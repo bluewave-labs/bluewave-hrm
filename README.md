@@ -7,3 +7,4 @@ The BlueWave HR is a people and resource management application for your organiz
 - Time off and accrual
 - Reporting
 
+![Time off settings](https://github.com/bluewave-labs/hrm/blob/main/Time%20off.png?raw=true)
