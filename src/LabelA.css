@@ -1,0 +1,29 @@
+.labelA {
+    font-family: "Inter", sans-serif;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.label-orange {
+    background-color: #FEF6EE;
+    color: #B42318;
+    border:1px solid #F9DBAF;
+}
+
+.label-gray {
+    background-color: #F9FAFB;
+    color: #475467;
+    border: 1px solid #EAECF0;
+}
+
+.label-brand {
+    background-color: #F9F5FF;
+    color: #7F56D9;
+    border: 1px solid #E9D7FE;
+}
+
+.label-success {
+    background-color: #ECFDF3;
+    color: green;
+    border: 1px solid #ABEFC6;
+}

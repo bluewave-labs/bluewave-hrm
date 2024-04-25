@@ -1,0 +1,101 @@
+.button {
+    font-family: "Inter", sans-serif;
+    padding: 10px 14px;
+    border-radius: 4px;
+}
+
+.button-primary {
+    color: white;
+    background-color: #7F56D9;
+    border: 1px solid #7F56D9;
+}
+
+.button-primary:hover {
+    color: white;
+    background-color: #6941C6;
+    border: 1px solid #6941C6;
+}
+
+.button-primary:active {
+    color: white;
+    background-color: #7F56D9;
+    border: 1px solid #7F56D9;
+    outline: 5px solid #9E77ED3D;
+}
+
+.button-primary:disabled, .button-error:disabled {
+    color: #B9C0D4;
+    background-color: #F2F4F7;
+    border: 1px solid #EAECF0;
+    font-weight: bold;
+}
+
+.button-secondaryA {
+    color: #6941C6;
+    background-color: #FFFFFF;
+    border: 1px solid #D6BBFB;
+}
+
+.button-secondaryA:hover {
+    color: #6941C6;
+    background-color: #F9F5FF;
+    border: 1px solid #D6BBFB;
+}
+
+.button-secondaryA:active {
+    color: #6941C6;
+    background-color: #FFFFFF;
+    border: 1px solid #D6BBFB;
+    outline: 5px solid #9E77ED3D;
+}
+
+.button-secondaryB {
+    color: #475467;
+    background-color: #FFFFFF;
+    border: 1px solid #D0D5DD;
+}
+
+.button-secondaryB:hover {
+    color: #475467;
+    background-color: #F9FAFB;
+    border: 1px solid #D0D5DD;
+}
+
+.button-secondaryB:active {
+    color: #475467;
+    background-color: #FFFFFF;
+    border: 1px solid #D0D5DD;
+    outline: 5px solid #98A2B324;
+}
+
+.button-secondaryA:disabled, .button-secondaryB:disabled {
+    color: #B9C0D4;
+    background-color: #FFFFFF;
+    border: 1px solid #EAECF0;
+    font-weight: bold;
+}
+
+.button-tertiary {
+    color: #475467;
+    background-color: #FFFFFF;
+    border: none;
+}
+
+.button-error {
+    color: white;
+    background-color: #D92D20;
+    border: 1px solid #D92D20;
+}
+
+.button-error:hover {
+    color: white;
+    background-color: #B42318;
+    border: 1px solid #912018;
+}
+
+.button-error:active {
+    color: white;
+    background-color: #B42318;
+    border: 1px solid #D92D20;
+    outline: 5px solid #FCCED7;
+}
