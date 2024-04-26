@@ -2,6 +2,15 @@ import Box from '@mui/system/Box';
 import PropTypes from 'prop-types';
 import './LabelB.css';
 
+/**
+ * Second variation of label components for both HRM and Onboarding applications. Can be configured
+ * to be a 'seen', 'waiting' or 'new' label using prop values.
+ * 
+ * Props:
+ * - mode<String>: Determines the type of the label. Valid values include 'seen', 'waiting', and 
+ *      'new'.
+ * - label<String>: Text to be used for the label.
+ */
 export default function LabelB({type, label}) {
     return (
         <Box
@@ -15,6 +24,7 @@ export default function LabelB({type, label}) {
     )
 };
 
+// Control panel settings for storybook 
 LabelB.propTypes = {
     //Label type
     type: PropTypes.oneOf(['seen', 'waiting', 'new']),
