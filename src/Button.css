@@ -1,5 +1,6 @@
 .button {
     font-family: "Inter", sans-serif;
+    font-size: 13px;
     padding: 10px 14px;
     border-radius: 4px;
 }

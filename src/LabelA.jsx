@@ -7,8 +7,9 @@ import './LabelA.css';
  * to be an orange, gray, purple(brand) or green(success) label using prop values.
  * 
  * Props:
- * - mode<String>: Determines the type of the label. Valid values include 'orange', 'gray', 
- *      'brand' and 'success'.
+ * - mode<String>: Determines the type of the label. 
+ *      Valid values: ['orange', 'gray', 'brand', 'success']
+ * 
  * - label<String>: Text to be used for the label.
  */
 export default function LabelA({mode, label}) {
@@ -21,7 +22,7 @@ export default function LabelA({mode, label}) {
     );
 };
 
-// Control panel settings for storybook 
+//Control panel settings for storybook 
 LabelA.propTypes = {
     //Label type
     mode: PropTypes.oneOf(['orange', 'gray', 'brand', 'success']),

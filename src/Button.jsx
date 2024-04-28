@@ -6,10 +6,12 @@ import './Button.css';
  * secondary, tertiary or error button using prop values.
  * 
  * Props:
- * - mode<String>: Determines the type of the button. Valid values include 'primary', 'secondaryA', 
- *      'secondaryB', 'tertiary' and 'error'.
+ * - mode<String>: Determines the type of the button. 
+ *      Valid values: ['primary', 'secondaryA', 'secondaryB', 'tertiary', 'error']
+ * 
  * - label<String>: Text to be used for the button label.
- * - enabled<Boolean>: Flag determining whether the button is enabled for disabled.
+ * 
+ * - enabled<Boolean>: Flag determining whether the button is enabled or disabled.
  */
 export default function Button({mode, label, enabled}) {
     return (
@@ -22,13 +24,16 @@ export default function Button({mode, label, enabled}) {
     );
 };
 
-// Control panel settings for storybook 
+//Control panel settings for storybook 
 Button.propTypes = {
     //Button type
     mode: PropTypes.oneOf(['primary', 'secondaryA', 'secondaryB', 'tertiary', 'error']),
 
     //Button text
     label: PropTypes.string.isRequired,
+
+    //Button enabled flag
+    enabled: PropTypes.bool,
 
     //Behaviour when clicked
     onClick: PropTypes.func

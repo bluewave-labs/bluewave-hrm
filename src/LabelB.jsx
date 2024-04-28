@@ -7,8 +7,9 @@ import './LabelB.css';
  * to be a 'seen', 'waiting' or 'new' label using prop values.
  * 
  * Props:
- * - mode<String>: Determines the type of the label. Valid values include 'seen', 'waiting', and 
- *      'new'.
+ * - mode<String>: Determines the type of the label. 
+ *      Valid values: ['seen', 'waiting', 'new']
+ * 
  * - label<String>: Text to be used for the label.
  */
 export default function LabelB({type, label}) {
