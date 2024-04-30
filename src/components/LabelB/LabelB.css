@@ -1,3 +1,4 @@
+/* All variation B labels */
 .labelB {
     font-family: "Inter", sans-serif;
     font-weight: 400;
@@ -10,6 +11,7 @@
     align-items: center;
 }
 
+/* Coloured dot inside variation B labels */
 .dot {
     height: 6px;
     width: 6px;
@@ -17,14 +19,17 @@
     margin-right: 4px;
 }
 
+/* 'seen' labels */
 .seen {
     background-color: #344054;
 }
 
+/* 'waiting' labels */
 .waiting {
     background-color: #D92D20;
 }
 
+/* 'new' labels */
 .new {
     background-color: orange;
 }

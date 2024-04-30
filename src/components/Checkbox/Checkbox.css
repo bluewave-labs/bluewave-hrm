@@ -1,3 +1,4 @@
+/* Checkboxes and radio buttons */
 .checkbox, .radio {
     accent-color: #7F56D9;
 }
@@ -11,12 +12,14 @@
     outline: 5px solid #9E77ED3D;
 }
 
+/* Small checkboxes and radio buttons */
 .small {
     width: 16px;
     height: 16px;
     border-radius: 4px;
 }
 
+/* Large checkboxes and radio buttons */
 .large {
     width: 20px;
     height: 20px;

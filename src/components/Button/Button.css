@@ -1,3 +1,4 @@
+/* All buttons */
 .button {
     font-family: "Inter", sans-serif;
     font-size: 13px;
@@ -5,6 +6,7 @@
     border-radius: 4px;
 }
 
+/* Primary buttons */
 .button-primary {
     color: white;
     background-color: #7F56D9;
@@ -31,6 +33,7 @@
     font-weight: bold;
 }
 
+/* Secondary variation A buttons */
 .button-secondaryA {
     color: #6941C6;
     background-color: #FFFFFF;
@@ -50,6 +53,7 @@
     outline: 5px solid #9E77ED3D;
 }
 
+/* Secondary variation B buttons */
 .button-secondaryB {
     color: #475467;
     background-color: #FFFFFF;
@@ -76,12 +80,14 @@
     font-weight: bold;
 }
 
+/* Tertiary buttons */
 .button-tertiary {
     color: #475467;
     background-color: #FFFFFF;
     border: none;
 }
 
+/* Error buttons */
 .button-error {
     color: white;
     background-color: #D92D20;
