@@ -4,15 +4,7 @@
     display: inline-block;
     width: 36px;
     height: 20px;
-    /*width: 60px;
-    height: 34px;*/
 }
-
-/*
-.switch:hover {
-    outline: 5px solid #9E77ED3D;
-}
-*/
   
 /* Hide default HTML checkbox */
 .switch input {
@@ -39,8 +31,6 @@
     content: "";
     height: 16px;
     width: 16px;
-    /*height: 26px;
-    width: 26px;*/
     left: 2px;
     bottom: 2px;
     background-color: white;

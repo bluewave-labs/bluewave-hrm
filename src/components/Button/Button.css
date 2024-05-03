@@ -6,6 +6,10 @@
     border-radius: 4px;
 }
 
+.button:hover {
+    cursor: pointer;
+}
+
 /* Primary buttons */
 .button-primary {
     color: white;
@@ -85,6 +89,10 @@
     color: #475467;
     background-color: #FFFFFF;
     border: none;
+}
+
+.button-tertiary:hover {
+    text-decoration: underline dotted #7F56D9;
 }
 
 /* Error buttons */
