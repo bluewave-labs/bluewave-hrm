@@ -43,7 +43,7 @@ export default function CheckIcon({type, size, color}) {
 };
 
 //Control panel settings for storybook 
-CheckCircle.propTypes = {
+CheckIcon.propTypes = {
     //Check circle type
     type: PropTypes.oneOf(['outline', 'solid']),
 
@@ -55,7 +55,7 @@ CheckCircle.propTypes = {
 };
 
 //Default values for this component in storybook
-CheckCircle.defaultProps = {
+CheckIcon.defaultProps = {
     type: 'outline',
     size: 'medium',
     color: 'purple'
