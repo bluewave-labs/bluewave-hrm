@@ -6,7 +6,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/inter": "^5.0.18",
-    "@mui/icons-material": "^5.15.15",
+    "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -42,5 +42,5 @@
   },
   "devDependencies": {
     "prop-types": "^15.8.1"
-   }
+  }
 }

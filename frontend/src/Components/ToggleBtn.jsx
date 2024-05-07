@@ -58,8 +58,6 @@ const IOSSwitch = styled((props) => (
   },
 }));
 
-
-
 export default function CustomizedSwitches() {
   return (
     <FormGroup>
