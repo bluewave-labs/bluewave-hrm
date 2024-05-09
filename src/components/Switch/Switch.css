@@ -41,15 +41,21 @@
 input:checked + .slider {
     background-color: #7F56D9;
 }
-  
+ 
+/*
 input:focus + .slider {
     box-shadow: 0 0 1px #7F56D9;
 }
+*/
   
 input:checked + .slider:before {
     -webkit-transform: translateX(15.6px);
     -ms-transform: translateX(15.6px);
     transform: translateX(15.6px);
+}
+
+input:disabled + .slider {
+    background-color: #F2F4F7;
 }
   
 /* Rounded sliders */
