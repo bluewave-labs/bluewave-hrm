@@ -100,7 +100,7 @@ const ToolTips = () => {
                         title={<React.Fragment>
                         This is a tooltip
                         </React.Fragment>}>
-                        <Button>BasicArrowTooltip</Button>
+                        <Button>BasicTooltip</Button>
                     </BasicTooltip>
                 </Item>
                 <Item>

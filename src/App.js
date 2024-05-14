@@ -1,12 +1,12 @@
 import './App.css';
-import ToolTips from './components/tooltips/ToolTips';
+import Charts from './components/charts/Charts';
 
 
 
 function App() {
   return (
     <div className="App">
-      <ToolTips/>
+      <Charts/>
      
     </div>
   );
