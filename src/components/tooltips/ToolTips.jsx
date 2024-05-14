@@ -3,7 +3,6 @@ import './ToolTips.css'
 import { styled } from '@mui/material/styles';
 import  { tooltipClasses } from '@mui/material/Tooltip';
 import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 import { Box, Button } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -19,6 +18,7 @@ const BasicArrowTooltip = styled(({ className, ...props }) => (
             backgroundColor: theme.palette.common.black,
             color:'',
             maxWidth:110,
+            height:34,
             fontSize: theme.typography.pxToRem(12),
         }
 }))
@@ -30,8 +30,9 @@ const BasicTooltip = styled(({ className, ...props }) => (
       backgroundColor: theme.palette.common.black,
       color: '',
       maxWidth: 110,
+      height: 34,
       fontSize: theme.typography.pxToRem(12),
-      border: '1px solid #dadde9',
+      
     },
 }));
 
@@ -61,7 +62,7 @@ const DescriptionTooltip = styled(({ className, ...props }) => (
       color: '',
       maxWidth: 280,
       fontSize: theme.typography.pxToRem(12),
-      border: '1px solid #dadde9',
+    
     },
 }));
 
@@ -90,7 +91,7 @@ const ToolTips = () => {
                 <Item>
                     <BasicArrowTooltip 
                         title={<React.Fragment>
-                            This is a tooltip
+                            <p className='tooltiptext'>This is a tooltip</p>
                         </React.Fragment>}>
                         <Button>BasicArrowTooltip</Button>
                     </BasicArrowTooltip>
@@ -98,7 +99,7 @@ const ToolTips = () => {
                 <Item>
                     <BasicTooltip 
                         title={<React.Fragment>
-                        This is a tooltip
+                        <p className='tooltiptext'>This is a tooltip</p>
                         </React.Fragment>}>
                         <Button>BasicTooltip</Button>
                     </BasicTooltip>
@@ -106,9 +107,8 @@ const ToolTips = () => {
                 <Item>
                     <DescriptionArrowTooltip 
                         title={<React.Fragment>
-                            <Typography color="inherit">This is a tooltip</Typography>
-                            {' '}
-                            {"Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand meaning, function or alt-text."}
+                            <p className='text'>This is a tooltip</p>
+                            <p className='description'>Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand meaning, function or alt-text.</p>
                         </React.Fragment>}>
                         <Button>DescriptionArrowTooltip</Button>
                     </DescriptionArrowTooltip>
@@ -116,9 +116,8 @@ const ToolTips = () => {
                 <Item>
                     <DescriptionTooltip
                         title={<React.Fragment>
-                            <Typography color="inherit">This is a tooltip</Typography>
-                            {' '}
-                            {"Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand meaning, function or alt-text."}
+                            <p className='text'>This is a tooltip</p>
+                            <p className='description'>Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand meaning, function or alt-text.</p>
                         </React.Fragment>}>
                         <Button>DescriptionTooltip</Button>
                     </DescriptionTooltip>

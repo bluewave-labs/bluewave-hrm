@@ -1,3 +1,9 @@
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+
 .views-card {
     background-color: var(--Colors-Background-bg-primary, #fff);
     border: 1px solid rgba(234, 236, 240, 1);
@@ -5,7 +11,7 @@
     box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
     display: flex;
     flex-direction: column;
-    max-width: 388px;
+    width: 340px;
     padding: 22px 24px;
 }
 
@@ -76,23 +82,45 @@
 
 .views-card__percent-value {
     font-family: Inter, sans-serif;
-  }
+}
+
+.views-card-chart {
+    background-color: var(--Colors-Background-bg-primary, #fff);
+    border: 1px solid rgba(234, 236, 240, 1);
+    border-radius: var(--radius-xs, 4px);
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    height: 132px;
+    padding: 22px 24px;
+}
+
+.views-card-header-chart {
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    height: 28px;
+}
 
 .views-title {
     color: #101828;
-    font: 600 16px/150% Inter, -apple-system, Roboto, Helvetica, sans-serif;
+    font: 600 16px/24px Inter, sans-serif;
+    margin-top: 5px;
 }
 
 .views-card_contentchart {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-top: 24px;
+    margin-top: 10px;
+    height: 80px;
 }
 
 .view-item {
     display: flex;
     gap: 16px;
+    height: 80px;
 }
 
 .view-details {

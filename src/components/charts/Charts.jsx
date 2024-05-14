@@ -1,6 +1,6 @@
 import React from 'react';
 import './Charts.css';
-import { SvgIcon, Grid } from '@mui/material';
+import { SvgIcon } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { LineChart, areaElementClasses } from '@mui/x-charts/LineChart';
@@ -77,8 +77,8 @@ function ViewsCardCharts() {
     
       
 
-      <div className="views-card">
-        <div className="views-card-header">
+      <div className="views-card-chart">
+        <div className="views-card-header-chart">
           <h2 className="views-title">Views 24 hours</h2>
           <MoreVertIcon className="views-card__more-icon"color='action'></MoreVertIcon>
         </div>
@@ -104,7 +104,7 @@ function ViewsCardCharts() {
                 series={[{ curve: 'linear', data, showMark: false, area: true, color: '#59a14f' }]}
                 width={400}
                 height={150}
-                margin={{ top: 20, bottom: 30, left: 200 }}
+                margin={{ top: 5, bottom: 22, left: 125 }}
                 sx={{
                   [`& .${areaElementClasses.root}`]: {
                     fill: 'url(#swich-color-id-2)',
@@ -125,15 +125,20 @@ function ViewsCardCharts() {
 
 function Charts() {
   return (
-    <Grid container justifyContent="space-around"
-    alignItems="center">
-      <Grid item  xs={6}>
-        <ViewsCard viewsCount="2,000" percentChange="100" />
-      </Grid>
-      <Grid item xs={6}>
-      <ViewsCardCharts  />
-      </Grid>
-    </Grid>
+    // <Grid container justifyContent="space-around" alignItems="center">
+    //   <Grid item  xs={6}>
+    //     <ViewsCard viewsCount="2,000" percentChange="100" />
+    //   </Grid>
+    //   <Grid item xs={6}>
+    //     <ViewsCardCharts/>
+    //   </Grid>
+    // </Grid>
+
+    <div className="flex-container">
+      <div><ViewsCard viewsCount="2,000" percentChange="100" /></div>
+      <div><ViewsCardCharts/></div>
+
+    </div>
     
   )
 }

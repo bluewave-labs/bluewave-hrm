@@ -2,3 +2,19 @@
     display: flex;
     justify-content: center;
 }
+
+.tooltiptext {
+    color: #D0D5DD;
+    font: 400 12px/18px Inter, sans-serif;
+    margin: 7px;
+}
+
+.text {
+    color: #fff;
+    font: 600 12px/18px Inter, sans-serif;
+}
+
+.description {
+    color: #D0D5DD;
+    font: 400 12px/18px Inter, sans-serif;
+}
