@@ -13,7 +13,7 @@ export default function MUIRadio({id, size, value, enabled}) {
     return (
         <StyledRadio id={id} size={size} value={value} disabled={!enabled} />
     );
-}
+};
 
 MUIRadio.propTypes = {
     size: PropTypes.oneOf(['small', 'medium']),

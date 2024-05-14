@@ -1,7 +1,6 @@
-//import {ThemeProvider, createTheme} from '@mui/system';
-//import Button from '@mui/material/Button';
+import {styled} from '@mui/system';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
-import './HRMButton.css';
 
 /**
  * Button components for both HRM and Onboarding applications. Can be configured to be a primary,
@@ -13,110 +12,100 @@ import './HRMButton.css';
  * 
  * - label<String>: Text to be used for the button label.
  * 
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
+ * 
  * - enabled<Boolean>: Flag determining whether the button is enabled or disabled.
+ *      Default: true
  */
-export default function HRMButton({mode, label, enabled}) {
-    /*
-    const theme = createTheme({
-        palette: {
-            primary: {
-                border: "#7F56D9",
-                bg: "#7F56D9",
-                bgHover: "#6941C6",
-                outline: "#9E77ED3D"
-            },
-            secondaryA: {
-                border: "#D6BBFB",
-                bg: "#FFFFFF",
-                bgHover: "#F9F5FF",
-                text: "#6941C6",
-                textHover: "#53389E",
-                outline: "#9E77ED3D"
-            },
-            secondaryB: {
-                border: "#D0D5DD",
-                bg: "#FFFFFF",
-                bgHover: "#F9FAFB",
-                text: "#344054",
-                textHover: "#182230",
-                outline: "#98A2B324"
-            },
-            tertiary: {
-                text: "#475467"
-            },
-            error: {
-                border: "#D92D20",
-                borderHover: "#912018",
-                bg: "#D92D20",
-                bgHover: "#B42318",
-                bgActive: "#B42318",
-                outline: "#FCCED7"
-            }
-        }
-    })
-
+export default function HRMButton({mode, label, style, enabled}) {
     const primaryStyle = {
-        borderRadius: 4,
-        borderColor: "primary.border",
-        bgcolor: "primary.bg",
+        textTransform: "none",
+        backgroundColor: "#7F56D9",
         "&:hover": {
-            cursor: "pointer",
-            bgcolor: "primary.bgHover",
+            backgroundColor: "#6941C6"
+        },
+        "&:active": {
+            outline: "5px solid #9E77ED3D"
         }
     };
 
     const secondaryAStyle = {
-        borderRadius: 4,
-        borderColor: "secondaryA.border",
-        bgcolor: "secondaryA.bg",
-        color: "secondaryA.text",
+        textTransform: "none",
+        color: "#6941C6",
+        borderColor: "#D6BBFB",
         "&:hover": {
-            bgcolor: "secondaryA.bgHover",
-            color: "secondaryA.textHover"
+            borderColor: "#D6BBFB",
+            backgroundColor: "#F9F5FF"
+        },
+        "&:active": {
+            outline: "5px solid #9E77ED3D"
+        }
+    }
+
+    const secondaryBStyle = {
+        textTransform: "none",
+        color: "#475467",
+        borderColor: "#D0D5DD",
+        "&:hover": {
+            borderColor: "#D0D5DD",
+            backgroundColor: "#F9FAFB"
+        },
+        "&:active": {
+            outline: "5px solid #98A2B324"
         }
     };
 
-    const secondaryBStyle = {
-        borderRadius: 4,
-        borderColor: "secondaryB.border",
-        bgcolor: "secondaryB.bg",
-        color: "secondaryB.color",
-        "&:hover": {
-            bgcolor: "secondaryB.bgHover",
-            color: "secondaryB.textHover"
-        }
-    }
-
     const tertiaryStyle = {
-        color: "tertiary.text"
-    }
+        textTransform: "none",
+        color: "#475467"
+    };
 
     const errorStyle = {
-        borderRadius: 4,
-        borderColor: "error.border",
-        bgcolor: "error.bg",
+        textTransform: "none",
+        backgroundColor: "#D92D20",
         "&:hover": {
-            borderColor: "error.borderHover",
-            bgcolor: "error.bgHover",
+            borderColor: "#912018",
+            backgroundColor: "#B42318"
+        },
+        "&:active": {
+            outline: "5px solid #FCCED7"
         }
-    }
-    */
+    };
 
-    return (
-        /*
-        <ThemeProvider theme={theme}>
-            {mode == "primary" && 
-                <Button variant="contained" sx={primaryStyle} disabled={!enabled}>{label}</Button>
-            }
-        </ThemeProvider>
-        */
-        <button
-            className={["button", `button-${mode}`].join(' ')}
-            disabled={!enabled}
-        >
-            {label}
-        </button>
-    );
+    let StyledButton;
+    switch (mode) {
+        case "primary": 
+            StyledButton = styled(Button)({...primaryStyle, ...style});
+            break;
+        case "secondaryA":
+            StyledButton = styled(Button)({...secondaryAStyle, ...style});
+            break;
+        case "secondaryB":
+            StyledButton = styled(Button)({...secondaryBStyle, ...style});
+            break;
+        case "error":
+            StyledButton = styled(Button)({...errorStyle, ...style});
+            break;
+        default:
+            StyledButton = styled(Button)({...tertiaryStyle, ...style});
+    }
+
+    if (mode === "primary" || mode === "error") {
+        return (
+            <StyledButton variant="contained" disabled={!enabled} disableElevation>{label}</StyledButton>
+        );
+    }
+    else if (mode === "secondaryA" || mode === "secondaryB") {
+        return (
+            <StyledButton variant="outlined" disabled={!enabled}>{label}</StyledButton>
+        );
+    }
+    else {
+        return (
+            <StyledButton variant="text" disabled={!enabled}>{label}</StyledButton>
+        );
+    }
 };
 
 //Control panel settings for storybook 
@@ -138,6 +127,7 @@ HRMButton.propTypes = {
 HRMButton.defaultProps = {
     mode: 'primary',
     label: 'Button',
+    style: {},
     enabled: true,
     onClick: undefined
 };
