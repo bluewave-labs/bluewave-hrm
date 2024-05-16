@@ -16,8 +16,11 @@ import PropTypes from 'prop-types';
  * 
  * - color<String>: Determines the color of the check circle.
  *      Valid values: ['purple', 'black', 'green']
+ * 
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
  */
-export default function CheckIcon({type, size, color}) {
+export default function CheckIcon({type, size, color, style}) {
     const theme = createTheme({
         palette: {
             purple: "#7F56D9",
@@ -26,17 +29,17 @@ export default function CheckIcon({type, size, color}) {
         }
     });
 
-    const style = {
+    const checkStyle = {...{
         width: size == "small" ? 20 : size == "medium" ? 24 : 28,
         height: size == "small" ? 20 : size == "medium" ? 24 : 28,
         color: color == "purple" ? "purple" : color == "black" ? "black" : "green" 
-    };
+    }, ...style};
 
     return (
         <ThemeProvider theme={theme}>
             {(type == "outline") ?
-                <CheckCircleOutlineIcon sx={style} /> :
-                <CheckCircleIcon sx={style} />
+                <CheckCircleOutlineIcon sx={checkStyle} /> :
+                <CheckCircleIcon sx={checkStyle} />
             }
         </ThemeProvider>
     );
@@ -58,5 +61,6 @@ CheckIcon.propTypes = {
 CheckIcon.defaultProps = {
     type: 'outline',
     size: 'medium',
-    color: 'purple'
+    color: 'purple',
+    style: {}
 };

@@ -5,22 +5,25 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import UploadFile from './UploadFile';
 import HRMButton from '../Button/HRMButton';
-//import PropTypes from 'prop-types';
 
 /**
  * Setup menu component for onboarding purposes. Contains a text field for a company's name 
  * and website and other components for uploading a company logo.
+ * 
+ * Props:
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
  */
-export default function SetupCompanyMenu() {
+export default function SetupCompanyMenu({style}) {
     return(
-        <Box sx={{
+        <Box sx={{...{
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingTop: 6,
             paddingX: 10,
             paddingBottom: 20,
-            fontFamily: "Inter, sans-serif",
-        }}>
+            fontFamily: "Inter, sans-serif"
+        }, ...style}}>
             <Grid container columns={10} rowSpacing={2} columnSpacing={1}>
                 <Grid xs={10} textAlign="center">
                     <h3>Add fundamental company details</h3>
@@ -28,14 +31,14 @@ export default function SetupCompanyMenu() {
                 </Grid>
                 {/*Textfield for company name*/}
                 <Grid xs={3}>
-                    <h4>Company name</h4>
+                    <h5>Company name</h5>
                 </Grid>
                 <Grid xs={7} alignContent="center">
                     <TextField fullWidth size="small" />
                 </Grid>
                 {/*Textfield for company website*/}
                 <Grid xs={3}>
-                    <h4>Company website</h4>
+                    <h5>Company website</h5>
                 </Grid>
                 <Grid xs={7} alignContent="center">
                     <TextField 
@@ -46,7 +49,7 @@ export default function SetupCompanyMenu() {
                 </Grid>
                 {/*Section for uploading company logo*/}
                 <Grid xs={3}>
-                    <h4>Company Logo</h4>
+                    <h5>Company logo</h5>
                 </Grid>
                 <Grid xs={7} sx={{display: "flex", justifyContent: "center"}}>
                     <AddPhotoAlternateOutlinedIcon 
@@ -71,6 +74,10 @@ export default function SetupCompanyMenu() {
     );
 };
 
+//Control panel settings for storybook 
 SetupCompanyMenu.propTypes = {};
 
-SetupCompanyMenu.defaultProps = {};
+//Default values for this component in storybook
+SetupCompanyMenu.defaultProps = {
+    style: {}
+};

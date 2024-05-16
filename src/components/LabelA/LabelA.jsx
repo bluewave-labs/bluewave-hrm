@@ -11,11 +11,15 @@ import './LabelA.css';
  *      Valid values: ['orange', 'gray', 'brand', 'success']
  * 
  * - label<String>: Text to be used for the label.
+ * 
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
  */
-export default function LabelA({mode, label}) {
+export default function LabelA({mode, label, style}) {
     return (
         <Box
             className={["labelA", `label-${mode}`].join(" ")}
+            sx={style}
         >
             {label}
         </Box>
@@ -34,5 +38,6 @@ LabelA.propTypes = {
 //Default values for this component in storybook
 LabelA.defaultProps = {
     mode: 'orange',
-    label: 'label'
+    label: 'label',
+    default: {}
 };

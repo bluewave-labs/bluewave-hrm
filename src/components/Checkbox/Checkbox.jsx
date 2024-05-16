@@ -18,9 +18,13 @@ import './Checkbox.css';
  * - size<String>: Determines the size of the checkbox.
  *      Valid values: ['small', 'large']
  * 
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
+ * 
  * - enabled<Boolean>: Flag determining whether the checkbox is enabled or disabled.
+ *      Default: true
  */
-export default function Checkbox({type, id, name, value, size, enabled}){
+export default function Checkbox({type, id, name, value, size, style, enabled}){
     return (
         <input 
             className={[type, size].join(' ')}
@@ -28,6 +32,7 @@ export default function Checkbox({type, id, name, value, size, enabled}){
             id={id}
             name={name}
             value={value}
+            style={style}
             disabled={!enabled}
         />
     );
@@ -52,5 +57,6 @@ Checkbox.defaultProps = {
     name: 'name',
     value: 'value',
     size: 'small',
+    style: {},
     enabled: true
 };

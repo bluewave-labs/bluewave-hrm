@@ -7,11 +7,15 @@ import PropTypes from 'prop-types';
  * Props:
  * - buttonLabels<Array<String>>: Labels for each button in the button group. For each label in
  *      'buttonLabels', a new button with that label will be added to the button group.
+ * 
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
  */
-export default function HRMButtonGroup({buttonLabels}) {
+export default function HRMButtonGroup({buttonLabels, style}) {
     return (
         <ButtonGroup 
             variant="outlined"
+            sx={style}
         >
             {buttonLabels.map(label => {
                 return <Button
@@ -40,5 +44,6 @@ HRMButtonGroup.propTypes = {
 
 //Default values for this component in storybook
 HRMButtonGroup.defaultProps = {
-    buttonLabels: ['Text', 'Text', 'Text']
+    buttonLabels: ['Text', 'Text', 'Text'],
+    style: {}
 };

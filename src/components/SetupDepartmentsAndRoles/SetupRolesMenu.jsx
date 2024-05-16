@@ -3,16 +3,24 @@ import Grid from '@mui/system/Unstable_Grid';
 import SelectItem from './SelectItem';
 import HRMButton from '../Button/HRMButton';
 
-export default function SetupRolesMenu() {
+/**
+ * Setup menu component for onboarding purposes. Contains toggle buttons for displaying items to
+ * be added.
+ * 
+ * Props:
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
+ */
+export default function SetupRolesMenu({style}) {
     return (
-        <Box sx={{
+        <Box sx={{...{
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingTop: 6,
             paddingX: 10,
             paddingBottom: 20,
             fontFamily: "Inter, sans-serif",
-        }}>
+        }, ...style}}>
             <Grid container columns={11} spacing={2}>
                 <Grid xs={11} textAlign="center">
                     <h3>Select the roles to add</h3>
@@ -47,6 +55,10 @@ export default function SetupRolesMenu() {
     );
 };
 
+//Control panel settings for storybook 
 SetupRolesMenu.propTypes = {};
 
-SetupRolesMenu.defaultProps = {};
+//Default values for this component in storybook
+SetupRolesMenu.defaultProps = {
+    style: {}
+};

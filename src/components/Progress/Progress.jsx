@@ -7,13 +7,16 @@ import './Progress.css';
  * Props:
  * - value<String>: Standard progress value attribute. Represents total progress on the progress 
  *      bar. Must be a number between 0 and 100.
+ * 
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
  */
-export default function Progress({value}) {
+export default function Progress({value, style}) {
     const progressWidth = {
         width: `${value}%`
     };
     return (
-        <div className="wrapper">
+        <div className="wrapper" style={style}>
             <span className="progressContainer">
                 <span className="progress" style={progressWidth}></span>
             </span>
@@ -30,5 +33,6 @@ Progress.propTypes = {
 
 //Default values for this component in storybook
 Progress.defaultProps = {
-    value: '30'
+    value: '30',
+    style: {}
 }

@@ -2,14 +2,23 @@ import {styled} from '@mui/system';
 import {useState} from 'react';
 import PropTypes from 'prop-types';
 
-export default function SelectItem({label}) {
+/**
+ * Intermediate component for the SetupDepartmentsMenu and SetupRolesMenu components
+ * 
+ * Props:
+ * - label<String>: Text to be used for the button label.
+ * 
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
+ */
+export default function SelectItem({label, style}) {
     const [selected, setSelected] = useState(false);
 
     function handleClick() {
         setSelected(!selected);
     }
 
-    let Item = styled("div")({
+    let Item = styled("div")({...{
         backgroundColor: "#FFFFFF",
         border: "1px solid",
         borderColor: selected ? "#D6BBFB" : "#D0D5DD",
@@ -23,17 +32,20 @@ export default function SelectItem({label}) {
         "&:hover": {
             cursor: "pointer"
         }
-    });
+    }, ...style});
 
     return (
         <Item onClick={handleClick}>{label}</Item>
     );
 };
 
+//Control panel settings for storybook 
 SelectItem.propTypes = {
     label: PropTypes.string
 };
 
+//Default values for this component in storybook
 SelectItem.defaultProps = {
-    label: 'Label'
+    label: 'Label',
+    style: {}
 };

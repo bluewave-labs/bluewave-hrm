@@ -1,17 +1,23 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
-//import PropTypes from 'prop-types';
 
-export default function UploadFile() {
+/**
+ * Intermediate component for the SetupCompanyMenu component
+ * 
+ * Props:
+ * - style<Object>: Optional prop for adding further inline styling 
+ *      Default: {}
+ */
+export default function UploadFile({style}) {
     return (
-        <Box sx={{
+        <Box sx={{...{
             width: "fit-content",
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             padding: 3,
-            fontFamily: "Inter, sans-serif",
-        }}
+            fontFamily: "Inter, sans-serif"
+        },...style}}
         >
             <Stack 
                 spacing={1} 
@@ -47,4 +53,12 @@ export default function UploadFile() {
             </Stack>
         </Box>
     );
+};
+
+//Control panel settings for storybook 
+UploadFile.propTypes = {};
+
+//Default values for this component in storybook
+UploadFile.defaultProps = {
+    style: {}
 };
