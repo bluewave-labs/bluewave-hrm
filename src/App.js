@@ -1,7 +1,10 @@
+
 import './App.css';
 import Charts from './components/charts/Charts';
-//import Logos from './components/logos/Logos';
-//import ToolTips from './components/tooltips/ToolTips';
+import Logos from './components/logos/Logos';
+import PopupModals from './components/popupmodals/PopupModal';
+import { TextFields } from './components/textfields/TextFields';
+import ToolTips from './components/tooltips/ToolTips';
 
 
 
@@ -9,8 +12,16 @@ import Charts from './components/charts/Charts';
 function App() {
   return (
     <div className="App">
+
+      <TextFields/>
+      <PopupModals/>
+      <br/>
+      <Logos/>
+      <br/>
       <Charts/>
-     
+      
+      <ToolTips/>
+      
     </div>
   );
 }

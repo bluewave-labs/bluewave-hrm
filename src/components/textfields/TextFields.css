@@ -1,40 +1,47 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-width: 320px;
-  font-size: 13px;
-  font-weight: 400;
+  height: 89px;
 }
 
 .header {
-  border: none;
-  padding-left: 0px;
-  line-height: 24px;
-  padding-top: 0px;
-  color: var(--colors-text-text-secondary-700, #344054);
-  font-family: Inter, sans-serif;
-  font-weight: 600;
-  line-height: 154%;
-  margin: 0;
+  font: 600 14px/20px Inter, sans-serif;
+  color: #344054;
+  margin-bottom: 7px;
+}
+
+.hint {
+  font: 400 14px/20px Inter, sans-serif;
+  color: #475467;
+  margin-top: 8px;
+}
+
+.hint-error {
+  font: 400 14px/20px Inter, sans-serif;
+  color: #d92d20;
+  margin-top: 8px;
+}
+
+.hint-description {
+  font: 400 14px/20px Inter, sans-serif;
+  color: #475467;
+  margin-top: 8px;
+}
+
+.container-description {
+  width: 320px;
+  height: 180px;
 }
 
 .card {
+  height: 103px;
+  border: 1px solid #D0D5DD;
   border-radius: var(--radius-xs, 4px);
-  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-  border: 1px solid rgba(208, 213, 221, 1);
   background-color: var(--Colors-Background-bg-primary, #fff);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 14px;
-  padding-right: 14px;
-  margin-top: 6px;
+  color: var(--Colors-Text-text-placeholder, #667085);
+  padding: 12px 14px;
 }
 
 .card-error {
+  height: 103px;
   border-radius: var(--radius-xs, 4px);
   box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
   border: 1px solid rgb(220, 11, 11);
@@ -49,129 +56,23 @@
   margin-top: 6px;
 }
 
-.tag {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  border-radius: var(--radius-xs, 4px);
-  border: 1px solid rgba(208, 213, 221, 1);
-  background-color: var(--Colors-Background-bg-primary, #fff);
-  color: var(--colors-text-text-secondary-700, #344054);
-  padding: 2px 4px 2px 9px;
-  font-family: Inter, sans-serif;
-}
-
-.tag-icon {
-  width: 12px;
-}
-
-.tags-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
 .description-input {
-    align-self: stretch;
-    border-radius: var(--radius-xs, 4px);
-    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-    border: 1px solid rgba(208, 213, 221, 1);
-    background-color: var(--Colors-Background-bg-primary, #fff);
-    color: var(--Colors-Text-text-placeholder, #667085);
-    padding: 12px 14px;
-    font: 400 13px/24px Inter, -apple-system, Roboto, Helvetica, sans-serif;
-    border: none;
-    box-shadow: none;
-    padding-left: 0px;
-    line-height: 24px;
-    padding-top: 0px;
-    color: var(--colors-text-text-secondary-700, #344054);
-    font-family: Inter, sans-serif;
-    font-weight: 600;
-    line-height: 154%;
-    margin: 0;
-  }
 
-  .hint {
-    color: var(--colors-text-text-tertiary-600, #475467);
-    font-family: Inter, sans-serif;
-    line-height: 154%;
-    margin: 6px 0 0;
-  }
- 
-  .hint-description-error {
-    color: var(--colors-text-text-tertiary-600, #d92d20);
-    font-family: Inter, sans-serif;
-    line-height: 154%;
-    margin: 6px 0 0;
-  }
-
-  /* #description {
-    border: none;
-    box-shadow: none;
-    padding-left: 0px;
-    line-height: 24px;
-    padding-top: 0px;
-    color: var(--colors-text-text-secondary-700, #344054);
-    font-family: Inter, sans-serif;
-    font-weight: 600;
-    line-height: 154%;
-    margin: 0;
-  } */
-
-  
-  
-  
-
-  
-
-  
-  
-  /* .title {
-    color: var(--colors-text-text-primary-900, #101828);
-    font-family: Inter, sans-serif;
-    line-height: 24px;
-    margin: 0;
-  } */
-  
-  
-
-
-/* #Coords{
-    width:270px;
-    height:300px;
+  align-self: stretch;
+  border-radius: var(--radius-xs, 4px);
+  width: 290.4px;
+  height: 103px;
+  background-color: var(--Colors-Background-bg-primary, #fff);
+  color: var(--Colors-Text-text-placeholder, #667085);
+  font: 400 16px/24px Inter, sans-serif;
+  border: none;
+  padding-left: 0px;
+  line-height: 24px;
+  padding-top: 0px;
+  color: var(--colors-text-text-secondary-700, #344054);
 }
 
-#Time{
-    width:215px;
-    height:300px;
+.description-input:focus {
+  outline: none;
+  border: none;
 }
-label {display:block;}
-.box{
-    display:inline-block;
-}
-
-
-
-.textarea {
-    flex-wrap: vertical;
-    row-gap: 6;
-} */
-
-
-
-/* .description {
-    flex-direction: column;
-    flex-wrap: wrap;
-
-}
-.labeltextfiels {
-    font-family: Inter, semi-bold;
-    font-weight: 600;
-    font-size: 13;
-    line-height: 20;
-    width: auto;
-    text-align: left, top;
-    color: #344054;
-}
- */
