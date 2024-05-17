@@ -45,10 +45,12 @@ export default function SetupDepartmentsMenu({style}) {
                 <Grid xs={1}></Grid>
             </Grid>
             {/*Add departments button*/}
-            <HRMButton mode="primary" label="Add Departments" style={{
+            <HRMButton mode="primary" style={{
                 float: "right",
                 marginTop: "80px"
-            }}/>
+            }}>
+                Add Departments
+            </HRMButton>
         </Box>
     );
 };

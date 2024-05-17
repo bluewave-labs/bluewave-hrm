@@ -10,18 +10,18 @@ import './LabelA.css';
  * - mode<String>: Determines the type of the label. 
  *      Valid values: ['orange', 'gray', 'brand', 'success']
  * 
- * - label<String>: Text to be used for the label.
+ * - children<Any>: Text to be used for the label.
  * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function LabelA({mode, label, style}) {
+export default function LabelA({mode, children, style}) {
     return (
         <Box
             className={["labelA", `label-${mode}`].join(" ")}
             sx={style}
         >
-            {label}
+            {children}
         </Box>
     );
 };
@@ -32,12 +32,12 @@ LabelA.propTypes = {
     mode: PropTypes.oneOf(['orange', 'gray', 'brand', 'success']),
 
     //Label text
-    label: PropTypes.string.isRequired
+    children: PropTypes.string.isRequired
 };
 
 //Default values for this component in storybook
 LabelA.defaultProps = {
     mode: 'orange',
-    label: 'label',
+    children: 'label',
     default: {}
 };

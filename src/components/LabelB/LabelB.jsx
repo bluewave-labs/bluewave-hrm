@@ -10,12 +10,12 @@ import './LabelB.css';
  * - mode<String>: Determines the type of the label. 
  *      Valid values: ['seen', 'waiting', 'new']
  * 
- * - label<String>: Text to be used for the label.
+ * - children<Any>: Text to be used for the label.
  * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function LabelB({type, label, style}) {
+export default function LabelB({type, children, style}) {
     return (
         <Box
             className="labelB"
@@ -24,7 +24,7 @@ export default function LabelB({type, label, style}) {
             {type == "seen" && <span className="dot seen"></span>}
             {type == "waiting" && <span className="dot waiting"></span>}
             {type == "new" && <span className="dot new"></span>}
-            {label}
+            {children}
         </Box>
     )
 };
@@ -35,12 +35,12 @@ LabelB.propTypes = {
     type: PropTypes.oneOf(['seen', 'waiting', 'new']),
 
     //Label text
-    label: PropTypes.string.isRequired
+    children: PropTypes.string.isRequired
 };
 
 //Default values for this component in storybook
 LabelB.defaultProps = {
     type: 'seen',
-    label: 'Seen',
+    children: 'Seen',
     style: {}
 };

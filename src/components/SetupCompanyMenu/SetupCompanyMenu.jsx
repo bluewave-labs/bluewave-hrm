@@ -66,10 +66,12 @@ export default function SetupCompanyMenu({style}) {
                 </Grid>
             </Grid>
             {/*Add company button*/}
-            <HRMButton mode="primary" label="Add Company" style={{
+            <HRMButton mode="primary" style={{
                 float: "right",
                 marginTop: "80px"
-            }}/>
+            }}>
+                Add Company
+            </HRMButton>
         </Box>
     );
 };

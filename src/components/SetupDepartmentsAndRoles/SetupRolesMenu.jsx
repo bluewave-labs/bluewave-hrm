@@ -50,10 +50,12 @@ export default function SetupRolesMenu({style}) {
                 <Grid xs={1}></Grid>
             </Grid>
             {/*Add roles button*/}
-            <HRMButton mode="primary" label="Add Roles" style={{
+            <HRMButton mode="primary" style={{
                 float: "right",
                 marginTop: "80px"
-            }}/>
+            }}>
+                Add Roles
+            </HRMButton>
         </Box>
     );
 };

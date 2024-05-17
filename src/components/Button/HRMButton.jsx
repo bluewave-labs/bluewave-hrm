@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
  * - mode<String>: Determines the type of the button. 
  *      Valid values: ['primary', 'secondaryA', 'secondaryB', 'tertiary', 'error']
  * 
- * - label<String>: Text to be used for the button label.
+ * - children<Any>: Text to be used for the button label.
  * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
  * - enabled<Boolean>: Flag determining whether the button is enabled or disabled.
  *      Default: true
  */
-export default function HRMButton({mode, label, style, enabled}) {
+export default function HRMButton({mode, children, style, enabled}) {
     const primaryStyle = {
         textTransform: "none",
         backgroundColor: "#7F56D9",
@@ -93,17 +93,17 @@ export default function HRMButton({mode, label, style, enabled}) {
 
     if (mode === "primary" || mode === "error") {
         return (
-            <StyledButton variant="contained" disabled={!enabled} disableElevation>{label}</StyledButton>
+            <StyledButton variant="contained" disabled={!enabled} disableElevation>{children}</StyledButton>
         );
     }
     else if (mode === "secondaryA" || mode === "secondaryB") {
         return (
-            <StyledButton variant="outlined" disabled={!enabled}>{label}</StyledButton>
+            <StyledButton variant="outlined" disabled={!enabled}>{children}</StyledButton>
         );
     }
     else {
         return (
-            <StyledButton variant="text" disabled={!enabled}>{label}</StyledButton>
+            <StyledButton variant="text" disabled={!enabled}>{children}</StyledButton>
         );
     }
 };
