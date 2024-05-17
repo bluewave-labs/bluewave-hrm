@@ -3,7 +3,7 @@ import Stack from '@mui/system/Stack';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 
 /**
- * Intermediate component for the SetupCompanyMenu component
+ * Intermediate component for uploading an image in the SetupCompanyMenu component
  * 
  * Props:
  * - style<Object>: Optional prop for adding further inline styling 
@@ -24,6 +24,7 @@ export default function UploadFile({style}) {
                 justifyContent="center" 
                 textAlign="center"
             >
+                {/*Upload icon*/}
                 <Box 
                     sx={{
                         width: "fit-content",    
@@ -37,6 +38,7 @@ export default function UploadFile({style}) {
                 >
                     <CloudUploadOutlinedIcon />
                 </Box>
+                {/*Text*/}
                 <p>
                     <a 
                         href="#" 

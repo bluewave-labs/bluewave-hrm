@@ -21,11 +21,13 @@ export default function SuccessMenu({style}) {
             fontFamily: "Inter, sans-serif",
             textAlign: "center"
         }, ...style}}>
+            {/*Text and image*/}
             <Stack spacing={3}>
                 <img src={SuccessImage} alt="Image" />
                 <h3>Well done!</h3>
                 <p>You have completed the initial setup</p>
             </Stack>
+            {/*Complete setup button*/}
             <HRMButton mode="primary" label="Dismiss and complete setup" style={{
                 marginTop: "40px"
             }}/>

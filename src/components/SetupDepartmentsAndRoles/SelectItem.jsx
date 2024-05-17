@@ -3,7 +3,8 @@ import {useState} from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Intermediate component for the SetupDepartmentsMenu and SetupRolesMenu components
+ * Button component for selecting deparmentments and roles in the SetupDepartmentsMenu and 
+ * SetupRolesMenu components
  * 
  * Props:
  * - label<String>: Text to be used for the button label.
@@ -18,6 +19,7 @@ export default function SelectItem({label, style}) {
         setSelected(!selected);
     }
 
+    //Button styles
     let Item = styled("div")({...{
         backgroundColor: "#FFFFFF",
         border: "1px solid",

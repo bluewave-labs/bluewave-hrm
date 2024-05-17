@@ -22,10 +22,12 @@ export default function SetupDepartmentsMenu({style}) {
             fontFamily: "Inter, sans-serif"
         }, ...style}}>
             <Grid container columns={11} spacing={2}>
+                {/*Text*/}
                 <Grid xs={11} textAlign="center">
                     <h3>Select the departments to add</h3>
                     <p>You can modify the name or add more departments later</p>
                 </Grid>
+                {/*Buttons*/}
                 <Grid xs={1}></Grid>
                 <Grid xs={3}><SelectItem label="Customer Success" /></Grid>
                 <Grid xs={3}><SelectItem label="Design" /></Grid>
@@ -42,6 +44,7 @@ export default function SetupDepartmentsMenu({style}) {
                 <Grid xs={3}><SelectItem label="Sales" /></Grid>
                 <Grid xs={1}></Grid>
             </Grid>
+            {/*Add departments button*/}
             <HRMButton mode="primary" label="Add Departments" style={{
                 float: "right",
                 marginTop: "80px"

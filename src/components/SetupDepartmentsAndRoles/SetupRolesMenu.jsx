@@ -22,10 +22,12 @@ export default function SetupRolesMenu({style}) {
             fontFamily: "Inter, sans-serif",
         }, ...style}}>
             <Grid container columns={11} spacing={2}>
+                {/*Text*/}
                 <Grid xs={11} textAlign="center">
                     <h3>Select the roles to add</h3>
                     <p>You can modify the name or add more roles later</p>
                 </Grid>
+                {/*Buttons*/}
                 <Grid xs={1}></Grid>
                 <Grid xs={3}><SelectItem label="Account Manager" /></Grid>
                 <Grid xs={3}><SelectItem label="Business Developer" /></Grid>
@@ -47,6 +49,7 @@ export default function SetupRolesMenu({style}) {
                 <Grid xs={3}><SelectItem label="Sales Representative" /></Grid>
                 <Grid xs={1}></Grid>
             </Grid>
+            {/*Add roles button*/}
             <HRMButton mode="primary" label="Add Roles" style={{
                 float: "right",
                 marginTop: "80px"
