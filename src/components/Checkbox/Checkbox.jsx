@@ -8,6 +8,7 @@ import './Checkbox.css';
  * Props:
  * - type<String>: Determines the type of checkbox.
  *      Valid values: ['checkbox', 'radio']
+ *      Default: 'checkbox'
  * 
  * - id<String>: Standard input id attribute
  * 
@@ -17,6 +18,7 @@ import './Checkbox.css';
  * 
  * - size<String>: Determines the size of the checkbox.
  *      Valid values: ['small', 'large']
+ *      Default: 'small'
  * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
@@ -50,12 +52,9 @@ Checkbox.propTypes = {
     enabled: PropTypes.bool
 };
 
-//Default values for this component in storybook
+//Default values for this component
 Checkbox.defaultProps = {
     type: 'checkbox',
-    id: 'test',
-    name: 'name',
-    value: 'value',
     size: 'small',
     style: {},
     enabled: true

@@ -42,8 +42,7 @@ HRMButtonGroup.propTypes = {
     buttonLabels: PropTypes.array
 };
 
-//Default values for this component in storybook
+//Default values for this component
 HRMButtonGroup.defaultProps = {
-    buttonLabels: ['Text', 'Text', 'Text'],
     style: {}
 };

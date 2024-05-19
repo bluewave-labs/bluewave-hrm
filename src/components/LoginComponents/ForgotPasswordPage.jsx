@@ -25,5 +25,5 @@ export default ForgotPasswordPage;
 //Control panel settings for storybook
 ForgotPasswordPage.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 ForgotPasswordPage.defaultProps = {};

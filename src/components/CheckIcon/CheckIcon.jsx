@@ -57,10 +57,7 @@ CheckIcon.propTypes = {
     color: PropTypes.oneOf(['purple', 'black', 'green'])
 };
 
-//Default values for this component in storybook
+//Default values for this component
 CheckIcon.defaultProps = {
-    type: 'outline',
-    size: 'medium',
-    color: 'purple',
     style: {}
 };

@@ -10,6 +10,9 @@ import './Switch.css';
  * - name<String>: Standard input name attribute
  * 
  * - value<String>: Standard input value attribute
+ * 
+ * - enabled<Boolean>: Flag determining whether the switch is enabled or disabled.
+ *      Default: true
  */
 export default function Switch({id, name, value, enabled}) {
     return (
@@ -20,13 +23,12 @@ export default function Switch({id, name, value, enabled}) {
     );
 };
 
+//Control panel settings for storybook 
 Switch.propTypes = {
     enabled: PropTypes.bool
 };
 
+//Default values for this component
 Switch.defaultProps = {
-    id: 'test',
-    name: 'name',
-    value: 'value',
     enabled: true
 };

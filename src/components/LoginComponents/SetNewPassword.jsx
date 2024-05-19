@@ -84,5 +84,5 @@ export default SetNewPasswordPage;
 //Control panel settings for storybook
 SetNewPasswordPage.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 SetNewPasswordPage.defaultProps = {};

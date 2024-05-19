@@ -24,5 +24,5 @@ export default CheckYourEmailPage;
 //Control panel settings for storybook
 CheckYourEmailPage.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 CheckYourEmailPage.defaultProps = {};

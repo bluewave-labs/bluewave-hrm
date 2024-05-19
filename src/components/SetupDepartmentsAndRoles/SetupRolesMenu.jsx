@@ -63,7 +63,7 @@ export default function SetupRolesMenu({style}) {
 //Control panel settings for storybook 
 SetupRolesMenu.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 SetupRolesMenu.defaultProps = {
     style: {}
 };

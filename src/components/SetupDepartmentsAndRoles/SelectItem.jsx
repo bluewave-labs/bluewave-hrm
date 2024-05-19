@@ -46,7 +46,7 @@ SelectItem.propTypes = {
     label: PropTypes.string
 };
 
-//Default values for this component in storybook
+//Default values for this component
 SelectItem.defaultProps = {
     label: 'Label',
     style: {}

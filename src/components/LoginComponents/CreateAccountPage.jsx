@@ -116,5 +116,5 @@ export default CreateAccountPage;
 //Control panel settings for storybook
 CreateAccountPage.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 CreateAccountPage.defaultProps = {};

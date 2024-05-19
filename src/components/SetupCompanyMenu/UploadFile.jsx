@@ -60,7 +60,7 @@ export default function UploadFile({style}) {
 //Control panel settings for storybook 
 UploadFile.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 UploadFile.defaultProps = {
     style: {}
 };

@@ -35,9 +35,7 @@ LabelA.propTypes = {
     children: PropTypes.string.isRequired
 };
 
-//Default values for this component in storybook
+//Default values for this component
 LabelA.defaultProps = {
-    mode: 'orange',
-    children: 'label',
-    default: {}
+    style: {}
 };

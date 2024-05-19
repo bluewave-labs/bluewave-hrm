@@ -31,8 +31,7 @@ Progress.propTypes = {
     value: PropTypes.string
 };
 
-//Default values for this component in storybook
+//Default values for this component
 Progress.defaultProps = {
-    value: '30',
     style: {}
 }

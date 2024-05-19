@@ -79,7 +79,7 @@ export default function SetupCompanyMenu({style}) {
 //Control panel settings for storybook 
 SetupCompanyMenu.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 SetupCompanyMenu.defaultProps = {
     style: {}
 };

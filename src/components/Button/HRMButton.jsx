@@ -114,7 +114,7 @@ HRMButton.propTypes = {
     mode: PropTypes.oneOf(['primary', 'secondaryA', 'secondaryB', 'tertiary', 'error']),
 
     //Button text
-    label: PropTypes.string.isRequired,
+    children: PropTypes.string.isRequired,
 
     //Button enabled flag
     enabled: PropTypes.bool,
@@ -123,12 +123,9 @@ HRMButton.propTypes = {
     onClick: PropTypes.func
 };
 
-//Default values for this component in storybook
+//Default values for this component
 HRMButton.defaultProps = {
-    mode: 'primary',
-    label: 'Button',
     style: {},
-    enabled: true,
-    onClick: undefined
+    enabled: true
 };
 

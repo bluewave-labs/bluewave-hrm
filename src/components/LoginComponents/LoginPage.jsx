@@ -61,5 +61,5 @@ export default LoginPage;
 //Control panel settings for storybook 
 LoginPage.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 LoginPage.defaultProps = {};

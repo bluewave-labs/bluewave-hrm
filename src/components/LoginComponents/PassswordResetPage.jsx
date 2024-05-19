@@ -22,5 +22,5 @@ export default PasswordResetPage;
 //Control panel settings for storybook
 PasswordResetPage.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 PasswordResetPage.defaultProps = {};

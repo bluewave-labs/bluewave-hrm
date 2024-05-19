@@ -38,5 +38,5 @@ export default function SuccessMenu({style}) {
 //Control panel settings for storybook
 SuccessMenu.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 SuccessMenu.defaultProps = {};

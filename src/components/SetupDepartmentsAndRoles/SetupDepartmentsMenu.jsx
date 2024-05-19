@@ -58,7 +58,7 @@ export default function SetupDepartmentsMenu({style}) {
 //Control panel settings for storybook 
 SetupDepartmentsMenu.propTypes = {};
 
-//Default values for this component in storybook
+//Default values for this component
 SetupDepartmentsMenu.defaultProps = {
     style: {}
 };
