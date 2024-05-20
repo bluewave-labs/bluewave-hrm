@@ -5,6 +5,8 @@ import AppTabs from "../components/AppTabs"
 import * as Status from "../Status";
 import AppStaticDatePicker from "../components/AppStaticDatePicker";
 import AppResponsiveDatePicker from "../components/AppResponsiveDatePicker";
+import AppVerticalTab from '../components/AppVerticalTab';
+import AppCalendar from '../components/AppCalendar'
 
 // Number of rows to display on the table at a time.
 const rowsPerPage = 6;
@@ -218,15 +220,19 @@ export default function Demonstration() {
       <Stack direction={"row"} spacing={5}>
         {/*Main Stack*/}
         <SideBar />
-        <Stack spacing={5}>{<AppTabs items={tabItems} />}</Stack>
+        <Stack spacing={5}>{<AppTabs items={tabItems} />}
+        <AppCalendar />
+        </Stack>
         <Stack spacing={5}>
         <Typography variant="h6" component="div">
         Date Pickers
       </Typography>
           <AppStaticDatePicker />
-          <AppResponsiveDatePicker />
+          <AppResponsiveDatePicker /> 
+          <AppVerticalTab />
         </Stack>
       </Stack>
+      
     </Box>
   );
 }

@@ -4,7 +4,7 @@ import Demo from "./containers/Demonstration";
 function App() {
   return (
     <Box>
-      <Demo />
+      { <Demo /> }    
     </Box>
   );
 }
