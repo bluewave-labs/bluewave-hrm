@@ -3,6 +3,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
+- Team management
+- Employee management
+- Time off & vacation management
+- Reporting
 
 In the project directory, you can run:
 
