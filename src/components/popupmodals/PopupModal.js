@@ -1,13 +1,11 @@
 import React from 'react'
 import './PopupModal.css'
 import CloseIcon from '@mui/icons-material/Close';
+import HRMButton from '../Button/HRMButton';
 
 
-const Button = ({ children, variant }) => {
-    const buttonClass = (variant === "primary1") ? "button-primary1" : (variant === "primary2") ? "button-primary2" : "button-secondary" ;
-  
-    return <button className={`button ${buttonClass}`}>{children}</button>;
-  };
+
+
 
 function PopupModals() {
   return (
@@ -19,7 +17,7 @@ function PopupModals() {
             
             <div className='btngroup1'>
                 <label className='discardLabel'>Discard</label>
-                <Button variant="primary1">Save changes</Button>
+                <HRMButton mode={'primary'}>Save changes</HRMButton>
             </div>
         </div>
         <div className='createNewDepartmentPopupBody'>
@@ -34,8 +32,8 @@ function PopupModals() {
                 <div><input type="text" id="departman-name"  className='inputname' placeholder='Human Resource' aria-label='Departman Name'></input></div>
             </main>
             <div className='createbtngroup'>
-                <Button variant="secondary" >Cancel</Button>
-                <Button variant="primary2" >Save</Button>
+                <HRMButton mode={'secondaryB'}>Cancel</HRMButton>
+                <HRMButton mode={'primary'}>Save</HRMButton>
             </div>
         </div>
 

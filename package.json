@@ -24,13 +24,6 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "plugin:storybook/recommended"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -54,7 +47,6 @@
     "@storybook/react": "^8.0.9",
     "@storybook/react-webpack5": "^8.0.9",
     "@storybook/test": "^8.0.9",
-    "eslint-plugin-storybook": "^0.8.0",
     "prop-types": "^15.8.1",
     "storybook": "^8.0.9",
     "webpack": "^5.91.0"

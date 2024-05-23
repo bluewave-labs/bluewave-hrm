@@ -16,7 +16,6 @@ function App() {
       <Logos/>
       <br/>
       <Charts/>
-      
       <ToolTips/>
       
       

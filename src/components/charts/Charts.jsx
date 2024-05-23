@@ -125,16 +125,9 @@ function ViewsCardCharts() {
 
 function Charts() {
   return (
-    // <Grid container justifyContent="space-around" alignItems="center">
-    //   <Grid item  xs={6}>
-    //     <ViewsCard viewsCount="2,000" percentChange="100" />
-    //   </Grid>
-    //   <Grid item xs={6}>
-    //     <ViewsCardCharts/>
-    //   </Grid>
-    // </Grid>
-
+    
     <div className="flex-container">
+      
       <div><ViewsCard viewsCount="2,000" percentChange="100" /></div>
       <div><ViewsCardCharts/></div>
 
