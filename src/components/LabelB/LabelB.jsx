@@ -18,8 +18,20 @@ import './LabelB.css';
 export default function LabelB({type, children, style}) {
     return (
         <Box
-            className="labelB"
-            sx={style}
+            sx={{...{
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 400,
+                fontSize: 12,
+                maxWidth: "67px",
+                maxHeight: "22px",
+                paddingY: "2px",
+                paddingX: "6px",
+                border: "1px solid #D0D5DD",
+                borderRadius: "6px",
+                color: "#344054",
+                display: "flex",
+                alignItems: "center"
+            }, ...style}}
         >
             {type == "seen" && <span className="dot seen"></span>}
             {type == "waiting" && <span className="dot waiting"></span>}

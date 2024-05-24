@@ -25,4 +25,4 @@ yarn-error.log*
 *storybook.log
 .storybook/
 /src/stories
-*.stories.js
+/src/components/UpdatesMenu/

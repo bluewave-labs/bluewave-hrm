@@ -18,8 +18,14 @@ import './LabelA.css';
 export default function LabelA({mode, children, style}) {
     return (
         <Box
-            className={["labelA", `label-${mode}`].join(" ")}
-            sx={style}
+            className={`label-${mode}`}
+            sx={{...{
+                fontFamily: "Inter, sans-serif",
+                fontSize: "12px",
+                paddingY: "2px",
+                paddingX: "8px",
+                borderRadius: "4px"
+            }, ...style}}
         >
             {children}
         </Box>

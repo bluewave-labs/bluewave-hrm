@@ -1,5 +1,5 @@
-import {styled} from '@mui/system';
-import {useState} from 'react';
+import { styled } from '@mui/system';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -7,12 +7,12 @@ import PropTypes from 'prop-types';
  * SetupRolesMenu components
  * 
  * Props:
- * - label<String>: Text to be used for the button label.
+ * - children<Any>: Text to be used for the button label
  * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function SelectItem({label, style}) {
+export default function SelectItem({children, style}) {
     const [selected, setSelected] = useState(false);
 
     function handleClick() {
@@ -37,17 +37,17 @@ export default function SelectItem({label, style}) {
     }, ...style});
 
     return (
-        <Item onClick={handleClick}>{label}</Item>
+        <Item onClick={handleClick}>{children}</Item>
     );
 };
 
 //Control panel settings for storybook 
 SelectItem.propTypes = {
-    label: PropTypes.string
+    children: PropTypes.string
 };
 
 //Default values for this component
 SelectItem.defaultProps = {
-    label: 'Label',
+    children: 'Label',
     style: {}
 };
