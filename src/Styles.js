@@ -12,7 +12,7 @@ export const fonts = {
         size: '16px',
         lineHeight: '24px',
         color: colors.darkGrey,
-        fontWeight: 600
+        fontWeight: 500
     },
     default: {
         size: '13px',

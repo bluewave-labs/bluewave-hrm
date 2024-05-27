@@ -5,17 +5,17 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Button component which displays a dropdown menu when toggled
+ * Button component which displays a dropdown menu when toggled.
  * 
  * Props:
- * - label<String>: Text to be used for the button label
+ * - label<String>: Text to be used for the button label.
  * 
- * - menuComponent<Component>: Menu component to be displayed when button is toggled
+ * - menuComponent<Component>: Menu component to be displayed when button is toggled.
  * 
- * - icon<Component>: Optional prop for including an icon in the button label
+ * - icon<Component>: Optional prop for including an icon in the button label.
  *      Default: null
  * 
- * - style<Object>: Optional prop for adding further inline styling 
+ * - style<Object>: Optional prop for adding further inline styling .
  *      Default: {}
  */
 export default function MenuToggleButton({label, menuComponent, icon, style}) {
