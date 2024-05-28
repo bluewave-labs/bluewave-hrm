@@ -1,6 +1,6 @@
-import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/system';
 
 /**
  * Button components for both HRM and Onboarding applications. Can be configured to be a primary,

@@ -5,6 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Label from '../Label/Label';
 import HRMButton from '../Button/HRMButton';
+import PropTypes from 'prop-types';
 
 /**
  * Menu component for listing update notifications in the home page.
@@ -67,7 +68,9 @@ export default function UpdatesList({updates, style}) {
 };
 
 //Control panel settings for storybook
-UpdatesList.propTypes = {};
+UpdatesList.propTypes = {
+    updates: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string))
+};
 
 //Default values for this component
 UpdatesList.defaultProps = {
