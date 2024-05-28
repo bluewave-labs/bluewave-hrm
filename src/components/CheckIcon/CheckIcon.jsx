@@ -1,7 +1,8 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import {ThemeProvider, createTheme} from '@mui/system';
+import { ThemeProvider, createTheme } from '@mui/system';
 import PropTypes from 'prop-types';
+import { colors } from '../../Styles.js';
 
 /**
  * Check icon components for both HRM and Onboarding applications. Can be configured to be an
@@ -23,9 +24,9 @@ import PropTypes from 'prop-types';
 export default function CheckIcon({type, size, color, style}) {
     const theme = createTheme({
         palette: {
-            purple: "#7F56D9",
-            black: "#475467",
-            green: "#079455"
+            purple: colors.purple,
+            black: colors.darkGrey,
+            green: colors.green
         }
     });
 

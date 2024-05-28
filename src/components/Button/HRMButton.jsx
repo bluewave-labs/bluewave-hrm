@@ -1,6 +1,6 @@
-import {styled} from '@mui/system';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/system';
 
 /**
  * Button components for both HRM and Onboarding applications. Can be configured to be a primary,
@@ -12,13 +12,19 @@ import PropTypes from 'prop-types';
  * 
  * - children<Any>: Text to be used for the button label.
  * 
- * - style<Object>: Optional prop for adding further inline styling 
+ * - startIcon<Component>: Optional prop for including an icon on the left side of the button label.
+ *      Default: null
+ * 
+ * - endIcon<Component>: Optional prop for including an icon on the right side of the button label.
+ *      Default: null
+ * 
+ * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  * 
  * - enabled<Boolean>: Flag determining whether the button is enabled or disabled.
  *      Default: true
  */
-export default function HRMButton({mode, children, style, enabled}) {
+export default function HRMButton({mode, children, startIcon, endIcon, style, enabled}) {
     const primaryStyle = {
         textTransform: "none",
         backgroundColor: "#7F56D9",
@@ -93,17 +99,17 @@ export default function HRMButton({mode, children, style, enabled}) {
 
     if (mode === "primary" || mode === "error") {
         return (
-            <StyledButton variant="contained" disabled={!enabled} disableElevation>{children}</StyledButton>
+            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="contained" disabled={!enabled} disableElevation>{children}</StyledButton>
         );
     }
     else if (mode === "secondaryA" || mode === "secondaryB") {
         return (
-            <StyledButton variant="outlined" disabled={!enabled}>{children}</StyledButton>
+            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="outlined" disabled={!enabled}>{children}</StyledButton>
         );
     }
     else {
         return (
-            <StyledButton variant="text" disabled={!enabled}>{children}</StyledButton>
+            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="text" disabled={!enabled}>{children}</StyledButton>
         );
     }
 };
@@ -125,6 +131,8 @@ HRMButton.propTypes = {
 
 //Default values for this component
 HRMButton.defaultProps = {
+    startIcon: null,
+    endIcon: null,
     style: {},
     enabled: true
 };
