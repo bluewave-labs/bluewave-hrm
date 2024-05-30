@@ -65,6 +65,15 @@ export default function CustomizedSwitches() {
       <FormControlLabel
         control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
         label="Active and visible"
+        sx={{
+          '& .MuiFormControlLabel-label': {
+           // Change to your desired font
+            fontSize: '13px', // Change to your desired font size
+            fontWeight: 'regular',
+            color:'#344054' // Change to your desired font weight
+             // Change to your desired font color
+          },
+        }}
       />
      
     </FormGroup>

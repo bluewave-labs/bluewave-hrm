@@ -27,23 +27,25 @@ const AnnouncementSubscribe = () => {
   return (
     <>
       <Box  disableGutters
-
-            width={768}
-            marginLeft={30}
-            marginTop={30}
-            boxShadow={5}
-            pt={'20px'}
-            px={'20px'}
-            pb={'20px'}>
+            sx={{
+              width: 768,
+              marginLeft: 30,
+              marginTop: 24,
+              marginBottom: 24,
+              padding:'24px',
+              border: '1px solid #EAECF0',
+              fontFamily:'Inter'
+            }}
+            >
             
         <Stack spacing={2}>
-          <Typography sx={{fontSize:'16px',fontWeight:'bold'}}>We’ve just released a new update!</Typography>
-          <Typography sx={{fontSize:'13px'}}>Check out the all new dashboard view. Pages and now load faster.</Typography>
-          <Typography sx={{fontSize:'13px',fontWeight:'bold'}}>Subscribe to updates</Typography>
+          <Typography sx={{fontSize:'18px',fontWeight:'600',color:'#101828',fontFamily:'Inter'}}>We’ve just released a new update!</Typography>
+          <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter'}}>Check out the all new dashboard view. Pages and now load faster.</Typography>
+          <Typography sx={{fontSize:'13px',fontWeight:'600',color:'#344054',fontFamily:'Inter'}}>Subscribe to updates</Typography>
           <Stack spacing={2} direction="row">
-          <TextField placeholder='olivia@untitledui.com' size='small' sx = {{width:'40%',mb:'30px'}}/>
-          <ColorButton variant="contained">Subscribe</ColorButton>
-        </Stack>
+            <TextField placeholder='olivia@untitledui.com' size='small' sx = {{width:'40%',mb:'30px'}}/>
+            <ColorButton sx={{ textTransform: 'capitalize',fontSize:'13px',fontFamily:'Inter',fontWeight:'regular' }} variant="contained">Subscribe</ColorButton>
+          </Stack>
         </Stack>
        
       </Box>

@@ -9,6 +9,8 @@ import { styled } from '@mui/material/styles';
 
 const FileUploadDialog = () => {
 
+
+ // Linear Progress Bar with passing % as prop 
   function LinearProgressWithLabel(props) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -24,6 +26,7 @@ const FileUploadDialog = () => {
     );
   }
 
+// Give some styling on the Liniear Progeass Bar
   const BorderLinearProgress = styled(LinearProgressWithLabel)(({ theme }) => ({
     height: 10,
     borderRadius: 5,
@@ -41,25 +44,28 @@ const FileUploadDialog = () => {
     <>
 
       <Box  disableGutters
-            width={512}
-            margin={20}
-            boxShadow={5}
-            pt={'20px'}
-            px={'20px'}
-            pb={'20px'}
-            flexGrow={1}>
+            sx={{
+              width: 512,
+              marginLeft: 30,
+              marginTop: 24,
+              marginBottom: 24,
+              padding:'16px',
+              border: '1px solid #EAECF0',
+              fontFamily:'Inter',
+              flexGrow: 1
+          
+            }} >
         <Grid container>
         <Grid item xs={2}>
           <PictureAsPdfIcon/> 
         </Grid>
         <Grid item xs={10}>
           <Stack>
-            <Box sx={{ display: 'flex', justifyContent:'space-between'
-             }} >
-              <Typography>Tech design requirements.pdf</Typography>
+            <Box sx={{ display: 'flex', justifyContent:'space-between'}}>
+              <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#344054',fontFamily:'Inter'}}>Tech design requirements.pdf</Typography>
               <DeleteIcon/>
             </Box>
-            <Typography>200 KB</Typography>
+            <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#344054',fontFamily:'Inter'}}>200 KB</Typography>
             <Box>
             <BorderLinearProgress variant="determinate" value={10} />
             </Box>

@@ -27,20 +27,23 @@ const Announcement = () => {
   return (
     <>
       <Box  disableGutters
-            height={160}
-            width={768}
-            marginLeft={30}
-            marginTop={30}
-            boxShadow={5}
-            pt={'20px'}
-            px={'20px'}>
+            sx={{
+              height: 160,
+              width: 768,
+              marginLeft: 30,
+              marginTop: 30,
+              border: '1px solid #EAECF0',
+              pt: '20px',
+              px: '20px',
+              fontFamily:'Inter'
+            }}>
         <Stack spacing={2}>
-        <Typography sx={{fontSize:'16px',fontWeight:'bold'}}>We’ve just released a new update!</Typography>
-        <Typography sx={{fontSize:'13px'}}>Check out the all new dashboard view. Pages and now load faster.</Typography>
-        <Stack spacing={2} direction="row">
-          <OutlinedButton variant="outlined">Dismiss</OutlinedButton>
-          <ColorButton variant="contained">Changelog</ColorButton>
-        </Stack>
+          <Typography sx={{fontSize:'16px',fontWeight:'600',color:'#101828',fontFamily:'Inter'}}>We’ve just released a new update!</Typography>
+          <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter'}}>Check out the all new dashboard view. Pages and now load faster.</Typography>
+          <Stack spacing={2} direction="row">
+            <OutlinedButton sx={{ textTransform: 'capitalize',fontSize:'13px',fontFamily:'Inter',fontWeight:'regular' }} variant="outlined">Dismiss</OutlinedButton>
+            <ColorButton sx={{ textTransform: 'capitalize', fontSize:'13px',fontFamily:'Inter',fontWeight:'regular' }} variant="contained">Changelog</ColorButton>
+          </Stack>
         </Stack>
        
       </Box>

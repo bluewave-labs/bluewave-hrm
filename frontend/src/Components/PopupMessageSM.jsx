@@ -11,36 +11,39 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Button from '@mui/material/Button';
 
 
-const PopupMessage = () => {
+const PopupMessageSM = () => {
   return (
     <>
        <Box  disableGutters
              sx={{
-              width: 812,
-              height:108,
+              width: 343,
               marginLeft: 30,
               marginTop: 24,
               marginBottom: 24,
-              padding:'20px',
+              paddingTop:'16px',
+              paddingBottom:'16px',
+              paddingRight:'16px',
               border: '1px solid #EAECF0',
               fontFamily:'Inter',
-              flexGrow:1
-            }}>
+             
+            }} >
         <Grid container>
         <Grid item xs={1}>
-          <InfoOutlinedIcon/>
         </Grid>
         <Grid item xs={11}>
           <Stack>
             <Box sx={{ display: 'flex', justifyContent:'space-between'}}>
-              <Typography sx={{fontSize:'13px',fontWeight:'600',color:'#344054',fontFamily:'Inter'}}>We’ve just released a new feature</Typography>
+              <Stack>
+              <Typography sx={{fontSize:'13px',fontWeight:'600',color:'#344054',fontFamily:'Inter',marginBottom:'4px'}}>We’ve just released a new feature</Typography>
+              <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter',marginBottom:'4px'}}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor.</Typography>
+              <Stack disableGutters direction='row'>
+              <Button sx={{textTransform: 'capitalize',color: '#475467',fontWeight:'bold',pl:0,fontSize:'13px',fontFamily:'Inter' }} s variant="text">Dismiss</Button>
+              <Button sx={{textTransform: 'capitalize', color:'#6941C6', fontWeight:'bold',fontSize:'13px',fontFamily:'Inter'}}variant="text">View changes</Button>
+              </Stack>
+              </Stack>
               <CloseIcon sx={{color:'#98A2B3'}}/>
             </Box>
-            <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter'}} >Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor.</Typography>
-            <Stack disableGutters direction='row' sx={{paddingLeft:0,marginLeft:0}}>
-              <Button sx={{paddingLeft:0,textTransform: 'capitalize',fontSize:'13px',fontFamily:'Inter', color: '#475467',fontWeight:'600'}} s variant="text">Dismiss</Button>
-              <Button sx={{textTransform: 'capitalize',fontSize:'13px',fontFamly:'Inter', color:'#6941C6', fontWeight:'600'}}variant="text">View changes</Button>
-            </Stack>
+           
           </Stack>
         
         </Grid>
@@ -49,9 +52,7 @@ const PopupMessage = () => {
        
       </Box>
     </>
-   
-    
   )
 }
 
-export default PopupMessage
+export default PopupMessageSM
