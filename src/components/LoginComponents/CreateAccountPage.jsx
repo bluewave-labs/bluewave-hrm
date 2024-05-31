@@ -51,7 +51,6 @@ function CreateAccountPage() {
     <body class="login-body"> 
     <div className="login-container">
       <h2 style={{marginBottom: "0px"}}>Create an account</h2>
-      <h3>Start your 30-day free trial</h3>
       <div className="form-group">
       <div className='check-div'>
       {isNameValid && <CheckCircleIcon style={{ color: 'green', fontSize: '20px' }} />}
