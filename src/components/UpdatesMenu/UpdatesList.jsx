@@ -20,7 +20,7 @@ export default function UpdatesList({updates, style}) {
 
     return (
         <TableContainer sx={{...{
-            width: "925px"
+            minWidth: "925px"
         }, ...style}}>
             <Table>
                 <TableBody>
