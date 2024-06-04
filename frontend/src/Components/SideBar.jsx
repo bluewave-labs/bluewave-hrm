@@ -42,15 +42,15 @@ const SideBar = () => {
 
   return (
     <Box
-    disableGutters
-    height={811}
-    width={460}
-    marginLeft={30}
-    marginTop={30}
-    boxShadow={5}
+      sx={{
+        height:811,
+        width:460,
+        marginLeft:30,
+        marginTop:30,
+        border: '1px solid #EAECF0',
+      }}>
    
-    // sx={{boxShadow: 5}}
-   >
+
     
       
       <Box
@@ -108,6 +108,7 @@ const SideBar = () => {
                 displayEmpty
                 size='small'
                 inputProps={{ 'aria-label': 'Without label' }}
+                
                 >
                 <MenuItem sx={{color:'#667085',fontSize:'13px'}} disabled value="">Equals to</MenuItem>
                 <MenuItem sx={{color:'#667085',fontSize:'13px'}} value={10}>Ten</MenuItem>
@@ -143,6 +144,16 @@ const SideBar = () => {
                 displayEmpty
                 size='small'
                 inputProps={{ 'aria-label': 'Without label' }}
+                MenuProps={{
+                  anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  },
+                  transformOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  },
+                }}
                 >
                 <MenuItem sx={{color:'#667085',fontSize:'13px'}} disabled value="">Default theme</MenuItem>
                 <MenuItem sx={{color:'#667085',fontSize:'13px'}} value={10}>Ten</MenuItem>
