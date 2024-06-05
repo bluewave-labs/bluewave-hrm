@@ -1,0 +1,1517 @@
+[
+  {
+    "administratorId": 61,
+    "permissionId": 1,
+    "isGranted": true
+  },
+  {
+    "administratorId": 61,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 61,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 38,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 38,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 38,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 69,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 69,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 69,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 25,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 25,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 25,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 63,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 63,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 63,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 17,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 17,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 17,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 6,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 6,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 6,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 12,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 12,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 12,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 1,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 1,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 1,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 78,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 78,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 78,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 31,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 31,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 31,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 55,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 55,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 55,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 94,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 94,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 94,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 51,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 51,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 51,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 86,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 86,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 86,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 96,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 96,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 96,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 10,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 10,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 10,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 84,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 84,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 84,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 3,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 3,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 3,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 93,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 93,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 93,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 18,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 18,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 18,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 89,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 89,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 89,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 28,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 28,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 28,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 64,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 64,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 64,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 81,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 81,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 81,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 21,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 21,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 21,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 46,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 46,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 46,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 65,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 65,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 65,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 47,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 47,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 47,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 35,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 35,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 35,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 42,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 42,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 42,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 74,
+    "permissionId": 1,
+    "isGranted": true
+  },
+  {
+    "administratorId": 74,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 74,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 90,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 90,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 90,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 41,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 41,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 41,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 79,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 79,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 79,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 40,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 40,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 40,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 100,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 100,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 100,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 73,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 73,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 73,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 54,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 54,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 54,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 95,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 95,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 95,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 56,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 56,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 56,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 68,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 68,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 68,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 77,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 77,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 77,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 50,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 50,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 50,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 22,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 22,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 22,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 101,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 101,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 101,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 70,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 70,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 70,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 72,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 72,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 72,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 4,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 4,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 4,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 59,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 59,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 59,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 11,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 11,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 11,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 82,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 82,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 82,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 16,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 16,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 16,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 97,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 97,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 97,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 36,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 36,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 36,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 66,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 66,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 66,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 26,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 26,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 26,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 33,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 33,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 33,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 91,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 91,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 91,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 13,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 13,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 13,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 49,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 49,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 49,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 2,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 2,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 2,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 87,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 87,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 87,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 23,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 23,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 23,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 67,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 67,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 67,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 62,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 62,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 62,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 20,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 20,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 20,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 9,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 9,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 9,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 48,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 48,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 48,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 88,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 88,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 88,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 5,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 5,
+    "permissionId": 2,
+    "isGranted": true
+  },
+  {
+    "administratorId": 5,
+    "permissionId": 3,
+    "isGranted": false
+  },
+  {
+    "administratorId": 60,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 60,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 60,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 14,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 14,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 14,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 45,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 45,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 45,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 99,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 99,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 99,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 92,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 92,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 92,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 43,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 43,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 43,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 19,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 19,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 19,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 30,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 30,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 30,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 29,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 29,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 29,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 27,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 27,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 27,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 44,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 44,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 44,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 37,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 37,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 37,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 83,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 83,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 83,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 76,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 76,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 76,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 85,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 85,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 85,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 34,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 34,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 34,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 24,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 24,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 24,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 52,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 52,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 52,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 75,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 75,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 75,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 71,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 71,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 71,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 53,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 53,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 53,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 80,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 80,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 80,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 7,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 7,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 7,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 15,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 15,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 15,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 32,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 32,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 32,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 58,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 58,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 58,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 57,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 57,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 57,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 98,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 98,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 98,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 8,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 8,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 8,
+    "permissionId": 3,
+    "isGranted": true
+  },
+  {
+    "administratorId": 39,
+    "permissionId": 1,
+    "isGranted": false
+  },
+  {
+    "administratorId": 39,
+    "permissionId": 2,
+    "isGranted": false
+  },
+  {
+    "administratorId": 39,
+    "permissionId": 3,
+    "isGranted": true
+  }
+]

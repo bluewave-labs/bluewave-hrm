@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "departmentName": "Engineering and Development",
+    "departmentManagerId": 53
+  },
+  {
+    "id": 2,
+    "departmentName": "Product Management",
+    "departmentManagerId": 69
+  },
+  {
+    "id": 3,
+    "departmentName": "Quality Assurance",
+    "departmentManagerId": 9
+  },
+  {
+    "id": 4,
+    "departmentName": "Sales and Marketing",
+    "departmentManagerId": 42
+  },
+  {
+    "id": 5,
+    "departmentName": "Customer Support",
+    "departmentManagerId": 57
+  },
+  {
+    "id": 6,
+    "departmentName": "Human Resources",
+    "departmentManagerId": 32
+  },
+  {
+    "id": 7,
+    "departmentName": "Finance ",
+    "departmentManagerId": 55
+  },
+  {
+    "id": 8,
+    "departmentName": "Administration",
+    "departmentManagerId": 50
+  },
+  {
+    "id": 9,
+    "departmentName": "Research and Development",
+    "departmentManagerId": 71
+  },
+  {
+    "id": 10,
+    "departmentName": "Legal",
+    "departmentManagerId": 38
+  },
+  {
+    "id": 11,
+    "departmentName": "Executive",
+    "departmentManagerId": 1
+  }
+]

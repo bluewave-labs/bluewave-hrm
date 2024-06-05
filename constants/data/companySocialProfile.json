@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "mediumName": "Facebook",
+    "companyId": 1,
+    "profileUrl": "https://facebook.com/bluewavelabs"
+  },
+  {
+    "id": 2,
+    "mediumName": "Twitter",
+    "companyId": 1,
+    "profileUrl": "https://twitter.com/bluewavelabs"
+  },
+  {
+    "id": 3,
+    "mediumName": "Linkedin",
+    "companyId": 1,
+    "profileUrl": "http://linkedin.com/bluewavelabs"
+  }
+]
