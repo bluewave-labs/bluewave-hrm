@@ -171,11 +171,15 @@ export default function UpdatesMenu({style}) {
             {/*If there are updates, display the updates list and navbar */}
             {(allUpdates.length > 0) ?
                 <>
-                    <Stack direction="row" sx={{
-                        justifyContent: "space-between",
-                        fontFamily: fonts.fontFamily,
-                        marginBottom: "10px"
-                    }}>
+                    <Stack 
+                        direction="row" 
+                        justifyContent="space-between" 
+                        alignItems="center" 
+                        sx={{
+                            fontFamily: fonts.fontFamily,
+                            marginBottom: "10px"
+                        }}
+                    >
                         <h3 style={{color: colors.darkGrey}}>Latest updates</h3>
                         <UpdatesFilter handleFilter={handleFilter} />
                     </Stack>

@@ -12,7 +12,7 @@ import { fonts } from '../../Styles';
  * 
  * Props:
  * - numOfUpdates<Integer>: The number of updates to be displayed by the parent menu component.
- *      Must be greater than 0
+ *      Must be greater than 0.
  * 
  * - currentPage<Integer>: The currently selected page in the parent menu component. Is set 
  *      using state management hooks. Must be between 1 and the number of pages.

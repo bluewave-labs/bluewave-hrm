@@ -23,10 +23,12 @@ export default function UpdatesFilter({filter, handleFilter, style}) {
             exclusive
             sx={{...{
                 border: "1px solid #D0D5DD",
-                borderRadius: "8px"
-        }, ...style}}>
-            <ToggleButton value="All" sx={{textTransform: "none", padding: "4px"}}>All</ToggleButton>
-            <ToggleButton value="Unread" sx={{textTransform: "none", padding: "4px"}}>Unread</ToggleButton>
+                borderRadius: "8px",
+                height: "34px"
+            }, ...style}}
+        >
+            <ToggleButton value="All" sx={{textTransform: "none", paddingY: "4px"}}>All</ToggleButton>
+            <ToggleButton value="Unread" sx={{textTransform: "none", paddingY: "4px"}}>Unread</ToggleButton>
         </ToggleButtonGroup>
     );
 };
