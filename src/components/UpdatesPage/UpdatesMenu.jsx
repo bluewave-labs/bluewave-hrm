@@ -165,7 +165,8 @@ export default function UpdatesMenu({style}) {
             paddingX: "59px",
             paddingY: "31px",
             border: "1px solid #EBEBEB",
-            borderRadius: "10px"
+            borderRadius: "10px",
+            backgroundColor: "#FFFFFF"
         }, ...style}}>
             {/*If there are updates, display the updates list and navbar */}
             {(allUpdates.length > 0) ?
@@ -181,17 +182,19 @@ export default function UpdatesMenu({style}) {
                     {/*Updates list*/}
                     <UpdatesList updates={updatesToDisplay} style={{marginBottom: "20px"}} />
                     {/*Updates nav bar*/}
-                    <UpdatesNavBar 
-                        numOfUpdates={filteredUpdates.length} 
-                        currentPage={currentPage} 
-                        handlePage={handlePage}
-                    /> 
+                    {filteredUpdates.length > 10 &&
+                        <UpdatesNavBar 
+                            numOfUpdates={filteredUpdates.length} 
+                            currentPage={currentPage} 
+                            handlePage={handlePage}
+                        /> 
+                    }       
                 </> :
                 <>
                     {/*Otherwise, display a message that there are no updates*/}
                     <NoContentComponent>
                         <h3 style={{color:colors.darkGrey}}>You don't have any updates yet</h3>
-                        <p style={{color:colors.darkGrey}}>Any update about your company will be shown here.</p>
+                        <p style={{color:colors.darkGrey}}>Any updates about your company will be shown here.</p>
                     </NoContentComponent>
                 </>
             }

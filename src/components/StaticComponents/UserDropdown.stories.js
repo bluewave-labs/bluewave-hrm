@@ -3,7 +3,7 @@ import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 
 //Storybook display settings
 export default {
-    title: 'Header/UserDropdown',
+    title: 'StaticMenus/UserDropdown',
     component: UserDropdown,
     parameters: {
         layout: 'centered'

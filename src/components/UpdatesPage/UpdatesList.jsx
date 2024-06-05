@@ -17,7 +17,6 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function UpdatesList({updates, style}) {
-
     return (
         <TableContainer sx={{...{
             minWidth: "925px"

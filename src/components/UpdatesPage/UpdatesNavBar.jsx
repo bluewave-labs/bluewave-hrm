@@ -90,7 +90,7 @@ export default function UpdatesNavBar({numOfUpdates, currentPage, handlePage, st
     return (
         <Box sx={{...{
             boxSizing: "border-box",
-            width: "925px",
+            minWidth: "925px",
             display: "flex",
             padding: 2,
             justifyContent: "space-between",

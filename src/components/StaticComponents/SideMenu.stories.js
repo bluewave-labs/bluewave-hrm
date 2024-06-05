@@ -1,9 +1,8 @@
 import Box from '@mui/system/Box';
-import Header from './Header';
+import SideMenu from './SideMenu';
 
-//Storybook display settings
 export default {
-    title: 'StaticMenus/Header',
+    title: 'StaticMenus/SideMenu',
     component: Box,
     parameters: {
         layout: 'centered'
@@ -11,12 +10,12 @@ export default {
     tags: ['autodocs']
 };
 
-//Stories for each Header type
 export const Primary = {
     args: {
-        children: <Header />,
+        children: <SideMenu />,
         sx: {
-            minWidth: "1042px"
+            width: "1440px",
+            height: "1056px"
         }
     }
 };
