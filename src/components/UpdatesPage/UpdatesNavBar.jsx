@@ -12,17 +12,18 @@ import { fonts } from '../../Styles';
  * 
  * Props:
  * - numOfUpdates<Integer>: The number of updates to be displayed by the parent menu component.
- *      Must be greater than 0
+ *      Must be greater than 0.
  * 
  * - currentPage<Integer>: The currently selected page in the parent menu component. Is set 
  *      using state management hooks. Must be between 1 and the number of pages.
  * 
- * - setCurrentPage<Function>: The function to set the currently selected page.
+ * - handlePage<Function>: The function to set the currently selected page.
+ *      Syntax: handlePage(<page number>)
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function UpdatesNavBar({numOfUpdates, currentPage, style}) {
+export default function UpdatesNavBar({numOfUpdates, currentPage, handlePage, style}) {
     const numOfPages = Math.ceil(numOfUpdates / 10);
     const pageNumbers = Array.from({length: numOfPages}, (_, i) => i + 1);
 
@@ -34,8 +35,8 @@ export default function UpdatesNavBar({numOfUpdates, currentPage, style}) {
         pageButtons = <Stack direction="row" spacing={1}>
             {pageNumbers.map((n) => (
                 (currentPage === n) ? 
-                    <Chip label={n} sx={{backgroundColor: "#F9FAFB"}} /> : 
-                    <Chip label={n} sx={{backgroundColor: "#FFFFFF"}} />
+                    <Chip label={n} sx={{backgroundColor: "#EAECF0"}} /> : 
+                    <Chip label={n} onClick={() => handlePage(n)} sx={{backgroundColor: "#FFFFFF"}} />
             ))}
         </Stack>;
     }
@@ -45,50 +46,51 @@ export default function UpdatesNavBar({numOfUpdates, currentPage, style}) {
         pageButtons = <Stack direction="row" spacing={1}>
             {/*Always display the first 3 page buttons*/}
             {(currentPage === 1) ? 
-                <Chip label={1} sx={{backgroundColor: "#F9FAFB"}} /> : 
-                <Chip label={1} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={1} sx={{backgroundColor: "#EAECF0"}} /> : 
+                <Chip label={1} onClick={() => handlePage(1)} sx={{backgroundColor: "#FFFFFF"}} />}
             {(currentPage === 2) ? 
-                <Chip label={2} sx={{backgroundColor: "#F9FAFB"}} /> : 
-                <Chip label={2} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={2} sx={{backgroundColor: "#EAECF0"}} /> : 
+                <Chip label={2} onClick={() => handlePage(2)} sx={{backgroundColor: "#FFFFFF"}} />}
             {(currentPage === 3) ? 
-                <Chip label={3} sx={{backgroundColor: "#F9FAFB"}} /> : 
-                <Chip label={3} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={3} sx={{backgroundColor: "#EAECF0"}} /> : 
+                <Chip label={3} onClick={() => handlePage(3)} sx={{backgroundColor: "#FFFFFF"}} />}
             {/*Display ellipsis if there is a significant gap between the current page and the
-                first three pages*/}
+                first 3 pages*/}
             {currentPage > 6 && <Chip label={"..."} sx={{backgroundColor: "#FFFFFF"}} />}
 
-            {/*Display the current page as well as buttons for the previous and next two pages
+            {/*Display the current page as well as buttons for the previous and next 2 pages
             if they are not already displayed*/}
             {(currentPage - 2 > 3 && currentPage - 2 < numOfPages - 2) && 
-                <Chip label={currentPage - 2} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={currentPage - 2} onClick={() => handlePage(currentPage - 2)} sx={{backgroundColor: "#FFFFFF"}} />}
             {(currentPage - 1 > 3 && currentPage - 1 < numOfPages - 2) && 
-                <Chip label={currentPage - 1} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={currentPage - 1} onClick={() => handlePage(currentPage - 1)} sx={{backgroundColor: "#FFFFFF"}} />}
             {(currentPage > 3 && currentPage < numOfPages - 2) && 
-                <Chip label={currentPage} sx={{backgroundColor: "#F9FAFB"}} />}
+                <Chip label={currentPage} sx={{backgroundColor: "#EAECF0"}} />}
             {(currentPage + 1 > 3 && currentPage + 1 < numOfPages - 2) && 
-                <Chip label={currentPage + 1} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={currentPage + 1} onClick={() => handlePage(currentPage + 1)} sx={{backgroundColor: "#FFFFFF"}} />}
             {(currentPage + 2 > 3 && currentPage + 2 < numOfPages - 2) && 
-                <Chip label={currentPage + 2} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={currentPage + 2} onClick={() => handlePage(currentPage + 2)} sx={{backgroundColor: "#FFFFFF"}} />}
             
             {/*Display ellipsis if there is a significant gap between the current page and the
-                last three pages*/}
+                last 3 pages*/}
             {currentPage < numOfPages - 5 && <Chip label={"..."} sx={{backgroundColor: "#FFFFFF"}} />}
             {/*Always display the last 3 page buttons*/}
             {(currentPage === numOfPages - 2) ? 
-                <Chip label={numOfPages - 2} sx={{backgroundColor: "#F9FAFB"}} /> : 
-                <Chip label={numOfPages - 2} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={numOfPages - 2} sx={{backgroundColor: "#EAECF0"}} /> : 
+                <Chip label={numOfPages - 2} onClick={() => handlePage(numOfPages - 2)} sx={{backgroundColor: "#FFFFFF"}} />}
             {(currentPage === numOfPages - 1) ? 
-                <Chip label={numOfPages - 1} sx={{backgroundColor: "#F9FAFB"}} /> : 
-                <Chip label={numOfPages - 1} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={numOfPages - 1} sx={{backgroundColor: "#EAECF0"}} /> : 
+                <Chip label={numOfPages - 1} onClick={() => handlePage(numOfPages - 1)} sx={{backgroundColor: "#FFFFFF"}} />}
             {(currentPage === numOfPages) ? 
-                <Chip label={numOfPages} sx={{backgroundColor: "#F9FAFB"}} /> : 
-                <Chip label={numOfPages} sx={{backgroundColor: "#FFFFFF"}} />}
+                <Chip label={numOfPages} sx={{backgroundColor: "#EAECF0"}} /> : 
+                <Chip label={numOfPages} onClick={() => handlePage(numOfPages)} sx={{backgroundColor: "#FFFFFF"}} />}
         </Stack>
     }
 
     return (
         <Box sx={{...{
-            width: "925px",
+            boxSizing: "border-box",
+            minWidth: "925px",
             display: "flex",
             padding: 2,
             justifyContent: "space-between",
@@ -96,9 +98,9 @@ export default function UpdatesNavBar({numOfUpdates, currentPage, style}) {
             borderRadius: "4px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
-            <HRMButton mode="secondaryB" startIcon={<ArrowBackIcon />}>Previous</HRMButton>
+            <HRMButton mode="secondaryB" startIcon={<ArrowBackIcon />} onClick={() => handlePage(currentPage - 1)}>Previous</HRMButton>
             {pageButtons}
-            <HRMButton mode="secondaryB" endIcon={<ArrowForwardIcon />}>Next</HRMButton>
+            <HRMButton mode="secondaryB" endIcon={<ArrowForwardIcon />} onClick={() => handlePage(currentPage + 1)}>Next</HRMButton>
         </Box>
     );
 };

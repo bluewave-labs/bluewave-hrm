@@ -1,5 +1,6 @@
-import {ButtonGroup, Button} from '@mui/material';
+import { ButtonGroup, Button } from '@mui/material';
 import PropTypes from 'prop-types';
+import { colors } from '../../Styles';
 
 /**
  * ButtonGroup component for both HRM and Onboarding applications.
@@ -21,12 +22,13 @@ export default function HRMButtonGroup({buttonLabels, style}) {
                 return <Button
                     sx={{
                         fontFamily: `"Inter", sans-serif`,
-                        borderColor: "grey.400",
-                        color: "grey.900",
-                        borderRadius: 2,
+                        textTransform: "none",
+                        borderColor: "#D0D5DD",
+                        color: colors.darkGrey,
+                        borderRadius: "8px",
                         "&:hover": {
                             cursor: 'pointer',
-                            borderColor: "grey.400"
+                            borderColor: "#D0D5DD"
                         }
                     }}>
                         {label}

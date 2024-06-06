@@ -1,16 +1,16 @@
-import NoUpdatesLogo from './NoUpdatesLogo';
+import UpdatesPage from './UpdatesPage';
 
 //Storybook display settings
 export default {
-    title: 'HomeMenu/NoUpdatesLogo',
-    component: NoUpdatesLogo,
+    title: 'HomeMenu/UpdatesPage',
+    component: UpdatesPage,
     parameters: {
         layout: 'centered'
     },
     tags: ['autodocs']
 };
 
-//Stories for each NoUpdatesLogo type
+//Stories for each UpdatesPage type
 export const Primary = {
     args: {}
 };

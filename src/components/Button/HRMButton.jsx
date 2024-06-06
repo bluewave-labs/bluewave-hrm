@@ -18,13 +18,16 @@ import { styled } from '@mui/system';
  * - endIcon<Component>: Optional prop for including an icon on the right side of the button label.
  *      Default: null
  * 
+ * - onClick<Function>: Behaviour to be executed when the button is clicked
+ *      Default: null
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  * 
  * - enabled<Boolean>: Flag determining whether the button is enabled or disabled.
  *      Default: true
  */
-export default function HRMButton({mode, children, startIcon, endIcon, style, enabled}) {
+export default function HRMButton({mode, children, startIcon, endIcon, onClick, style, enabled}) {
     const primaryStyle = {
         textTransform: "none",
         backgroundColor: "#7F56D9",
@@ -99,12 +102,12 @@ export default function HRMButton({mode, children, startIcon, endIcon, style, en
 
     if (mode === "primary" || mode === "error") {
         return (
-            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="contained" disabled={!enabled} disableElevation>{children}</StyledButton>
+            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="contained" onClick={onClick} disabled={!enabled} disableElevation>{children}</StyledButton>
         );
     }
     else if (mode === "secondaryA" || mode === "secondaryB") {
         return (
-            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="outlined" disabled={!enabled}>{children}</StyledButton>
+            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="outlined" onClick={onClick} disabled={!enabled}>{children}</StyledButton>
         );
     }
     else {
@@ -124,9 +127,6 @@ HRMButton.propTypes = {
 
     //Button enabled flag
     enabled: PropTypes.bool,
-
-    //Behaviour when clicked
-    onClick: PropTypes.func
 };
 
 //Default values for this component
@@ -134,6 +134,7 @@ HRMButton.defaultProps = {
     startIcon: null,
     endIcon: null,
     style: {},
-    enabled: true
+    enabled: true,
+    onClick: null
 };
 
