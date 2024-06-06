@@ -32,7 +32,8 @@ import { colors, fonts } from '../../Styles';
 export default function TimeApproval({user_information, style}) {
     const StyledTD = styled('td')({
         textAlign: "start",
-        paddingBottom: "15px"
+        paddingBottom: "15px",
+        width: "50%"
     });
 
     return (
@@ -56,7 +57,7 @@ export default function TimeApproval({user_information, style}) {
                 }}/>
             </Stack>
             {/*Request Information*/}
-            <table style={{width: "100%"}}>
+            <table style={{width: "100%", marginBottom: "40px"}}>
                 <tr>
                     <StyledTD><b>Photo</b></StyledTD>
                     <StyledTD>
@@ -94,6 +95,8 @@ export default function TimeApproval({user_information, style}) {
                     <StyledTD><b>Time off balance</b></StyledTD>
                     <StyledTD>{user_information.timeOffBalance}</StyledTD>
                 </tr>
+            </table>
+            <table style={{width: "100%"}}>
                 <tr>
                     <StyledTD><b>Time off requested</b></StyledTD>
                     <StyledTD>{user_information.timeOffRequested}</StyledTD>
