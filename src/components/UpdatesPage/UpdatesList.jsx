@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
  * Menu component for listing update notifications in the home page.
  * 
  * Props:
- * - updates<Array<Object>>: List of objects containing updates to be rendered.
+ * - updates<Array<Object>>: List of objects containing update information to be displayed.
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
