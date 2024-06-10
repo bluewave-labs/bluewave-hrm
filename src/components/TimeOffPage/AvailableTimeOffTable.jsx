@@ -6,6 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/system';
 import { colors, fonts } from '../../Styles';
+import PropTypes from 'prop-types';
 
 /**
  * Menu component for listing the available time off policies and the time used and available 
@@ -60,7 +61,10 @@ export default function AvailableTimeOffTable({policies, style}) {
 };
 
 //Control panel settings for storybook
-AvailableTimeOffTable.propTypes = {};
+AvailableTimeOffTable.propTypes = {
+    //Time off policies to be displayed
+    policies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string))
+};
 
 //Default values for this component
 AvailableTimeOffTable.defaultProps = {

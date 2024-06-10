@@ -8,10 +8,10 @@ import PropTypes from 'prop-types';
 import { fonts } from '../../Styles';
 
 /**
- * Navbar component for displaying the page numbers for displaying updates on the home menu.
+ * Navbar component for displaying the page numbers for displaying pages of various menus.
  * 
  * Props:
- * - numOfUpdates<Integer>: The number of updates to be displayed by the parent menu component.
+ * - numOfEntries<Integer>: The number of entries to be displayed by the parent menu component.
  *      Must be greater than 0.
  * 
  * - currentPage<Integer>: The currently selected page in the parent menu component. Is set 
@@ -23,8 +23,8 @@ import { fonts } from '../../Styles';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function UpdatesNavBar({numOfUpdates, currentPage, handlePage, style}) {
-    const numOfPages = Math.ceil(numOfUpdates / 10);
+export default function PagesNavBar({numOfEntries, currentPage, handlePage, style}) {
+    const numOfPages = Math.ceil(numOfEntries / 10);
     const pageNumbers = Array.from({length: numOfPages}, (_, i) => i + 1);
 
     //Body of the navbar, displaying the page numbers
@@ -106,16 +106,19 @@ export default function UpdatesNavBar({numOfUpdates, currentPage, handlePage, st
 };
 
 //Control panel settings for storybook
-UpdatesNavBar.propTypes = {
-    //Number of page buttons to display
-    numOfUpdates: PropTypes.number,
+PagesNavBar.propTypes = {
+    //Number of entries to display in parent component
+    numOfEntries: PropTypes.number,
 
     //Currently selected page
-    currentPage: PropTypes.number
+    currentPage: PropTypes.number,
+
+    //Function for changing the selected page
+    handlePage: PropTypes.func
 };
 
 //Default values for this component
-UpdatesNavBar.defaultProps = {
+PagesNavBar.defaultProps = {
     args: {
         style: {}
     }

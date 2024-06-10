@@ -30,9 +30,14 @@ export default function MenuToggleButton({label, menuComponent, icon, style}) {
     });
 
     return (
-        <Box sx={style}>
-            <StyledChip icon={icon} label={label} variant="outlined" onClick={() => setSelected(!selected)} />
-            <Box sx={{display: display, position: "absolute"}}>
+        <Box sx={{...{position: "relative"}, ...style}}>
+            <StyledChip 
+                icon={icon} 
+                label={label} 
+                variant="outlined" 
+                onClick={() => setSelected(!selected)} 
+            />
+            <Box sx={{display: display, position: "absolute", zIndex: 999, right: 0}}>
                 {menuComponent}
             </Box>
         </Box>
