@@ -38,7 +38,5 @@ UpdatesFilter.propTypes = {};
 
 //Default values for this component
 UpdatesFilter.defaultProps = {
-    args: {
-        style: {}
-    }
+    style: {}
 };

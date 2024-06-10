@@ -119,7 +119,5 @@ PagesNavBar.propTypes = {
 
 //Default values for this component
 PagesNavBar.defaultProps = {
-    args: {
-        style: {}
-    }
+    style: {}
 };

@@ -2,17 +2,18 @@ import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import Header from '../StaticComponents/Header';
 import SideMenu from '../StaticComponents/SideMenu';
-import UpdatesMenu from './UpdatesMenu';
+import TimeOffMenu from './TimeOffMenu';
+import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
 
 /**
- * Home page of the HRM application.
+ * Time off page of the HRM application
  * 
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function UpdatesPage({style}) {
+export default function TimeOffPage({style}) {
     return (
         <Box sx={{...{
             width: "100%", 
@@ -40,18 +41,18 @@ export default function UpdatesPage({style}) {
                     height: "100%"
                 }}>
                     {/*Main page content*/}
-                    <Stack 
-                        direction="row" 
+                    <Stack
+                        direction="row"
                         alignItems="center"
                         justifyContent="space-between"
                         sx={{
                             marginBottom: "40px"
                         }}
                     >
-                        <h3>Hello, Gabriel</h3>
-                        <p>Today is Monday, June 6, 2024</p>
+                        <h3>Time off</h3>
+                        <HRMButton mode="primary">Request new time off</HRMButton>
                     </Stack>
-                    <UpdatesMenu />
+                    <TimeOffMenu />
                 </Box>
             </Box>
         </Box>
@@ -59,9 +60,9 @@ export default function UpdatesPage({style}) {
 };
 
 //Control panel settings for storybook
-UpdatesPage.propTypes = {};
+TimeOffPage.propTypes = {};
 
 //Default values for this component
-UpdatesPage.defaultProps = {
+TimeOffPage.defaultProps = {
     style: {}
 };

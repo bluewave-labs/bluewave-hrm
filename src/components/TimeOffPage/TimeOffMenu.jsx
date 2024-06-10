@@ -328,6 +328,45 @@ export default function TimeOffMenu({style}) {
             note: 'Family in town for the holidays.',
             status: 'Approved'
         },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
     ];
 
     return (
