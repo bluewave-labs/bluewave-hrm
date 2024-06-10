@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useEffect,useState} from 'react'
 import Box from '@mui/material/Box';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { Typography,Stack } from '@mui/material';
@@ -12,12 +12,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Input from '@mui/material/Input';
 import Dropzone from "dropzone";
+import axios from 'axios';
 import '../App.css';
 
 const rows = [
   {name:"Offer letter",date:"Jan 4, 2022"},
   {name:"Vacation types",date:"Jan 4, 2022"},
-  {name:"Offer letter",date:"Jan 2, 2022"}
+  {name:"Offer letter2",date:"Jan 2, 2022"}
 ]
 
 
@@ -26,37 +27,107 @@ const rows = [
 const DocumentMyinfo = () => {
 
   const fileInputRef = React.createRef();
+  const [progress,setProgress] = useState(0);
+  const [dragOver, setDragOver] = useState(false);
+  const [currentfile, setCurrentFile] = useState('')
+  const [filesize, setFileSize] = useState(0)
+  const [filelist, setFileList] = useState([]);
+  const [uploaded, setUploaded] = useState(false)
 
-  const handleFileChange = (e) => {
-    const file = e.target.file[0];
+  const handleUpload = async () => {
+    if (uploaded) {
+      clearFileInput();
+      return
+    }
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/",
+        filelist, 
+        {
+          onUploadProgress: (progressEvent) => { 
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percentCompleted)
+          }
+        }
+      );
+      
+    }
+    catch (error) {
+      setUploaded(false)
+    }
   }
 
+// Add uploaded file to an Array
+  const addFile = (newFile) => {
+    setFileList((prevFiles) => [...prevFiles, newFile] ) 
+  }
+
+  // Handle file change event
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if(file) {
+      const name = file.name.split('.')[0]
+      const size = Math.round(file.size/1000000)
+      const uploadedDate = new Date();
+      setCurrentFile(file.name.split('.')[0])
+      setFileSize(size)
+      addFile({
+        name: name,
+        size: size,
+        uploadedDate: uploadedDate.toLocaleString()
+      })
+    }
+    console.log(filelist)
+    handleUpload()
+  
+  }
+ // Trigger file input 
   const handleClick = () => {
     fileInputRef.current.click()
   }
-  // useEffect(() => {
-  //   // Initialize Dropzone
-  //   const dropzone = new Dropzone("#my-dropzone", {
-  //     url: "/upload", // Change this to your upload URL
-  //     paramName: "file", // The name that will be used to transfer the file
-  //     maxFilesize: 2, // MB
-  //     acceptedFiles: ".jpeg,.jpg,.png,.gif",
-  //     autoProcessQueue: true,
-  //   });
 
-  //   // Handle click to open file dialog
-    
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragOver(true)
+  }
+  const handleDragLeave = () => {
+    setDragOver(false)
+  }
 
-  //   // Cleanup Dropzone on component unmount
-  //   return () => {
-  //     dropzone.destroy();
-  //   };
-  // }, []);
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false)
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInputRef.current.files = files;
+      handleFileChange({target:{files}})
+    }
+  }
+
+// Function to clear file state
+const clearFileInput = () => {
+  fileInputRef.current.value ="";
+  setProgress(0);
+}
+
+const handleDelete = (index) => {
+  const newFilelist = filelist.filter((_, i) => i !== index);
+  // Update the state with the new array
+  setFileList(newFilelist);
+}
+// Function to handle file upload
+
+
 
   return (
    <>
   
-
+  <div 
+    onDragOver={handleDragOver}
+    onDragLeave={handleDragLeave}
+    onDrop={handleDrop} >
   <Box
       height={126}
       width={812}
@@ -68,6 +139,7 @@ const DocumentMyinfo = () => {
       gap={4}
       p={2}
       sx={{ border: '2px solid #7F56D9',borderRadius:'12px' }}
+      
     >
      
       <Stack  
@@ -81,20 +153,16 @@ const DocumentMyinfo = () => {
           sx={{border:'1px solid #EAECF0',borderRadius:'8px'}}/>
         <Stack direction='row'>
 
-      
-      <div>
+  
         <input
           type="file"
           ref={fileInputRef}
           className="hidden-input"
+           accept=".svg, .png, .jpg, .jpeg, .gif"
           onChange={handleFileChange}
         />
-        <div className="upload-button" onClick={handleClick}>
-          Click to upload
-        </div>
-       </div>
-
-          <Link
+        <Link
+            onClick={handleClick}
             type='file'
             component="button"
             underline="none"
@@ -102,6 +170,7 @@ const DocumentMyinfo = () => {
             >
             Click to upload
           </Link>
+      
         <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter',marginBottom:'4px'}}>or drag and drop</Typography>
         
         </Stack>
@@ -109,6 +178,8 @@ const DocumentMyinfo = () => {
         
       </Stack>
     </Box>
+  </div>
+  
 
     
     <Box
@@ -120,11 +191,12 @@ const DocumentMyinfo = () => {
       justifyContent={"space-between"}
       gap={4}
       p={2}
-      sx={{ border: '2px solid #EAECF0',borderRadius:'12px' }}
+      
+      sx={{ border: '2px solid #EAECF0',borderRadius:'12px', background: `linear-gradient(to right, #F9FAFB ${progress}%, transparent ${progress}%), transparent 100%` }}
     >
       <Stack>
-        <Typography sx={{fontSize:'14px',fontWeight:'medium',color:'#344054',fontFamily:'Inter',marginBottom:'4px'}}>Offer letter</Typography>
-        <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter',marginBottom:'4px'}}>16 MB – 70% uploaded</Typography>
+        <Typography sx={{fontSize:'14px',fontWeight:'medium',color:'#344054',fontFamily:'Inter',marginBottom:'4px'}}>{currentfile}</Typography>
+        <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter',marginBottom:'4px'}}>{filesize}MB – {progress}% uploaded</Typography>
       </Stack>
       <Stack sx={{ position: 'relative' }}>
         <CircularProgress
@@ -134,7 +206,6 @@ const DocumentMyinfo = () => {
           }}
           size={40}
           thickness={4}
-      
           value={100}
         />
         <CircularProgress
@@ -142,14 +213,13 @@ const DocumentMyinfo = () => {
           disableShrink
           sx={{
             color: "#7F56D9",
-          
             position: 'absolute',
             left: 0,
             [`& .${circularProgressClasses.circle}`]: {
               strokeLinecap: 'round',
             },
           }}
-          value={75}
+          value={progress}
           size={40}
           thickness={4}
         
@@ -167,21 +237,21 @@ const DocumentMyinfo = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {filelist.map((file,index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" sx={{fontSize:'14px',fontWeight:'medium',color:'#101828',fontFamily:'Inter'}} >
-                {row.name}
+                {file.name}
               </TableCell>
-              <TableCell align="left" sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter'}}>{row.date}</TableCell>
+              <TableCell align="left" sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter'}}>{file.uploadedDate}</TableCell>
               <TableCell align="right">
                 <Stack direction="row" display="flex" justifyContent="right">
                   <Link
                     component="button"
                     underline="none"
-                    onClick={() => {alert("hello");}}
+                    onClick={() => handleDelete(index)}
                     sx={{fontSize:'14px',fontWeight:'600',color:'#475467',fontFamily:'Inter',marginBottom:'4px',marginRight:'8px'}}
                     >Delete
                   </Link>
