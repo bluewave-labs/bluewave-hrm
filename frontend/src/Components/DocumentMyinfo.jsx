@@ -64,19 +64,30 @@ const DocumentMyinfo = () => {
     setFileList((prevFiles) => [...prevFiles, newFile] ) 
   }
 
+  const formatDate = (inputDate) => {
+    const [month, day, year] = inputDate.split('/').map(Number);
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const formattedMonth = monthNames[month-1];
+    return `${formattedMonth} ${day}, ${year}`;
+
+  }
+
   // Handle file change event
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if(file) {
       const name = file.name.split('.')[0]
       const size = Math.round(file.size/1000000)
-      const uploadedDate = new Date();
+      const date = new Date();
+      const newdate = date.toLocaleDateString();
+      const uploadedDate = formatDate(newdate)
+
       setCurrentFile(file.name.split('.')[0])
       setFileSize(size)
       addFile({
         name: name,
         size: size,
-        uploadedDate: uploadedDate.toLocaleString()
+        uploadedDate: uploadedDate
       })
     }
     console.log(filelist)
