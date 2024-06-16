@@ -41,7 +41,7 @@ export default function BoardTabContent({policies, timeOffPeriods, style}) {
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Available time off header and table*/}
-            <h3>Available time offs</h3>
+            <h3 style={{marginBottom: "40px"}}>Available time offs</h3>
             <AvailableTimeOffTable policies={policies} />
             {/*Upcoming time off header*/}
             <Stack 

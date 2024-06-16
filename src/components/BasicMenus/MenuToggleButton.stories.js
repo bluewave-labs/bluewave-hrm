@@ -1,47 +1,35 @@
 import MenuToggleButton from './MenuToggleButton';
 import TuneIcon from '@mui/icons-material/Tune';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import MenuItem from './MenuItem';
+import { useState } from 'react';
 
-const selectableContent = (
-    <Box sx={{ 
-        width: '100%', 
-        maxWidth: 360, 
-        border: "1px solid #EAECF0", 
-        borderRadius: 2 
-    }}>
-        <List>
-            <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                <MenuItem>Name</MenuItem>
-            </ListItem>
-            <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                <MenuItem>Status</MenuItem>
-            </ListItem>
-            <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                <MenuItem>Role</MenuItem>
-            </ListItem>
-            <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                <MenuItem>Team</MenuItem>
-            </ListItem>
-            <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                <MenuItem>Hire date</MenuItem>
-            </ListItem>
-            <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                <MenuItem>Employee No</MenuItem>
-            </ListItem>
-            <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                <MenuItem>Employment status</MenuItem>
-            </ListItem>
-        </List>
-    </Box>
-);
+function parentComponent() {
+    const [nameSelected, setNameSelected] = useState(false);
+    const [statusSelected, setStatusSelected] = useState(false);
+    const [roleSelected, setRoleSelected] = useState(false);
+    const [teamSelected, setTeamSelected] = useState(false);
+    const [hireDateSelected, setHireDateSelected] = useState(false);
+    const [employeeNoSelected, setEmployeeNoSelected] = useState(false);
+    const [employmentStatusSelected, setEmploymentStatusSelected] = useState(false);
+
+    const menuItems = {
+        "Name": [nameSelected, setNameSelected],
+        "Status": [statusSelected, setStatusSelected],
+        "Role": [roleSelected, setRoleSelected],
+        "Team": [teamSelected, setTeamSelected],
+        "Hire date": [hireDateSelected, setHireDateSelected],
+        "Employee No": [employeeNoSelected, setEmployeeNoSelected],
+        "Employment Status": [employmentStatusSelected, setEmploymentStatusSelected]
+    }
+
+    return (
+        <MenuToggleButton label="Customize" menuItems={menuItems} icon={<TuneIcon />} />
+    );
+}
 
 //Storybook display settings
 export default {
     title: 'BasicMenus/ToggleButton',
-    component: MenuToggleButton,
+    component: parentComponent,
     parameters: {
         layout: 'centered'
     },
@@ -50,9 +38,5 @@ export default {
 
 //Stories for each ToggleButton type
 export const Primary = {
-    args: {
-        menuComponent: selectableContent,
-        icon: <TuneIcon />,
-        label: 'Customize'
-    }
+    args: {}
 };

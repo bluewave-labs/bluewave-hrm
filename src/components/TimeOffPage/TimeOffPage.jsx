@@ -1,10 +1,14 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+import Dialog from '@mui/material/Dialog';
 import Header from '../StaticComponents/Header';
 import SideMenu from '../StaticComponents/SideMenu';
 import TimeOffMenu from './TimeOffMenu';
+import TimeOffRequest from '../PopupComponents/TimeOffRequest';
+import TimeOffRequestSent from '../PopupComponents/TimeOffRequestSent';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
+import { useState } from 'react';
 
 /**
  * Time off page of the HRM application
@@ -14,6 +18,14 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function TimeOffPage({style}) {
+    const [openRequest, setOpenRequest] = useState(false);
+    const [requestSuccess, setRequestSuccess] = useState(false);
+
+    function sendRequest() {
+        setOpenRequest(false);
+        setRequestSuccess(true);
+    }
+
     return (
         <Box sx={{...{
             width: "100%", 
@@ -50,10 +62,31 @@ export default function TimeOffPage({style}) {
                         }}
                     >
                         <h3>Time off</h3>
-                        <HRMButton mode="primary">Request new time off</HRMButton>
+                        <HRMButton 
+                            mode="primary" 
+                            onClick={() => setOpenRequest(true)}
+                        >
+                            Request new time off
+                        </HRMButton>
                     </Stack>
                     <TimeOffMenu />
                 </Box>
+                <Dialog open={openRequest} onClose={() => setOpenRequest(false)}>
+                    <TimeOffRequest 
+                        close={() => setOpenRequest(false)} 
+                        sendRequest={() => sendRequest()} 
+                    />
+                </Dialog>
+                <TimeOffRequestSent 
+                    close={() => setRequestSuccess(false)} 
+                    style={{
+                        display: (requestSuccess) ? "block" : "none",
+                        position: "fixed",
+                        right: "40px",
+                        bottom: "40px",
+                        zIndex: 999
+                    }} 
+                />
             </Box>
         </Box>
     );

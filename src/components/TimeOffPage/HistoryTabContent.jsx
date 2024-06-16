@@ -1,9 +1,6 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import TuneIcon from '@mui/icons-material/Tune';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import MenuItem from '../BasicMenus/MenuItem';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
@@ -27,6 +24,23 @@ import PropTypes from 'prop-types';
  */
 export default function HistoryTabContent({timeOffPeriods, style}) {
     const [currentPage, setCurrentPage] = useState(1);
+    const [nameSelected, setNameSelected] = useState(false);
+    const [statusSelected, setStatusSelected] = useState(false);
+    const [roleSelected, setRoleSelected] = useState(false);
+    const [teamSelected, setTeamSelected] = useState(false);
+    const [hireDateSelected, setHireDateSelected] = useState(false);
+    const [employeeNoSelected, setEmployeeNoSelected] = useState(false);
+    const [employmentStatusSelected, setEmploymentStatusSelected] = useState(false);
+
+    const menuItems = {
+        "Name": [nameSelected, setNameSelected],
+        "Status": [statusSelected, setStatusSelected],
+        "Role": [roleSelected, setRoleSelected],
+        "Team": [teamSelected, setTeamSelected],
+        "Hire date": [hireDateSelected, setHireDateSelected],
+        "Employee No": [employeeNoSelected, setEmployeeNoSelected],
+        "Employment Status": [employmentStatusSelected, setEmploymentStatusSelected]
+    };
 
     //Only shows 10 periods at a time
     const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);
@@ -37,40 +51,6 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
             setCurrentPage(n);
         }
     };
-
-    const selectableContent = (
-        <Box sx={{ 
-            width: '100%', 
-            maxWidth: 360, 
-            border: "1px solid #EAECF0", 
-            borderRadius: 2,
-            backgroundColor: "#FFFFFF"
-        }}>
-            <List>
-                <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                    <MenuItem>Name</MenuItem>
-                </ListItem>
-                <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                    <MenuItem>Status</MenuItem>
-                </ListItem>
-                <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                    <MenuItem>Role</MenuItem>
-                </ListItem>
-                <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                    <MenuItem>Team</MenuItem>
-                </ListItem>
-                <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                    <MenuItem>Hire date</MenuItem>
-                </ListItem>
-                <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                    <MenuItem>Employee No</MenuItem>
-                </ListItem>
-                <ListItem sx={{width: 300, paddingX: 1, paddingY: "3px"}}>
-                    <MenuItem>Employment status</MenuItem>
-                </ListItem>
-            </List>
-        </Box>
-    );
 
     return (
         <Box sx={{...{
@@ -98,10 +78,10 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
                 {timeOffPeriods.length > 0 &&
                     <MenuToggleButton 
                         label="Customize" 
-                        menuComponent={selectableContent} 
+                        menuItems={menuItems}
                         icon={<TuneIcon />} 
                     />
-                }     
+                }
             </Stack>
             {/*If there are periods of time off, display the time off period list and navbar */}
             {(timeOffPeriods.length > 0) ?

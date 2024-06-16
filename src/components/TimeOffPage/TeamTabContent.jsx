@@ -1,8 +1,12 @@
 import Box from '@mui/system/Box';
+import Stack from '@mui/system/Stack';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { useState, useEffect } from 'react';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import NoContentComponent from '../UpdatesPage/NoContentComponent';
-import { useState } from 'react';
+import MenuToggleButton from '../BasicMenus/MenuToggleButton';
+import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
 
@@ -20,9 +24,31 @@ import PropTypes from 'prop-types';
  */
 export default function TeamTabContent({timeOffPeriods, style}) {
     const [currentPage, setCurrentPage] = useState(1);
+    const [approvedFilter, setApprovedFilter] = useState(true);
+    const [waitingFilter, setWaitingFilter] = useState(true);
+    const [rejectedFilter, setRejectedFilter] = useState(true);
+
+    //Set the current page back to 1 each time the filters are changed
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [approvedFilter, waitingFilter, rejectedFilter]);
+
+    //Filter periods depending on the settings set by the user
+    const filterItems = {
+        "Approved": [approvedFilter, setApprovedFilter],
+        "Waiting": [waitingFilter, setWaitingFilter],
+        "Rejected": [rejectedFilter, setRejectedFilter]
+    };
+
+    const activeFilters = [];
+    if (approvedFilter) { activeFilters.push("Approved"); }
+    if (waitingFilter) { activeFilters.push("Waiting"); }
+    if (rejectedFilter) { activeFilters.push("Rejected"); }
+
+    const filteredPeriods = timeOffPeriods.filter((period) => activeFilters.includes(period.status));
 
     //Only shows 10 periods at a time
-    const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);
+    const periodsToDisplay = filteredPeriods.slice((currentPage - 1) * 10, currentPage * 10);
 
     //Function for changing the page number
     function handlePage(n) {
@@ -36,7 +62,37 @@ export default function TeamTabContent({timeOffPeriods, style}) {
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
-            <h3 style={{marginTop: "40px", marginBottom: "40px"}}>My team's time offs</h3>
+            {/*Time off header*/}
+            <Stack 
+                direction="row" 
+                alignItems="center" 
+                justifyContent="space-between"
+                sx={{
+                    marginY: "40px"
+                }}
+            >
+                <Stack 
+                    direction="row" 
+                    alignItems="center" 
+                    spacing={3} 
+                >
+                    <h3>My team's history</h3>
+                    <Label 
+                        mode="brand" 
+                        label={timeOffPeriods.length} 
+                        style={{borderRadius: "50%"}} 
+                    />
+                </Stack>
+                {/*Filter by status button*/}
+                {timeOffPeriods.length > 0 &&
+                    <MenuToggleButton 
+                        label="Filter by status" 
+                        menuItems={filterItems} 
+                        icon={<FilterListIcon />} 
+                    />
+                }
+            </Stack>
+            {/*If there are periods of time off, display the time off period list and navbar */}
             {timeOffPeriods.length > 0 ?
                 <>
                     <UpcomingTimeOffTable 
@@ -45,15 +101,16 @@ export default function TeamTabContent({timeOffPeriods, style}) {
                         teamFlag={true} 
                         style={{marginBottom: "30px"}}
                     />
-                    {timeOffPeriods.length > 10 && 
+                    {filteredPeriods.length > 10 && 
                         <PagesNavBar 
-                            numOfEntries={timeOffPeriods.length} 
+                            numOfEntries={filteredPeriods.length} 
                             currentPage={currentPage}
                             handlePage={handlePage}
                         />
                     }
                 </> :
                 <>
+                    {/*Otherwise, display a message that there is no history*/}
                     <NoContentComponent>
                         <h3>There is no time off history</h3>
                         <p>Any updates about your time off history will be shown here.</p>
