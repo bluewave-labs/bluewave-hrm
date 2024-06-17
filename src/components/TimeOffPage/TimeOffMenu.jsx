@@ -22,12 +22,14 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function TimeOffMenu({style}) {
-    const [tab, setTab] = useState('Board');
+    const [tab, setTab] = useState('Board');    //State determining which flag is selected
 
+    //Function for selecting a new tab
     function handleChange(e, newValue) {
         setTab(newValue);
     };
 
+    //Custom style elements
     const StyledTab = styled(Tab)({
         textTransform: "none",
     });
@@ -36,6 +38,7 @@ export default function TimeOffMenu({style}) {
         padding: 0
     });
 
+    //List of time off policies
     const policies = [
         {
             type: 'Vacation',
@@ -54,6 +57,7 @@ export default function TimeOffMenu({style}) {
         }
     ];
 
+    //List of time off periods
     const timeOffPeriods = [
         
         {
@@ -379,6 +383,7 @@ export default function TimeOffMenu({style}) {
             border: "1px solid #EBEBEB",
             borderRadius: "5px",
             backgroundColor: "#FFFFFF",
+            color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
             <TabContext value={tab}>
@@ -393,12 +398,15 @@ export default function TimeOffMenu({style}) {
                         <StyledTab label="My team" value="My team" />
                     </TabList>
                 </Box>
+                {/*Board tab*/}
                 <StyledTabPanel value="Board">
                     <BoardTabContent policies={policies} timeOffPeriods={timeOffPeriods} />
                 </StyledTabPanel>
+                {/*History tab*/}
                 <StyledTabPanel value="History">
                     <HistoryTabContent timeOffPeriods={timeOffPeriods} />
                 </StyledTabPanel>
+                {/*Team tab*/}
                 <StyledTabPanel value="My team">
                     <TeamTabContent timeOffPeriods={timeOffPeriods} />
                 </StyledTabPanel>

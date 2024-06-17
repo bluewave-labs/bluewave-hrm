@@ -23,7 +23,8 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function HistoryTabContent({timeOffPeriods, style}) {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);  //The current page number
+    //Flags for determining which buttons in the "customize" dropdown are selected
     const [nameSelected, setNameSelected] = useState(false);
     const [statusSelected, setStatusSelected] = useState(false);
     const [roleSelected, setRoleSelected] = useState(false);
@@ -31,16 +32,6 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
     const [hireDateSelected, setHireDateSelected] = useState(false);
     const [employeeNoSelected, setEmployeeNoSelected] = useState(false);
     const [employmentStatusSelected, setEmploymentStatusSelected] = useState(false);
-
-    const menuItems = {
-        "Name": [nameSelected, setNameSelected],
-        "Status": [statusSelected, setStatusSelected],
-        "Role": [roleSelected, setRoleSelected],
-        "Team": [teamSelected, setTeamSelected],
-        "Hire date": [hireDateSelected, setHireDateSelected],
-        "Employee No": [employeeNoSelected, setEmployeeNoSelected],
-        "Employment Status": [employmentStatusSelected, setEmploymentStatusSelected]
-    };
 
     //Only shows 10 periods at a time
     const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);
@@ -78,7 +69,15 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
                 {timeOffPeriods.length > 0 &&
                     <MenuToggleButton 
                         label="Customize" 
-                        menuItems={menuItems}
+                        menuItems={{
+                            "Name": [nameSelected, setNameSelected],
+                            "Status": [statusSelected, setStatusSelected],
+                            "Role": [roleSelected, setRoleSelected],
+                            "Team": [teamSelected, setTeamSelected],
+                            "Hire date": [hireDateSelected, setHireDateSelected],
+                            "Employee No": [employeeNoSelected, setEmployeeNoSelected],
+                            "Employment Status": [employmentStatusSelected, setEmploymentStatusSelected]
+                        }}
                         icon={<TuneIcon />} 
                     />
                 }

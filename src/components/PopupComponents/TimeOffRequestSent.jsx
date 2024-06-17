@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
  * 
  * Props:
  * - close<Function>: Function for closing this popup component.
+ *      Syntax: close()
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}

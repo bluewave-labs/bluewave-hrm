@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 /**
  * Displays the content for the Board tab in the time off menu which includes the available
- * time off per policy and any upcoming periods of time off scheduled
+ * time off per policy and any upcoming periods of time off scheduled.
  * 
  * Props:
  * - policies<Array<Object>>: List of objects containing policy information to be displayed.
@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function BoardTabContent({policies, timeOffPeriods, style}) {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);  //The current page number 
 
     //Only shows 10 periods at a time
     const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);

@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function AvailableTimeOffTable({policies, style}) {
+    //Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey, 
         paddingTop: "10px",

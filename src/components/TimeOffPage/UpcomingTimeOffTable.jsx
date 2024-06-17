@@ -30,6 +30,7 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function UpcomingTimeOffTable({timeOffPeriods, editFlag, teamFlag, style}) {
+    //Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey, 
         paddingTop: "10px",

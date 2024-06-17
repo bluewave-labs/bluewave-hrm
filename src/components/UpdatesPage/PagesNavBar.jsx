@@ -15,7 +15,7 @@ import { fonts } from '../../Styles';
  *      Must be greater than 0.
  * 
  * - currentPage<Integer>: The currently selected page in the parent menu component. Is set 
- *      using state management hooks. Must be between 1 and the number of pages.
+ *      using the parent's state management hooks. Must be between 1 and the number of pages.
  * 
  * - handlePage<Function>: The function to set the currently selected page.
  *      Syntax: handlePage(<page number>)

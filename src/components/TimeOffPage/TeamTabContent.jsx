@@ -23,7 +23,8 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function TeamTabContent({timeOffPeriods, style}) {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);  //The current page number
+    //Flags for determining which buttons in the "filter by status" dropdown are selected
     const [approvedFilter, setApprovedFilter] = useState(true);
     const [waitingFilter, setWaitingFilter] = useState(true);
     const [rejectedFilter, setRejectedFilter] = useState(true);
@@ -33,13 +34,7 @@ export default function TeamTabContent({timeOffPeriods, style}) {
         setCurrentPage(1);
     }, [approvedFilter, waitingFilter, rejectedFilter]);
 
-    //Filter periods depending on the settings set by the user
-    const filterItems = {
-        "Approved": [approvedFilter, setApprovedFilter],
-        "Waiting": [waitingFilter, setWaitingFilter],
-        "Rejected": [rejectedFilter, setRejectedFilter]
-    };
-
+    //Filter out time off periods depending on which filters are active
     const activeFilters = [];
     if (approvedFilter) { activeFilters.push("Approved"); }
     if (waitingFilter) { activeFilters.push("Waiting"); }
@@ -87,7 +82,11 @@ export default function TeamTabContent({timeOffPeriods, style}) {
                 {timeOffPeriods.length > 0 &&
                     <MenuToggleButton 
                         label="Filter by status" 
-                        menuItems={filterItems} 
+                        menuItems={{
+                            "Approved": [approvedFilter, setApprovedFilter],
+                            "Waiting": [waitingFilter, setWaitingFilter],
+                            "Rejected": [rejectedFilter, setRejectedFilter]
+                        }} 
                         icon={<FilterListIcon />} 
                     />
                 }

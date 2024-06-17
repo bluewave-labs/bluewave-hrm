@@ -6,7 +6,7 @@ import UpdatesMenu from './UpdatesMenu';
 import { colors, fonts } from '../../Styles';
 
 /**
- * Home page of the HRM application.
+ * Home page of the HRM application. Contains the updates menu.
  * 
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.

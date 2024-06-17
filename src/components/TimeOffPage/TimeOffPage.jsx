@@ -11,16 +11,20 @@ import { colors, fonts } from '../../Styles';
 import { useState } from 'react';
 
 /**
- * Time off page of the HRM application
+ * Time off page of the HRM application. Contains the time off menu as well as controls for 
+ * request time off.
  * 
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
 export default function TimeOffPage({style}) {
+    //States determining whether the time off request menu and request successful notifications
+    //should be displayed
     const [openRequest, setOpenRequest] = useState(false);
     const [requestSuccess, setRequestSuccess] = useState(false);
 
+    //Function for sending a time off request
     function sendRequest() {
         setOpenRequest(false);
         setRequestSuccess(true);
@@ -71,12 +75,14 @@ export default function TimeOffPage({style}) {
                     </Stack>
                     <TimeOffMenu />
                 </Box>
+                {/*Time off request menu*/}
                 <Dialog open={openRequest} onClose={() => setOpenRequest(false)}>
                     <TimeOffRequest 
                         close={() => setOpenRequest(false)} 
                         sendRequest={() => sendRequest()} 
                     />
                 </Dialog>
+                {/*Request successful notification*/}
                 <TimeOffRequestSent 
                     close={() => setRequestSuccess(false)} 
                     style={{

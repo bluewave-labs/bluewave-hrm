@@ -16,8 +16,10 @@ import PropTypes from 'prop-types';
  * 
  * Props:
  * - close<Function>: Function for closing this popup component.
+ *      Syntax: close()
  * 
  * - setDate<Function>: Function for setting the date in the parent component.
+ *      Syntax: setDate(<JavaScript date>)
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}

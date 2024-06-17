@@ -68,6 +68,7 @@ export default function UpdatesList({updates, style}) {
 
 //Control panel settings for storybook
 UpdatesList.propTypes = {
+    //List of updates to be rendered
     updates: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string))
 };
 

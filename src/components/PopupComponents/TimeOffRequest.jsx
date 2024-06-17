@@ -22,7 +22,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 //Function for determining if a time period is valid. A time period is only valid if the 
-//ending date is not before the starting date.
+//starting date is before or on the same day as the ending date.
 function isValidPeriod(from, to) {
     if (from.getFullYear() < to.getFullYear()) {
         return true;
@@ -43,7 +43,7 @@ function isValidPeriod(from, to) {
     }
 };
 
-//Function for parsing a JavaScript date into a string format
+//Function for parsing a JavaScript date into a string format.
 function formatDate(date) {
     const day = date.toLocaleString('default', { day: '2-digit' });
     const month = date.toLocaleString('default', { month: 'short' });
@@ -58,16 +58,24 @@ function formatDate(date) {
  * 
  * Props:
  * - close<Function>: Function for closing this popup component.
+ *      Syntax: close()
+ * 
+ * - sendRequest<Function>: Function for submitting a time off request.
+ *      Syntax: sendRequest()
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
 export default function TimeOffRequest({close, sendRequest, style}) {
+    //Time off starting and ending dates
     const [from, setFrom] = useState(dayjs().toDate());
-    const [openFrom, setOpenFrom] = useState(false);
     const [to, setTo] = useState(dayjs().toDate());
+    //States determining whether the menus for setting dates should be open
+    const [openFrom, setOpenFrom] = useState(false);
     const [openTo, setOpenTo] = useState(false);
-    const [eachDay, setEachday] = useState(false);
+    //Flag determining if the amount of time off should be set for each day or for just the
+    //starting and ending dates 
+    const [eachDay, setEachday] = useState(false);          
 
     //Automatically adjust dates to ensure a valid period is set
     useEffect(() => {
@@ -194,6 +202,7 @@ export default function TimeOffRequest({close, sendRequest, style}) {
                 />
                 <p>Set hours for each day during the time off period</p>
             </Stack>
+            {/*Time off per day table*/}
             <TableContainer sx={{width: "100%", marginY: "20px"}}>
                 <Table>
                     <TableHead>
