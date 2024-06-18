@@ -2,7 +2,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 /**
- * Toggle button group component for filtering between all and unread components
+ * Toggle button group component for filtering between all and unread components.
  * 
  * Props:
  * - filter<String>: The current value of the filter setting for updates.
@@ -38,7 +38,5 @@ UpdatesFilter.propTypes = {};
 
 //Default values for this component
 UpdatesFilter.defaultProps = {
-    args: {
-        style: {}
-    }
+    style: {}
 };
