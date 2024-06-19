@@ -41,21 +41,32 @@ export const Success = {
 
 export const New = {
     args: {
-        mode: 'new',
+        mode: 'status',
+        dot: 'orange',
         label: 'New'
     }
 };
 
 export const Waiting = {
     args: {
-        mode: 'waiting',
+        mode: 'status',
+        dot: 'red',
         label: 'Waiting'
     }
 };
 
 export const Seen = {
     args: {
-        mode: 'seen',
+        mode: 'status',
+        dot: 'grey',
         label: 'Seen'
+    }
+};
+
+export const Active = {
+    args: {
+        mode: 'status',
+        dot: 'green',
+        label: 'Active'
     }
 };

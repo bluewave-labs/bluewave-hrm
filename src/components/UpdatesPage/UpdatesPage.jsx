@@ -6,7 +6,7 @@ import UpdatesMenu from './UpdatesMenu';
 import { colors, fonts } from '../../Styles';
 
 /**
- * Home page of the HRM application.
+ * Home page of the HRM application. Contains the updates menu.
  * 
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
@@ -17,6 +17,7 @@ export default function UpdatesPage({style}) {
         <Box sx={{...{
             width: "100%", 
             height: "100%", 
+            color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Header*/}
@@ -41,11 +42,10 @@ export default function UpdatesPage({style}) {
                     {/*Main page content*/}
                     <Stack 
                         direction="row" 
+                        alignItems="center"
+                        justifyContent="space-between"
                         sx={{
-                            width: "100%", 
-                            justifyContent: "space-between",
-                            marginBottom: "40px",
-                            color: colors.darkGrey
+                            marginBottom: "40px"
                         }}
                     >
                         <h3>Hello, Gabriel</h3>
@@ -63,7 +63,5 @@ UpdatesPage.propTypes = {};
 
 //Default values for this component
 UpdatesPage.defaultProps = {
-    args: {
-        style: {}
-    }
+    style: {}
 };

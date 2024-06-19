@@ -1,20 +1,20 @@
-import TimeApproval from './TimeApproval';
+import TimeOffApproval from './TimeOffApproval';
 import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 
 //Storybook display settings
 export default {
-    title: 'PopupMenus/TimeApproval',
-    component: TimeApproval,
+    title: 'PopupMenus/TimeOffApproval',
+    component: TimeOffApproval,
     parameters: {
         layout: 'centered'
     },
     tags: ['autodocs']
 };
 
-//Stories for each TimeApproval type
+//Stories for each TimeOffApproval type
 export const Primary = {
     args: {
-        user_information: {
+        request_information: {
             avatar: AvatarImage,
             name: 'Gabriel Chan',
             role: 'Front End Developer',
