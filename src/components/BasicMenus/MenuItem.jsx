@@ -1,6 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
 import { styled } from '@mui/system';
-import { useState } from 'react';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
 
@@ -8,21 +7,20 @@ import PropTypes from 'prop-types';
  * Selectable component for dropdown menus.
  * 
  * Props:
- * - children<Any>: Text to be used for the button label
+ * - children<Any>: Text to be used for the button label.
  * 
- * - style<Object>: Optional prop for adding further inline styling 
+ * - state<Boolean>: Flag determining whether the button this component represents is selected.
+ * 
+ * - setState<Function>: Function for toggling the selected state this component represents.
+ * 
+ * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function MenuItem ({children, style}) {
-    const [selected, setSelected] = useState(false);
-
-    function handleClick() {
-        setSelected(!selected);
-    }
+export default function MenuItem({children, state, setState, style}) {
 
     let Item = styled("div")({...{
         fontFamily: fonts.fontFamily,
-        backgroundColor: selected ? "#F9FAFB" : "#FFFFFF",
+        backgroundColor: state ? "#F9FAFB" : "#FFFFFF",
         border: "1px solid #FFFFFF",
         borderRadius: "4px",
         width: "100%",
@@ -39,9 +37,9 @@ export default function MenuItem ({children, style}) {
     }, ...style});
 
     return (
-        <Item onClick={handleClick}>
+        <Item onClick={() => setState(!state)}>
             {children}
-            {selected && <CheckIcon sx={{color: colors.purple}} />}
+            {state && <CheckIcon sx={{color: colors.purple}} />}
         </Item>
     );
 };
@@ -49,7 +47,13 @@ export default function MenuItem ({children, style}) {
 //Control panel settings for storybook
 MenuItem.propTypes = {
     //MenuItem text
-    children: PropTypes.string
+    children: PropTypes.string,
+
+    //MenuItem state
+    state: PropTypes.bool,
+
+    //MenuItem setState function
+    setState: PropTypes.func
 };
 
 //Default values for this component

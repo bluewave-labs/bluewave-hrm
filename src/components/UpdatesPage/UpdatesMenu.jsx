@@ -2,7 +2,7 @@ import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
-import UpdatesNavBar from './UpdatesNavBar';
+import PagesNavBar from './PagesNavBar';
 import NoContentComponent from './NoContentComponent';
 import { useState } from 'react';
 import { colors, fonts } from '../../Styles';
@@ -187,8 +187,8 @@ export default function UpdatesMenu({style}) {
                     <UpdatesList updates={updatesToDisplay} style={{marginBottom: "20px"}} />
                     {/*Updates nav bar*/}
                     {filteredUpdates.length > 10 &&
-                        <UpdatesNavBar 
-                            numOfUpdates={filteredUpdates.length} 
+                        <PagesNavBar 
+                            numOfEntries={filteredUpdates.length} 
                             currentPage={currentPage} 
                             handlePage={handlePage}
                         /> 

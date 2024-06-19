@@ -11,7 +11,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
-import MenuItem from './MenuItem';
+import MenuItem from '../BasicMenus/MenuItem';
 
 const basicContent = (
     <>
@@ -102,7 +102,7 @@ const selectableContent = (
 
 //Storybook display settings
 export default {
-    title: 'BasicMenus/PopoverMenu',
+    title: 'PopupMenus/PopoverMenu',
     component: Box,
     parameters: {
         layout: 'centered'

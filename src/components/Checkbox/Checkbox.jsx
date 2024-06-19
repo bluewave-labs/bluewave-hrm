@@ -10,34 +10,54 @@ import './Checkbox.css';
  *      Valid values: ['checkbox', 'radio']
  *      Default: 'checkbox'
  * 
- * - id<String>: Standard input id attribute
+ * - id<String>: Standard input id attribute.
  * 
- * - name<String>: Standard input name attribute
+ * - name<String>: Standard input name attribute.
  * 
- * - value<String>: Standard input value attribute
+ * - value<String>: Standard input value attribute.
  * 
  * - size<String>: Determines the size of the checkbox.
  *      Valid values: ['small', 'large']
  *      Default: 'small'
  * 
- * - style<Object>: Optional prop for adding further inline styling 
+ * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
+ * 
+ * - onChange<Function>: Function to be executed when the checkbox value is changed.
  * 
  * - enabled<Boolean>: Flag determining whether the checkbox is enabled or disabled.
  *      Default: true
  */
-export default function Checkbox({type, id, name, value, size, style, enabled}){
-    return (
-        <input 
-            className={[type, size].join(' ')}
-            type={type}
-            id={id}
-            name={name}
-            value={value}
-            style={style}
-            disabled={!enabled}
-        />
-    );
+export default function Checkbox({type, id, name, value, size, checked, style, onChange, enabled}) {
+    if (checked) {
+        return (
+            <input 
+                className={[type, size].join(' ')}
+                type={type}
+                id={id}
+                name={name}
+                value={value}
+                style={style}
+                onChange={onChange}
+                disabled={!enabled}
+                checked="checked"
+            />
+        );
+    }
+    else {
+        return (
+            <input 
+                className={[type, size].join(' ')}
+                type={type}
+                id={id}
+                name={name}
+                value={value}
+                style={style}
+                onChange={onChange}
+                disabled={!enabled}
+            />
+        );
+    }
 };
 
 //Control panel settings for storybook
@@ -56,6 +76,8 @@ Checkbox.propTypes = {
 Checkbox.defaultProps = {
     type: 'checkbox',
     size: 'small',
+    onChange: () => {},
+    checked: false,
     style: {},
     enabled: true
 };

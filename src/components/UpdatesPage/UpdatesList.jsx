@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
  * Menu component for listing update notifications in the home page.
  * 
  * Props:
- * - updates<Array<Object>>: List of objects containing updates to be rendered.
+ * - updates<Array<Object>>: List of objects containing update information to be displayed.
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
@@ -30,9 +30,9 @@ export default function UpdatesList({updates, style}) {
                         }}>
                             {/*Update status*/}
                             <TableCell>
-                                {update.status == "new" && <Label mode="new" label="New"/>}
-                                {update.status == "waiting" && <Label mode="waiting" label="Waiting"/>}
-                                {update.status == "seen" && <Label mode="seen" label="Seen"/>}
+                                {update.status == "new" && <Label mode="status" dot="orange" label="New"/>}
+                                {update.status == "waiting" && <Label mode="status" dot="red" label="Waiting"/>}
+                                {update.status == "seen" && <Label mode="status" dot="grey" label="Seen"/>}
                             </TableCell>
                             {/*Update name and description*/}
                             <TableCell><b>{update.name}</b></TableCell>
@@ -68,6 +68,7 @@ export default function UpdatesList({updates, style}) {
 
 //Control panel settings for storybook
 UpdatesList.propTypes = {
+    //List of updates to be rendered
     updates: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string))
 };
 

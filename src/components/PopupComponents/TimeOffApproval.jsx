@@ -6,13 +6,14 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
+import PropTypes from 'prop-types';
 
 /**
  * Popup component for displaying the information of a time off request and the options to reject
- * or approve it to an administrator
+ * or approve it to an administrator.
  * 
  * Props:
- * - user_information<Object>: Contains the request information.
+ * - request_information<Object>: Contains the request information.
  *      Syntax: {
  *          avatar: <image source>
  *          name: <String>
@@ -29,7 +30,7 @@ import { colors, fonts } from '../../Styles';
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function TimeApproval({user_information, style}) {
+export default function TimeOffApproval({request_information, style}) {
     const StyledTD = styled('td')({
         textAlign: "start",
         paddingBottom: "15px",
@@ -62,8 +63,8 @@ export default function TimeApproval({user_information, style}) {
                     <StyledTD><b>Photo</b></StyledTD>
                     <StyledTD>
                         <Avatar 
-                            alt={user_information.name} 
-                            src={user_information.avatar} 
+                            alt={request_information.name} 
+                            src={request_information.avatar} 
                             sx={{
                                 width: "60px",
                                 height: "60px"
@@ -73,45 +74,45 @@ export default function TimeApproval({user_information, style}) {
                 </tr>
                 <tr>
                     <StyledTD><b>Name</b></StyledTD>
-                    <StyledTD>{user_information.name}</StyledTD>
+                    <StyledTD>{request_information.name}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Role</b></StyledTD>
-                    <StyledTD>{user_information.role}</StyledTD>
+                    <StyledTD>{request_information.role}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Email</b></StyledTD>
-                    <StyledTD>{user_information.email}</StyledTD>
+                    <StyledTD>{request_information.email}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Office</b></StyledTD>
-                    <StyledTD>{user_information.office}</StyledTD>
+                    <StyledTD>{request_information.office}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Effective date</b></StyledTD>
-                    <StyledTD>{user_information.effectiveDate}</StyledTD>
+                    <StyledTD>{request_information.effectiveDate}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Time off balance</b></StyledTD>
-                    <StyledTD>{user_information.timeOffBalance}</StyledTD>
+                    <StyledTD>{request_information.timeOffBalance}</StyledTD>
                 </tr>
             </table>
             <table style={{width: "100%"}}>
                 <tr>
                     <StyledTD><b>Time off requested</b></StyledTD>
-                    <StyledTD>{user_information.timeOffRequested}</StyledTD>
+                    <StyledTD>{request_information.timeOffRequested}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Requested days total</b></StyledTD>
-                    <StyledTD>{user_information.requestedDaysTotal}</StyledTD>
+                    <StyledTD>{request_information.requestedDaysTotal}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Time-off category</b></StyledTD>
-                    <StyledTD>{user_information.timeOffCategory}</StyledTD>
+                    <StyledTD>{request_information.timeOffCategory}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Description</b></StyledTD>
-                    <StyledTD>{user_information.description}</StyledTD>
+                    <StyledTD>{request_information.description}</StyledTD>
                 </tr>
             </table>
             {/*Admin's notes*/}
@@ -142,9 +143,12 @@ export default function TimeApproval({user_information, style}) {
 };
 
 //Control panel settings for storybook
-TimeApproval.propTypes = {};
+TimeOffApproval.propTypes = {
+    //Information included in the time off request
+    request_information: PropTypes.objectOf(PropTypes.string)
+};
 
 //Default values for this component
-TimeApproval.defaultProps = {
+TimeOffApproval.defaultProps = {
     style: {}
 };
