@@ -39,7 +39,7 @@ const App = () => {
       <PopupMessage/>
       <PopupMessageSM/> */}
       <DocumentMyinfo/>
-      <Jouney/>
+
       <JourneyMyinfo/>
    
    
