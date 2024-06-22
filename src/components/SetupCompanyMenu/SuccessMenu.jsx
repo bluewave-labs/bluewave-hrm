@@ -28,9 +28,11 @@ export default function SuccessMenu({style}) {
                 <p>You have completed the initial setup</p>
             </Stack>
             {/*Complete setup button*/}
-            <HRMButton mode="primary" label="Dismiss and complete setup" style={{
+            <HRMButton mode="primary" style={{
                 marginTop: "40px"
-            }}/>
+            }}>
+                Dismiss and complete setup
+            </HRMButton>
         </Box>
     );
 };
