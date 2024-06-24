@@ -38,7 +38,7 @@ export default function TimeOffPage({style}) {
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Header*/}
-            <Header />
+            <Header style={{minWidth: "1480px"}} />
             <Box sx={{
                 display: "flex",
                 flexDirection: "row", 

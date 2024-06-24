@@ -20,16 +20,15 @@ import { colors, fonts } from '../../Styles';
  * - timeOffPeriods<Array<Object>>: List of objects containing information of upcoming periods 
  *      of time off.
  * 
- * - editFlag<Boolean>: Boolean determining if time off periods can be edited or deleted.
- *      Default: false
+ * - tableColumns<Array<String>>: List of table columns to be displayed
  * 
- * - teamFlag<Boolean>: Boolean determining if the time off periods belong to other team members.
+ * - editFlag<Boolean>: Boolean determining if time off periods can be edited or deleted.
  *      Default: false
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function UpcomingTimeOffTable({timeOffPeriods, editFlag, teamFlag, style}) {
+export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, editFlag, style}) {
     //Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey, 
@@ -57,21 +56,32 @@ export default function UpcomingTimeOffTable({timeOffPeriods, editFlag, teamFlag
                 {/*Table header*/}
                 <TableHead>
                     <TableRow sx={{backgroundColor: "#F9FAFB"}}>
-                        {teamFlag && <TableHeaderCell sx={{paddingLeft: "25px"}}><b>Person</b></TableHeaderCell>}
-                        {teamFlag && <TableHeaderCell><b>From</b></TableHeaderCell>}
-                        {!teamFlag && <TableHeaderCell sx={{paddingLeft: "25px"}}><b>From</b></TableHeaderCell>}
+                        {tableColumns.includes("Person") && <TableHeaderCell sx={{paddingLeft: "25px"}}><b>Person</b></TableHeaderCell>}
+                        {tableColumns.includes("Person") ? 
+                            <TableHeaderCell><b>From</b></TableHeaderCell> :
+                            <TableHeaderCell sx={{paddingLeft: "25px"}}><b>From</b></TableHeaderCell>
+                        }
                         <TableHeaderCell><b>To</b></TableHeaderCell>
-                        <TableHeaderCell><b>Type</b></TableHeaderCell>
-                        <TableHeaderCell><b>Amount</b></TableHeaderCell>
-                        <TableHeaderCell colSpan={(teamFlag) ? 1 : 2}><b>Note</b></TableHeaderCell>
-                        {teamFlag && <TableHeaderCell><b>Status</b></TableHeaderCell>}
+                        {tableColumns.includes("Type") && 
+                            <TableHeaderCell><b>Type</b></TableHeaderCell>
+                        }
+                        {tableColumns.includes("Amount") && 
+                            <TableHeaderCell><b>Amount</b></TableHeaderCell>
+                        }
+                        {tableColumns.includes("Note") && 
+                            <TableHeaderCell colSpan={(tableColumns.includes("Status")) ? 1 : 2}>
+                                <b>Note</b>
+                            </TableHeaderCell>
+                        }
+                        {tableColumns.includes("Status") && <TableHeaderCell><b>Status</b></TableHeaderCell>}
+                        
                     </TableRow>
                 </TableHead>
                 {/*Time off information*/}
                 <TableBody>
                     {timeOffPeriods.map((period) => (
                         <TableRow>
-                            {teamFlag && 
+                            {tableColumns.includes('Person') &&
                                 <TableBodyCell>
                                     <Stack direction="row" alignItems="center" spacing={2}>
                                         <Avatar alt={period.user.name} src={period.user.avatar} />
@@ -87,11 +97,25 @@ export default function UpcomingTimeOffTable({timeOffPeriods, editFlag, teamFlag
                                 <StyledChip label={<b>{period.to}</b>} />
                             </TableBodyCell>
                             {/*Time off category*/}
-                            <TableBodyCell>{period.type}</TableBodyCell>
+                            {tableColumns.includes('Type') && <TableBodyCell>{period.type}</TableBodyCell>}
                             {/*Time off amount*/}
-                            <TableBodyCell>{period.amount}</TableBodyCell>
+                            {tableColumns.includes('Amount') && <TableBodyCell>{period.amount}</TableBodyCell>}
                             {/*Time off additional notes*/}
-                            <TableBodyCell>{period.note}</TableBodyCell>
+                            {tableColumns.includes('Note') && <TableBodyCell>{period.note}</TableBodyCell>}
+                            {/*The status of the time off period*/}
+                            {tableColumns.includes('Status') &&
+                                <TableBodyCell>
+                                    <Label
+                                        mode="status" 
+                                        dot={
+                                            (period.status === "Approved") ? "green" :
+                                            (period.status === "Waiting") ? "orange" :
+                                            (period.status === "Rejected") ? "red" : null
+                                        }
+                                        label={period.status}
+                                    />
+                                </TableBodyCell>
+                            }
                             {/*Buttons to edit and delete time off period*/}
                             {editFlag && 
                                 <TableBodyCell>
@@ -112,20 +136,6 @@ export default function UpcomingTimeOffTable({timeOffPeriods, editFlag, teamFlag
                                     </Stack>
                                 </TableBodyCell>
                             }
-                            {/*The status of the time off period*/}
-                            {teamFlag && 
-                                <TableBodyCell>
-                                    <Label
-                                        mode="status" 
-                                        dot={
-                                            (period.status === "Approved") ? "green" :
-                                            (period.status === "Waiting") ? "orange" :
-                                            (period.status === "Rejected") ? "red" : null
-                                        }
-                                        label={period.status}
-                                    />
-                                </TableBodyCell>
-                            }
                         </TableRow>
                     ))}
                 </TableBody>
@@ -139,16 +149,15 @@ UpcomingTimeOffTable.propTypes = {
     //Periods of time off to be displayed
     timeOffPeriods: PropTypes.arrayOf(PropTypes.object),
 
-    //Boolean determining if time off periods can be edited or deleted in this menu
-    editFlag: PropTypes.bool,
+    //Table columns to be displayed
+    tableColumns: PropTypes.arrayOf(PropTypes.string),
 
-    //Boolean determining if the time off periods of other users are being displayed in this menu
-    teamFlag: PropTypes.bool
+    //Boolean determining if time off periods can be edited or deleted in this menu
+    editFlag: PropTypes.bool
 };
 
 //Default values for this component
 UpcomingTimeOffTable.defaultProps = {
     editFlag: false,
-    teamFlag: false,
     style: {}
 };

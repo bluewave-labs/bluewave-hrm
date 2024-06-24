@@ -25,14 +25,17 @@ import PropTypes from 'prop-types';
 export default function HistoryTabContent({timeOffPeriods, style}) {
     const [currentPage, setCurrentPage] = useState(1);  //The current page number
     //Flags for determining which buttons in the "customize" dropdown are selected
-    const [nameSelected, setNameSelected] = useState(false);
-    const [statusSelected, setStatusSelected] = useState(false);
-    const [roleSelected, setRoleSelected] = useState(false);
-    const [teamSelected, setTeamSelected] = useState(false);
-    const [hireDateSelected, setHireDateSelected] = useState(false);
-    const [employeeNoSelected, setEmployeeNoSelected] = useState(false);
-    const [employmentStatusSelected, setEmploymentStatusSelected] = useState(false);
+    const [typeFilter, setTypeFilter] = useState(true);
+    const [amountFilter, setAmountFilter] = useState(true);
+    const [noteFilter, setNoteFilter] = useState(true);
 
+    //Filter table columns depending on which filters are active
+    //"From", "To" and at least one other column will always be active
+    const activeFilters = [];
+    if (typeFilter) { activeFilters.push("Type"); }
+    if (amountFilter) { activeFilters.push("Amount"); }
+    if (noteFilter) { activeFilters.push("Note"); }
+ 
     //Only shows 10 periods at a time
     const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);
 
@@ -70,13 +73,15 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
                     <MenuToggleButton 
                         label="Customize" 
                         menuItems={{
-                            "Name": [nameSelected, setNameSelected],
-                            "Status": [statusSelected, setStatusSelected],
-                            "Role": [roleSelected, setRoleSelected],
-                            "Team": [teamSelected, setTeamSelected],
-                            "Hire date": [hireDateSelected, setHireDateSelected],
-                            "Employee No": [employeeNoSelected, setEmployeeNoSelected],
-                            "Employment Status": [employmentStatusSelected, setEmploymentStatusSelected]
+                            "Type": [typeFilter, (value) => {
+                                if (activeFilters.length >= 2 || !typeFilter) {setTypeFilter(value)}
+                            }],
+                            "Amount": [amountFilter, (value) => {
+                                if (activeFilters.length >= 2 || !amountFilter) {setAmountFilter(value)}
+                            }],
+                            "Note": [noteFilter, (value) => {
+                                if (activeFilters.length >= 2 || !noteFilter) {setNoteFilter(value)}
+                            }]
                         }}
                         icon={<TuneIcon />} 
                     />
@@ -88,8 +93,8 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
                     {/*Upcoming time off table*/}
                     <UpcomingTimeOffTable 
                         timeOffPeriods={periodsToDisplay} 
+                        tableColumns={activeFilters}
                         editFlag={true} 
-                        teamFlag={false} 
                         style={{marginBottom: "30px"}}
                     />
                     {/*Upcoming time off navbar*/}
