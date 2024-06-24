@@ -203,7 +203,7 @@ export default function TimeOffRequest({close, sendRequest, style}) {
                 <p>Set hours for each day during the time off period</p>
             </Stack>
             {/*Time off per day table*/}
-            <TableContainer sx={{width: "100%", marginY: "20px"}}>
+            <TableContainer sx={{width: "100%", maxHeight: "260px", marginY: "20px", overflowY: "auto"}}>
                 <Table>
                     <TableHead>
                         <TableRow sx={{backgroundColor: "#F9FAFB"}}>
