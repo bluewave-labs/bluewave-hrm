@@ -25,8 +25,11 @@ export default function Header({style}) {
             padding: 2,
             display: "flex",
             justifyContent: "space-between",
+            backgroundColor: "#FFFFFF",
             borderBottom: "1px solid #EBEBEB",
-            boxShadow: "0 10px 6px #10182808"
+            boxShadow: "0 10px 6px #10182808",
+            position: "fixed",
+            zIndex: 2
         }, ...style}}>
             <img src={Logo} alt="Company Logo" />
             <UserDropdown user={user} />

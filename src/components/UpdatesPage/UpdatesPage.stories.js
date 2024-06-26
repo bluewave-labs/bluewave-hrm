@@ -5,7 +5,7 @@ export default {
     title: 'HomeMenu/UpdatesPage',
     component: UpdatesPage,
     parameters: {
-        layout: 'centered'
+        layout: 'fullscreen'
     },
     tags: ['autodocs']
 };
