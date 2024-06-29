@@ -14,6 +14,7 @@ import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutl
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SupportIcon from '@mui/icons-material/Support';
 import { styled } from '@mui/system';
+import { fonts, colors } from '../../Styles';
 
 /**
  * Side menu component for most pages. Contains buttons and links to multiple pages.
@@ -35,16 +36,27 @@ export default function SideMenu({style}) {
         paddingLeft: 0
     });
 
+    const ItemText = styled("p")({
+        margin: 0,
+        padding: 0,
+        fontFamily: fonts.fontFamily,
+        fontSize: fonts.default.size,
+        color: colors.darkGrey
+    });
+
     return (
         <Stack sx={{...{
-            width: "15%",
-            minWidth: "280px",
+            boxSizing: "border-box",
+            width: "280px",
             height: "100%",
             paddingRight: "15px",
             direction: "column",
             justifyContent: "space-between",
             borderRight: "1px solid #EBEBEB",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "#FFFFFF",
+            position: "fixed",
+            paddingTop: "87px",
+            zIndex: 1
         }, ...style}}>
             <List>
                 <StyledListItem disablePadding>
@@ -52,7 +64,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <HomeOutlinedIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary="Home" />
+                        <ListItemText primary={<ItemText>Home</ItemText>} />
                     </StyledListItemButton>
                 </StyledListItem>
                 <StyledListItem disablePadding>
@@ -60,7 +72,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <PersonOutlineIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary="My info" />
+                        <ListItemText primary={<ItemText>My info</ItemText>} />
                     </StyledListItemButton>
                 </StyledListItem>
                 <StyledListItem disablePadding>
@@ -68,7 +80,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <PeopleOutlineIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary="People" />
+                        <ListItemText primary={<ItemText>People</ItemText>} />
                     </StyledListItemButton>
                 </StyledListItem>
                 <StyledListItem disablePadding>
@@ -76,7 +88,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <AccessTimeIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary="Time off" />
+                        <ListItemText primary={<ItemText>Time off</ItemText>} />
                     </StyledListItemButton>
                 </StyledListItem>
                 <StyledListItem disablePadding>
@@ -84,7 +96,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <PieChartOutlineOutlinedIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary="Reporting" />
+                        <ListItemText primary={<ItemText>Reporting</ItemText>} />
                     </StyledListItemButton>
                 </StyledListItem>
                 <StyledListItem disablePadding>
@@ -92,7 +104,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <SettingsOutlinedIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary="Settings" />
+                        <ListItemText primary={<ItemText>Settings</ItemText>} />
                     </StyledListItemButton>
                 </StyledListItem>
             </List>
@@ -103,7 +115,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <SupportIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary="Support" />
+                        <ListItemText primary={<ItemText>Support</ItemText>} />
                     </StyledListItemButton>
                 </StyledListItem>
             </Box>
