@@ -224,6 +224,7 @@ export default function TimeOffRequest({close, sendRequest, style}) {
                                         id={`${formatDate(date)}-full`}
                                         name={formatDate(date)}
                                         value="full" 
+                                        checked={true}
                                     />
                                 </TableBodyCell>
                                 <TableBodyCell align="center">
@@ -248,6 +249,7 @@ export default function TimeOffRequest({close, sendRequest, style}) {
                                                 id={`${formatDate(dateRange[0])}-full`}
                                                 name={formatDate(dateRange[0])}
                                                 value="full" 
+                                                checked={true}
                                             />
                                         </TableBodyCell>
                                         <TableBodyCell align="center">
@@ -271,6 +273,7 @@ export default function TimeOffRequest({close, sendRequest, style}) {
                                                 id={`${formatDate(dateRange[dateRange.length - 1])}-full`}
                                                 name={formatDate(dateRange[dateRange.length - 1])}
                                                 value="full" 
+                                                checked={true}
                                             />
                                         </TableBodyCell>
                                         <TableBodyCell align="center">

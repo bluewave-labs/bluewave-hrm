@@ -10,5 +10,7 @@ export default {
 };
 
 export const Primary ={
-    args: {}
+    args: {
+        setFile: (s) => {}
+    }
 };

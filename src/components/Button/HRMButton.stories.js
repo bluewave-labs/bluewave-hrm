@@ -6,6 +6,15 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 export default {
     title: 'Interactables/Button',
     component: HRMButton,
+    argTypes: {
+        mode: {
+            options: ['primary', 'secondaryA', 'secondaryB', 'tertiary', 'error'],
+            control: { type: 'radio' }
+        },
+        enabled: {
+            control: { type: 'boolean' }
+        }
+    },
     parameters: {
         layout: 'centered'
     },
