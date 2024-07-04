@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { employee } = require("../../models");
 
 const displayInfo = (size, tableName) => {
   console.log(
@@ -30,13 +29,14 @@ module.exports = {
     }
     displayInfo(count, "role");
   },
-  populateAmininstratorTable: async function (db) {
-    const adminData = require("./administrator.json");
-    removeKey(adminData, "id");
-    const results = await db.administrator.bulkCreate(adminData, {
+ 
+  populateUserTable: async function (db) {
+    const users = require("./appUser.json");
+    removeKey(users, "id");
+    const results = await db.appUser.bulkCreate(users, {
       validate: true,
     });
-    displayInfo(results.length, "administrator");
+    displayInfo(results.length, "appUser");
   },
   populateTeamTable: async function (db) {
     const teamData = require("./team.json");
@@ -87,16 +87,28 @@ module.exports = {
   },
   populateEmployeeTable: async function (db) {
     const data = require("./employee.json");
-    removeKey(data, "empId");
-    const maleImg = fs.readFileSync("./constants/data/male.png", {
-      encoding: "base64",
-    });
-    const femaleImg = fs.readFileSync("./constants/data/female.png", {
-      encoding: "base64",
-    });
-    for (let d of data) {
-      d.photo = d.gender === "Male" ? maleImg : femaleImg;
+    const path = "./constants/data/images/";
+    if (fs.existsSync(path)) {
+      for (let d of data) {
+        console.log(d);
+         const img = fs.readFileSync(`${path}${d.empId}.png`, {
+         encoding: "base64",
+        });
+        d.photo = img;
+      }
+    } else {
+      const maleImg = fs.readFileSync("./constants/data/male.png", {
+        encoding: "base64",
+      });
+      const femaleImg = fs.readFileSync("./constants/data/female.png", {
+        encoding: "base64",
+      });
+      for (let d of data) {
+        d.photo = d.gender === "Male" ? maleImg : femaleImg;
+      }
     }
+
+    removeKey(data, "empId");
     const results = await db.employee.bulkCreate(data, {
       validate: true,
     });
@@ -117,22 +129,6 @@ module.exports = {
       validate: true,
     });
     displayInfo(results.length, "socialProfile");
-  },
-  populateCompaySocialProfileTable: async function (db) {
-    const data = require("./companySocialProfile.json");
-    removeKey(data, "id");
-    const results = await db.companySocialProfile.bulkCreate(data, {
-      validate: true,
-    });
-    displayInfo(results.length, "companySocialProfile");
-  },
-  populateEmergencyContactTable: async function (db) {
-    const data = require("./emergencyContact.json");
-    removeKey(data, "id");
-    const results = await db.emergencyContact.bulkCreate(data, {
-      validate: true,
-    });
-    displayInfo(results.length, "emergencyContact");
   },
   populateTimeOffHistoryTable: async function (db) {
     const data = require("./timeOffHistory.json");
@@ -158,13 +154,7 @@ module.exports = {
     });
     displayInfo(results.length, "reportTo");
   },
-  populateAdministratorPermissionTable: async function (db) {
-    const data = require("./administratorPermission.json");
-    const results = await db.administratorPermission.bulkCreate(data, {
-      validate: true,
-    });
-    displayInfo(results.length, "administratorPermission");
-  },
+
   populateEmployeeAnnualTimeOffTable: async function (db) {
     const data = require("./employeeAnnualTimeOff.json");
     removeKey(data, "id");
@@ -176,7 +166,6 @@ module.exports = {
 
   populateTables: async function (db) {
     console.log("Populating tables...");
-    await this.populateEmergencyContactTable(db);
     await this.populateRoleTable(db);
     await this.populateTeamTable(db);
     await this.populateTimeOffTable(db);
@@ -186,12 +175,10 @@ module.exports = {
     await this.populateEmployeeTable(db);
     await this.populateSocialProfileTable(db);
     await this.populateDocumentTable(db);
-    await this.populateAmininstratorTable(db);
-    await this.populateCompaySocialProfileTable(db);
+    await this.populateUserTable(db);
     await this.populateTimeOffHistoryTable(db);
     await this.populateChangeHistoryTable(db);
     await this.populateReportToTable(db);
-    await this.populateAdministratorPermissionTable(db);
     await this.populateEmployeeAnnualTimeOffTable(db);
     console.log("Operation successful, tables Populated.");
   },

@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "type": "Admin",
+    "type": "Administrator",
     "description": "Admin role"
   },
   {

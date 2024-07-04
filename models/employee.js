@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-return sequelize.define(
+  return sequelize.define(
     "employee",
     {
       empId: {
@@ -73,8 +73,8 @@ return sequelize.define(
         type: Sequelize.STRING,
         allowNull: false,
       },
-      compensation: {
-        type: Sequelize.STRING,
+      effectiveDate: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
       weeklyHours: {
@@ -93,9 +93,17 @@ return sequelize.define(
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      emergencyContactId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
+      emergencyContactName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      emergencyContactRelationship: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      emergencyContactPhoneNumber: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       streetAddress: {
         type: Sequelize.STRING,
@@ -103,11 +111,11 @@ return sequelize.define(
       },
       unitSuite: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       city: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       country: {
         type: Sequelize.STRING,
@@ -115,11 +123,11 @@ return sequelize.define(
       },
       stateProvince: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       postalZipCode: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
@@ -128,15 +136,4 @@ return sequelize.define(
       timestamps: true,
     }
   );
-  
- 
-
-
-
-
-
-
-
-
-
-}
+};

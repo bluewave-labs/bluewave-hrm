@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       companyName: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       companyWebsite: {
         type: Sequelize.STRING,
@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       administratorEmail: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       companyDomain: {
         type: Sequelize.STRING,
@@ -30,34 +30,45 @@ module.exports = (sequelize, Sequelize) => {
       },
       streetAddress: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       unitSuite: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       city: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       country: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       stateProvince: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       postalZipCode: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
+      },
+      facebookUrl: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      twitterUrl: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      linkedinUrl: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
     },
     {
       sequelize,
       freezeTableName: true,
       timestamps: true,
-      initialAutoIncrement: 100000,
     }
   );
 };

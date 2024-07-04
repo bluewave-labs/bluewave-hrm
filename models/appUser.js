@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
-    "hrmUser",
+    "appUser",
     {
       id: {
         type: Sequelize.INTEGER,
@@ -44,6 +44,14 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: true,
         unique: true,
+      },
+      access: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaltValue: "Permitted",
+        validate: {
+          isIn: [["Permitted", "Suspended", "Revoked"]],
+        },
       },
       permissionId: {
         type: Sequelize.INTEGER,

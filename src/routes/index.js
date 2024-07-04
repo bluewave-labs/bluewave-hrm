@@ -1,12 +1,8 @@
-const administrator = require("./administrator");
-const administratorPermission = require("./administratorPermission");
 const authentication = require("./authentication");
 const changeHistory = require("./changeHistory");
 const company = require("./company");
-const companySocialProfile = require("./companySocialProfile");
 const department = require("./department");
 const document = require("./document");
-const emergencyContact = require("./emergencyContact");
 const employee = require("./employee");
 const employeeAnnualTimeOff = require("./employeeAnnualTimeOff");
 const permission = require("./permission");
@@ -16,18 +12,14 @@ const socialProfile = require("./socialProfile");
 const team = require("./team");
 const timeOff = require("./timeOff");
 const timeOffHistory = require("./timeOffHistory");
+const appUser = require("./appUser");
 
 module.exports = (router) => {
-  administrator(router);
-  administratorPermission(router);
-  administratorPermission(router);
   authentication(router);
   changeHistory(router);
   company(router);
-  companySocialProfile(router);
   department(router);
   document(router);
-  emergencyContact(router);
   employee(router);
   employeeAnnualTimeOff(router);
   permission(router);
@@ -37,6 +29,7 @@ module.exports = (router) => {
   team(router);
   timeOff(router);
   timeOffHistory(router);
+  appUser(router);
 
   return router;
 };

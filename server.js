@@ -40,8 +40,9 @@ app.listen(HTTP_PORT, () => {
 
 // Uncomment the following codes to populate your database
 
-//db.sequelize.sync({ force: false }).then(async () => {
+// db.sequelize.sync({ force: true }).then(async () => {
 // let data = require("./constants/data");
 // await data.populateTables(db);
 // console.log("Sync operation successful.");
-//});
+// });
+

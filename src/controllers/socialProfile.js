@@ -24,6 +24,40 @@ exports.showOne = async (req, res) => {
   }
 };
 
+
+exports.findOne = async (req, res) => {
+  const { empId, profileUrl } = req.body;
+  let profile = null;
+  if (empId) {
+    //This check all profileUrls other than empId's. This is useful when profile urls is not being updated (same as before).
+    profile = await db.socialProfile.findOne({
+      where: {
+        empId: { [db.Sequelize.Op.ne]: req.body.empId },
+        where: getComparator(db, "profileUrl", profileUrl),
+      },
+    });
+  } else {// This check all profileUrls. It is useful when creating a new profile.
+    profile = await db.socialProfile.findOne({
+      where: {
+        where: getComparator(db, "profileUrl", profileUrl),
+      },
+    });
+  }
+  if (profile) {
+    res.json({
+      exists: true,
+      data: profile,
+      message: "Record found",
+    });
+  } else {
+    res.json({
+      exists: false,
+      data: profile,
+      message: "Record not found",
+    });
+  }
+};
+
 exports.createRecord = async (req, res) => {
   //checking for profileUrl already exists
   try {
@@ -52,7 +86,7 @@ exports.updateRecord = async (req, res) => {
       id: {
         [db.Sequelize.Op.not]: updatedData.id,
       },
-      empId : updatedData.empId,
+      empId: updatedData.empId,
       where: getComparator(db, "profileUrl", req.body.profileUrl),
     },
   });
