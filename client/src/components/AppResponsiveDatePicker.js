@@ -17,7 +17,29 @@ const styles = {
     ".css-1wy8uaa-MuiButtonBase-root-MuiPickersDay-root.Mui-selected": {
     backgroundColor: "#7F56D9",
   },
+  ".css-9reuh9-MuiPickersArrowSwitcher-root": {
+    display: "inline-flex",
+  },
+  ".MuiPickersCalendarHeader-label": {
+    textAlign: "center",
+  },
+  ".css-9reuh9-MuiPickersArrowSwitcher-root": {
+    width: "220px",
+    border:"2px solid red"
+  },
+  ".css-1gyhqmk-MuiFormControl-root-MuiTextField-root":{
+    backgroundColor:"red",
+    border: "2px solid blue"
+  },
+  ".css-1rhb6d2-MuiFormControl-root-MuiTextField-root .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root ": {
+    flexDirection: "row-reverse",
+    height: "2433px",
+    width: "160px",
+}
 };
+//.css-1aqny2q-MuiPickersCalendarHeader-root
+//.css-9reuh9-MuiPickersArrowSwitcher-root
+//.css-9reuh9-MuiPickersArrowSwitcher-root
 /**
  * This function creates a responsive React Datepicker component.
  * @returns React Datepicker component
