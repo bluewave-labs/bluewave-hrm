@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "companyName": "BlueWave Labs",
+    "companyWebsite": "www.bluewavelabs.ca",
+    "administratorEmail": "elwyn.ginnety@bluewavelabs.ca",
+    "companyDomain": "bluewavelabs",
+    "streetAddress": "00900 Oakridge Alley",
+    "unitSuite": "Apt 1765",
+    "postalZipCode": "L5V 1E5",
+    "city": "Stony Plain",
+    "country": "Canada",
+    "stateProvince": "Alberta",
+    "facebookUrl": "https://facebook.com/bluewavelabs",
+    "twitterUrl": "https://twitter.com/bluewavelabs",
+    "linkedinUrl": "http://linkedin.com/in/bluewavelabs"
+  }
+]

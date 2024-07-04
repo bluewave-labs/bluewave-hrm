@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "type": "Administrator",
+    "description": "Admin role"
+  },
+  {
+    "id": 2,
+    "type": "Manager",
+    "description": "Manager role"
+  },
+  {
+    "id": 3,
+    "type": "Employee",
+    "description": "Employee role"
+  }
+]

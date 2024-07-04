@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "title": "Production Designer",
+    "minimumSalary": 6000,
+    "maximumSalary": 9500
+  },
+  {
+    "id": 2,
+    "title": "Product Manager",
+    "minimumSalary": 10500,
+    "maximumSalary": 15000
+  },
+  {
+    "id": 3,
+    "title": "Frontend Developer",
+    "minimumSalary": 8700,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 4,
+    "title": "Backend Developer",
+    "minimumSalary": 9000,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 5,
+    "title": "Fullstack Developer",
+    "minimumSalary": 9700,
+    "maximumSalary": 14200
+  },
+  {
+    "id": 6,
+    "title": "UX Designer",
+    "minimumSalary": 5700,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 7,
+    "title": "UX Copywriter",
+    "minimumSalary": 7500,
+    "maximumSalary": 13500
+  },
+  {
+    "id": 8,
+    "title": "UI Designer",
+    "minimumSalary": 9500,
+    "maximumSalary": 16500
+  },
+  {
+    "id": 9,
+    "title": "QA Engineer",
+    "minimumSalary": 8000,
+    "maximumSalary": 16200
+  },
+  {
+    "id": 10,
+    "title": "Finance Manager",
+    "minimumSalary": 9500,
+    "maximumSalary": 11500
+  },
+  {
+    "id": 11,
+    "title": "Accountant",
+    "minimumSalary": 7500,
+    "maximumSalary": 10200
+  },
+  {
+    "id": 12,
+    "title": "Human Resource Manager",
+    "minimumSalary": 9500,
+    "maximumSalary": 11500
+  },
+  {
+    "id": 13,
+    "title": "IT Risk Analyst",
+    "minimumSalary": 9500,
+    "maximumSalary": 11500
+  },
+  {
+    "id": 14,
+    "title": "Administration Assistant",
+    "minimumSalary": 4000,
+    "maximumSalary": 7000
+  },
+  {
+    "id": 15,
+    "title": "Legal Counsel",
+    "minimumSalary": 5500,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 16,
+    "title": "Marketing Representative",
+    "minimumSalary": 5500,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 17,
+    "title": "Human Resources Representative",
+    "minimumSalary": 5500,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 18,
+    "title": "Legal Clerk",
+    "minimumSalary": 5500,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 19,
+    "title": "Customer Service representative",
+    "minimumSalary": 5700,
+    "maximumSalary": 10700
+  },
+  {
+    "id": 20,
+    "title": "Software Tester",
+    "minimumSalary": 8000,
+    "maximumSalary": 11500
+  },
+  {
+    "id": 21,
+    "title": "Software Engineer",
+    "minimumSalary": 12000,
+    "maximumSalary": 20000
+  },
+  {
+    "id": 22,
+    "title": "Marketing Manager",
+    "minimumSalary": 10500,
+    "maximumSalary": 13500
+  },
+  {
+    "id": 23,
+    "title": "Finance Officer",
+    "minimumSalary": 4500,
+    "maximumSalary": 7500
+  },
+  {
+    "id": 24,
+    "title": "Customer Support Specialist",
+    "minimumSalary": 8500,
+    "maximumSalary": 10500
+  },
+  {
+    "id": 25,
+    "title": "CEO/President",
+    "minimumSalary": 75000,
+    "maximumSalary": 100000
+  },
+  {
+    "id": 26,
+    "title": "Administration Manager",
+    "minimumSalary": 10000,
+    "maximumSalary": 12500
+  },
+  {
+    "id": 27,
+    "title": "Research & Development Manager",
+    "minimumSalary": 11000,
+    "maximumSalary": 14000
+  },
+  {
+    "id": 28,
+    "title": "Principal Architect",
+    "minimumSalary": 9700,
+    "maximumSalary": 12200
+  }
+]
