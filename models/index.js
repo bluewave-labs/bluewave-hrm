@@ -41,6 +41,7 @@ db.socialProfile = require("./socialProfile")(sequelize, Sequelize);
 db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
+db.update = require("./update")(sequelize, Sequelize);
 
 db.reportTo = require("./reportTo")(sequelize, Sequelize);
 db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
@@ -179,6 +180,18 @@ db.appUser.belongsTo(db.permission, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "permissionId",
+});
+
+db.employee.hasMany(db.update, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
+});
+
+db.update.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
 });
 
 db.employee.belongsTo(db.employee, { foreignKey: "managerId", as: "Manager" });
