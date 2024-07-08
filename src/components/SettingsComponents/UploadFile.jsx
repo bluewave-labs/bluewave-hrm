@@ -45,7 +45,8 @@ export default function UploadFile({style}) {
                         style={{
                             color: "#7F56D9", 
                             textDecoration: "none", 
-                            fontWeight: "bold"}}
+                            fontWeight: "bold",
+                        }}
                     >
                         Click to upload
                     </a> 

@@ -1,16 +1,39 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Box from "@mui/system/Box";
 import Grid from "@mui/system/Unstable_Grid";
-import { TextField } from "@mui/material";
+import { styled, TextField as MUITextField, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import UploadFile from "./UploadFile";
 import HRMButton from "../Button/HRMButton";
 import "./settings.css";
 
+const TextField = styled(MUITextField)({
+  "& fieldset": {
+    borderColor: "1px solid #D0D5DD",
+  },
+  "& .MuiInputAdornment-root + input": {
+    borderLeft: "1px solid #D0D5DD",
+    paddingLeft: "4px",
+  },
+});
+
+const Text = styled(Typography)({
+  fontSize: "13px",
+  fontWeight: "600",
+  lineHeight: "20px",
+  color: " #344054",
+});
+
 export default function Form({ style }) {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const [data, setData] = useState("");
+  const onSubmit = (data) => {
+    setData(JSON.stringify(data));
+    console.log("hellooo");
+    console.log(data);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -24,44 +47,72 @@ export default function Form({ style }) {
           ...style,
         }}
       >
-        <Grid container columns={10} rowSpacing={2} columnSpacing={1}>
+        <Grid container columns={10} rowSpacing={4} columnSpacing={1}>
           <Grid xs={10} textAlign="center">
             <h3>Edit company profile information</h3>
           </Grid>
           {/*Textfield for company name*/}
           <Grid xs={3}>
-            <h5>Company name</h5>
+            <Text>Company name</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
-              inputProps={register("name")}
+              inputProps={{...register("name")}}
               color="secondary"
             />
           </Grid>
           {/*Textfield for company website*/}
           <Grid xs={3}>
-            <h5>Company website</h5>
+            <Text>Company website</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               InputProps={{
                 startAdornment: (
-                  <InputAdornment position="end">https://</InputAdornment>
+                  <InputAdornment position="start">https://</InputAdornment>
                 ),
+                ...register("website"),
               }}
               size="small"
-              inputProps={register("website")}
+              color="secondary"
+            />
+          </Grid>
+          {/*Textfield for company domain*/}
+          <Grid xs={3}>
+            <Text>Company domain</Text>
+          </Grid>
+          <Grid xs={7} alignContent="center">
+            <TextField
+              fullWidth
+              InputProps={{
+                ...register("domain"),
+              }}
+              size="small"
+              color="secondary"
+            />
+          </Grid>
+          {/*Textfield for administrator email*/}
+          <Grid xs={3}>
+            <Text>Administrator email</Text>
+          </Grid>
+          <Grid xs={7} alignContent="center">
+            <TextField
+              fullWidth
+              InputProps={{
+                ...register("administrator"),
+              }}
+              size="small"
               color="secondary"
             />
           </Grid>
           {/*Section for uploading company logo*/}
           <Grid xs={3}>
-            <h5>Company logo</h5>
+            <Text>Company logo</Text>
           </Grid>
-          <Grid xs={7} sx={{ display: "flex", justifyContent: "center" }}>
+          <Grid xs={7} sx={{ display: "flex" }}>
             <AddPhotoAlternateOutlinedIcon
               sx={{
                 backgroundColor: "#F2F4F7",
@@ -72,90 +123,97 @@ export default function Form({ style }) {
                 borderRadius: "50%",
               }}
             />
-            <UploadFile inputProps={register("logo")} />
+            <UploadFile InputProps={{ ...register("logo") }} />
           </Grid>
           {/*Textfield for address line 1*/}
           <Grid xs={3}>
-            <h5>Address line 1</h5>
+            <Text>Address line 1</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
-              inputProps={register("address1")}
+              InputProps={{ ...register("address1") }}
               color="secondary"
             />
           </Grid>
           {/*Textfield for address line 2*/}
           <Grid xs={3}>
-            <h5>Address line 2</h5>
+            <Text>Address line 2</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
-              inputProps={register("address2")}
+              InputProps={{ ...register("address2") }}
               color="secondary"
             />
           </Grid>
           {/*Textfield for city*/}
           <Grid xs={3}>
-            <h5>City</h5>
+            <Text>City</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
-              inputProps={register("city")}
+              InputProps={{ ...register("city") }}
               color="secondary"
             />
           </Grid>
           {/*Textfield for State (if applicable)*/}
           <Grid xs={3}>
-            <h5>State (if applicable)</h5>
+            <Text>State (if applicable)</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
-              inputProps={register("state")}
+              InputProps={{ ...register("state") }}
               color="secondary"
             />
           </Grid>
           {/*Textfield for Postal code*/}
           <Grid xs={3}>
-            <h5>Postal code</h5>
+            <Text>Postal code</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
-              inputProps={register("postalcode")}
+              InputProps={{ ...register("postalcode") }}
               color="secondary"
             />
           </Grid>
           {/*Textfield for Country*/}
           <Grid xs={3}>
-            <h5>Country</h5>
+            <Text>Country</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
-              inputProps={register("country")}
+              InputProps={{ ...register("country") }}
               color="secondary"
             />
           </Grid>
           {/*Textfield for Social profiles*/}
           <Grid xs={3}>
-            <h5>Social profiles</h5>
+            <Text>Social profiles</Text>
           </Grid>
           <Grid container xs={7} alignContent="center" spacing={2}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
                 size="small"
-                inputProps={register("twitter")}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      twitter.com/
+                    </InputAdornment>
+                  ),
+                  ...register("twitter"),
+                }}
                 color="secondary"
               />
             </Grid>
@@ -163,7 +221,14 @@ export default function Form({ style }) {
               <TextField
                 fullWidth
                 size="small"
-                inputProps={register("facebook")}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      facebook.com/
+                    </InputAdornment>
+                  ),
+                  ...register("facebook"),
+                }}
                 color="secondary"
               />
             </Grid>
@@ -171,12 +236,20 @@ export default function Form({ style }) {
               <TextField
                 fullWidth
                 size="small"
-                inputProps={register("linkedin")}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      linkedin.com/company/
+                    </InputAdornment>
+                  ),
+                  ...register("linkedin"),
+                }}
                 color="secondary"
               />
             </Grid>
           </Grid>
         </Grid>
+        <p>{data}</p>
         {/*Add company button*/}
         <Grid xs={10} alignContent="right" spacing={2}>
           <HRMButton
@@ -185,6 +258,7 @@ export default function Form({ style }) {
               float: "right",
               marginTop: "60px",
             }}
+            type="submit"
           >
             Save changes
           </HRMButton>
