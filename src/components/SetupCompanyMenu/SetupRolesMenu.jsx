@@ -5,6 +5,7 @@ import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+const axios = require('axios');
 
 //Function for formatting the departments given in the props
 function divideIntoThree(obj) {
@@ -30,7 +31,7 @@ function divideIntoThree(obj) {
  *      Default: {}
  */
 export default function SetupRolesMenu({advancePage, style}) {
-    //Hooks for each role item
+    //State variables for each role item
     const [accountManagerRole, setAccountManagerRole] = useState(false);
     const [businessDeveloperRole, setBusinessDeveloperRole] = useState(false);
     const [CEORole, setCEORole] = useState(false);
@@ -44,7 +45,8 @@ export default function SetupRolesMenu({advancePage, style}) {
     const [salesManagerRole, setSalesManagerRole] = useState(false);
     const [salesRepresentativeRole, setSalesRepresentativeRole] = useState(false);
 
-    const url = "http://localhost:5000/api/roles/";
+    //URL to be used for API requests
+    const url = `${process.env.URL}/roles/`;
 
     //Organizing and formatting role items
     const roleItems = {
@@ -70,24 +72,21 @@ export default function SetupRolesMenu({advancePage, style}) {
         if (v[0]) {activeStates.push(k)}
     });
 
+    //Function for creating the POST requests and setting the new menu component
     async function handleSubmit() {
         for (const item of activeStates) {
-            const data = JSON.stringify({
+            //Parse data of each role into JSON format
+            const data = {
                 roleTitle: item,
-                minimumSalary: 45000,
+                //Need function to retrieve actual minimum and maximum salary
+                minimumSalary: 45000,   
                 maximumSalary: 55000
-            })
+            };
 
+            //Send a POST request for each role
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: data,
-                    headers: {'Content-type': 'application/json'}
-                });
-                if (response.ok) {
-                    const jsonResponse = await response.json();
-                    console.log(jsonResponse);
-                }
+                const response = await axios.post(url, data);
+                console.log(response);
             }
             catch (error) {
                 console.log(error);

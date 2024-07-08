@@ -4,8 +4,9 @@ import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
 import PagesNavBar from './PagesNavBar';
 import NoContentComponent from './NoContentComponent';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
+const axios = require('axios').default;
 
 /**
  * Menu component for the home menu page. Displays up to 10 updates at a time along with controls
@@ -16,124 +17,32 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function UpdatesMenu({style}) {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);  
     const [filter, setFilter] = useState("All");
+    const [allUpdates, setAllUpdates] = useState([]);
+
+    useEffect(() => {
+        getUpdates();
+    }, []);
+
+    const url = `${process.env.URL}/updates`;
 
     //Retrieve all the updates
-    const allUpdates = [
-        
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'Your time off request has been sent',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'Your time off request has been sent',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        
-    ];
+    function getUpdates() {
+        axios.get(url)
+        .then((response) => {
+            const updates = [];
+            const data = response.data;
+            for (const up of data) {
+                //console.log(up);
+                updates.push(up)
+            }
+            setAllUpdates(updates);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    };
 
     //Either show all updates or only the unread ones
     const filteredUpdates = (filter === "All") ? 

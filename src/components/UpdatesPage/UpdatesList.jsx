@@ -36,7 +36,7 @@ export default function UpdatesList({updates, style}) {
                             </TableCell>
                             {/*Update name and description*/}
                             <TableCell><b>{update.name}</b></TableCell>
-                            <TableCell>{update.desc}</TableCell>
+                            <TableCell>{update.description}</TableCell>
                             {/*Mark as read/unread button*/}
                             <TableCell align="right" sx={{paddingRight: 0, width: "16%"}}>
                                 <HRMButton mode="tertiary">

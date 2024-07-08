@@ -5,6 +5,7 @@ import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+const axios = require('axios');
 
 //Function for formatting the departments given in the props
 function divideIntoThree(obj) {
@@ -30,7 +31,7 @@ function divideIntoThree(obj) {
  *      Default: {}
  */
 export default function SetupDepartmentsMenu({advancePage, style}) {
-    //Hooks for each department item
+    //State variables for each department item
     const [CSDepartment, setCSDepartment] = useState(false);
     const [designDepartment, setDesignDepartment] = useState(false);
     const [financeDepartment, setFinanceDepartment] = useState(false);
@@ -41,7 +42,8 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
     const [operationsDepartment, setOperationsDepartment] = useState(false);
     const [salesDepartment, setSalesDepartment] = useState(false);
 
-    const url = "http://localhost:5000/api/departments/";
+    //URL to be used for API requests
+    const url = `${process.env.URL}/departments/`;
 
     //Organizing and formatting department items
     const departmentItems = {
@@ -64,23 +66,19 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
         if (v[0]) {activeStates.push(k)}
     });
 
+    //Function for creating the POST requests and setting the new menu component
     async function handleSubmit() {
         for (const item of activeStates) {
-            const data = JSON.stringify({
+            //Parse data of each department into JSON format
+            const data = {
                 departmentName: item,
                 departmentManagerId: 1
-            })
+            };
 
+            //Send a POST request for each department
             try {
-                const response = await fetch(url, {
-                    method: "POST",
-                    body: data,
-                    headers: {"Content-type": "application/json"}
-                });
-                if (response.ok) {
-                    const jsonResponse = await response.json();
-                    console.log(jsonResponse);
-                }
+                const response = await axios.post(url, data);
+                console.log(response);
             }
             catch (error) {
                 console.log(error);

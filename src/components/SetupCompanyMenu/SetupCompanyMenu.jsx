@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { colors, fonts } from '../../Styles';
 import UploadFile from './UploadFile';
 import HRMButton from '../Button/HRMButton';
+const axios = require('axios');
 
 /**
  * Setup menu component for onboarding purposes. Contains a text field for a company's name 
@@ -20,14 +21,18 @@ import HRMButton from '../Button/HRMButton';
  *      Default: {}
  */
 export default function SetupCompanyMenu({advancePage, style}) {
+    //State variables for holding the new company's information
     const [companyName, setCompanyName] = useState(null);
     const [companyWebsite, setCompanyWebsite] = useState(null);
     const [companyLogo, setCompanyLogo] = useState(null);
 
-    const url = "http://localhost:5000/api/company/"
+    //URL to be used for API requests
+    const url = `${process.env.URL}/company/`;
 
+    //Function for creating the POST request and setting the new menu component
     async function handleSubmit() {
-        const data = JSON.stringify({
+        //Parse data into JSON format
+        const data = {
             companyName: companyName,
             companyWebsite: companyWebsite,
             companyLogo: companyLogo,
@@ -39,18 +44,12 @@ export default function SetupCompanyMenu({advancePage, style}) {
             country: null,
             stateProvince: null,
             postalZipCode: null
-        });
+        };
 
+        //Send the POST request 
         try {
-            const response = await fetch(url, {
-                method: "POST",
-                body: data,
-                headers: {"Content-type": "application/json"}
-            });
-            if (response.ok) {
-                const jsonResponse = await response.json();
-                console.log(jsonResponse);
-            }
+            const response = await axios.post(url, data)
+            console.log(response);
         }
         catch (error) {
             console.log(error);
