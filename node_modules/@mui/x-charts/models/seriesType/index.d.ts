@@ -1,0 +1,15 @@
+import { BarSeriesType, DefaultizedBarSeriesType } from './bar';
+import { CartesianChartSeriesType, ChartSeriesType, ChartsSeriesConfig, StackableChartSeriesType } from './config';
+type AllSeriesType<T extends ChartSeriesType = ChartSeriesType> = ChartsSeriesConfig[T]['seriesProp'];
+type CartesianSeriesType = AllSeriesType<CartesianChartSeriesType>;
+type DefaultizedSeriesType<T extends ChartSeriesType = ChartSeriesType> = ChartsSeriesConfig[T]['series'];
+type DefaultizedCartesianSeriesType = DefaultizedSeriesType<CartesianChartSeriesType>;
+type StackableSeriesType = DefaultizedSeriesType<StackableChartSeriesType>;
+export type SeriesItemIdentifier<T extends ChartSeriesType = ChartSeriesType> = ChartsSeriesConfig[T]['itemIdentifier'];
+export * from './line';
+export * from './bar';
+export * from './scatter';
+export * from './pie';
+export type { AllSeriesType, CartesianSeriesType, DefaultizedSeriesType, DefaultizedCartesianSeriesType, StackableSeriesType, };
+export declare function isDefaultizedBarSeries(series: DefaultizedSeriesType): series is DefaultizedBarSeriesType;
+export declare function isBarSeries(series: AllSeriesType): series is BarSeriesType;
