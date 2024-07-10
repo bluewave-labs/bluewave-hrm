@@ -1,0 +1,34 @@
+[
+    {
+        "empID":25,
+        "superID": 1,
+        "superEmail": "shidrathrahman365@gmail.com",
+        "sick": 15,
+        "vacation": 30,
+        "beaverment":15,
+        "type": "sick"
+
+    },
+    {
+        "empID":26,
+        "superID": 1,
+        "superEmail": "shidrathrahman365@gmail.com",
+        "sick": 15,
+        "vacation": 30,
+        "beaverment":15,
+        "type": "vacation"
+
+
+    },
+    {
+        "empID":27,
+        "superID": 1,
+        "superEmail": "shidrathrahman365@gmail.com",
+        "sick": 15,
+        "vacation": 30,
+        "beaverment":15,
+        "type": "beaverment"
+
+
+    }
+]

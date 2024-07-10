@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Request Time Off</title>
+    <script>
+        async function loadTimeOffTypes() {
+            try {
+                const response = await fetch('http://localhost:3000/timeoff-types');
+                if (response.ok) {
+                    const timeOffTypes = await response.json();
+                    const timeoffTypeSelect = document.getElementById('timeoffType');
+                    timeOffTypes.forEach(type => {
+                        const option = document.createElement('option');
+                        option.value = type.name;
+                        option.textContent = type.name;
+                        timeoffTypeSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Failed to load time off types:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error loading time off types:', error);
+            }
+        }
+
+        async function submitTimeOffRequest() {
+            const empID = document.getElementById('empID').value;
+            const timeoffType = document.getElementById('timeoffType').value;
+            const numberOfDays = document.getElementById('numberOfDays').value;
+            const reason = document.getElementById('reason').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/request-timeoff', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ empID, timeoffType, numberOfDays, reason })
+                });
+
+                if (response.ok) {
+                    alert('Request approved');
+                } else {
+                    const errorText = await response.text();
+                    alert(`Request denied: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('Error submitting time off request:', error);
+                alert('Request denied: Server error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadTimeOffTypes);
+    </script>
+</head>
+<body>
+    <h1>Request Time Off</h1>
+    <form onsubmit="event.preventDefault(); submitTimeOffRequest();">
+        <label for="empID">Employee ID:</label>
+        <input type="text" id="empID" name="empID" required><br><br>
+
+        <label for="timeoffType">Type of Time Off:</label>
+        <select id="timeoffType" name="timeoffType" required>
+            <!-- Options will be loaded from the database -->
+        </select><br><br>
+
+        <label for="numberOfDays">Number of Days:</label>
+        <input type="number" id="numberOfDays" name="numberOfDays" required><br><br>
+
+        <label for="reason">Reason:</label>
+        <textarea id="reason" name="reason" required></textarea><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
