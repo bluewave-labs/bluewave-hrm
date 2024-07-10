@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Box from "@mui/system/Box";
 import Grid from "@mui/system/Unstable_Grid";
 import {
@@ -33,10 +33,8 @@ const Text = styled(Typography)({
 });
 
 export default function Form({ style }) {
-  const [data, setData] = useState("");
   const [countries, setCountries] = useState([]);
-  const { register, handleSubmit } = useForm();
-  const [value, setValue] = useState(null); // State to control the selected value
+  const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
     // Fetch countries from the REST API
@@ -52,18 +50,17 @@ export default function Form({ style }) {
         countryOptions.sort((a, b) => a.name.localeCompare(b.name));
 
         setCountries(countryOptions);
-        setValue(countryOptions[0]); // Set default value to the first country
+        // setValue(countryOptions[0]); // Set default value to the first country
       })
       .catch((error) => {
         console.error("Error fetching countries:", error);
       });
   }, []);
 
-  console.log(countries);
+  // console.log(countries);
 
   const onSubmit = (data) => {
-    setData(JSON.stringify(data));
-    console.log("hellooo");
+    console.log();
     console.log(data);
   };
 
@@ -226,13 +223,11 @@ export default function Form({ style }) {
               disablePortal
               options={countries}
               getOptionLabel={(option) => option.name}
-              value={value} // Controlled value
-              onChange={(event, newValue) => setValue(newValue)} // Handle value change
               renderInput={(params) => <TextField {...params} />}
+              onChange={(event, value) => setValue('country', value)}
               fullWidth
               size="small"
               color="secondary"
-              inputProps={{ ...register("country") }}
             />
           </Grid>
           {/*Textfield for Social profiles*/}
@@ -287,7 +282,6 @@ export default function Form({ style }) {
             </Grid>
           </Grid>
         </Grid>
-        <p>{data}</p>
         {/*Add company button*/}
         <Grid xs={10} alignContent="right" spacing={2}>
           <HRMButton
