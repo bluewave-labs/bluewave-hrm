@@ -1,13 +1,19 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 import Box from "@mui/system/Box";
 import Grid from "@mui/system/Unstable_Grid";
-import { styled, TextField as MUITextField, Typography } from "@mui/material";
+import {
+  styled,
+  TextField as MUITextField,
+  Typography,
+  Autocomplete,
+} from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import UploadFile from "./UploadFile";
 import HRMButton from "../Button/HRMButton";
 import "./settings.css";
+import axios from "axios";
 
 const TextField = styled(MUITextField)({
   "& fieldset": {
@@ -27,8 +33,34 @@ const Text = styled(Typography)({
 });
 
 export default function Form({ style }) {
-  const { register, handleSubmit } = useForm();
   const [data, setData] = useState("");
+  const [countries, setCountries] = useState([]);
+  const { register, handleSubmit } = useForm();
+  const [value, setValue] = useState(null); // State to control the selected value
+
+  useEffect(() => {
+    // Fetch countries from the REST API
+    axios
+      .get("https://restcountries.com/v3.1/all")
+      .then((response) => {
+        const countryOptions = response.data.map((country) => ({
+          code: country.cca2,
+          name: country.name.common,
+        }));
+
+        // Sort the countries alphabetically by name
+        countryOptions.sort((a, b) => a.name.localeCompare(b.name));
+
+        setCountries(countryOptions);
+        setValue(countryOptions[0]); // Set default value to the first country
+      })
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+      });
+  }, []);
+
+  console.log(countries);
+
   const onSubmit = (data) => {
     setData(JSON.stringify(data));
     console.log("hellooo");
@@ -36,7 +68,7 @@ export default function Form({ style }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <Box
         sx={{
           ...{
@@ -59,7 +91,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{...register("name")}}
+              inputProps={{ ...register("name") }}
               color="secondary"
             />
           </Grid>
@@ -87,7 +119,7 @@ export default function Form({ style }) {
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
-              InputProps={{
+              inputProps={{
                 ...register("domain"),
               }}
               size="small"
@@ -101,7 +133,7 @@ export default function Form({ style }) {
           <Grid xs={7} alignContent="center">
             <TextField
               fullWidth
-              InputProps={{
+              inputProps={{
                 ...register("administrator"),
               }}
               size="small"
@@ -123,7 +155,7 @@ export default function Form({ style }) {
                 borderRadius: "50%",
               }}
             />
-            <UploadFile InputProps={{ ...register("logo") }} />
+            <UploadFile inputProps={{ ...register("logo") }} />
           </Grid>
           {/*Textfield for address line 1*/}
           <Grid xs={3}>
@@ -133,7 +165,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              InputProps={{ ...register("address1") }}
+              inputProps={{ ...register("address1") }}
               color="secondary"
             />
           </Grid>
@@ -145,7 +177,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              InputProps={{ ...register("address2") }}
+              inputProps={{ ...register("address2") }}
               color="secondary"
             />
           </Grid>
@@ -157,7 +189,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              InputProps={{ ...register("city") }}
+              inputProps={{ ...register("city") }}
               color="secondary"
             />
           </Grid>
@@ -169,7 +201,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              InputProps={{ ...register("state") }}
+              inputProps={{ ...register("state") }}
               color="secondary"
             />
           </Grid>
@@ -181,7 +213,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              InputProps={{ ...register("postalcode") }}
+              inputProps={{ ...register("postalcode") }}
               color="secondary"
             />
           </Grid>
@@ -190,11 +222,17 @@ export default function Form({ style }) {
             <Text>Country</Text>
           </Grid>
           <Grid xs={7} alignContent="center">
-            <TextField
+            <Autocomplete
+              disablePortal
+              options={countries}
+              getOptionLabel={(option) => option.name}
+              value={value} // Controlled value
+              onChange={(event, newValue) => setValue(newValue)} // Handle value change
+              renderInput={(params) => <TextField {...params} />}
               fullWidth
               size="small"
-              InputProps={{ ...register("country") }}
               color="secondary"
+              inputProps={{ ...register("country") }}
             />
           </Grid>
           {/*Textfield for Social profiles*/}
@@ -258,10 +296,12 @@ export default function Form({ style }) {
               float: "right",
               marginTop: "60px",
             }}
-            type="submit"
+            type="button"
+            onClick={handleSubmit(onSubmit)}
           >
             Save changes
           </HRMButton>
+          {/* <input type="submit" /> */}
         </Grid>
       </Box>
     </form>
