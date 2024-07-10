@@ -10,10 +10,31 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileTabContent from "./CompanyProfileTabContent";
+import DepartmentsTabContent from "./DepartmentsTabContent";
 
 export default function SettingsPage({ style }) {
   const [tab, setTab] = useState("Company profile"); //State determining which flag is selected
   const [company, setCompany] = useState({});
+
+  //List of time off periods
+  const departments = [
+    {
+      name: "Customer Success",
+      people: "12",
+    },
+    {
+      name: "Finance",
+      people: "4",
+    },
+    {
+      name: "IT",
+      people: "7",
+    },
+    {
+      name: "No department",
+      people: "12",
+    },
+  ];
 
   //Function for selecting a new tab
   function handleChange(e, newValue) {
@@ -111,8 +132,8 @@ export default function SettingsPage({ style }) {
                 <CompanyProfileTabContent company={company} />
               </StyledTabPanel>
               {/*History tab*/}
-              <StyledTabPanel value="History">
-                {/* <HistoryTabContent timeOffPeriods={timeOffPeriods} /> */}
+              <StyledTabPanel value="Departments">
+                <DepartmentsTabContent departments={departments} />
               </StyledTabPanel>
               {/*Team tab*/}
               <StyledTabPanel value="My team">
