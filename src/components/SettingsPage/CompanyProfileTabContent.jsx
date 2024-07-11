@@ -1,7 +1,5 @@
 import Box from "@mui/system/Box";
-import Stack from "@mui/system/Stack";
 import Form from "./Form";
-import { colors, fonts } from "../../Styles";
 import PropTypes from "prop-types";
 
 export default function CompanyProfileTabContent({ company, style }) {

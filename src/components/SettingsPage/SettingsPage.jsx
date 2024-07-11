@@ -3,7 +3,7 @@ import Stack from "@mui/system/Stack";
 import Header from "../StaticComponents/Header";
 import SideMenu from "../StaticComponents/SideMenu";
 import { colors, fonts } from "../../Styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { styled } from "@mui/system";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -11,12 +11,29 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileTabContent from "./CompanyProfileTabContent";
 import DepartmentsTabContent from "./DepartmentsTabContent";
+import axios from "axios";
 
 export default function SettingsPage({ style }) {
   const [tab, setTab] = useState("Company profile"); //State determining which flag is selected
   const [company, setCompany] = useState({});
+  const companyId = 1; //Id of the company
 
-  //List of time off periods
+  useEffect(() => {
+    // Fetch company from the REST API
+    axios
+      .post(`http://localhost:3000/api/company/${companyId}`)
+      .then((response) => {
+        const data = response.data;
+        setCompany(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching company:", error);
+      });
+  }, []);
+
+
+
+  //List of departments
   const departments = [
     {
       name: "Customer Success",
