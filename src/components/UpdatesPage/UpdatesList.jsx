@@ -6,17 +6,41 @@ import TableRow from '@mui/material/TableRow';
 import Label from '../Label/Label';
 import HRMButton from '../Button/HRMButton';
 import PropTypes from 'prop-types';
+const axios = require('axios').default;
 
 /**
  * Menu component for listing update notifications in the home page.
  * 
  * Props:
  * - updates<Array<Object>>: List of objects containing update information to be displayed.
+ *      Syntax of updates: {
+ *          id: <Integer>
+ *          empId: <Integer>
+ *          status: <String ['new', 'waiting', 'seen']>
+ *          name: <String>
+ *          description: <String>
+ *      }
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function UpdatesList({updates, style}) {
+export default function UpdatesList({updates, refresh, style}) {
+    function handleSwitch(up) {
+        const url = `${process.env.URL}/updates/${up.id}`;
+        console.log("Running handleSwitch()");
+        axios.put(
+            url, 
+            { status: (up.status === "new" || up.status === "waiting") ? "seen" : "new" }, 
+            { params: { id: up.id } })
+        .then((response) => {
+            console.log(response);
+            refresh();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    };
+
     return (
         <TableContainer sx={{...{
             minWidth: "925px"
@@ -30,17 +54,17 @@ export default function UpdatesList({updates, style}) {
                         }}>
                             {/*Update status*/}
                             <TableCell>
-                                {update.status == "new" && <Label mode="status" dot="orange" label="New"/>}
-                                {update.status == "waiting" && <Label mode="status" dot="red" label="Waiting"/>}
-                                {update.status == "seen" && <Label mode="status" dot="grey" label="Seen"/>}
+                                {update.status === "new" && <Label mode="status" dot="orange" label="New"/>}
+                                {update.status === "waiting" && <Label mode="status" dot="red" label="Waiting"/>}
+                                {update.status === "seen" && <Label mode="status" dot="grey" label="Seen"/>}
                             </TableCell>
                             {/*Update name and description*/}
                             <TableCell><b>{update.name}</b></TableCell>
                             <TableCell>{update.description}</TableCell>
                             {/*Mark as read/unread button*/}
                             <TableCell align="right" sx={{paddingRight: 0, width: "16%"}}>
-                                <HRMButton mode="tertiary">
-                                    <b>Mark as {update.status != "seen" && 'un'}read</b>
+                                <HRMButton mode="tertiary" onClick={() => handleSwitch(update)}>
+                                    <b>Mark as {update.status === "seen" && 'un'}read</b>
                                 </HRMButton>
                             </TableCell>
                             {/*View button*/}

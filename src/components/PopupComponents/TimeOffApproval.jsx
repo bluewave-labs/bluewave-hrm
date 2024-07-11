@@ -24,13 +24,15 @@ import PropTypes from 'prop-types';
  *          timeOffRequested: <String>
  *          requestedDaysTotal: <String>
  *          timeOffCategory: <String>
- *          description: <String>
  *      }
+ * 
+ * - close<Function>: Function for closing this popup component
+ *      Syntax: close()
  * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function TimeOffApproval({request_information, style}) {
+export default function TimeOffApproval({request_information, close, style}) {
     const StyledTD = styled('td')({
         textAlign: "start",
         paddingBottom: "15px",
@@ -48,8 +50,8 @@ export default function TimeOffApproval({request_information, style}) {
         }, ...style}}>
             {/*Title*/}
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <h2>Approve new time off</h2>
-                <CloseIcon sx={{
+                <h3>Approve new time off</h3>
+                <CloseIcon onClick={close} sx={{
                     backgroundColor: "#FFFFFFF",
                     "&:hover": {
                         cursor: "pointer",
@@ -65,10 +67,7 @@ export default function TimeOffApproval({request_information, style}) {
                         <Avatar 
                             alt={request_information.name} 
                             src={request_information.avatar} 
-                            sx={{
-                                width: "60px",
-                                height: "60px"
-                            }}
+                            sx={{width: "60px", height: "60px"}}
                         />
                     </StyledTD>
                 </tr>
@@ -110,10 +109,6 @@ export default function TimeOffApproval({request_information, style}) {
                     <StyledTD><b>Time-off category</b></StyledTD>
                     <StyledTD>{request_information.timeOffCategory}</StyledTD>
                 </tr>
-                <tr>
-                    <StyledTD><b>Description</b></StyledTD>
-                    <StyledTD>{request_information.description}</StyledTD>
-                </tr>
             </table>
             {/*Admin's notes*/}
             <Box sx={{display: "flex", flexDirection: "column"}}>
@@ -128,13 +123,14 @@ export default function TimeOffApproval({request_information, style}) {
                     }} 
                 />
             </Box>
-            {/*Reject or approve*/}
+            {/*Reject, approve or close*/}
             <Stack 
                 direction="row" 
                 alignItems="center" 
                 justifyContent="flex-end"
                 spacing={2}
             >
+                <HRMButton mode="tertiary" onClick={close}>Cancel</HRMButton>
                 <HRMButton mode="error">Reject</HRMButton>
                 <HRMButton mode="primary">Approve</HRMButton>
             </Stack>

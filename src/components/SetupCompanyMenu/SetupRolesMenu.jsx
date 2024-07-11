@@ -72,6 +72,7 @@ export default function SetupRolesMenu({advancePage, style}) {
         if (v[0]) {activeStates.push(k)}
     });
 
+    /*
     //Function for creating the POST requests and setting the new menu component
     async function handleSubmit() {
         for (const item of activeStates) {
@@ -94,18 +95,20 @@ export default function SetupRolesMenu({advancePage, style}) {
         }
         advancePage();
     };
+    */
 
     return (
         <Box sx={{...{
+            boxSizing: "border-box",
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingTop: 6,
-            paddingX: "18%",
+            paddingX: "150px",
             paddingBottom: 20,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily,
-            width: "1003px"
+            width: "1403px"
         }, ...style}}>
             {/*Text*/}
             <h3 style={{margin: "1em auto", textAlign: "center"}}>
@@ -134,7 +137,7 @@ export default function SetupRolesMenu({advancePage, style}) {
             <HRMButton 
                 mode="primary" 
                 enabled={activeStates.length >= 3} 
-                onClick={handleSubmit}
+                onClick={advancePage}
                 style={{
                     float: "right",
                     marginTop: "80px"

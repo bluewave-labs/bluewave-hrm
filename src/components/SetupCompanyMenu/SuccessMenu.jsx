@@ -18,10 +18,10 @@ export default function SuccessMenu({style}) {
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingY: 8,
-            paddingX: "18%",
+            paddingX: 0,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
-            width: "1003px",
+            width: "1403px",
             fontFamily: fonts.fontFamily,
             textAlign: "center"
         }, ...style}}>

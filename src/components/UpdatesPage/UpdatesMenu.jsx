@@ -20,10 +20,11 @@ export default function UpdatesMenu({style}) {
     const [currentPage, setCurrentPage] = useState(1);  
     const [filter, setFilter] = useState("All");
     const [allUpdates, setAllUpdates] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         getUpdates();
-    }, []);
+    }, [refresh]);
 
     const url = `${process.env.URL}/updates`;
 
@@ -93,7 +94,11 @@ export default function UpdatesMenu({style}) {
                         <UpdatesFilter handleFilter={handleFilter} />
                     </Stack>
                     {/*Updates list*/}
-                    <UpdatesList updates={updatesToDisplay} style={{marginBottom: "20px"}} />
+                    <UpdatesList 
+                        updates={updatesToDisplay} 
+                        refresh={() => {setRefresh(!refresh)}} 
+                        style={{marginBottom: "20px"}} 
+                    />
                     {/*Updates nav bar*/}
                     {filteredUpdates.length > 10 &&
                         <PagesNavBar 

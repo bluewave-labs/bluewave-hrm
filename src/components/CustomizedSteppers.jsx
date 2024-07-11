@@ -16,6 +16,7 @@ import StepContent from '@mui/material/StepContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import '../App.css';
+import { fonts, colors } from '../Styles';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -106,11 +107,15 @@ ColorlibStepIcon.propTypes = {
 
 
 
-export default function CustomizedSteppers({stepnumber,steps}) {
+export default function CustomizedSteppers({stepnumber, steps, style}) {
   return (
     
-    <>
-    <Stepper alternativeLabel activeStep={stepnumber} connector={<ColorlibConnector />}>
+    <Box sx={{...{
+      boxSizing: "border-box",
+      border: "1px solid #EBEBEB", 
+      backgroundColor: "#FFFFFF"
+    }, ...style}}>
+      <Stepper alternativeLabel activeStep={stepnumber} connector={<ColorlibConnector />}>
         {steps.map((step) => (
           <Step key={step.label}>
             <StepLabel 
@@ -121,13 +126,12 @@ export default function CustomizedSteppers({stepnumber,steps}) {
                 '& .MuiStepLabel-label.Mui-completed': { color: '#344054',fontFamily:'Inter',fontSize:'13px' } // Completed step color
               }}  
               >
-             <div className='font-semibold'> {step.label}</div>
-             <div >{step.description}</div>
+             <div className='font-semibold' style={{fontFamily: fonts.fontFamily, color: colors.darkGrey}} > {step.label}</div>
             </StepLabel>
           </Step>
         ))}
       </Stepper>
-    </>
+    </Box>
   );
 }
 

@@ -3,7 +3,7 @@ import Stack from '@mui/system/Stack';
 import SelectItem from './SelectItem';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 const axios = require('axios');
 
@@ -32,6 +32,7 @@ function divideIntoThree(obj) {
  */
 export default function SetupDepartmentsMenu({advancePage, style}) {
     //State variables for each department item
+    //const [departmentItems, setDepartmentItems] = useState({});
     const [CSDepartment, setCSDepartment] = useState(false);
     const [designDepartment, setDesignDepartment] = useState(false);
     const [financeDepartment, setFinanceDepartment] = useState(false);
@@ -41,11 +42,16 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
     const [marketingDepartment, setMarketingDepartment] = useState(false);
     const [operationsDepartment, setOperationsDepartment] = useState(false);
     const [salesDepartment, setSalesDepartment] = useState(false);
+    
+
+    // useEffect(() => {
+    //     getDepartments();
+    // }, []);
 
     //URL to be used for API requests
     const url = `${process.env.URL}/departments/`;
 
-    //Organizing and formatting department items
+    
     const departmentItems = {
         "Customer Success": [CSDepartment, setCSDepartment],
         "Design": [designDepartment, setDesignDepartment],
@@ -57,6 +63,7 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
         "Operations": [operationsDepartment, setOperationsDepartment],
         "Sales": [salesDepartment, setSalesDepartment]
     };
+    
 
     const formattedDepartments = divideIntoThree(departmentItems);
     
@@ -66,6 +73,33 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
         if (v[0]) {activeStates.push(k)}
     });
 
+    /*
+    function setSelected(state) {
+        state[0] = !state[0]
+    }
+    
+    function getDepartments() {
+        axios.get(url)
+        .then((response) => {
+            const data = response.data;
+            console.log(data);
+            for (const dep of data) {
+                console.log(dep)
+                departmentItems[dep.departmentName] = [];
+                departmentItems[dep.departmentName].push(false);
+                departmentItems[dep.departmentName].push(
+                    () => setSelected(departmentItems[dep.departmentName])
+                );
+                console.log(departmentItems[dep.departmentName]);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+    */
+    
+    /*
     //Function for creating the POST requests and setting the new menu component
     async function handleSubmit() {
         for (const item of activeStates) {
@@ -86,17 +120,19 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
         }
         advancePage();
     };
+    */
 
     return (
         <Box sx={{...{
+            boxSizing: "border-box",
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingTop: 6,
-            paddingX: "18%",
+            paddingX: "150px",
             paddingBottom: 20,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
-            width: "1003px",
+            width: "1403px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Text*/}
@@ -130,7 +166,7 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
             <HRMButton 
                 mode="primary" 
                 enabled={activeStates.length >= 3} 
-                onClick={handleSubmit}
+                onClick={advancePage}
                 style={{
                     float: "right",
                     marginTop: "80px"

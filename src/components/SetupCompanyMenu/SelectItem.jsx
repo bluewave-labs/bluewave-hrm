@@ -27,7 +27,7 @@ export default function SelectItem({children, state, setState, style}) {
         padding: "10px",
         borderRadius: "4px",
         textAlign: "center",
-        fontSize: "12px",
+        fontSize: "13px",
         fontFamily: "Inter, sans-serif",
         "&:hover": {
             cursor: "pointer"

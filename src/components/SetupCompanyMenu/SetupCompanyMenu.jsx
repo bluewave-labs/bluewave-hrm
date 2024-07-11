@@ -1,4 +1,5 @@
 import Box from '@mui/system/Box';
+import Stack from '@mui/system/Stack';
 import Grid from '@mui/system/Unstable_Grid';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -33,6 +34,7 @@ export default function SetupCompanyMenu({advancePage, style}) {
     async function handleSubmit() {
         //Parse data into JSON format
         const data = {
+            id: 1,
             companyName: companyName,
             companyWebsite: companyWebsite,
             companyLogo: companyLogo,
@@ -46,19 +48,22 @@ export default function SetupCompanyMenu({advancePage, style}) {
             postalZipCode: null
         };
 
-        //Send the POST request 
-        try {
-            const response = await axios.post(url, data)
+        //Send the PUT request 
+        axios.put(url, data)
+        .then((response) => {
             console.log(response);
-        }
-        catch (error) {
+        })
+        .catch((error) => {
             console.log(error);
-        }
-        advancePage();
+        })
+        .finally(() => {
+            advancePage();
+        });
     }
 
     return(
         <Box sx={{...{
+            //boxSizing: "border-box",
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingTop: 6,
@@ -66,7 +71,7 @@ export default function SetupCompanyMenu({advancePage, style}) {
             paddingBottom: 20,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
-            width: "1003px",
+            //width: "1003px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
             <Grid container columns={10} rowSpacing={2} columnSpacing={1}>
@@ -98,6 +103,12 @@ export default function SetupCompanyMenu({advancePage, style}) {
                     <h5>Company logo</h5>
                 </Grid>
                 <Grid xs={7} sx={{display: "flex", justifyContent: "center"}}>
+                    <Stack 
+                        direction="row" 
+                        alignItems="center" 
+                        justifyContent="space-between"
+                        sx={{width: "100%"}}
+                    >
                     {(companyLogo) ? 
                         <img src={companyLogo} style={{
                             width: "175px", 
@@ -116,6 +127,7 @@ export default function SetupCompanyMenu({advancePage, style}) {
                     />
                     }  
                     <UploadFile setFile={setCompanyLogo} />
+                    </Stack>
                 </Grid>
             </Grid>
             {/*Add company button*/}

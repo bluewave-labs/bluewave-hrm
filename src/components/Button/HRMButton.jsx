@@ -133,6 +133,7 @@ export default function HRMButton({mode, children, startIcon, endIcon, onClick, 
                 startIcon={startIcon} 
                 endIcon={endIcon} 
                 variant="text" 
+                onClick={onClick}
                 disabled={!enabled}
             >
                 {children}
