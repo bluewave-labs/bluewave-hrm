@@ -32,35 +32,59 @@ const Text = styled(Typography)({
   color: " #344054",
 });
 
-export default function Form({ style }) {
-  const [countries, setCountries] = useState([]);
-  const { register, handleSubmit, setValue } = useForm();
+const parseDefaultValues = (company) => ({
+  companyName: company?.companyName || "",
+  companyWebsite: company?.companyWebsite || "",
+  companyDomain: company?.companyDomain || "",
+  administratorEmail: company?.administratorEmail || "",
+  companyLogo: company?.companyLogo || "",
+  city: company?.city || "",
+  streetAddress: company?.streetAddress || "",
+  unitSuite: company?.unitSuite || "",
+  stateProvince: company?.stateProvince || "",
+  postalZipCode: company?.postalZipCode || "",
+  country: company?.country || "",
+  twitterUrl: company?.twitterUrl || "",
+  facebookUrl: company?.facebookUrl || "",
+  linkedinUrl: company?.linkedinUrl || "",
+});
 
+export default function Form({ company, style }) {
+  const [countries, setCountries] = useState([]);
+  const { register, handleSubmit, reset, setValue } = useForm({
+    defaultValues: parseDefaultValues(company),
+  });
+
+  const [countryValue, setCountryValue] = useState(parseDefaultValues(company).country);
+
+  // Load countries
   useEffect(() => {
     // Fetch countries from the REST API
     axios
       .get("https://restcountries.com/v3.1/all")
       .then((response) => {
-        const countryOptions = response.data.map((country) => ({
-          code: country.cca2,
-          name: country.name.common,
-        }));
+        const countryOptions = response.data.map(
+          (country) => country.name.common
+        );
 
         // Sort the countries alphabetically by name
-        countryOptions.sort((a, b) => a.name.localeCompare(b.name));
+        countryOptions.sort((a, b) => a.localeCompare(b));
 
         setCountries(countryOptions);
-        // setValue(countryOptions[0]); // Set default value to the first country
       })
       .catch((error) => {
         console.error("Error fetching countries:", error);
       });
   }, []);
 
-  // console.log(countries);
+  // Reset form when company changes
+  useEffect(() => {
+    const defaultValues = parseDefaultValues(company);
+    reset(defaultValues);
+    setCountryValue(defaultValues.country); // Update country value
+  }, [company]);
 
   const onSubmit = (data) => {
-    console.log();
     console.log(data);
   };
 
@@ -88,7 +112,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("name") }}
+              inputProps={{ ...register("companyName") }}
               color="secondary"
             />
           </Grid>
@@ -103,7 +127,7 @@ export default function Form({ style }) {
                 startAdornment: (
                   <InputAdornment position="start">https://</InputAdornment>
                 ),
-                ...register("website"),
+                ...register("companyWebsite"),
               }}
               size="small"
               color="secondary"
@@ -117,7 +141,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               inputProps={{
-                ...register("domain"),
+                ...register("companyDomain"),
               }}
               size="small"
               color="secondary"
@@ -131,7 +155,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               inputProps={{
-                ...register("administrator"),
+                ...register("administratorEmail"),
               }}
               size="small"
               color="secondary"
@@ -152,7 +176,7 @@ export default function Form({ style }) {
                 borderRadius: "50%",
               }}
             />
-            <UploadFile inputProps={{ ...register("logo") }} />
+            <UploadFile inputProps={{ ...register("companyLogo") }} />
           </Grid>
           {/*Textfield for address line 1*/}
           <Grid xs={3}>
@@ -162,7 +186,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("address1") }}
+              inputProps={{ ...register("streetAddress") }}
               color="secondary"
             />
           </Grid>
@@ -174,7 +198,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("address2") }}
+              inputProps={{ ...register("unitSuite") }}
               color="secondary"
             />
           </Grid>
@@ -198,7 +222,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("state") }}
+              inputProps={{ ...register("stateProvince") }}
               color="secondary"
             />
           </Grid>
@@ -210,7 +234,7 @@ export default function Form({ style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("postalcode") }}
+              inputProps={{ ...register("postalZipCode") }}
               color="secondary"
             />
           </Grid>
@@ -222,14 +246,16 @@ export default function Form({ style }) {
             <Autocomplete
               disablePortal
               options={countries}
-              getOptionLabel={(option) => option.name}
               renderInput={(params) => <TextField {...params} />}
-              onChange={(event, value) => setValue('country', value)}
+              value={countryValue}
+              onChange={(_, value) => {
+                setCountryValue(value);
+                setValue("country", value);
+              }}
               fullWidth
               size="small"
               color="secondary"
             />
-            {/* <input type="hidden" {...register('country23')} value={country?.name || ''} /> */}
           </Grid>
           {/*Textfield for Social profiles*/}
           <Grid xs={3}>
@@ -246,7 +272,7 @@ export default function Form({ style }) {
                       twitter.com/
                     </InputAdornment>
                   ),
-                  ...register("twitter"),
+                  ...register("twitterUrl"),
                 }}
                 color="secondary"
               />
@@ -261,7 +287,7 @@ export default function Form({ style }) {
                       facebook.com/
                     </InputAdornment>
                   ),
-                  ...register("facebook"),
+                  ...register("facebookUrl"),
                 }}
                 color="secondary"
               />
@@ -276,7 +302,7 @@ export default function Form({ style }) {
                       linkedin.com/company/
                     </InputAdornment>
                   ),
-                  ...register("linkedin"),
+                  ...register("linkedinUrl"),
                 }}
                 color="secondary"
               />
@@ -296,7 +322,6 @@ export default function Form({ style }) {
           >
             Save changes
           </HRMButton>
-          {/* <input type="submit" /> */}
         </Grid>
       </Box>
     </form>
