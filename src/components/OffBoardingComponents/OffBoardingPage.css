@@ -1,0 +1,31 @@
+.container{
+    margin: 0 auto;
+}
+
+.box {
+  width: 1003px;
+  height: 418px;
+  text-align: center;
+  border-radius: 10px 0px 0px 0px;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  background: #fff;
+  border: 1px solid #ebebeb;
+  font-family: "Inter", sans-serif;
+}
+
+.firstStep-heading {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 28px;
+  text-align: center;
+}
+
+.firstStep-paragraph {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: left;
+  width: 694px;
+  height: 136px;
+  margin: 0 auto;}
