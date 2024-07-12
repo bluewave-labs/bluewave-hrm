@@ -85,7 +85,14 @@ export default function Form({ company, style }) {
   }, [company]);
 
   const onSubmit = (data) => {
-    console.log(data);
+    axios
+      .put("http://localhost:3000/api/company", {...data, id: company.id})
+      .then((response) => {
+        console.log('Data submitted successfully:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error submitting data:', error);
+      });
   };
 
   return (
