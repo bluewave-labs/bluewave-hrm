@@ -31,8 +31,6 @@ export default function SettingsPage({ style }) {
       });
   }, []);
 
-
-
   //List of departments
   const departments = [
     {
