@@ -51,11 +51,19 @@ const parseDefaultValues = (company) => ({
 
 export default function Form({ company, style }) {
   const [countries, setCountries] = useState([]);
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: parseDefaultValues(company),
   });
 
-  const [countryValue, setCountryValue] = useState(parseDefaultValues(company).country);
+  const [countryValue, setCountryValue] = useState(
+    parseDefaultValues(company).country
+  );
 
   // Load countries
   useEffect(() => {
@@ -77,21 +85,24 @@ export default function Form({ company, style }) {
       });
   }, []);
 
-  // Reset form when company changes
   useEffect(() => {
     const defaultValues = parseDefaultValues(company);
     reset(defaultValues);
-    setCountryValue(defaultValues.country); // Update country value
+    setCountryValue(defaultValues.country);
   }, [company]);
 
   const onSubmit = (data) => {
     axios
-      .put("http://localhost:3000/api/company", {...data, id: company.id})
+      .put("http://localhost:3000/api/company", { ...data, id: company.id })
       .then((response) => {
-        console.log('Data submitted successfully:', response.data);
+        console.log("Data submitted successfully:", response.data);
+        const updatedCompany = response.data.message;
+        console.log("Updated company:", updatedCompany);
+        reset(parseDefaultValues(updatedCompany));
+        setCountryValue(updatedCompany.country);
       })
       .catch((error) => {
-        console.error('Error submitting data:', error);
+        console.error("Error submitting data:", error);
       });
   };
 
@@ -119,7 +130,15 @@ export default function Form({ company, style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("companyName") }}
+              inputProps={{
+                ...register("companyName", { required: true, minLength: 2 }),
+              }}
+              error={!!errors.companyName}
+              helperText={
+                errors.companyName
+                  ? "Company name should have at least 2 characters."
+                  : ""
+              }
               color="secondary"
             />
           </Grid>
@@ -134,8 +153,14 @@ export default function Form({ company, style }) {
                 startAdornment: (
                   <InputAdornment position="start">https://</InputAdornment>
                 ),
-                ...register("companyWebsite"),
+                ...register("companyWebsite", {
+                  required: true,
+                  pattern:
+                    /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/,
+                }),
               }}
+              error={!!errors.companyWebsite}
+              helperText={errors.companyWebsite ? "Invalid URL format." : ""}
               size="small"
               color="secondary"
             />
@@ -148,8 +173,14 @@ export default function Form({ company, style }) {
             <TextField
               fullWidth
               inputProps={{
-                ...register("companyDomain"),
+                ...register("companyDomain", { required: true, minLength: 2 }),
               }}
+              error={!!errors.companyDomain}
+              helperText={
+                errors.companyDomain
+                  ? "Company domain should have at least 2 characters."
+                  : ""
+              }
               size="small"
               color="secondary"
             />
@@ -162,8 +193,16 @@ export default function Form({ company, style }) {
             <TextField
               fullWidth
               inputProps={{
-                ...register("administratorEmail"),
+                ...register("administratorEmail", {
+                  required: true,
+                  pattern:
+                    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                }),
               }}
+              error={!!errors.administratorEmail}
+              helperText={
+                errors.administratorEmail ? "Invalid email address." : ""
+              }
               size="small"
               color="secondary"
             />
@@ -193,7 +232,9 @@ export default function Form({ company, style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("streetAddress") }}
+              inputProps={{
+                ...register("streetAddress", { required: true, minLength: 10 }),
+              }}
               color="secondary"
             />
           </Grid>
@@ -217,7 +258,9 @@ export default function Form({ company, style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("city") }}
+              inputProps={{
+                ...register("city", { required: true, minLength: 2 }),
+              }}
               color="secondary"
             />
           </Grid>
@@ -229,7 +272,9 @@ export default function Form({ company, style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("stateProvince") }}
+              inputProps={{
+                ...register("stateProvince", { required: true, minLength: 2 }),
+              }}
               color="secondary"
             />
           </Grid>
@@ -241,7 +286,9 @@ export default function Form({ company, style }) {
             <TextField
               fullWidth
               size="small"
-              inputProps={{ ...register("postalZipCode") }}
+              inputProps={{
+                ...register("postalZipCode", { required: true, minLength: 4 }),
+              }}
               color="secondary"
             />
           </Grid>
