@@ -49,8 +49,11 @@ const parseDefaultValues = (company) => ({
   linkedinUrl: company?.linkedinUrl || "",
 });
 
-export default function Form({ company, style }) {
+export default function CompanyProfileForm({ company, style }) {
+  console.log("company", company);
+  
   const [countries, setCountries] = useState([]);
+  const [companyLogo, setCompanyLogo] = useState(parseDefaultValues(company).companyLogo);
   const {
     register,
     handleSubmit,
@@ -92,6 +95,7 @@ export default function Form({ company, style }) {
   }, [company]);
 
   const onSubmit = (data) => {
+    console.log("data", data);
     axios
       .put("http://localhost:3000/api/company", { ...data, id: company.id })
       .then((response) => {
@@ -212,17 +216,31 @@ export default function Form({ company, style }) {
             <Text>Company logo</Text>
           </Grid>
           <Grid xs={7} sx={{ display: "flex" }}>
-            <AddPhotoAlternateOutlinedIcon
-              sx={{
-                backgroundColor: "#F2F4F7",
-                width: 35,
-                height: 35,
-                padding: 2,
-                marginRight: 2,
-                borderRadius: "50%",
-              }}
+            {companyLogo ? (
+              <img
+                src={companyLogo}
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  marginRight: "50px",
+                }}
+              />
+            ) : (
+              <AddPhotoAlternateOutlinedIcon
+                sx={{
+                  backgroundColor: "#F2F4F7",
+                  width: "32px",
+                  height: "32px",
+                  padding: "32px",
+                  marginRight: "50px",
+                  borderRadius: "50%",
+                }}
+              />
+            )}
+            <UploadFile
+              setFile={setCompanyLogo}
+              inputProps={{ ...register("companyLogo") }}
             />
-            <UploadFile inputProps={{ ...register("companyLogo") }} />
           </Grid>
           {/*Textfield for address line 1*/}
           <Grid xs={3}>
@@ -385,9 +403,9 @@ export default function Form({ company, style }) {
 }
 
 //Control panel settings for storybook
-Form.propTypes = {};
+CompanyProfileForm.propTypes = {};
 
 //Default values for this component
-Form.defaultProps = {
+CompanyProfileForm.defaultProps = {
   style: {},
 };

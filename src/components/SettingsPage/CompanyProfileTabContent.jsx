@@ -1,11 +1,11 @@
 import Box from "@mui/system/Box";
-import Form from "./Form";
+import CompanyProfileForm from "./CompanyProfileForm";
 import PropTypes from "prop-types";
 
 export default function CompanyProfileTabContent({ company, style }) {
   return (
     <Box>
-      <Form company={company} />
+      <CompanyProfileForm company={company} />
     </Box>
   );
 }
