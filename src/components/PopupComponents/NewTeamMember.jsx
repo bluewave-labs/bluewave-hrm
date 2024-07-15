@@ -31,7 +31,7 @@ export default function NewTeamMember({employee_details, close, style}) {
                 sx={{marginBottom: "40px"}}
             >
                 <h3>We have a new employee</h3>
-                <CloseIcon sx={{
+                <CloseIcon onClick={close} sx={{
                     backgroundColor: "#FFFFFF",
                     "&:hover": {
                         cursor: "pointer",

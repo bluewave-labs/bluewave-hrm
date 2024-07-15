@@ -66,10 +66,10 @@ function formatDate(date) {
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function TimeOffRequest({close, sendRequest, style}) {
+export default function TimeOffRequest({close, sendRequest, initialRequest, style}) {
     //Time off starting and ending dates
-    const [from, setFrom] = useState(dayjs().toDate());
-    const [to, setTo] = useState(dayjs().toDate());
+    const [from, setFrom] = useState(initialRequest ? initialRequest.startDate : dayjs().toDate());
+    const [to, setTo] = useState(initialRequest ? initialRequest.endDate : dayjs().toDate());
     //States determining whether the menus for setting dates should be open
     const [openFrom, setOpenFrom] = useState(false);
     const [openTo, setOpenTo] = useState(false);
@@ -139,7 +139,7 @@ export default function TimeOffRequest({close, sendRequest, style}) {
                     marginBottom: "30px"
                 }}
             >
-                <h2>Request new time off</h2>
+                {(initialRequest) ? <h3>Edit my time off</h3> : <h3>Request new time off</h3>}
                 <CloseIcon onClick={close} sx={{
                     backgroundColor: "#FFFFFFF",
                     "&:hover": {
@@ -298,7 +298,9 @@ export default function TimeOffRequest({close, sendRequest, style}) {
             {/*Send or cancel*/}
             <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={3}>
                 <HRMButton mode="secondaryB" onClick={close}>Cancel</HRMButton>
-                <HRMButton mode="primary" onClick={sendRequest}>Send</HRMButton>
+                {(initialRequest) ?
+                <HRMButton mode="primary" onClick={sendRequest}>Update</HRMButton> :
+                <HRMButton mode="primary" onClick={sendRequest}>Send</HRMButton>}
             </Stack>
             {/*Popup components for setting starting and ending dates*/}
             <Dialog open={openFrom} onClose={() => setOpenFrom(false)}>
@@ -322,5 +324,6 @@ TimeOffRequest.propTypes = {
 
 //Default values for this component
 TimeOffRequest.defaultProps = {
+    initialRequest: null,
     style: {}
 };

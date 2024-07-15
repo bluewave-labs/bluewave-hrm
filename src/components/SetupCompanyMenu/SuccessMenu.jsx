@@ -21,7 +21,6 @@ export default function SuccessMenu({style}) {
             paddingX: 0,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
-            width: "1403px",
             fontFamily: fonts.fontFamily,
             textAlign: "center"
         }, ...style}}>

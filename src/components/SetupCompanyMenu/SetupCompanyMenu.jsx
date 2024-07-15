@@ -71,7 +71,6 @@ export default function SetupCompanyMenu({advancePage, style}) {
             paddingBottom: 20,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
-            //width: "1003px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
             <Grid container columns={10} rowSpacing={2} columnSpacing={1}>

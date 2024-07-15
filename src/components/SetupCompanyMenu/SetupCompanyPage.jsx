@@ -4,6 +4,7 @@ import SetupDepartmentsMenu from './SetupDepartmentsMenu';
 import SetupRolesMenu from './SetupRolesMenu';
 import SuccessMenu from './SuccessMenu';
 import CustomizedSteppers from '../CustomizedSteppers';
+import Logo from '../../Images/HRM_logo_large.svg'
 import { useState } from 'react';
 
 /**
@@ -38,11 +39,17 @@ export default function SetupCompanyPage({style}) {
 
     return (
         <Box sx={{...{
-            width: "1403px",
+            width: "100%",
             height: "100%",
-            paddingX: "150px",
+            paddingX: "10%",
+            paddingY: "50px",
             backgroundColor: "#FCFCFD"
         }, ...style}}>
+            <img 
+                src={Logo} 
+                alt={"Company Logo"} 
+                style={{display: "block", margin: "60px auto"}} 
+            />
             <CustomizedSteppers 
                 stepnumber={
                     (page === "Company") ? 0 :
@@ -51,7 +58,6 @@ export default function SetupCompanyPage({style}) {
                 } 
                 steps={steps}
                 style={{
-                    width: "1403px",
                     margin: "auto",
                     padding: "2% 150px", 
                     marginY: "40px"

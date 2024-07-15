@@ -107,8 +107,7 @@ export default function SetupRolesMenu({advancePage, style}) {
             paddingBottom: 20,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
-            fontFamily: fonts.fontFamily,
-            width: "1403px"
+            fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Text*/}
             <h3 style={{margin: "1em auto", textAlign: "center"}}>

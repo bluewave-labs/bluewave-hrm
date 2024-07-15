@@ -1,6 +1,6 @@
 import Box from '@mui/system/Box';
 import UserDropdown from './UserDropdown';
-import Logo from '../../Images/enthalpy_logo_text.svg';
+import Logo from '../../Images/HRM_logo_small.svg';
 import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 
 /**

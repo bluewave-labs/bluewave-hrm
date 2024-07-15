@@ -132,7 +132,6 @@ export default function SetupDepartmentsMenu({advancePage, style}) {
             paddingBottom: 20,
             backgroundColor: "#FFFFFF",
             color: colors.darkGrey,
-            width: "1403px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Text*/}
