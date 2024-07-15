@@ -46,6 +46,7 @@ export default function UploadFile({style}) {
                             color: "#7F56D9", 
                             textDecoration: "none", 
                             fontWeight: "bold",
+                            marginRight: "6px"
                         }}
                     >
                         Click to upload
