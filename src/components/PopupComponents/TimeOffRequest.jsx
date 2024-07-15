@@ -63,6 +63,14 @@ function formatDate(date) {
  * - sendRequest<Function>: Function for submitting a time off request.
  *      Syntax: sendRequest()
  * 
+ * - initialRequest<Object>: When editing a time off request, this object shows the original
+ *      details of the request
+ *      Syntax: {
+ *          startDate: <Date>
+ *          endDate: <Date>
+ *          type: <String>
+ *      }
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */

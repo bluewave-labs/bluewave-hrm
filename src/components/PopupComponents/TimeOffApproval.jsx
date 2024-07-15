@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
  * Props:
  * - request_information<Object>: Contains the request information.
  *      Syntax: {
- *          avatar: <image source>
+ *          avatar: <Image Source>
  *          name: <String>
  *          role: <String>
  *          email: <String>
@@ -33,6 +33,7 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function TimeOffApproval({request_information, close, style}) {
+    //Custom style elements
     const StyledTD = styled('td')({
         textAlign: "start",
         paddingBottom: "15px",

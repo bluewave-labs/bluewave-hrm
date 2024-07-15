@@ -33,6 +33,8 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, editFlag, style}) {
+    //States determining whether the edit time off request menu and delete time off request
+    //component should be displayed
     const [editTimeOff, setEditTimeOff] = useState(false);
     const [deleteTimeOff, setDeleteTimeOff] = useState(false);
 
@@ -162,6 +164,7 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
                     </TableBody>
                 </Table>
             </TableContainer>
+            {/*Edit time off request menu*/}
             <Dialog open={editTimeOff} onClose={() => setEditTimeOff(false)}>
                 <TimeOffRequest 
                     close={() => setEditTimeOff(false)} 
@@ -169,6 +172,7 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
                     initialRequest={timeOffRequest} 
                 />
             </Dialog>
+            {/*Delete time off request notification*/}
             <Dialog open={deleteTimeOff} onClose={() => setDeleteTimeOff(false)}>
                 <DeleteTimeOff 
                     close={() => setDeleteTimeOff(false)} 

@@ -28,11 +28,13 @@ export default function DeleteTimeOff({handleDelete, close, style}) {
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
+            {/*Text*/}
             <h3>Delete time off request?</h3>
             <p style={{marginBottom: "40px"}}>
                 When you remove this time off request, a confirmation message will be sent 
                 to your manager
             </p>
+            {/*Buttons*/}
             <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
                 <HRMButton mode="tertiary" onClick={close}>Cancel</HRMButton>
                 <HRMButton mode="error" onClick={handleDelete}>Remove</HRMButton>

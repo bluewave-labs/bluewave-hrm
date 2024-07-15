@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 /**
  * More detailed popup component for notifying the user that a time off request was succcessfully
- * send.
+ * sent.
  * 
  * Props:
  * - request_information<Object>: Contains the request information
@@ -27,6 +27,7 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function TimeOffRequestSentWindow({request_information, close, style}) {
+    //Custom style elements
     const StyledTD = styled("td")({
         textAlign: "start",
         width: "50%",
@@ -43,6 +44,7 @@ export default function TimeOffRequestSentWindow({request_information, close, st
             padding: "40px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
+            {/*Title*/}
             <Stack 
                 direction="row" 
                 alignItems="center" 
@@ -58,6 +60,7 @@ export default function TimeOffRequestSentWindow({request_information, close, st
                     }
                 }}/>
             </Stack>
+            {/*Time off request details*/}
             <table style={{width: "100%", marginBottom: "40px"}}>
                 <tr>
                     <StyledTD><b>Time off balance</b></StyledTD>
@@ -78,6 +81,7 @@ export default function TimeOffRequestSentWindow({request_information, close, st
             </table>
             <b>Your Notes</b>
             <p>{request_information.notes}</p>
+            {/*Buttons*/}
             <Stack direction="row" alignItems="center" justifyContent="flex-end">
                 <HRMButton mode="primary" onClick={close}>OK</HRMButton>
             </Stack>

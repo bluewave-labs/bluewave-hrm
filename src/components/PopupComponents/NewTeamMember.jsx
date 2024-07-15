@@ -7,7 +7,28 @@ import HRMButton from '../Button/HRMButton';
 import { fonts, colors } from '../../Styles';
 import PropTypes from 'prop-types';
 
+/**
+ * Popup component for displaying the details of a new employee
+ * 
+ * Props:
+ * - employee_details<Object>: Details about the new employee
+ *      Syntax: {
+ *          name: <String>
+ *          avatar: <Image Source>
+ *          role: <String>
+ *          email: <String>
+ *          office: <String>
+ *          effectiveDate: <Date>
+ *      }
+ * 
+ * - close<Function>: Function for closing this popup component
+ *      Syntax: close()
+ * 
+ * - style<Object>: Optional prop for adding further inline styling
+ *      Default: {}
+ */
 export default function NewTeamMember({employee_details, close, style}) {
+    //Custom style elements
     const StyledTD = styled("td")({
         textAlign: "start",
         width: "50%",
@@ -24,6 +45,7 @@ export default function NewTeamMember({employee_details, close, style}) {
             padding: "40px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
+            {/*Title*/}
             <Stack 
                 direction="row" 
                 alignItems="center" 
@@ -39,6 +61,7 @@ export default function NewTeamMember({employee_details, close, style}) {
                     }
                 }}/>
             </Stack>
+            {/*Employee details*/}
             <table style={{width: "100%", marginBottom: "40px"}}>
                 <tr>
                     <StyledTD><b>Photo</b></StyledTD>
@@ -71,6 +94,7 @@ export default function NewTeamMember({employee_details, close, style}) {
                     <StyledTD>{employee_details.effectiveDate}</StyledTD>
                 </tr>
             </table>
+            {/*Buttons*/}
             <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
                 <HRMButton mode="tertiary" onClick={close}>Dismiss</HRMButton>
                 <HRMButton mode="primary">See employee details</HRMButton>

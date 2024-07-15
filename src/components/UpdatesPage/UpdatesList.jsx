@@ -35,6 +35,8 @@ const axios = require('axios').default;
  *      Default: {}
  */
 export default function UpdatesList({updates, refresh, style}) {
+    //States determining whether the new team member, time off request sent and time off approval
+    //components should be displayed
     const [newMember, setNewMember] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
     const [approval, setApproval] = useState(false);
