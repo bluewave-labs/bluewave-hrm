@@ -1,16 +1,16 @@
-import TimeOffPage from './TimeOffPage';
+import SetupCompanyPage from './SetupCompanyPage';
 
 //Storybook display settings
 export default {
-    title: 'TimeOffMenu/TimeOffPage',
-    component: TimeOffPage,
+    title: 'Setup/SetupCompanyPage',
+    component: SetupCompanyPage,
     parameters: {
         layout: 'fullscreen'
     },
     tags: ['autodocs']
 };
 
-//Stories for each TimeOffPage type
+//Stories for each SetupCompanyPage type
 export const Primary = {
     args: {}
 };
