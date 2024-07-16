@@ -14,3 +14,9 @@ label {
   color: var(--main-text-color);
   font-weight: 600;
 }
+
+.error {
+  color: var(--border-error-solid);
+  font-size: 11px;
+  margin-top: 4px;
+}
