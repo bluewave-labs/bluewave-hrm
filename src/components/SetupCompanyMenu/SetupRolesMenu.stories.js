@@ -12,5 +12,7 @@ export default {
 
 //Stories for each SetupRolesMenu type
 export const Primary = {
-    args: {}
+    args: {
+        advancePage: () => {}
+    }
 };

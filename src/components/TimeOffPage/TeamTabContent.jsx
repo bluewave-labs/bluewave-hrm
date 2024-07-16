@@ -35,6 +35,7 @@ export default function TeamTabContent({timeOffPeriods, style}) {
     }, [approvedFilter, waitingFilter, rejectedFilter]);
 
     //Filter out time off periods depending on which filters are active
+    //At least one filter will always be active
     const activeFilters = [];
     if (approvedFilter) { activeFilters.push("Approved"); }
     if (waitingFilter) { activeFilters.push("Waiting"); }
@@ -83,9 +84,15 @@ export default function TeamTabContent({timeOffPeriods, style}) {
                     <MenuToggleButton 
                         label="Filter by status" 
                         menuItems={{
-                            "Approved": [approvedFilter, setApprovedFilter],
-                            "Waiting": [waitingFilter, setWaitingFilter],
-                            "Rejected": [rejectedFilter, setRejectedFilter]
+                            "Approved": [approvedFilter, (value) => {
+                                if (activeFilters.length >= 2 || !approvedFilter) {setApprovedFilter(value)}
+                            }],
+                            "Waiting": [waitingFilter, (value) => {
+                                if (activeFilters.length >= 2 || !waitingFilter) {setWaitingFilter(value)}
+                            }],
+                            "Rejected": [rejectedFilter, (value) => {
+                                if (activeFilters.length >= 2 || !rejectedFilter) {setRejectedFilter(value)}
+                            }]
                         }} 
                         icon={<FilterListIcon />} 
                     />
@@ -95,9 +102,9 @@ export default function TeamTabContent({timeOffPeriods, style}) {
             {timeOffPeriods.length > 0 ?
                 <>
                     <UpcomingTimeOffTable 
-                        timeOffPeriods={periodsToDisplay} 
-                        editFlag={false} 
-                        teamFlag={true} 
+                        timeOffPeriods={periodsToDisplay}
+                        tableColumns={['Person', 'Type', 'Amount', 'Note', 'Status']}
+                        editFlag={false}  
                         style={{marginBottom: "30px"}}
                     />
                     {filteredPeriods.length > 10 && 

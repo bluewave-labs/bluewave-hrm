@@ -62,8 +62,8 @@ export default function BoardTabContent({policies, timeOffPeriods, style}) {
                     {/*Upcoming time off table*/}
                     <UpcomingTimeOffTable 
                         timeOffPeriods={periodsToDisplay} 
+                        tableColumns={['Type', 'Amount', 'Note']}
                         editFlag={true} 
-                        teamFlag={false} 
                         style={{marginBottom: "30px"}}
                     />
                     {/*Upcoming time off navbar*/}

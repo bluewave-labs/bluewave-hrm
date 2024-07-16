@@ -1,6 +1,6 @@
 import Box from '@mui/system/Box';
 import UserDropdown from './UserDropdown';
-import Logo from '../../Images/enthalpy_logo_text.svg';
+import Logo from '../../Images/HRM_logo_small.svg';
 import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 
 /**
@@ -25,8 +25,11 @@ export default function Header({style}) {
             padding: 2,
             display: "flex",
             justifyContent: "space-between",
+            backgroundColor: "#FFFFFF",
             borderBottom: "1px solid #EBEBEB",
-            boxShadow: "0 10px 6px #10182808"
+            boxShadow: "0 10px 6px #10182808",
+            position: "fixed",
+            zIndex: 2
         }, ...style}}>
             <img src={Logo} alt="Company Logo" />
             <UserDropdown user={user} />

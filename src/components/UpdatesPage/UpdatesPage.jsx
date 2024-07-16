@@ -1,9 +1,6 @@
-import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
-import Header from '../StaticComponents/Header';
-import SideMenu from '../StaticComponents/SideMenu';
+import Page from '../StaticComponents/Page';
 import UpdatesMenu from './UpdatesMenu';
-import { colors, fonts } from '../../Styles';
 
 /**
  * Home page of the HRM application. Contains the updates menu.
@@ -11,50 +8,27 @@ import { colors, fonts } from '../../Styles';
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
+ * 
+ * - innerStyle<Object>: Optional prop for adding further inline styling in the inner component.
+ *      Default: {}
  */
-export default function UpdatesPage({style}) {
+export default function UpdatesPage({style, innerStyle}) {
     return (
-        <Box sx={{...{
-            width: "100%", 
-            height: "100%", 
-            color: colors.darkGrey,
-            fontFamily: fonts.fontFamily
-        }, ...style}}>
-            {/*Header*/}
-            <Header />
-            <Box sx={{
-                display: "flex",
-                flexDirection: "row", 
-                width: "100%", 
-                height: "100%", 
-                backgroundColor: "#F9FAFB"
-            }}>
-                {/*Side menu*/}
-                <Box>
-                    <SideMenu />
-                </Box>
-                <Box sx={{
-                    paddingX: "75px", 
-                    paddingY: "40px", 
-                    width: "100%",
-                    height: "100%"
-                }}>
-                    {/*Main page content*/}
-                    <Stack 
-                        direction="row" 
-                        alignItems="center"
-                        justifyContent="space-between"
-                        sx={{
-                            marginBottom: "40px"
-                        }}
-                    >
-                        <h3>Hello, Gabriel</h3>
-                        <p>Today is Monday, June 6, 2024</p>
-                    </Stack>
-                    <UpdatesMenu />
-                </Box>
-            </Box>
-        </Box>
+        <Page style={style} innerStyle={innerStyle}>
+            <Stack 
+                direction="row" 
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{
+                    marginBottom: "40px",
+                    minWidth: "1042px"
+                }}
+            >
+                <h3>Hello, Gabriel</h3>
+                <p>Today is Monday, June 6, 2024</p>
+            </Stack>
+            <UpdatesMenu />
+        </Page>
     );
 };
 
@@ -63,5 +37,6 @@ UpdatesPage.propTypes = {};
 
 //Default values for this component
 UpdatesPage.defaultProps = {
-    style: {}
+    style: {},
+    innerStyle: {}
 };
