@@ -14,6 +14,7 @@ import UploadFile from "./UploadFile";
 import HRMButton from "../Button/HRMButton";
 import "./settings.css";
 import axios from "axios";
+import Toast from "./Toast";
 
 const TextField = styled(MUITextField)({
   "& fieldset": {
@@ -22,6 +23,17 @@ const TextField = styled(MUITextField)({
   "& .MuiInputAdornment-root + input": {
     borderLeft: "1px solid #D0D5DD",
     paddingLeft: "4px",
+  },
+  "& .Mui-error .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#FDA29B",
+  },
+  "& .MuiFormHelperText-root.Mui-error": {
+    color: "#D92D20",
+    fontSize: "11px",
+    fontWeight: 400,
+    marginLeft: 0,
+    lineHeight: "24px",
+    textAlign: "left",
   },
 });
 
@@ -63,6 +75,11 @@ export default function CompanyProfileForm({ company, style }) {
   } = useForm({
     defaultValues: parseDefaultValues(company),
   });
+  const [toast, setToast] = useState({
+    open: false,
+    severity: "success",
+    message: "",
+  });
 
   const [countryValue, setCountryValue] = useState(
     parseDefaultValues(company).country
@@ -71,6 +88,10 @@ export default function CompanyProfileForm({ company, style }) {
   const handleLogoUpload = (file) => {
     setCompanyLogo(file);
     setValue("companyLogo", file);
+  };
+
+  const handleClose = () => {
+    setToast({ ...toast, open: false });
   };
 
   useEffect(() => {
@@ -98,7 +119,7 @@ export default function CompanyProfileForm({ company, style }) {
   }, [company]);
 
   const onSubmit = (data) => {
-    console.log("data submit", {...data, id: company.id });
+    console.log("data submit", { ...data, id: company.id });
     axios
       .put("http://localhost:3000/api/company", { ...data, id: company.id })
       .then((response) => {
@@ -107,9 +128,19 @@ export default function CompanyProfileForm({ company, style }) {
         console.log("Updated company:", updatedCompany);
         reset(parseDefaultValues(updatedCompany));
         setCountryValue(updatedCompany.country);
+        setToast({
+          open: true,
+          severity: "success",
+          message: "Company profile updated successfully",
+        });
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
+        setToast({
+          open: true,
+          severity: "error",
+          message: "Company profile updated failed. Please try again",
+        });
       });
   };
 
@@ -141,11 +172,10 @@ export default function CompanyProfileForm({ company, style }) {
                 ...register("companyName", { required: true, minLength: 2 }),
               }}
               error={!!errors.companyName}
-              helperText={
-                errors.companyName
-                  ? "Company name should have at least 2 characters."
-                  : ""
-              }
+              helperText={errors.companyName ? "Company name is required." : ""}
+              FormHelperTextProps={{
+                className: errors.companyName ? "error" : "",
+              }}
               color="secondary"
             />
           </Grid>
@@ -184,9 +214,7 @@ export default function CompanyProfileForm({ company, style }) {
               }}
               error={!!errors.companyDomain}
               helperText={
-                errors.companyDomain
-                  ? "Company domain should have at least 2 characters."
-                  : ""
+                errors.companyDomain ? "Company domain is required." : ""
               }
               size="small"
               color="secondary"
@@ -253,6 +281,8 @@ export default function CompanyProfileForm({ company, style }) {
               inputProps={{
                 ...register("streetAddress", { required: true, minLength: 10 }),
               }}
+              error={!!errors.streetAddress}
+              helperText={errors.streetAddress ? "Address is required." : ""}
               color="secondary"
             />
           </Grid>
@@ -279,6 +309,8 @@ export default function CompanyProfileForm({ company, style }) {
               inputProps={{
                 ...register("city", { required: true, minLength: 2 }),
               }}
+              error={!!errors.city}
+              helperText={errors.city ? "City is required." : ""}
               color="secondary"
             />
           </Grid>
@@ -291,7 +323,7 @@ export default function CompanyProfileForm({ company, style }) {
               fullWidth
               size="small"
               inputProps={{
-                ...register("stateProvince", { required: true, minLength: 2 }),
+                ...register("stateProvince"),
               }}
               color="secondary"
             />
@@ -307,6 +339,10 @@ export default function CompanyProfileForm({ company, style }) {
               inputProps={{
                 ...register("postalZipCode", { required: true, minLength: 4 }),
               }}
+              error={!!errors.postalZipCode}
+              helperText={
+                errors.postalZipCode ? "Postal Code is required." : ""
+              }
               color="secondary"
             />
           </Grid>
@@ -396,6 +432,14 @@ export default function CompanyProfileForm({ company, style }) {
             Save changes
           </HRMButton>
           {/* <input type="submit" /> */}
+        </Grid>
+        <Grid xs={10} alignContent="right" spacing={2}>
+          <Toast
+            open={toast.open}
+            severity={toast.severity}
+            message={toast.message}
+            onClose={handleClose}
+          />
         </Grid>
       </Box>
     </form>
