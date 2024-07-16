@@ -50,10 +50,10 @@ const parseDefaultValues = (company) => ({
 });
 
 export default function CompanyProfileForm({ company, style }) {
-  console.log("company", company);
-  
   const [countries, setCountries] = useState([]);
-  const [companyLogo, setCompanyLogo] = useState(parseDefaultValues(company).companyLogo);
+  const [companyLogo, setCompanyLogo] = useState(
+    parseDefaultValues(company).companyLogo
+  );
   const {
     register,
     handleSubmit,
@@ -68,9 +68,12 @@ export default function CompanyProfileForm({ company, style }) {
     parseDefaultValues(company).country
   );
 
-  // Load countries
+  const handleLogoUpload = (file) => {
+    setCompanyLogo(file);
+    setValue("companyLogo", file);
+  };
+
   useEffect(() => {
-    // Fetch countries from the REST API
     axios
       .get("https://restcountries.com/v3.1/all")
       .then((response) => {
@@ -95,7 +98,7 @@ export default function CompanyProfileForm({ company, style }) {
   }, [company]);
 
   const onSubmit = (data) => {
-    console.log("data", data);
+    console.log("data submit", {...data, id: company.id });
     axios
       .put("http://localhost:3000/api/company", { ...data, id: company.id })
       .then((response) => {
@@ -218,7 +221,7 @@ export default function CompanyProfileForm({ company, style }) {
           <Grid xs={7} sx={{ display: "flex" }}>
             {companyLogo ? (
               <img
-                src={companyLogo}
+                src={`data:image/jpeg;base64,${companyLogo}`}
                 style={{
                   width: "200px",
                   height: "200px",
@@ -237,10 +240,7 @@ export default function CompanyProfileForm({ company, style }) {
                 }}
               />
             )}
-            <UploadFile
-              setFile={setCompanyLogo}
-              inputProps={{ ...register("companyLogo") }}
-            />
+            <UploadFile setFile={handleLogoUpload} />
           </Grid>
           {/*Textfield for address line 1*/}
           <Grid xs={3}>

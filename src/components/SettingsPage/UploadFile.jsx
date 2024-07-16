@@ -20,18 +20,14 @@ export default function UploadFile({setFile, style}) {
     const fileInputRef = createRef();
 
     function handleFileChange(e) {
-        //console.log("Running handleFileChange()")
         const reader = new FileReader();
         
         reader.addEventListener("load", () => {
-            setFile(reader.result);
+            setFile(reader.result.split(',')[1]);
         })
 
         reader.readAsDataURL(e.target.files[0]);
-
-         console.log("Running handleFileChange()")
-
-        console.log(e.target.files[0]);
+        
     };
 
     function handleDragOver(e) {
@@ -46,18 +42,15 @@ export default function UploadFile({setFile, style}) {
     
     function handleDrop(e) {
         e.preventDefault();
-        //console.log("Running handleDrop()")
         setDragOver(false);
         const f = e.dataTransfer.files;
         if (f.length > 0) {
             fileInputRef.current.files = f;
-            //console.log(f);
             handleFileChange({target: {files: f}});
         }
     };
 
     function handleClick() {
-        //console.log("Running handleClick()");
         fileInputRef.current.click();
     }
 
