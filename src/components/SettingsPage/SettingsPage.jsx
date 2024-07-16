@@ -16,6 +16,7 @@ import axios from "axios";
 export default function SettingsPage({ style }) {
   const [tab, setTab] = useState("Company profile"); //State determining which flag is selected
   const [company, setCompany] = useState({});
+  const [departments, setDepartments] = useState({});
   const companyId = 1; //Id of the company
 
   useEffect(() => {
@@ -29,27 +30,17 @@ export default function SettingsPage({ style }) {
       .catch((error) => {
         console.error("Error fetching company:", error);
       });
-  }, []);
 
-  //List of departments
-  const departments = [
-    {
-      name: "Customer Success",
-      people: "12",
-    },
-    {
-      name: "Finance",
-      people: "4",
-    },
-    {
-      name: "IT",
-      people: "7",
-    },
-    {
-      name: "No department",
-      people: "12",
-    },
-  ];
+    axios
+      .get(`http://localhost:3000/api/departments`)
+      .then((response) => {
+        const data = response.data;
+        setDepartments(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching company:", error);
+      });
+  }, []);
 
   //Function for selecting a new tab
   function handleChange(e, newValue) {

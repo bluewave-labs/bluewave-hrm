@@ -9,6 +9,7 @@ import Label from '../Label/Label';
 import { useState } from 'react';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
+import DepartmentsTable from './DepartmentsTable';
 
 /**
  * Displays the content for the History tab in the time off menu which includes the complete time
@@ -29,6 +30,7 @@ export default function DepartmentsTabContent({departments, style}) {
     const [peopleSelected, setPeopleSelected] = useState(false);
 
 
+    console.log("departments");
     console.log(departments);
 
     //Function for changing the page number
@@ -62,14 +64,7 @@ export default function DepartmentsTabContent({departments, style}) {
                 </Stack>
                 {/*Customize button*/}
                 {departments.length > 0 &&
-                    <MenuToggleButton 
-                        label="Customize" 
-                        menuItems={{
-                            "Name": [nameSelected, setNameSelected],
-                            "People": [peopleSelected, setPeopleSelected]
-                        }}
-                        icon={<TuneIcon />} 
-                    />
+                    <DepartmentsTable departments={departments}/>
                 }
             </Stack>
             {/*If there are periods of time off, display the time off period list and navbar */}
