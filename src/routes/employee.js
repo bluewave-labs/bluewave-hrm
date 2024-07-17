@@ -9,4 +9,6 @@ module.exports = (router) => {
   router.route("/employees").post(controller.createRecord);
   router.route("/employees").put(controller.updateRecord);
   router.route("/employees/:id").delete(controller.deleteRecord);
+  router.route("/employees/summaries/departments").get(controller.summarizeByDepartments);
+  router.route("/employees/summaries/jobtitles").get(controller.summarizeByJobTitles);
 };
