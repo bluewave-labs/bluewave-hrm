@@ -24,7 +24,7 @@ const TextField = styled(MUITextField)({
     borderLeft: "1px solid #D0D5DD",
     paddingLeft: "4px",
   },
-  "& .Mui-error .MuiOutlinedInput-notchedOutline": {
+  "& .MuiInputBase-root.MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline": {
     borderColor: "#FDA29B",
   },
   "& .MuiFormHelperText-root.Mui-error": {
