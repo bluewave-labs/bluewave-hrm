@@ -20,27 +20,45 @@ export default function SettingsPage({ style }) {
   const companyId = 1; //Id of the company
 
   useEffect(() => {
-    // Fetch company from the REST API
-    axios
-      .post(`http://localhost:3000/api/company/${companyId}`)
-      .then((response) => {
-        const data = response.data;
-        setCompany(data);
-      })
-      .catch((error) => {
+    const fetchCompany = async () => {
+      try {
+        const response = await axios.post(
+          `http://localhost:3000/api/company/${companyId}`
+        );
+        return response.data;
+      } catch (error) {
         console.error("Error fetching company:", error);
-      });
+        throw error;
+      }
+    };
 
-    axios
-      .get(`http://localhost:3000/api/departments`)
-      .then((response) => {
-        const data = response.data;
-        setDepartments(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching company:", error);
-      });
-  }, []);
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/departments`
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching departments:", error);
+        throw error;
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        const [companyData, departmentsData] = await Promise.all([
+          fetchCompany(),
+          fetchDepartments(),
+        ]);
+        setCompany(companyData);
+        setDepartments(departmentsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [companyId]);
 
   //Function for selecting a new tab
   function handleChange(e, newValue) {
