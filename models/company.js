@@ -17,7 +17,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: true,
       },
       companyLogo: {
-        type: Sequelize.STRING(25000),
+        type: Sequelize.BLOB,
         allowNull: true,
       },
       administratorEmail: {
