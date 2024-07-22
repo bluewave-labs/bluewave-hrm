@@ -46,20 +46,19 @@ const Text = styled(Typography)({
   color: " #344054",
 });
 
-// const convertLogo = (logo) => {
-//   if (logo) {
-//     return `data:image/png;base64,${Buffer.from(logo).toString("base64")}`;
-//   }
-//   return;
-// };
+const convertImage = (logo) => {
+  if (logo) {
+    return `${Buffer.from(logo)}`;
+  }
+  return "";
+};
 
 const parseDefaultValues = (company) => ({
   companyName: company?.companyName || "",
   companyWebsite: company?.companyWebsite || "",
   companyDomain: company?.companyDomain || "",
   administratorEmail: company?.administratorEmail || "",
-  companyLogo: company.companyLogo || "",
-  // companyLogo: convertLogo(company.companyLogo) || "",
+  companyLogo: convertImage(company.companyLogo) || "",
   city: company?.city || "",
   streetAddress: company?.streetAddress || "",
   unitSuite: company?.unitSuite || "",
@@ -97,25 +96,9 @@ export default function CompanyProfileForm({ company, style }) {
   );
 
   const handleLogoUpload = (file) => {
-    console.log("file");
-    console.log(file);
-
-    const blob = new Blob([file], { type: file.type });
-    const blobURL = window.URL.createObjectURL(blob);
-
-    console.log(blobURL);
-
-    setBlobFile(blobURL);
-
-    console.log(blobFile);
-    
     setCompanyLogo(file);
 
-    setValue("companyLogo", blobURL);
-
-    setTimeout(() => {
-      window.URL.revokeObjectURL(blobURL);
-    }, 1000);
+    setValue("companyLogo", file);
   };
 
   const handleClose = () => {
@@ -146,14 +129,9 @@ export default function CompanyProfileForm({ company, style }) {
     setCountryValue(defaultValues.country);
   }, [company]);
 
-  console.log("company");
-  console.log(company);
-  console.log(companyLogo);
-
   const onSubmit = (data) => {
-    console.log("data submit:", {...data, id: company.id, companyLogo: blobFile});
     axios
-      .put("http://localhost:3000/api/company", { ...data, id: company.id, companyLogo: blobFile })
+      .put("http://localhost:3000/api/company", { ...data, id: company.id })
       .then((response) => {
         console.log("Data submitted successfully:", response.data);
         const updatedCompany = response.data.message;
@@ -281,7 +259,7 @@ export default function CompanyProfileForm({ company, style }) {
           <Grid xs={7} sx={{ display: "flex" }}>
             {companyLogo ? (
               <img
-                src={`${companyLogo}`}
+                src={companyLogo}
                 style={{
                   width: "200px",
                   height: "200px",
