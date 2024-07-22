@@ -19,15 +19,14 @@ export default function UploadFile({ setFile, style }) {
   const fileInputRef = createRef();
 
   function handleFileChange(e) {
-    const reader = new FileReader();
-    console.log(reader.result);
-    reader.addEventListener("load", () => {
-      setFile(reader.result);
-    });
-
-    console.log(e.target.files[0]);
-
-    reader.readAsDataURL(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFile(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   function handleDragOver(e) {
