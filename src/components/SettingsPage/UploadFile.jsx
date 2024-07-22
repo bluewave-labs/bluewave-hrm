@@ -20,10 +20,12 @@ export default function UploadFile({ setFile, style }) {
 
   function handleFileChange(e) {
     const reader = new FileReader();
-    console.log(reader);
+    console.log(reader.result);
     reader.addEventListener("load", () => {
-      setFile(reader.result.split(",")[1]);
+      setFile(reader.result);
     });
+
+    console.log(e.target.files[0]);
 
     reader.readAsDataURL(e.target.files[0]);
   }
