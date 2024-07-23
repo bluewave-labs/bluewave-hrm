@@ -11,13 +11,15 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileTabContent from "./CompanyProfileTabContent";
 import DepartmentsTabContent from "./DepartmentsTabContent";
+import JobTitlesTabContent from "./JobTitlesTabContent";
 import axios from "axios";
 
 export default function SettingsPage({ style }) {
-  const [tab, setTab] = useState("Company profile"); //State determining which flag is selected
+  const [tab, setTab] = useState("Company profile");
   const [company, setCompany] = useState({});
   const [departments, setDepartments] = useState({});
-  const companyId = 1; //Id of the company
+  const [jobTitles, setJobTitles] = useState({});
+  const companyId = 1;
 
   useEffect(() => {
     const fetchCompany = async () => {
@@ -35,7 +37,7 @@ export default function SettingsPage({ style }) {
     const fetchDepartments = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/departments`
+          `http://localhost:3000/api/employees/summaries/departments`
         );
         return response.data;
       } catch (error) {
@@ -44,14 +46,26 @@ export default function SettingsPage({ style }) {
       }
     };
 
+    const fetchJobTitles = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/employees/summaries/jobtitles`
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching job titles:", error);
+        throw error;
+      }
+    };
+
     const fetchData = async () => {
       try {
-        const [companyData, departmentsData] = await Promise.all([
-          fetchCompany(),
-          fetchDepartments(),
-        ]);
+        const [companyData, departmentsData, jobTitlesData] = await Promise.all(
+          [fetchCompany(), fetchDepartments(), fetchJobTitles()]
+        );
         setCompany(companyData);
         setDepartments(departmentsData);
+        setJobTitles(jobTitlesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -160,8 +174,8 @@ export default function SettingsPage({ style }) {
                 <DepartmentsTabContent departments={departments} />
               </StyledTabPanel>
               {/*Team tab*/}
-              <StyledTabPanel value="My team">
-                {/* <TeamTabContent timeOffPeriods={timeOffPeriods} /> */}
+              <StyledTabPanel value="Job titles">
+                <JobTitlesTabContent jobTitles={jobTitles} />
               </StyledTabPanel>
             </TabContext>
           </Box>
