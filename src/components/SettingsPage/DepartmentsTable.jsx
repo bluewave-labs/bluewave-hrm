@@ -105,7 +105,7 @@ export default function DepartmentsTable({ departments, style }) {
 //Control panel settings for storybook
 DepartmentsTable.propTypes = {
   //Time off policies to be displayed
-  departments: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
+  departments: PropTypes.objectOf(PropTypes.array),
 };
 
 //Default values for this component

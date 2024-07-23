@@ -4,22 +4,8 @@ import PagesNavBar from "../UpdatesPage/PagesNavBar";
 import Label from "../Label/Label";
 import { colors, fonts } from "../../Styles";
 import { useState } from "react";
-import PropTypes from "prop-types";
 import DepartmentsTable from "./DepartmentsTable";
 
-/**
- * Displays the content for the Board tab in the time off menu which includes the available
- * time off per policy and any upcoming periods of time off scheduled.
- *
- * Props:
- * - policies<Array<Object>>: List of objects containing policy information to be displayed.
- *
- * - timeOffPeriods<Array<Object>>: List of objects containing information of upcoming periods
- *      of time off.
- *
- * - style<Object>: Optional prop for adding further inline styling.
- *      Default: {}
- */
 export default function DepartmentsTabContent({ departments, style }) {
   const [currentPage, setCurrentPage] = useState(1); //The current page number
 
@@ -43,7 +29,10 @@ export default function DepartmentsTabContent({ departments, style }) {
     >
       {/*header and table*/}
       <h3 style={{ marginBottom: "40px" }}>Departments</h3>
-      <DepartmentsTable departments={departments} sx={{ marginBottom: "40px" }} />
+      <DepartmentsTable
+        departments={departments}
+        sx={{ marginBottom: "40px" }}
+      />
       {/*header*/}
       {departments.length > 0 ? (
         <>
@@ -63,13 +52,6 @@ export default function DepartmentsTabContent({ departments, style }) {
   );
 }
 
-//Control panel settings for storybook
-DepartmentsTabContent.propTypes = {
-  //Time off departments to be displayed
-  departments: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
-};
-
-//Default values for this component
 DepartmentsTabContent.defaultProps = {
   style: {},
 };
