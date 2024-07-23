@@ -24,7 +24,7 @@ const Text = styled(Typography)({
   lineHeight: "20px",
   color: "#101828",
 });
-export default function DepartmentsTable({ departments, style }) {
+export default function JobTitlesTable({ jobTitles, style }) {
   //Custom style elements
   const TableHeaderCell = styled(TableCell)({
     color: colors.darkGrey,
@@ -63,13 +63,13 @@ export default function DepartmentsTable({ departments, style }) {
         </TableHead>
         {/*Policy information*/}
         <TableBody>
-          {departments.map((department) => (
+          {jobTitles.map((jobTitle) => (
             <TableRow>
               <TableBodyCell sx={{ width: "50%", paddingLeft: "25px" }}>
-                <Text>{department.departmentName}</Text>
+                <Text>{jobTitle.roleTitle}</Text>
               </TableBodyCell>
               <TableBodyCell>
-                <Text>{department.count}</Text>
+                <Text>{jobTitle.count}</Text>
               </TableBodyCell>
               <TableBodyCell>
                 <Stack
@@ -103,12 +103,12 @@ export default function DepartmentsTable({ departments, style }) {
 }
 
 //Control panel settings for storybook
-DepartmentsTable.propTypes = {
+JobTitlesTable.propTypes = {
   //Time off policies to be displayed
-  departments: PropTypes.objectOf(PropTypes.array),
+  jobtitles: PropTypes.objectOf(PropTypes.array),
 };
 
 //Default values for this component
-DepartmentsTable.defaultProps = {
+JobTitlesTable.defaultProps = {
   style: {},
 };

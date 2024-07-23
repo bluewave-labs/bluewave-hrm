@@ -1,10 +1,12 @@
-import { Box, Stack } from "@mui/system";
-import { styled, Typography } from "@mui/material";
+import {Box, Stack} from "@mui/system";
+import {
+  styled,
+  Typography
+} from "@mui/material";
 import PagesNavBar from "../UpdatesPage/PagesNavBar";
-import Label from "../Label/Label";
 import { colors, fonts } from "../../Styles";
 import { useState } from "react";
-import DepartmentsTable from "./DepartmentsTable";
+import JobTitlesTable from "./JobTitlesTable";
 import HRMButton from "../Button/HRMButton";
 
 const Text = styled(Typography)({
@@ -13,18 +15,20 @@ const Text = styled(Typography)({
   lineHeight: "28px",
   color: " #344054",
 });
-export default function DepartmentsTabContent({ departments, style }) {
+
+export default function JobTitlesTabContent({ jobTitles, style }) {
   const [currentPage, setCurrentPage] = useState(1); //The current page number
+  console.log(jobTitles);
 
   //Function for changing the page number
   function handlePage(n) {
-    if (n > 0 && n <= Math.ceil(departments.length / 10)) {
+    if (n > 0 && n <= Math.ceil(jobTitles.length / 10)) {
       setCurrentPage(n);
     }
   }
 
-  const addDepartment = () => {
-    console.log("Add new department");
+  const addNewJobTitle = () => {
+    console.log("Add new job title");
   };
 
   return (
@@ -39,40 +43,39 @@ export default function DepartmentsTabContent({ departments, style }) {
       }}
     >
       {/*header and table*/}
-      <Stack
-        direction="row"
-        alignContent="center"
-        justifyContent="space-between"
-        style={{ marginBottom: "20px" }}
-      >
-        <Text>Departments</Text>
-        <HRMButton mode="primary" type="button" onClick={addDepartment}>
-          Add new
-        </HRMButton>
+      <Stack direction="row" alignContent="center" justifyContent="space-between" style={{ marginBottom: "20px" }}>
+      <Text>Job Titles</Text>
+        <HRMButton
+            mode="primary"
+            type="button"
+            onClick={addNewJobTitle}
+          >
+            Add new
+          </HRMButton>
       </Stack>
-      <DepartmentsTable
-        departments={departments}
+      <JobTitlesTable
+        jobTitles={jobTitles}
         sx={{ marginBottom: "40px" }}
       />
       {/*header*/}
-      {departments.length > 0 ? (
+      {jobTitles.length > 0 ? (
         <>
           {/*Upcoming time off navbar*/}
-          {departments.length > 10 && (
+          {jobTitles.length > 10 && (
             <PagesNavBar
-              numOfEntries={departments.length}
+              numOfEntries={jobTitles.length}
               currentPage={currentPage}
               handlePage={handlePage}
             />
           )}
         </>
       ) : (
-        <p>There is no departments right now.</p>
+        <p>There is no job titles right now.</p>
       )}
     </Box>
   );
 }
 
-DepartmentsTabContent.defaultProps = {
+JobTitlesTabContent.defaultProps = {
   style: {},
 };
