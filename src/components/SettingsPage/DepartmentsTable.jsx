@@ -1,9 +1,10 @@
+import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import Typography from "@mui/material/Typography";
+import { Typography, Dialog } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
@@ -25,7 +26,8 @@ const Text = styled(Typography)({
   color: "#101828",
 });
 export default function DepartmentsTable({ departments, style }) {
-  //Custom style elements
+  const [openEditDepartment, setOpenEditDepartment] = useState(false);
+
   const TableHeaderCell = styled(TableCell)({
     color: colors.darkGrey,
     paddingTop: "10px",
@@ -80,7 +82,10 @@ export default function DepartmentsTable({ departments, style }) {
                   <HRMButton mode="tertiary">
                     <b>Delete</b>
                   </HRMButton>
-                  <HRMButton mode="tertiary">
+                  <HRMButton
+                    mode="tertiary"
+                    onClick={() => setOpenEditDepartment(true)}
+                  >
                     <a
                       href="#"
                       style={{
@@ -93,6 +98,12 @@ export default function DepartmentsTable({ departments, style }) {
                     </a>
                   </HRMButton>
                 </Stack>
+                <Dialog
+                  open={openEditDepartment}
+                  onClose={() => setOpenEditDepartment(false)}
+                >
+                  <Text>Hi</Text>
+                </Dialog>
               </TableBodyCell>
             </TableRow>
           ))}
