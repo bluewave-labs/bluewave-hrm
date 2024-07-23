@@ -11,7 +11,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import axios from 'axios';
-// import '../App.css';
+import '../../App.css'
+import { upload } from '@testing-library/user-event/dist/upload';
 
 const rows = [
   {name:"Offer letter",date:"Jan 4, 2022"},
@@ -31,24 +32,41 @@ const MyinfoDocument = () => {
   const [filesize, setFileSize] = useState(0)
   const [filelist, setFileList] = useState([]);
   const [uploaded, setUploaded] = useState(false)
+  
+  const uploadFileBackend = () => {
+    if (filelist) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const base64String = event.target.result.split(',')[1]; // Extract base64 string
+            sendFileAPI(base64String);
+        };
+        reader.readAsDataURL(filelist);
+    } else {
+        alert("Please select a file");
+    }
+};
 
-  const handleUpload = async () => {
+  const sendFileAPI = async () => {
     if (uploaded) {
       clearFileInput();
       return
     }
+    
     try {
       const response = await axios.post(
-        "http://localhost:3000/",
-        filelist, 
+        'http://localhost:5000/api/documents',
+        { file: filelist },
         {
-          onUploadProgress: (progressEvent) => { 
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setProgress(percentCompleted)
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                );
+                setProgress(percentCompleted);
           }
-        }
+        } 
       );
       
     }
@@ -70,6 +88,8 @@ const MyinfoDocument = () => {
 
   }
 
+
+
   // Handle file change event
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -89,12 +109,13 @@ const MyinfoDocument = () => {
       })
     }
     console.log(filelist)
-    handleUpload()
+    // uploadFileBackend()
   
   }
  // Trigger file input 
   const handleClick = () => {
     fileInputRef.current.click()
+
   }
 
   const handleDragOver = (e) => {

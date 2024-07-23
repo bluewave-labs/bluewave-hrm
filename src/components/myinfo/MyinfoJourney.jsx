@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import { Typography,Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,34 +15,68 @@ const rows = [
   
 ]
 
-{/* <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter',marginBottom:'4px'}}>or drag and drop</Typography>
-         */}
+
+
 
 const MyinfoJourney = () => {
+
+  function formatDate(isoDate) {
+    const date = new Date(isoDate);
+    
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    
+    return date.toLocaleDateString('en-US', options);
+}
+
+  const [journeyLists,setJourneyLists] = useState([])
+
+  useEffect(()=>{
+    const getJourneyAPI = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/changehistories",{
+          method:'GET',
+          headers: {
+            'Content-Type' : 'application/json'
+          }
+        });
+        const result = await res.json();
+        setJourneyLists(result)
+       
+
+
+      }
+      catch(error) {
+        console.log("Error fetching Myinfo:Journey",error)
+      }
+    }
+    getJourneyAPI()
+  
+  },[])
+
   return (
    <>
      <TableContainer >
-      <Table sx={{ width:"812px" }} aria-label="simple table">
+      <Table sx={{ width:"1012px" }} aria-label="simple table">
         <TableBody>
-          {rows.map((row) => (
+          {journeyLists.map((list) => (
             <TableRow
-              key={row.title}
+              key={list.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" sx={{fontSize:'13px',fontWeight:'600',color:'#344054',fontFamily:'Inter'}} >
-                {row.title}
+                {list.changeType}
               </TableCell>
               <TableCell align="left" >
                 <Stack direction="row" spacing={2}>
                   <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#344054',fontFamily:'Inter'}}>From:
-                    <Typography display="inline" sx={{fontSize:'13px',fontWeight:'bold',color:'#344054',fontFamily:'Inter',marginLeft:"3px"}}>{row.from}</Typography>
+                    <Typography display="inline" sx={{fontSize:'13px',fontWeight:'bold',color:'#344054',fontFamily:'Inter',marginLeft:"3px"}}>{list.changeFrom}</Typography>
                   </Typography>
                   <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#344054',fontFamily:'Inter'}}>To:
-                    <Typography display="inline" sx={{fontSize:'13px',fontWeight:'bold',color:'#344054',fontFamily:'Inter',marginLeft:"3px"}}>{row.to}</Typography>
+                    <Typography display="inline" sx={{fontSize:'13px',fontWeight:'bold',color:'#344054',fontFamily:'Inter',marginLeft:"3px"}}>{list.changeTo}</Typography>
                   </Typography>
                 </Stack>
                 </TableCell>
-              <TableCell  align="right" sx={{fontSize:'13px',fontWeight:'regular',color:'#344054',fontFamily:'Inter'}}>{row.date}</TableCell>
+              <TableCell  align="right" sx={{fontSize:'13px',fontWeight:'regular',color:'#344054',fontFamily:'Inter'}}>{formatDate(list.date)}</TableCell>
              
             </TableRow>
           ))}
@@ -54,3 +88,4 @@ const MyinfoJourney = () => {
 }
 
 export default MyinfoJourney
+
