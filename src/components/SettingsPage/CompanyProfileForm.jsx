@@ -48,7 +48,7 @@ const Text = styled(Typography)({
 
 const convertImage = (logo) => {
   if (logo) {
-    return `${Buffer.from(logo)}`;
+    return Buffer.from(logo);
   }
   return "";
 };
@@ -72,7 +72,6 @@ const parseDefaultValues = (company) => ({
 
 export default function CompanyProfileForm({ company, style }) {
   const [countries, setCountries] = useState([]);
-  const [blobFile, setBlobFile] = useState("");
   const [companyLogo, setCompanyLogo] = useState(
     parseDefaultValues(company).companyLogo
   );
@@ -167,14 +166,14 @@ export default function CompanyProfileForm({ company, style }) {
         }}
       >
         <Grid container columns={10} rowSpacing={4} columnSpacing={1}>
-          <Grid xs={10} textAlign="center">
+          <Grid item xs={10} textAlign="center">
             <h3>Edit company profile information</h3>
           </Grid>
           {/*Textfield for company name*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Company name</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
@@ -190,10 +189,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for company website*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Company website</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               InputProps={{
@@ -213,10 +212,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for company domain*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Company domain</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               inputProps={{
@@ -231,10 +230,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for administrator email*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Administrator email</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               inputProps={{
@@ -253,10 +252,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Section for uploading company logo*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Company logo</Text>
           </Grid>
-          <Grid xs={7} sx={{ display: "flex" }}>
+          <Grid item xs={7} sx={{ display: "flex" }}>
             {companyLogo ? (
               <img
                 src={companyLogo}
@@ -281,10 +280,10 @@ export default function CompanyProfileForm({ company, style }) {
             <UploadFile setFile={handleLogoUpload} />
           </Grid>
           {/*Textfield for address line 1*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Address line 1</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
@@ -297,10 +296,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for address line 2*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Address line 2</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
@@ -309,10 +308,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for city*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>City</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
@@ -325,10 +324,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for State (if applicable)*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>State (if applicable)</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
@@ -339,10 +338,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for Postal code*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Postal code</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <TextField
               fullWidth
               size="small"
@@ -357,10 +356,10 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for Country*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Country</Text>
           </Grid>
-          <Grid xs={7} alignContent="center">
+          <Grid item xs={7} alignContent="center">
             <Autocomplete
               disablePortal
               options={countries}
@@ -377,7 +376,7 @@ export default function CompanyProfileForm({ company, style }) {
             />
           </Grid>
           {/*Textfield for Social profiles*/}
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <Text>Social profiles</Text>
           </Grid>
           <Grid container xs={7} alignContent="center" spacing={2}>
@@ -429,7 +428,7 @@ export default function CompanyProfileForm({ company, style }) {
           </Grid>
         </Grid>
         {/*Add company button*/}
-        <Grid xs={10} alignContent="right" spacing={2}>
+        <Grid item xs={10} alignContent="right" spacing={2}>
           <HRMButton
             mode="primary"
             style={{
@@ -443,7 +442,7 @@ export default function CompanyProfileForm({ company, style }) {
           </HRMButton>
           {/* <input type="submit" /> */}
         </Grid>
-        <Grid xs={10} alignContent="right" spacing={2}>
+        <Grid item xs={10} alignContent="right" spacing={2}>
           <Toast
             open={toast.open}
             severity={toast.severity}
