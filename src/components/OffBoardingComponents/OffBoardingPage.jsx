@@ -15,6 +15,8 @@ import {
   textAlign,
   width,
 } from "@mui/system";
+import CustomizedSteppers from "../CustomizedSteppers/CustomizedSteppers";
+import { Description } from "@mui/icons-material";
 
 function OffBoardingPage() {
   const { currentStep } = useContext(multiStepContext);
@@ -73,30 +75,14 @@ function OffBoardingPage() {
     <>
       <Box
         width={"1003px"}
+        height={"166px"}
         margin={"20px auto"}
-        paddingInline={0}
-        sx={{ border: "2px solid #ebebeb" }}
+        sx={{ border: "2px solid #ebebeb", justifyContent:"center", alignContent:"center"}}
       >
-        <Stepper
-          activeStep={currentStep - 1}
-          orientation="horizontal"
-          sx={stepStyle}
-        >
-          <Step>
-            <StepLabel>Start</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Sign and Upload</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Complete questionnaire </StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Finish </StepLabel>
-          </Step>
-        </Stepper>
+        <CustomizedSteppers stepnumber={currentStep - 1} steps={[{label:"Start",description:""},{label:"Sign and Upload",description:""},{label:"Complete questionnaire",description:""},{label:"Finish",description:""}]}/>
       </Box>
       {showstep(currentStep)}
+      
     </>
   );
 }

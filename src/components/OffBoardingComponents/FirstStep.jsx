@@ -1,4 +1,4 @@
-import { Box, margin } from "@mui/system";
+import { Box, margin, padding } from "@mui/system";
 import React, { useContext } from "react";
 import "./OffBoardingPage.css";
 import HRMButton from "../Button/HRMButton";
@@ -14,25 +14,48 @@ function FirstStep() {
       textAlign={"center"}
       sx={{ border: "2px solid #ebebeb" }}
     >
-      <Typography variant="h1" fontSize={"16px"} fontWeight={600} margin={'20px auto'}>
+      <Typography
+        variant="h1"
+        fontSize={"16px"}
+        fontWeight={600}
+        margin={"20px auto"}
+      >
         Offboarding Process
       </Typography>
-      <Typography fontSize={"13px"} fontWeight={400} width={'70%'} margin={'0 auto 20px auto'}>
+      <Typography
+        fontSize={"13px"}
+        fontWeight={400}
+        width={"70%"}
+        margin={"0 auto 20px auto"}
+        textAlign={'left'}
+      >
         As part of our offboarding process, we want to ensure that everything
-        proceeds smoothly for you. If you have any questions about the
-        offboarding process or require assistance with anything, please do not
-        hesitate to reach out to [HR Contact Name] at [HR Contact Email] or [HR
-        Contact Phone Number]. We want to take this opportunity to thank you for
-        your dedication and contributions to [Company Name]. We wish you all the
-        best in your future endeavors and hope our paths cross again.
+        proceeds smoothly for you. We want to take this opportunity to thank you
+        for your dedication and contributions. We wish you all the best in your
+        future endeavors and hope our paths cross again.
       </Typography>
+
+      <Box margin={'100px'} textAlign={"right"}>
+      <HRMButton
+        mode={"secondaryA"}
+        style={{
+          margin:"0 20px 0 0"
+        }}
+      >
+        Quit and complete later
+      </HRMButton>
       <HRMButton
         mode={"primary"}
-        style={{ padding: "10px", width: "132px", height: "32px", margin:"0 auto 20px auto"}}
+        style={{
+        padding:"5px 40px"
+        }}
         onClick={() => setCurrentStep(2)}
       >
         Next
       </HRMButton>
+      </Box>
+      
+      
     </Box>
   );
 }

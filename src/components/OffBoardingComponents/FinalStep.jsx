@@ -18,7 +18,7 @@ function FinalStep() {
         <Typography variant="h1" fontSize={"16px"} fontWeight={600} margin={"0 auto 20px auto"}>
         Thank you for completing the offboarding!
         </Typography>
-        <HRMButton
+        {/* <HRMButton
         mode={"secondaryA"}
         style={{
           padding: "10px",
@@ -29,7 +29,7 @@ function FinalStep() {
         onClick={() => setCurrentStep(currentStep - 1)}
       >
         Back
-      </HRMButton>
+      </HRMButton> */}
         <HRMButton
           mode={"primary"}
           style={{ padding: "10px", width: "218px", height: "32px", margin:'0 auto 20px auto' }}
