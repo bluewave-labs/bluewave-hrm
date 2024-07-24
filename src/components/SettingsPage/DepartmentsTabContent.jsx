@@ -13,6 +13,7 @@ import { colors, fonts } from "../../Styles";
 import { useState } from "react";
 import DepartmentsTable from "./DepartmentsTable";
 import HRMButton from "../Button/HRMButton";
+import axios from "axios";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -62,12 +63,15 @@ const Dialog = styled(MUIDialog)({
 export default function DepartmentsTabContent({ departments, style }) {
   const [currentPage, setCurrentPage] = useState(1); //The current page number
   const [openAddDepartment, setOpenAddDepartment] = useState(false);
+  const [openEditDepartment, setOpenEditDepartment] = useState(false);
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
+    reset,
     formState: { errors },
   } = useForm();
-  const [newDepartment, setNewDepartment] = useState([]);
 
   //Function for changing the page number
   function handlePage(n) {
@@ -77,16 +81,52 @@ export default function DepartmentsTabContent({ departments, style }) {
   }
 
   const addDepartment = () => {
+    reset({ departmentName: "" });
+    clearErrors("departmentName");
     setOpenAddDepartment(true);
   };
 
-  const handleAddDepartment = () => {
+  const handleAddDepartment = (data) => {
+    console.log("handleClosehahaha", data);
+    axios
+      .post("http://localhost:3000/api/departments", data)
+      .then((response) => {
+        console.log("Data submitted successfully:", response.data);
+        const addedDepartment = response.data.message;
+        console.log("Added new department:", addedDepartment);
+        reset({ departmentName: "" });
+      })
+      .catch((error) => {
+        console.error("Error submitting data:", error);
+        const errorMessage =
+          error.response?.data?.message || "Failed to add department";
+        console.log(errorMessage);
+        setError("departmentName", {
+          message: errorMessage,
+        });
+      });
+    clearErrors("departmentName");
     setOpenAddDepartment(false);
   };
 
   const handleClose = () => {
     console.log("handleClose");
     setOpenAddDepartment(false);
+  };
+
+  const editDepartment = () => {
+    reset({ departmentName: "" });
+    clearErrors("departmentName");
+    setOpenEditDepartment(true);
+  };
+
+  const handleEditDepartment = (data) => {
+    console.log(data);
+  }
+
+  const handleEditClose = () => {
+    console.log("handle edit Close");
+    setOpenEditDepartment(false);
   };
 
   return (
@@ -110,36 +150,102 @@ export default function DepartmentsTabContent({ departments, style }) {
         <HRMButton mode="primary" onClick={addDepartment}>
           Add new
         </HRMButton>
+        <HRMButton mode="primary" onClick={editDepartment}>
+          Edit
+        </HRMButton>
       </Stack>
 
       <Dialog open={openAddDepartment} onClose={handleClose}>
         <DialogTitle>Add a new department</DialogTitle>
         <DialogContent>
           <TextLabel>Name</TextLabel>
-          <TextField
-            size="small"
-            fullWidth
-            color="secondary"
-            value={newDepartment}
-            onChange={(e) => setNewDepartment(e.target.value)}
-          />
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="flex-end"
-            spacing={2}
-            sx={{ marginTop: "50px" }}
-          >
-            <HRMButton mode="secondaryB" onClick={handleClose} color="primary">
-              Cancel
-            </HRMButton>
-            <HRMButton mode="primary" onClick={handleAddDepartment}>
-              Save
-            </HRMButton>
-            {/* <HRMButton mode="primary" onClick={handleClose} color="secondary">
-              Close
-            </HRMButton> */}
-          </Stack>
+          <form>
+            <TextField
+              size="small"
+              fullWidth
+              color="secondary"
+              {...register("departmentName", {
+                required: "Department name is required.",
+                minLength: {
+                  value: 2,
+                  message: "Department name must be at least 2 characters.",
+                },
+              })}
+              error={!!errors.departmentName}
+              helperText={errors.departmentName?.message || ""}
+              FormHelperTextProps={{
+                className: errors.departmentName ? "error" : "",
+              }}
+            />
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="flex-end"
+              spacing={2}
+              sx={{ marginTop: "50px" }}
+            >
+              <HRMButton
+                mode="secondaryB"
+                onClick={handleClose}
+                color="primary"
+              >
+                Cancel
+              </HRMButton>
+              <HRMButton
+                mode="primary"
+                onClick={handleSubmit(handleAddDepartment)}
+              >
+                Save
+              </HRMButton>
+            </Stack>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={openEditDepartment} onClose={handleEditClose}>
+        <DialogTitle>Rename department</DialogTitle>
+        <DialogContent>
+          <TextLabel>New name</TextLabel>
+          <form>
+            <TextField
+              size="small"
+              fullWidth
+              color="secondary"
+              {...register("departmentName", {
+                required: "Department name is required.",
+                minLength: {
+                  value: 2,
+                  message: "Department name must be at least 2 characters.",
+                },
+              })}
+              error={!!errors.departmentName}
+              helperText={errors.departmentName?.message || ""}
+              FormHelperTextProps={{
+                className: errors.departmentName ? "error" : "",
+              }}
+            />
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="flex-end"
+              spacing={2}
+              sx={{ marginTop: "50px" }}
+            >
+              <HRMButton
+                mode="secondaryB"
+                onClick={handleEditClose}
+                color="primary"
+              >
+                Cancel
+              </HRMButton>
+              <HRMButton
+                mode="primary"
+                onClick={handleSubmit(handleEditDepartment)}
+              >
+                Save
+              </HRMButton>
+            </Stack>
+          </form>
         </DialogContent>
       </Dialog>
 
