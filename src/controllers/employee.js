@@ -181,9 +181,7 @@ exports.deleteRecord = async (req, res) => {
 
 exports.summarizeByDepartments = async (req, res) => {
   try {
-    const query = `
-      select  d."departmentName", count(e."empId") as "count" from employee e JOIN department d ON e."departmentId" = d."id" GROUP BY e."departmentId", d."departmentName" ORDER BY d."departmentName"
-    `;
+    const query = `select d."id", d."departmentName", count(e."empId") as "count" from department d left join employee e on d."id" = e."departmentId" group by d."id", d."departmentName" order by d."departmentName"`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).json(results);
   } catch (error) {
