@@ -26,7 +26,7 @@ const Text = styled(Typography)({
   lineHeight: "20px",
   color: "#101828",
 });
-export default function DepartmentsTable({ editDepartmentBtn, style }) {
+export default function DepartmentsTable({ editDepartmentBtn,deleteDepartmentBtn, style }) {
   const { departmentsPeople } = useSettingsContext();
 
   const TableHeaderCell = styled(TableCell)({
@@ -79,7 +79,7 @@ export default function DepartmentsTable({ editDepartmentBtn, style }) {
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  <HRMButton mode="tertiary">
+                  <HRMButton mode="primary" onClick={() => deleteDepartmentBtn(department)}>
                     <b>Delete</b>
                   </HRMButton>
                   <HRMButton
