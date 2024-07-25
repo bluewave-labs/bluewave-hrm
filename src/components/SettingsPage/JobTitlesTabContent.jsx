@@ -8,6 +8,7 @@ import { colors, fonts } from "../../Styles";
 import { useState } from "react";
 import JobTitlesTable from "./JobTitlesTable";
 import HRMButton from "../Button/HRMButton";
+import { useSettingsContext } from "./context";
 
 const Text = styled(Typography)({
   fontSize: "18px",
@@ -16,10 +17,10 @@ const Text = styled(Typography)({
   color: " #344054",
 });
 
-export default function JobTitlesTabContent({ jobTitles, style }) {
+export default function JobTitlesTabContent({ style }) {
+  const { jobTitles } = useSettingsContext();
+  console.log("jobTitles", jobTitles);
   const [currentPage, setCurrentPage] = useState(1); //The current page number
-  console.log(jobTitles);
-
   //Function for changing the page number
   function handlePage(n) {
     if (n > 0 && n <= Math.ceil(jobTitles.length / 10)) {

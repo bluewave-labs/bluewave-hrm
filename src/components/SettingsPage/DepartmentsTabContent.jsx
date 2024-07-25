@@ -14,6 +14,15 @@ import { useState } from "react";
 import DepartmentsTable from "./DepartmentsTable";
 import HRMButton from "../Button/HRMButton";
 import axios from "axios";
+import Toast from "./Toast";
+import { useSettingsContext } from "./context";
+
+const Dialog = styled(MUIDialog)({
+  "& .MuiDialog-paper": {
+    width: "500px",
+    borderRadius: "10px",
+  },
+});
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -53,25 +62,27 @@ const TextField = styled(MUITextField)({
   },
 });
 
-const Dialog = styled(MUIDialog)({
-  "& .MuiDialog-paper": {
-    width: "500px",
-    borderRadius: "10px",
-  },
-});
-
-export default function DepartmentsTabContent({ departments, style }) {
+export default function DepartmentsTabContent({ style }) {
+  const { departmentsPeople, departments, fetchDepartmentsPeople } =
+    useSettingsContext();
+  const [selectedDepartment, setSelectedDepartment] = useState({});
   const [currentPage, setCurrentPage] = useState(1); //The current page number
   const [openAddDepartment, setOpenAddDepartment] = useState(false);
   const [openEditDepartment, setOpenEditDepartment] = useState(false);
   const {
     register,
     handleSubmit,
+    setValue,
     setError,
     clearErrors,
     reset,
     formState: { errors },
   } = useForm();
+  const [toast, setToast] = useState({
+    open: false,
+    severity: "success",
+    message: "",
+  });
 
   //Function for changing the page number
   function handlePage(n) {
@@ -92,21 +103,31 @@ export default function DepartmentsTabContent({ departments, style }) {
       .post("http://localhost:3000/api/departments", data)
       .then((response) => {
         console.log("Data submitted successfully:", response.data);
-        const addedDepartment = response.data.message;
-        console.log("Added new department:", addedDepartment);
-        reset({ departmentName: "" });
+        const responseMessage = response.data;
+        if (typeof responseMessage === 'string' && responseMessage?.includes("already exists")) {
+          setError("departmentName", {
+            message: responseMessage,
+          });
+        } else {
+          fetchDepartmentsPeople();
+          reset({ departmentName: "" });
+          setOpenAddDepartment(false);
+          setToast({
+            open: true,
+            severity: "success",
+            message: "Department created successfully",
+          });
+        }
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
         const errorMessage =
-          error.response?.data?.message || "Failed to add department";
+          error.response?.data?.message || "Failed to add new department";
         console.log(errorMessage);
         setError("departmentName", {
           message: errorMessage,
         });
       });
-    clearErrors("departmentName");
-    setOpenAddDepartment(false);
   };
 
   const handleClose = () => {
@@ -114,19 +135,63 @@ export default function DepartmentsTabContent({ departments, style }) {
     setOpenAddDepartment(false);
   };
 
-  const editDepartment = () => {
+  const editDepartment = (selectedDepartment) => {
+    console.log("editDepartment parent", selectedDepartment);
     reset({ departmentName: "" });
     clearErrors("departmentName");
+    setSelectedDepartment(selectedDepartment);
+    setValue("departmentName", selectedDepartment.departmentName);
     setOpenEditDepartment(true);
   };
 
   const handleEditDepartment = (data) => {
     console.log(data);
-  }
+    const editDepartmentData = departments.find(
+      (department) => department.id === selectedDepartment.id
+    );
+    console.log(editDepartmentData);
+    console.log({
+      ...editDepartmentData,
+      departmentName: data.departmentName,
+    });
+
+    axios
+      .put("http://localhost:3000/api/departments", {
+        ...editDepartmentData,
+        departmentName: data.departmentName,
+      })
+      .then((response) => {
+        console.log("Data submitted successfully:", response.data);
+        const editedDepartment = response.data.message;
+        console.log("Edited new department:", editedDepartment);
+        fetchDepartmentsPeople();
+        reset({ departmentName: "" });
+        clearErrors("departmentName");
+        setOpenEditDepartment(false);
+        setToast({
+          open: true,
+          severity: "success",
+          message: "Department edited successfully",
+        });
+      })
+      .catch((error) => {
+        console.error("Error submitting data:", error);
+        const errorMessage =
+          error.response?.data?.message || "Failed to add new department";
+        console.log(errorMessage);
+        setError("departmentName", {
+          message: errorMessage,
+        });
+      });
+  };
 
   const handleEditClose = () => {
     console.log("handle edit Close");
     setOpenEditDepartment(false);
+  };
+
+  const handleCloseToast = () => {
+    setToast({ ...toast, open: false });
   };
 
   return (
@@ -149,9 +214,6 @@ export default function DepartmentsTabContent({ departments, style }) {
         <HeadText>Departments</HeadText>
         <HRMButton mode="primary" onClick={addDepartment}>
           Add new
-        </HRMButton>
-        <HRMButton mode="primary" onClick={editDepartment}>
-          Edit
         </HRMButton>
       </Stack>
 
@@ -250,14 +312,14 @@ export default function DepartmentsTabContent({ departments, style }) {
       </Dialog>
 
       <DepartmentsTable
-        departments={departments}
+        editDepartmentBtn={editDepartment}
         sx={{ marginBottom: "40px" }}
       />
-      {departments.length > 0 ? (
+      {departmentsPeople.length > 0 ? (
         <>
-          {departments.length > 10 && (
+          {departmentsPeople.length > 10 && (
             <PagesNavBar
-              numOfEntries={departments.length}
+              numOfEntries={departmentsPeople.length}
               currentPage={currentPage}
               handlePage={handlePage}
             />
@@ -266,6 +328,12 @@ export default function DepartmentsTabContent({ departments, style }) {
       ) : (
         <p>There is no departments right now.</p>
       )}
+      <Toast
+        open={toast.open}
+        severity={toast.severity}
+        message={toast.message}
+        onClose={handleCloseToast}
+      />
     </Box>
   );
 }

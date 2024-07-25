@@ -16,6 +16,7 @@ import HRMButton from "../Button/HRMButton";
 import "./settings.css";
 import axios from "axios";
 import Toast from "./Toast";
+import { useSettingsContext } from "./context";
 
 const TextField = styled(MUITextField)({
   "& fieldset": {
@@ -70,7 +71,8 @@ const parseDefaultValues = (company) => ({
   linkedinUrl: company?.linkedinUrl || "",
 });
 
-export default function CompanyProfileForm({ company, style }) {
+export default function CompanyProfileForm({ style }) {
+  const { company } = useSettingsContext();
   const [countries, setCountries] = useState([]);
   const [companyLogo, setCompanyLogo] = useState(
     parseDefaultValues(company).companyLogo
@@ -112,7 +114,6 @@ export default function CompanyProfileForm({ company, style }) {
           (country) => country.name.common
         );
 
-        // Sort the countries alphabetically by name
         countryOptions.sort((a, b) => a.localeCompare(b));
 
         setCountries(countryOptions);
