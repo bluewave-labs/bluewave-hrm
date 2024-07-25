@@ -17,6 +17,7 @@ import HRMButton from "../Button/HRMButton";
 import axios from "axios";
 import Toast from "./Toast";
 import { useSettingsContext } from "./context";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Dialog = styled(MUIDialog)({
   "& .MuiDialog-paper": {
@@ -125,10 +126,10 @@ export default function DepartmentsTabContent({ style }) {
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
-        const errorMessage =
-          error.response?.data?.message || "Failed to add new department";
-        setError("departmentName", {
-          message: errorMessage,
+        setToast({
+          open: true,
+          severity: "error",
+          message: "Failed to add new department",
         });
       });
   };
@@ -179,10 +180,10 @@ export default function DepartmentsTabContent({ style }) {
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
-        const errorMessage =
-          error.response?.data?.message || "Failed to add new department";
-        setError("departmentName", {
-          message: errorMessage,
+        setToast({
+          open: true,
+          severity: "error",
+          message: "Failed to edit department",
         });
       });
   };
@@ -200,7 +201,27 @@ export default function DepartmentsTabContent({ style }) {
 
   const handleDeleteDepartment = () => {
     console.log("handleDelete");
-    // console.log(data);
+    console.log(selectedDepartment);
+    axios
+      .delete(`http://localhost:3000/api/departments/${selectedDepartment.id}`)
+      .then((response) => {
+        console.log("Data deleted successfully:", response.data);
+        fetchDepartmentsPeople();
+        setOpenDeleteDepartment(false);
+        setToast({
+          open: true,
+          severity: "success",
+          message: "Department deleted successfully",
+        });
+      })
+      .catch((error) => {
+        console.error("Error submitting data:", error);
+        setToast({
+          open: true,
+          severity: "error",
+          message: "Failed to delete department",
+        });
+      });
   };
 
   const handleDeleteClose = () => {
@@ -235,7 +256,26 @@ export default function DepartmentsTabContent({ style }) {
       </Stack>
 
       <Dialog open={openAddDepartment} onClose={handleClose}>
-        <DialogTitle>Add a new department</DialogTitle>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+        >
+          <DialogTitle sx={{marginTop: "10px", paddingBottom: "0"}}>Add a new department</DialogTitle>
+          <CloseIcon
+            onClick={handleClose}
+            sx={{
+              width: "20px",
+              height: "20px",
+              backgroundColor: "#FFFFFFF",
+              color: "#98A2B3",
+              textAlign: "right",
+              padding: "16px",
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+          />
+        </Stack>
         <DialogContent>
           <TextLabel>Name</TextLabel>
           <form>
@@ -282,7 +322,26 @@ export default function DepartmentsTabContent({ style }) {
       </Dialog>
 
       <Dialog open={openEditDepartment} onClose={handleEditClose}>
-        <DialogTitle>Rename department</DialogTitle>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+        >
+          <DialogTitle sx={{marginTop: "10px", paddingBottom: "0"}}>Rename department</DialogTitle>
+          <CloseIcon
+            onClick={handleEditClose}
+            sx={{
+              width: "20px",
+              height: "20px",
+              backgroundColor: "#FFFFFFF",
+              color: "#98A2B3",
+              textAlign: "right",
+              padding: "16px",
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+          />
+        </Stack>
         <DialogContent>
           <TextLabel>New name</TextLabel>
           <form>
@@ -329,7 +388,26 @@ export default function DepartmentsTabContent({ style }) {
       </Dialog>
 
       <Dialog open={openDeleteDepartment} onClose={handleDeleteClose}>
-        <DialogTitle>Where do you want to transfer employees?</DialogTitle>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+        >
+          <DialogTitle sx={{marginTop: "10px", paddingBottom: "0"}}>Where do you want to transfer employees?</DialogTitle>
+          <CloseIcon
+            onClick={handleDeleteClose}
+            sx={{
+              width: "20px",
+              height: "20px",
+              backgroundColor: "#FFFFFFF",
+              color: "#98A2B3",
+              textAlign: "right",
+              padding: "16px",
+              "&:hover": {
+                cursor: "pointer",
+              },
+            }}
+          />
+        </Stack>
         <DialogContent>
           <TextLabel>Transfer employees to</TextLabel>
           <form>
@@ -341,7 +419,6 @@ export default function DepartmentsTabContent({ style }) {
               value={selectedDepartment}
               onChange={(_, value) => {
                 setSelectedDepartment(value);
-                setValue("departmentId", value.id);
               }}
               fullWidth
               size="small"
@@ -361,10 +438,7 @@ export default function DepartmentsTabContent({ style }) {
               >
                 Cancel
               </HRMButton>
-              <HRMButton
-                mode="primary"
-                onClick={handleSubmit(handleDeleteDepartment)}
-              >
+              <HRMButton mode="primary" onClick={handleDeleteDepartment}>
                 Save
               </HRMButton>
             </Stack>
