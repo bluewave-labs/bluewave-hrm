@@ -4,13 +4,14 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { Typography, Dialog } from "@mui/material";
+import { Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
 import PropTypes from "prop-types";
 import Stack from "@mui/system/Stack";
 import HRMButton from "../Button/HRMButton";
+import { useSettingsContext } from "./context";
 
 const TextHeader = styled(Typography)({
   fontSize: "14px",
@@ -25,8 +26,8 @@ const Text = styled(Typography)({
   lineHeight: "20px",
   color: "#101828",
 });
-export default function DepartmentsTable({ departments, style }) {
-  const [openEditDepartment, setOpenEditDepartment] = useState(false);
+export default function DepartmentsTable({ editDepartmentBtn, style }) {
+  const { departmentsPeople } = useSettingsContext();
 
   const TableHeaderCell = styled(TableCell)({
     color: colors.darkGrey,
@@ -63,10 +64,9 @@ export default function DepartmentsTable({ departments, style }) {
             <TableHeaderCell></TableHeaderCell>
           </TableRow>
         </TableHead>
-        {/*Policy information*/}
         <TableBody>
-          {departments.map((department) => (
-            <TableRow>
+          {departmentsPeople.map((department) => (
+            <TableRow key={department.id}>
               <TableBodyCell sx={{ width: "50%", paddingLeft: "25px" }}>
                 <Text>{department.departmentName}</Text>
               </TableBodyCell>
@@ -83,27 +83,21 @@ export default function DepartmentsTable({ departments, style }) {
                     <b>Delete</b>
                   </HRMButton>
                   <HRMButton
-                    mode="tertiary"
-                    onClick={() => setOpenEditDepartment(true)}
+                    mode="primary"
+                    onClick={() => editDepartmentBtn(department)}
                   >
-                    <a
+                    {/* <a
                       href="#"
                       style={{
                         color: "#7F56D9",
                         textDecoration: "none",
                         fontWeight: "bold",
                       }}
-                    >
+                    > */}
                       Edit
-                    </a>
+                    {/* </a> */}
                   </HRMButton>
                 </Stack>
-                <Dialog
-                  open={openEditDepartment}
-                  onClose={() => setOpenEditDepartment(false)}
-                >
-                  <Text>Hi</Text>
-                </Dialog>
               </TableBodyCell>
             </TableRow>
           ))}
@@ -113,13 +107,10 @@ export default function DepartmentsTable({ departments, style }) {
   );
 }
 
-//Control panel settings for storybook
 DepartmentsTable.propTypes = {
-  //Time off policies to be displayed
   departments: PropTypes.objectOf(PropTypes.array),
 };
 
-//Default values for this component
 DepartmentsTable.defaultProps = {
   style: {},
 };
