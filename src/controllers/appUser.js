@@ -1,6 +1,7 @@
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
+const sample = require("./authentication")
 const { getComparator } = require("../helper/utils");
 
 exports.showAll = async (req, res) => {
@@ -43,13 +44,26 @@ exports.findByEmail = async (req, res) => {
     res.status(200).send(data);
   }
 };
+// The aim of this route is to check if the database is not empty.
+// It sends true if database is not empty or false if otherwise.
+exports.init = async (req, res) => {
+  const data = await db.appUser.findOne();
+  if (data === null) {
+    res.status(200).json({message: false})
+  } else {
+    res.status(200).json({message: true});
+  }
+};
 
 exports.createRecord = async (req, res) => {
   // This route should redirect user to registration page
   //Implementation will be done later
-  res.send(
-    `<h4>Sorry, registration page is under construction. Please try again later.</h4>`
-  );
+  console.log(req.body);
+  // res.send(
+  //   `<h4>Sorry, registration page is under construction. Please try again later.</h4> ${req.protocol}`
+  // );
+  sample.logout(req, res);
+ // res.redirect("company/prop/logo")
 };
 
 exports.updateRecord = async (req, res) => {
@@ -58,6 +72,7 @@ exports.updateRecord = async (req, res) => {
   res.send(
     `<h4>Sorry, the requested page is under construction. Please try again later.</h4>`
   );
+  //res.redirect("/singup");
 };
 
 exports.deleteRecord = async (req, res) => {

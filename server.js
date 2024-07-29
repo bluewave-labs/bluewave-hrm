@@ -1,15 +1,10 @@
-//const authJwt = require("./config/authJwt");
 const express = require("express");
-const db = require("./models");
 const cors = require("cors");
-const http = require("http");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const fs = require("fs");
 const app = express();
 const router = express.Router();
-app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
@@ -18,8 +13,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(bodyParser.json());
-
+app.use(bodyParser.json({ limit: "20mb" }));
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // simple route
@@ -37,12 +32,18 @@ app.use("/api", router);
 app.listen(HTTP_PORT, () => {
   console.log(`Server ready at http://localhost:${HTTP_PORT}.`);
 });
+/*
+Table(s) that must be prepopulated in production
+1. Permission table
 
-// Uncomment the following codes to populate your database
+*/
+
+//Uncomment the following codes to populate your database
 
 // db.sequelize.sync({ force: true }).then(async () => {
-// let data = require("./constants/data");
-// await data.populateTables(db);
-// console.log("Sync operation successful.");
-// });
+//   let data = require("./constants/data");
+//   await data.populateTables(db);
 
+//   //await data.populatePermissionTable(db);
+//   console.log("Sync operation successful.");
+// });

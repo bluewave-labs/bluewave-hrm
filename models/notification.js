@@ -19,15 +19,6 @@ module.exports = function (sequelize, Sequelize) {
         type: Sequelize.STRING,
         allowNull:false,
       },
-      //Notification message
-      notificationType: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: "new-time-off-request",
-        validate: {
-          isIn: [["new-team-member", "new-time-off-request", "time-off-request-sent"]],
-        },
-      },
       //ID number of the new employee or employee that creates a time of request
       empId: {
         type: Sequelize.INTEGER,

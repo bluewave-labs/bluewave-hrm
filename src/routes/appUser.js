@@ -5,6 +5,7 @@ module.exports = (router) => {
   router.route("/appusers").get(controller.showAll);
   router.route("/appusers/:id").post(controller.showOne);
   router.route("/appusers/find/email").post(controller.findByEmail);
+  router.route("/appusers/find/init/check").post(controller.init);
   router.route("/appusers").post(controller.createRecord);
   router.route("/appusers").put(controller.updateRecord);
   router.route("/appusers/:id").delete(controller.deleteRecord);

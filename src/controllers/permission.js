@@ -1,9 +1,7 @@
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
-const {getComparator} = require("../helper/utils");
-
-
+const { getComparator } = require("../helper/utils");
 
 exports.showAll = async (req, res) => {
   const data = await db.permission.findAll({
@@ -11,8 +9,9 @@ exports.showAll = async (req, res) => {
   });
   if (!data) {
     res.send("No results found");
+  } else {
+    res.send(data);
   }
-  res.send(data);
 };
 
 exports.showOne = async (req, res) => {
@@ -28,15 +27,17 @@ exports.showOne = async (req, res) => {
 exports.createRecord = async (req, res) => {
   //checking for permission name already exists
   try {
-    const check = await db.permission.findOne({ where: getComparator(db, 'type', req.body.type)});
+    const check = await db.permission.findOne({
+      where: getComparator(db, "type", req.body.type),
+    });
     if (check) {
       return res.send(`${req.body.type} already exists.`);
     }
     const data = await db.permission.create(req.body);
-    res.status(201).json({data});
+    res.status(201).json({ data });
   } catch (err) {
     console.log(err);
-    res.send({message : message.failed});
+    res.send({ message: message.failed });
   }
 };
 
@@ -44,12 +45,13 @@ exports.updateRecord = async (req, res) => {
   const updatedData = req.body;
   //checking for permission name already exists
   const check = await db.permission.findOne({
-    where:{  id: {
+    where: {
+      id: {
         [db.Sequelize.Op.not]: updatedData.id,
       },
-    where: getComparator(db, 'type', req.body.type),        
+      where: getComparator(db, "type", req.body.type),
     },
-});
+  });
   if (check) {
     return res.send(`${req.body.type} already exists.`);
   }
@@ -60,7 +62,7 @@ exports.updateRecord = async (req, res) => {
     res.status(200).json({ message: data });
   } catch (err) {
     console.log(err);
-    res.status(400).json({message: message.failed});
+    res.status(400).json({ message: message.failed });
   }
 };
 

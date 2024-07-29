@@ -48,7 +48,7 @@ module.exports = (sequelize, Sequelize) => {
       access: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaltValue: "Permitted",
+        defaultValue: "Permitted",
         validate: {
           isIn: [["Permitted", "Suspended", "Revoked"]],
         },

@@ -1,10 +1,8 @@
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
-const {getComparator} = require("../helper/utils");
+const { getComparator } = require("../helper/utils");
 const { Where } = require("sequelize/lib/utils");
-
-
 
 exports.showAll = async (req, res) => {
   const data = await db.employeeAnnualTimeOff.findAll({
@@ -12,13 +10,16 @@ exports.showAll = async (req, res) => {
   });
   if (!data) {
     res.send("No results found");
+  } else {
+    res.send(data);
   }
-  res.send(data);
 };
 
 exports.showOne = async (req, res) => {
   const empId = req.params.empid;
-  const data = await db.employeeAnnualTimeOff.findAll({where: {empId : empId}});
+  const data = await db.employeeAnnualTimeOff.findAll({
+    where: { empId: empId },
+  });
   if (data === null) {
     res.status(400).send("Not found!");
   } else {
@@ -29,10 +30,10 @@ exports.showOne = async (req, res) => {
 exports.createRecord = async (req, res) => {
   try {
     const data = await db.employeeAnnualTimeOff.create(req.body);
-    res.status(201).json({data});
+    res.status(201).json({ data });
   } catch (err) {
     console.log(err);
-    res.send({message : message.failed});
+    res.send({ message: message.failed });
   }
 };
 
@@ -45,7 +46,7 @@ exports.updateRecord = async (req, res) => {
     res.status(200).json({ message: data });
   } catch (err) {
     console.log(err);
-    res.status(400).json({message: message.failed});
+    res.status(400).json({ message: message.failed });
   }
 };
 

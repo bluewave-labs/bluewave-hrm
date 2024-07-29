@@ -14,10 +14,12 @@ module.exports = (sequelize, Sequelize) => {
       },
       minimumSalary: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
         allowNull: false,
       },
       maximumSalary: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
         allowNull: false,
       },
     },

@@ -12,7 +12,9 @@ exports.showAll = async (req, res) => {
   if (!data) {
     res.send("No results found");
   }
+  else {
   res.send(data);
+  }
 };
 
 exports.showOne = async (req, res) => {

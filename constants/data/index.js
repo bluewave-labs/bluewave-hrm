@@ -29,7 +29,7 @@ module.exports = {
     }
     displayInfo(count, "role");
   },
- 
+
   populateUserTable: async function (db) {
     const users = require("./appUser.json");
     removeKey(users, "id");
@@ -66,7 +66,7 @@ module.exports = {
   populateCompanyTable: async function (db) {
     const data = require("./company.json");
     removeKey(data, "id");
-    const imageFile = fs.readFileSync("./constants/data/logo.jpeg", {
+    const imageFile = fs.readFileSync("./constants/data/logo.png", {
       encoding: "base64",
     });
     for (let d of data) {
@@ -91,8 +91,8 @@ module.exports = {
     if (fs.existsSync(path)) {
       for (let d of data) {
         console.log(d);
-         const img = fs.readFileSync(`${path}${d.empId}.png`, {
-         encoding: "base64",
+        const img = fs.readFileSync(`${path}${d.empId}.png`, {
+          encoding: "base64",
         });
         d.photo = img;
       }
@@ -164,6 +164,20 @@ module.exports = {
     displayInfo(results.length, "employeeAnnualTimeOff");
   },
 
+  populateNotificationTable: async function (db) {
+    const data = require("./notification.json");
+    const results = await db.notification.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "notification");
+
+    const recipientData = require("./notificationRecipient.json");
+    const results2 = await db.notificationRecipient.bulkCreate(recipientData, {
+      validate: true,
+    });
+    displayInfo(results2.length, "notificationRecipient");
+  },
+
   populateTables: async function (db) {
     console.log("Populating tables...");
     await this.populateRoleTable(db);
@@ -180,6 +194,7 @@ module.exports = {
     await this.populateChangeHistoryTable(db);
     await this.populateReportToTable(db);
     await this.populateEmployeeAnnualTimeOffTable(db);
+    await this.populateNotificationTable(db);
     console.log("Operation successful, tables Populated.");
   },
 };

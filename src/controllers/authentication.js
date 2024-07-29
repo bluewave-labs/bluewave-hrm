@@ -8,8 +8,8 @@ const mailService = require("../helper/email");
 
 const { handleError, validatePassword } = require("../helper/validation");
 const message = require("../../constants/messages.json");
-const { error } = require("console");
 
+const checked = true;
 // create json web token
 const maxAge = 3 * 60 * 60; // 3 hours
 const createToken = (id) => {
@@ -19,23 +19,8 @@ const createToken = (id) => {
 };
 
 const signup = async (req, res) => {
-  const { email, password, confirmPassword } = req.body;
-  const { isErr, error } = handleError(email, password, confirmPassword, true);
-
-  if (isErr) {
-    return res.status(400).send({ error });
-  }
-
-  const checkMail = await db.administrator.findOne({
-    where: { email: email.toLowerCase() },
-  });
-  if (checkMail) {
-    error.email = message.alreadyExists;
-    return res.status(400).send({ error });
-  }
-
   try {
-    const user = await db.administrator.create(req.body);
+    const user = await db.appUser.create(req.body);
     const token = createToken(user.email);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(201).json({ user: user.email });
@@ -48,8 +33,11 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password) {
+      return res.status(400).json({ error: message.loginError });
+    }
     // Check if the email exists
-    const user = await db.administrator.findOne({
+    const user = await db.appUser.findOne({
       where: { email: email.toLowerCase() },
     });
     if (user) {
@@ -73,14 +61,17 @@ const logout = async (req, res) => {
 // This api sends a password resetToken to user
 const forgotPassword = async (req, res) => {
   // Get user based on the posted email
-  const { email } = req.body;
-
-  const user = await db.administrator.findOne({
+  const { email, frontendUrl } = req.body;
+  console.log(req.body);
+  const user = await db.appUser.findOne({
     where: { email: email.toLowerCase() },
   });
   if (!user) {
-    return res.status(404).json({ error: `user ${message.notFound}` });
+    return res
+      .status(404)
+      .json({ error: "No account is associated with this email" });
   }
+
   // Generate a random reset token
   const resetToken = crypto.randomBytes(64).toString("hex");
   // Hash resetToken
@@ -93,17 +84,16 @@ const forgotPassword = async (req, res) => {
   expiresAt.setMinutes(expiresAt.getMinutes() + 25); // 25 min from now
 
   // Send the plain resetToken to the user email and update user's passwordResetToken and passwordResetTokenExpiresAt in the database
-  const resetUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/api/resetpassword/${resetToken}`;
+  const resetUrl = `${frontendUrl}${resetToken}`;
   const message = `You have requested to reset your password. Please use the link below to reset your password\n\n${resetUrl}\n\nThis reset password link will expire in 25 minutes.`;
+  console.log(resetUrl);
 
   try {
-    await mailService.sendEmail({
-      email: user.email,
-      subject: "Password change request",
-      message: message,
-    });
+    // await mailService.sendEmail({
+    //   email: user.email,
+    //   subject: "Password change request",
+    //   message: message,
+    // });
 
     user.set({
       passwordResetToken: hashedResetToken,
@@ -125,6 +115,7 @@ const forgotPassword = async (req, res) => {
 
 //This api enables unverified user to reset password
 const resetPassword = async (req, res) => {
+  console.log(req.body);
   //Hash the plain token
   const token = crypto
     .createHash("sha256")
@@ -132,7 +123,7 @@ const resetPassword = async (req, res) => {
     .digest("hex");
 
   //Find user based on the parameter token
-  const user = await db.administrator.findOne({
+  const user = await db.appUser.findOne({
     where: {
       passwordResetToken: token,
       passwordResetTokenExpiresAt: { [db.Sequelize.Op.gt]: Date.now() },
@@ -147,13 +138,14 @@ const resetPassword = async (req, res) => {
 
   const { password, confirmPassword } = req.body;
 
+  //***To be re-implemented */
   // Check if the new password is valid
-  const passwordCheck = validatePassword(password);
-  if (!passwordCheck.isValid) {
-    return res.status(400).json({
-      passwordError: passwordCheck.message,
-    });
-  }
+  // const passwordCheck = validatePassword(password);
+  // if (!passwordCheck.isValid) {
+  //   return res.status(400).json({
+  //     passwordError: passwordCheck.message,
+  //   });
+  // }
 
   // Check if password and confirmPassword matched
   if (password !== confirmPassword) {
@@ -171,7 +163,10 @@ const resetPassword = async (req, res) => {
 
   await user.save();
 
-  res.json({ message: message.passwordChanged });
+  res.json({ 
+    message: message.passwordChanged,
+    user: user.email
+   });
 };
 
 // This api enables verified user to change password
@@ -180,7 +175,7 @@ const resetPasswordAuth = async (req, res) => {
   try {
     const result = jwt.verify(token, process.env.secret);
     const { password, newPassword, confirmNewPassword } = req.body;
-    const user = await db.administrator.findOne({
+    const user = await db.appUser.findOne({
       where: { email: result.id },
     });
     if (!user) {

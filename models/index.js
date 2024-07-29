@@ -41,6 +41,13 @@ db.socialProfile = require("./socialProfile")(sequelize, Sequelize);
 db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
+db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
+
+db.notification = require("./notification")(sequelize, Sequelize);
+db.notificationRecipient = require("./notificationRecipient")(
+  sequelize,
+  Sequelize
+);
 
 db.reportTo = require("./reportTo")(sequelize, Sequelize);
 db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
@@ -181,9 +188,60 @@ db.appUser.belongsTo(db.permission, {
   foreignKey: "permissionId",
 });
 
+db.appUser.hasMany(db.passwordHistory, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "userId",
+});
+
+db.passwordHistory.belongsTo(db.appUser, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "userId",
+});
+
+db.employee.hasMany(db.notification, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+
+db.notification.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+
+db.timeOffHistory.hasMany(db.notification, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "timeOffHistoryId",
+});
+
+db.notification.belongsTo(db.timeOffHistory, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "timeOffHistoryId",
+});
+
 db.employee.belongsTo(db.employee, { foreignKey: "managerId", as: "Manager" });
 
-db.timeOff.belongsToMany(db.employee, { through: db.employeeAnnualTimeOff });
-db.employee.belongsToMany(db.timeOff, { through: db.employeeAnnualTimeOff });
+db.timeOff.belongsToMany(db.employee, {
+  through: { model: db.employeeAnnualTimeOff, unique: false },
+  constraints: false,
+});
+db.employee.belongsToMany(db.timeOff, {
+  through: { model: db.employeeAnnualTimeOff, unique: false },
+  constraints: false,
+});
+
+db.notification.belongsToMany(db.employee, {
+  through: { model: db.notificationRecipient, unique: false },
+  constraints: false,
+});
+db.employee.belongsToMany(db.notification, {
+  through: { model: db.notificationRecipient, unique: false },
+  constraints: false,
+});
 
 module.exports = db;

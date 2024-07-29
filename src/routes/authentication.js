@@ -1,8 +1,7 @@
 const controller = require("../controllers/authentication");
 
 module.exports = (router) => {
-    router.route("/login").get(controller.login);
-    router.route("/signup").get(controller.signup);
+    router.route("/login").post(controller.login);
     router.route("/signup").post(controller.signup);
     router.route("/logout").post(controller.logout);
     router.route("/logout").get(controller.logout);

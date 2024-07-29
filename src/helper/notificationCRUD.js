@@ -3,14 +3,13 @@ const db = require("../../models");
 
 /**
  * This function creates a nofitication object
- * @param {object} param0 the properties include subject, message, notificationType, empId, timeOffHistoryId
+ * @param {object} param0 the properties include subject, message, empId, timeOffHistoryId
  * and recipientId which is an array of primary keys of employee objects.
  */
 
 async function createNotification({
   subject,
   message,
-  notificationType,
   empId,
   timeOffHistoryId,
   recipientId,
@@ -18,7 +17,6 @@ async function createNotification({
   const data = {
     subject,
     message,
-    notificationType,
     empId,
     timeOffHistoryId,
     recipientId,
@@ -65,11 +63,24 @@ async function formatNotificationData(notification) {
   const recipients = [];
   if (notification.employees) {
     // Get employee id, first name and last name of the recipient
+    if (notification.employee.photo) {
+      notification.employee.photo =
+        notification.employee.photo.toString("base64");
+    }
     for (let emp of notification.employees) {
+      let notificationStatus = await db.notificationRecipient.findOne({
+        attributes: ["status"],
+        where: {
+          employeeEmpId: emp.empId,
+          notificationId: notification.id,
+        },
+      });
+      notificationStatus = notificationStatus.toJSON().status;
       const detail = {
         empId: emp.empId,
         firstName: emp.firstName,
         lastName: emp.lastName,
+        notificationStatus,
       };
       recipients.push(detail);
     }
@@ -109,6 +120,34 @@ async function retrieveNotification(notificationId) {
       return null;
     }
     return await formatNotificationData(notification);
+  } catch (error) {
+    console.log("Encountered error when tried to retrieve notification");
+    throw error;
+  }
+}
+
+/**
+ * This function retrives all notification objects from the database
+ * @returns an array of notification objects.
+ */
+async function retrieveAllNotifications() {
+  try {
+    const notifications = await db.notification.findAll({
+      include: [
+        "employee", // new employee or employee that creates a time of request
+        "employees", // notification recipients
+        "timeOffHistory",
+      ],
+    });
+    if (notifications.length === 0) {
+      return null;
+    }
+    const formattedData = [];
+    for (let n of notifications) {
+      const data = await formatNotificationData(n);
+      formattedData.push(data);
+    }
+    return formattedData;
   } catch (error) {
     console.log("Encountered error when tried to retrieve notification");
     throw error;
@@ -165,7 +204,7 @@ async function updateNotificationStatus(
   newStatus
 ) {
   try {
-    await db.notificationRecipient.update(
+    return await db.notificationRecipient.update(
       { status: newStatus },
       {
         where: {
@@ -184,7 +223,7 @@ async function updateNotificationStatus(
  * @param {number} notificationId id of the notification to be deleted
  */
 async function deleteNotification(notificationId) {
-  await db.notification.destroy({
+  const data = await db.notification.destroy({
     where: {
       id: notificationId,
     },
@@ -195,12 +234,12 @@ async function deleteNotification(notificationId) {
       notificationId: notificationId,
     },
   });
-
-
+  return data;
 }
 module.exports = {
   createNotification,
   retrieveNotification,
+  retrieveAllNotifications,
   retrieveNotificationByRecipient,
   updateNotificationStatus,
   deleteNotification,
