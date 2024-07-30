@@ -26,7 +26,7 @@ export default function UpdatesMenu({style}) {
         getUpdates();
     }, [refresh]);
 
-    const url = `${process.env.URL}/updates`;
+    const url = `${process.env.URL}/notifications/employee/1`;
 
     //Retrieve all the updates
     function getUpdates() {

@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
  *          name: <String>
  *          role: <String>
  *          email: <String>
+ *          office: <String>
  *          effectiveDate: <String>
  *          timeOffBalance: <String>
  *          timeOffRequested: <String>

@@ -1,9 +1,10 @@
+import logo from './logo.svg';
 import './App.css';
-import OffBoardingPage from './components/OffBoardingComponents/OffBoardingPage';
+import UpdatesPage from './components/UpdatesPage/UpdatesPage';
 
 function App() {
   return (
-   <OffBoardingPage/> 
+    <UpdatesPage />
   );
 }
 
