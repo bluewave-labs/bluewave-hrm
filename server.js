@@ -1,3 +1,4 @@
+const db = require("./models");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -42,7 +43,7 @@ Table(s) that must be prepopulated in production
 
 // db.sequelize.sync({ force: true }).then(async () => {
 //   let data = require("./constants/data");
-//   await data.populateTables(db);
+//   //await data.populateTables(db);
 
 //   //await data.populatePermissionTable(db);
 //   console.log("Sync operation successful.");

@@ -30,7 +30,7 @@ module.exports = (router) => {
     .get(controller.summarizeByDepartmentsChartData);
 
   router
-    .route("/employees/summaries/headcounts")
+    .route("/employees/summaries/headcounts/:year")
     .get(controller.summarizeByHeadcounts);
 
   // Bulk change routes

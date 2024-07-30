@@ -15,15 +15,6 @@ const removeKey = (data, key) => {
 };
 //Note: properties serving as primary key in data are removed to enable autoIncrement to work.
 module.exports = {
-  populateUpdateTable: async function (db) {
-    const datas = require("./update.json");
-    removeKey(datas, "id");
-    const results = await db.update.bulkCreate(datas, {
-      validate: true
-    });
-    displayInfo(results.length, "update");
-  },
-
   populateRoleTable: async function (db) {
     const datas = require("./role");
     removeKey(datas, "id");
@@ -203,6 +194,7 @@ module.exports = {
     await this.populateChangeHistoryTable(db);
     await this.populateReportToTable(db);
     await this.populateEmployeeAnnualTimeOffTable(db);
+    await this.populateNotificationTable(db);
     console.log("Operation successful, tables Populated.");
   },
 };

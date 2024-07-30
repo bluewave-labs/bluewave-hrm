@@ -2,6 +2,7 @@ const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
 const { Value } = require("@sequelize/core");
+const { produce } = require("immer");
 
 const predefinedColors = [
   "#7F56D9", // 1st place
@@ -237,9 +238,7 @@ exports.summarizeByJobTitles = async (req, res) => {
   }
 };
 
-
 exports.summarizeByDepartmentsChartData = async (req, res) => {
-  
   try {
     const query = `SELECT count(e."empId") AS "value", d."departmentName" AS "label" from employee e JOIN department d ON e."departmentId" = d."id" GROUP BY 2 ORDER BY 1 DESC, 2;`;
     const [results, metadata] = await db.sequelize.query(query);
@@ -274,10 +273,65 @@ exports.summarizeByLocations = async (req, res) => {
 
 exports.summarizeByHeadcounts = async (req, res) => {
   try {
-    const query = `select  d."departmentName", count(e."empId") as "count" from employee e JOIN department d ON e."departmentId" = d."id" GROUP BY e."departmentId", d."departmentName" ORDER BY d."departmentName"`;
-    const [results, metadata] = await db.sequelize.query(query);
-    res.status(200).send(results);
+    // const [results, metadata] = await db.sequelize.query(query, {
+    // replacements: { departmentName: departmentName.trim().toLowerCase() },
+    const date = new Date();
+    console.log(date.getFullYear());
+    const year = parseInt(req.params.year);
+    // Limit the months to the current month if the year is the current year
+    const monthCount = year === date.getFullYear() ? date.getMonth() + 1 : 12;
+
+    const query = `SELECT count("empId") from employee WHERE cast(to_char("hireDate", 'YYYY') AS int) < :year;`;
+    const [results, metadata] = await db.sequelize.query(query, {
+      replacements: { year: year },
+    });
+    const prevYearCount = results[0].count;
+
+    //Get the given year monthly headcount.
+    const query2 = `SELECT date_part('month', "hireDate") AS "id", to_char("hireDate", 'Mon') AS "month", count("empId") AS "value" FROM employee WHERE cast(to_char("hireDate", 'YYYY') AS int) = :year GROUP BY "month", "id" ORDER BY 1;`;
+    const [results2, metadata2] = await db.sequelize.query(query2, {
+      replacements: { year: year },
+    });
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const data = [];
+    for (let i = 0; i < monthCount; i++) {
+      const d = { id: i + 1, month: months[i], value: 0 };
+      data.push(d);
+    }
+
+    //Iterate through the result
+    for (let result of results2) {
+      const index = result.id - 1;
+      data[index].value = result.value;
+    }
+    //Obtain cumulative values
+    const values = [parseInt(prevYearCount) + parseInt(data[0].value)];
+
+    for (let i = 1; i < monthCount; i++) {
+      const d = parseInt(values[i - 1]) + parseInt(data[i].value);
+      values.push(d);
+    }
+    const finalResult = {
+      xLabels: months.slice(0, monthCount),
+      pData: values,
+    };
+
+    res.status(200).send(finalResult);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: message.failed });
   }
 };

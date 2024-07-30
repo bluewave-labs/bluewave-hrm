@@ -66,7 +66,6 @@ exports.createRecord = async (req, res, next) => {
 exports.updateRecord = async (req, res, next) => {
   try {
     const { notificationId, employeeEmpId, status } = req.body;
-    console.log(notificationId, employeeEmpId, status)
     let data = await updateNotificationStatus(
       notificationId,
       employeeEmpId,
