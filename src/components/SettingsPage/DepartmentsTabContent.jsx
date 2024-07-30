@@ -16,6 +16,7 @@ import DepartmentsTable from "./DepartmentsTable";
 import HRMButton from "../Button/HRMButton";
 import axios from "axios";
 import Toast from "./Toast";
+import CustomDialog from "./Dialog";
 import { useSettingsContext } from "./context";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -65,9 +66,11 @@ const TextField = styled(MUITextField)({
 });
 
 export default function DepartmentsTabContent({ style }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { departmentsPeople, departments, fetchDepartmentsPeople } =
     useSettingsContext();
   const [selectedDepartment, setSelectedDepartment] = useState({});
+  const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1); //The current page number
   const [openAddDepartment, setOpenAddDepartment] = useState(false);
   const [openEditDepartment, setOpenEditDepartment] = useState(false);
@@ -81,11 +84,23 @@ export default function DepartmentsTabContent({ style }) {
     reset,
     formState: { errors },
   } = useForm();
+
   const [toast, setToast] = useState({
     open: false,
     severity: "success",
     message: "",
   });
+
+  const openDialog = (department, action) => {
+    if (action) setAction(action);
+    if (department) setSelectedDepartment(department);
+    setIsDialogOpen(true);
+  };
+  console.log(selectedDepartment);
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   //Function for changing the page number
   function handlePage(n) {
@@ -98,40 +113,6 @@ export default function DepartmentsTabContent({ style }) {
     reset({ departmentName: "" });
     clearErrors("departmentName");
     setOpenAddDepartment(true);
-  };
-
-  const handleAddDepartment = (data) => {
-    axios
-      .post("http://localhost:3000/api/departments", data)
-      .then((response) => {
-        console.log("Data submitted successfully:", response.data);
-        const responseMessage = response.data;
-        if (
-          typeof responseMessage === "string" &&
-          responseMessage?.includes("already exists")
-        ) {
-          setError("departmentName", {
-            message: responseMessage,
-          });
-        } else {
-          fetchDepartmentsPeople();
-          reset({ departmentName: "" });
-          setOpenAddDepartment(false);
-          setToast({
-            open: true,
-            severity: "success",
-            message: "Department created successfully",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error submitting data:", error);
-        setToast({
-          open: true,
-          severity: "error",
-          message: "Failed to add new department",
-        });
-      });
   };
 
   const handleClose = () => {
@@ -147,6 +128,45 @@ export default function DepartmentsTabContent({ style }) {
     setOpenEditDepartment(true);
   };
 
+  const handleSuccess = (response) => {
+    console.log("Data submitted successfully:", response.data);
+    const responseMessage = response.data;
+    if (
+      typeof responseMessage === "string" &&
+      responseMessage?.includes("already exists")
+    ) {
+      setError("departmentName", {
+        message: responseMessage,
+      });
+    } else {
+      fetchDepartmentsPeople();
+      reset({ departmentName: "" });
+      setOpenAddDepartment(false);
+      setOpenEditDepartment(false);
+      setToast({
+        open: true,
+        severity: "success",
+        message: "Department created/edited successfully",
+      });
+    }
+  };
+
+  const handleError = (error) => {
+    console.error("Error submitting data:", error);
+    setToast({
+      open: true,
+      severity: "error",
+      message: "Failed to add/edit department",
+    });
+  };
+
+  const handleAddDepartment = (data) => {
+    axios
+      .post("http://localhost:3000/api/departments", data)
+      .then(handleSuccess)
+      .catch(handleError);
+  };
+
   const handleEditDepartment = (data) => {
     const editDepartmentData = departments.find(
       (department) => department.id === selectedDepartment.id
@@ -157,35 +177,8 @@ export default function DepartmentsTabContent({ style }) {
         ...editDepartmentData,
         departmentName: data.departmentName,
       })
-      .then((response) => {
-        console.log("Data submitted successfully:", response.data);
-        const responseMessage = response.data;
-        if (
-          typeof responseMessage === "string" &&
-          responseMessage?.includes("already exists")
-        ) {
-          setError("departmentName", {
-            message: responseMessage,
-          });
-        } else {
-          fetchDepartmentsPeople();
-          reset({ departmentName: "" });
-          setOpenEditDepartment(false);
-          setToast({
-            open: true,
-            severity: "success",
-            message: "Department edited successfully",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error submitting data:", error);
-        setToast({
-          open: true,
-          severity: "error",
-          message: "Failed to edit department",
-        });
-      });
+      .then(handleSuccess)
+      .catch(handleError);
   };
 
   const handleEditClose = () => {
@@ -195,7 +188,6 @@ export default function DepartmentsTabContent({ style }) {
   const deleteDepartment = (selectedDepartment) => {
     console.log(selectedDepartment);
     setSelectedDepartment(selectedDepartment);
-    // setValue("departmentName", selectedDepartment.departmentName);
     setOpenDeleteDepartment(true);
   };
 
@@ -250,17 +242,18 @@ export default function DepartmentsTabContent({ style }) {
         style={{ marginBottom: "20px" }}
       >
         <HeadText>Departments</HeadText>
-        <HRMButton mode="primary" onClick={addDepartment}>
+        <HRMButton mode="primary" onClick={() => openDialog(undefined, "add")}>
           Add new
         </HRMButton>
       </Stack>
 
+      <CustomDialog open={isDialogOpen} onClose={closeDialog} action={action} checkedDepartment={selectedDepartment} />
+
       <Dialog open={openAddDepartment} onClose={handleClose}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-        >
-          <DialogTitle sx={{marginTop: "10px", paddingBottom: "0"}}>Add a new department</DialogTitle>
+        <Stack direction="row" justifyContent="space-between">
+          <DialogTitle sx={{ marginTop: "10px", paddingBottom: "0" }}>
+            Add a new department
+          </DialogTitle>
           <CloseIcon
             onClick={handleClose}
             sx={{
@@ -322,11 +315,10 @@ export default function DepartmentsTabContent({ style }) {
       </Dialog>
 
       <Dialog open={openEditDepartment} onClose={handleEditClose}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-        >
-          <DialogTitle sx={{marginTop: "10px", paddingBottom: "0"}}>Rename department</DialogTitle>
+        <Stack direction="row" justifyContent="space-between">
+          <DialogTitle sx={{ marginTop: "10px", paddingBottom: "0" }}>
+            Rename department
+          </DialogTitle>
           <CloseIcon
             onClick={handleEditClose}
             sx={{
@@ -388,11 +380,10 @@ export default function DepartmentsTabContent({ style }) {
       </Dialog>
 
       <Dialog open={openDeleteDepartment} onClose={handleDeleteClose}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-        >
-          <DialogTitle sx={{marginTop: "10px", paddingBottom: "0"}}>Where do you want to transfer employees?</DialogTitle>
+        <Stack direction="row" justifyContent="space-between">
+          <DialogTitle sx={{ marginTop: "10px", paddingBottom: "0" }}>
+            Where do you want to transfer employees?
+          </DialogTitle>
           <CloseIcon
             onClick={handleDeleteClose}
             sx={{
@@ -446,11 +437,7 @@ export default function DepartmentsTabContent({ style }) {
         </DialogContent>
       </Dialog>
 
-      <DepartmentsTable
-        editDepartmentBtn={editDepartment}
-        deleteDepartmentBtn={deleteDepartment}
-        sx={{ marginBottom: "40px" }}
-      />
+      <DepartmentsTable openDialog={openDialog} sx={{ marginBottom: "40px" }} />
       {departmentsPeople.length > 0 ? (
         <>
           {departmentsPeople.length > 10 && (

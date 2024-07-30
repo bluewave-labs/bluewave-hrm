@@ -26,7 +26,7 @@ const Text = styled(Typography)({
   lineHeight: "20px",
   color: "#101828",
 });
-export default function DepartmentsTable({ editDepartmentBtn,deleteDepartmentBtn, style }) {
+export default function DepartmentsTable({ openDialog, style }) {
   const { departmentsPeople } = useSettingsContext();
 
   const TableHeaderCell = styled(TableCell)({
@@ -79,12 +79,12 @@ export default function DepartmentsTable({ editDepartmentBtn,deleteDepartmentBtn
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  <HRMButton mode="primary" onClick={() => deleteDepartmentBtn(department)}>
+                  <HRMButton mode="primary" onClick={() => openDialog(department, "delete")}>
                     <b>Delete</b>
                   </HRMButton>
                   <HRMButton
                     mode="primary"
-                    onClick={() => editDepartmentBtn(department)}
+                    onClick={() => openDialog(department, "edit")}
                   >
                     {/* <a
                       href="#"
