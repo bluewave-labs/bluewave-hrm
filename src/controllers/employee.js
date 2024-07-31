@@ -202,3 +202,52 @@ exports.summarizeByJobTitles = async (req, res) => {
     res.status(400).json({ message: message.failed });
   }
 };
+
+// Routes for bulk changes, i.e. making changes to multiple employee objects at the same time
+exports.changeDepartment = async (req, res) => {
+  /*
+  The expected data format (how req.body should look like):
+  {
+  destinationDepartmentId: 2
+  employeeEmpIds: [1,2,3]
+  }
+  destinationDepartmentId is the id of the department where employees will be moved to.
+  employeeEmpIds is an array of affected employee ids.
+  */
+  console.log(req.body);
+  try {
+    const data = await db.employee.update(
+      { departmentId: req.body.destinationDepartmentId },
+      {
+        where: { empId: { [db.Sequelize.Op.in]: req.body.employeeEmpIds } },
+      }
+    );
+    res.status(200).json({ message: `${data} record(s) updated}` });
+  } catch (err) {
+    res.status(400).json({ message: message.failed });
+  }
+};
+
+exports.changeJob = async (req, res) => {
+  /*
+  The expected data format (how req.body should look like):
+  {
+  destinationRoleId: 2
+  employeeEmpIds: [1,2,3]
+  }
+  destinationRoleId is the id of the role where employees will be moved to.
+  employeeEmpIds is an array of affected employee ids.
+  */
+
+  try {
+    const data = await db.employee.update(
+      { roleId: req.body.destinationRoleId },
+      {
+        where: { empId: { [db.Sequelize.Op.in]: req.body.employeeEmpIds } },
+      }
+    );
+    res.status(200).json({ message: `${data} record(s) updated}` });
+  } catch (err) {
+    res.status(400).json({ message: message.failed });
+  }
+};
