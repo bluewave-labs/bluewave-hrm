@@ -18,6 +18,14 @@ import axios from "axios";
 import Toast from "./Toast";
 import { useSettingsContext } from "./context";
 
+const HeadText = styled(Typography)({
+  fontSize: "18px",
+  lineHeight: "28px",
+  color: "#101828",
+  fontWeight: "500",
+  marginBottom: "20px",
+});
+
 const TextField = styled(MUITextField)({
   "& fieldset": {
     borderColor: "1px solid #D0D5DD",
@@ -167,8 +175,8 @@ export default function CompanyProfileForm({ style }) {
         }}
       >
         <Grid container columns={10} rowSpacing={4} columnSpacing={1}>
-          <Grid item xs={10} textAlign="center">
-            <h3>Edit company profile information</h3>
+          <Grid item xs={10}>
+            <HeadText>Edit company profile information</HeadText>
           </Grid>
           {/*Textfield for company name*/}
           <Grid item xs={3}>

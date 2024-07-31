@@ -4,6 +4,7 @@ import {
   fetchDepartments as getDepartments,
   fetchDepartmentsPeople as getDepartmentsPeople,
   fetchJobTitles as getJobTitles,
+  fetchEmployeesByDepartment as getEmployeesByDepartment,
 } from "./api";
 
 const SettingsContext = createContext(undefined);
@@ -13,6 +14,7 @@ export const SettingsProvider = ({ children }) => {
   const [departments, setDepartments] = useState({});
   const [departmentsPeople, setDepartmentsPeople] = useState({});
   const [jobTitles, setJobTitles] = useState({});
+  const [employeesByDepartment, setEmployeesByDepartment] = useState({});
 
   const fetchCompany = async () => {
     const companyData = await getCompany();
@@ -35,11 +37,17 @@ export const SettingsProvider = ({ children }) => {
     setJobTitles(jobTitlesData);
   };
 
+  const fetchEmployeesByDepartment = async (employeeId) => {
+    const employeesByDepartmentData = await getEmployeesByDepartment(employeeId);
+    setEmployeesByDepartment(employeesByDepartmentData);
+  };
+
   useEffect(() => {
     fetchCompany();
     fetchDepartments();
     fetchDepartmentsPeople();
     fetchJobTitles();
+    fetchEmployeesByDepartment();
   }, []);
 
   const value = useMemo(
@@ -48,12 +56,14 @@ export const SettingsProvider = ({ children }) => {
       departments,
       departmentsPeople,
       jobTitles,
+      employeesByDepartment,
       fetchCompany,
       fetchDepartments,
       fetchDepartmentsPeople,
       fetchJobTitles,
+      fetchEmployeesByDepartment,
     }),
-    [company, departments, departmentsPeople, jobTitles]
+    [company, departments, departmentsPeople, jobTitles, employeesByDepartment]
   );
 
   return (

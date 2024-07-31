@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Box, Stack } from "@mui/system";
+import { Stack } from "@mui/system";
 import {
   styled,
   TextField as MUITextField,
@@ -13,6 +13,7 @@ import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Dialog = styled(MUIDialog)({
   "& .MuiDialog-paper": {
@@ -59,23 +60,19 @@ const TextField = styled(MUITextField)({
   },
 });
 
-const getDialogConfig = (action) => {
-  const configs = {
-    add: {
-      title: "Add a new department",
-      label: "Name",
-    },
-    edit: {
-      title: "Rename department",
-      label: "New name",
-    },
-    delete: {
-      title: "Where do you want to transfer employees?",
-      label: "Transfer employees to",
-    },
-  };
-
-  return configs[action] || {};
+const configs = {
+  add: {
+    title: "Add a new department",
+    label: "Name",
+  },
+  edit: {
+    title: "Rename department",
+    label: "New name",
+  },
+  delete: {
+    title: "Where do you want to transfer employees?",
+    label: "Transfer employees to",
+  },
 };
 
 export default function CustomDialog({
@@ -83,13 +80,9 @@ export default function CustomDialog({
   onClose,
   action,
   checkedDepartment,
+  setToast,
 }) {
-  console.log("custom dialog selected", checkedDepartment);
-  const [dialog, setDialog] = useState({ title: "", label: "" });
-  const { departments } = useSettingsContext();
-  console.log("departments dialog");
-  console.log(departments);
-  const deleteDepartment = action === "delete";
+  const { departments, fetchDepartmentsPeople } = useSettingsContext();
   const {
     register,
     handleSubmit,
@@ -99,24 +92,108 @@ export default function CustomDialog({
     reset,
     formState: { errors },
   } = useForm();
-  console.log("state selected", checkedDepartment);
+  const addAction = action === "add";
+  const deleteAction = action === "delete";
 
   useEffect(() => {
-    setDialog(getDialogConfig(action));
-  }, [action]);
+    reset({ departmentName: checkedDepartment?.departmentName ?? "" });
+  }, [open]);
 
-  if (action === "edit")
-    setValue("departmentName", checkedDepartment.departmentName);
+  const handleSuccess = (response) => {
+    console.log("Data submitted successfully:", response.data);
+    const responseMessage = response.data;
+    if (
+      typeof responseMessage === "string" &&
+      responseMessage?.includes("already exists")
+    ) {
+      setError("departmentName", {
+        message: responseMessage,
+      });
+    } else {
+      fetchDepartmentsPeople();
+      onClose();
+      setToast({
+        open: true,
+        severity: "success",
+        message: addAction
+          ? "Department created successfully"
+          : "Department edited successfully",
+      });
+    }
+  };
 
-  const handleDataSubmit = (action) => {
-    console.log("handle Submit", action);
+  const handleError = (error) => {
+    console.error("Error submitting data:", error);
+    onClose();
+    setToast({
+      open: true,
+      severity: "error",
+      message: addAction
+        ? "Failed to add department"
+        : "Failed to edit department",
+    });
+  };
+
+  const addDepartment = (data) => {
+    axios
+      .post("http://localhost:3000/api/departments", data)
+      .then(handleSuccess)
+      .catch(handleError);
+  };
+
+  const editDepartment = (data) => {
+    const editDepartmentData = departments.find(
+      (department) => department.id === checkedDepartment.id
+    );
+
+    axios
+      .put("http://localhost:3000/api/departments", {
+        ...editDepartmentData,
+        departmentName: data.departmentName,
+      })
+      .then(handleSuccess)
+      .catch(handleError);
+  };
+
+  const deleteDepartment = () => {
+    axios
+      .delete(`http://localhost:3000/api/departments/${checkedDepartment.id}`)
+      .then((response) => {
+        console.log("Data deleted successfully:", response.data);
+        fetchDepartmentsPeople();
+        onClose();
+        setToast({
+          open: true,
+          severity: "success",
+          message: "Department deleted successfully",
+        });
+      })
+      .catch((error) => {
+        console.error("Error submitting data:", error);
+        onClose();
+        setToast({
+          open: true,
+          severity: "error",
+          message: "Failed to delete department",
+        });
+      });
+  };
+
+  const handleDataSubmit = (data) => {
+    if (action === "add") {
+      addDepartment(data);
+    } else if (action === "edit") {
+      editDepartment(data);
+    } else if (action === "delete") {
+      deleteDepartment();
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
         <DialogTitle sx={{ marginTop: "10px", paddingBottom: "0" }}>
-          {dialog.title}
+          {configs[action]?.title}
         </DialogTitle>
         <CloseIcon
           onClick={onClose}
@@ -134,15 +211,15 @@ export default function CustomDialog({
         />
       </Stack>
       <DialogContent>
-        <TextLabel>{dialog.label}</TextLabel>
+        <TextLabel>{configs[action]?.label}</TextLabel>
         <form>
-          {deleteDepartment ? (
+          {deleteAction ? (
             <Autocomplete
               disablePortal
               options={departments}
               getOptionLabel={(option) => option.departmentName}
               renderInput={(params) => <TextField {...params} />}
-              value={checkedDepartment}
+              value={departments[0]}
               onChange={(_, value) => {
                 checkedDepartment = value;
               }}
@@ -182,9 +259,7 @@ export default function CustomDialog({
             <HRMButton
               mode="primary"
               onClick={
-                deleteDepartment
-                  ? handleDataSubmit
-                  : handleSubmit(handleDataSubmit)
+                deleteAction ? handleDataSubmit : handleSubmit(handleDataSubmit)
               }
             >
               Save
