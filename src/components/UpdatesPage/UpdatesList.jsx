@@ -9,10 +9,9 @@ import HRMButton from '../Button/HRMButton';
 import NewTeamMember from '../PopupComponents/NewTeamMember';
 import TimeOffRequestSentWindow from '../PopupComponents/TimeOffRequestSentWindow';
 import TimeOffApproval from '../PopupComponents/TimeOffApproval';
-//import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-const axios = require('axios').default;
+import axios from 'axios';
 
 /**
  * Menu component for listing update notifications in the home page.
@@ -46,7 +45,7 @@ export default function UpdatesList({updates, refresh, style}) {
 
     //Function for updating the status of an update 
     function handleSwitch(up) {
-        const url = `${process.env.URL}/notifications/`;
+        const url = `http://localhost:5000/api/notifications/`;
         console.log("Running handleSwitch()");
         axios.put(
             url, 
@@ -83,6 +82,8 @@ export default function UpdatesList({updates, refresh, style}) {
         }
         //Retrieve details for "New time off request" update
         else if (up.subject === "New time off request") {
+            details.notification = up;
+            details.timeOffId = up.timeOffHistory.id;
             details.avatar = up.employee.photo;
             details.name = `${up.employee.firstName} ${up.employee.lastName}`;
             details.role = up.employee.role.roleTitle;
@@ -95,6 +96,7 @@ export default function UpdatesList({updates, refresh, style}) {
                 ${up.timeOffHistory.endDate}`;
             details.requestedDaysTotal = Math.ceil(up.timeOffHistory.hours / 24);
             details.timeOffCategory = up.timeOff.category;
+            details.status = up.timeOffHistory.status;
             setApprovalDetails(details);
         }
         //Retrieve details for "Time off request sent" update
@@ -180,7 +182,14 @@ export default function UpdatesList({updates, refresh, style}) {
             </Dialog>
             {/*New time off request update popup component*/}
             <Dialog open={approval} onClose={() => setApproval(false)}>
-                <TimeOffApproval request_information={approvalDetails} close={() => setApproval(false)} />
+                <TimeOffApproval 
+                    request_information={approvalDetails} 
+                    close={() => setApproval(false)} 
+                    refresh={() => {
+                        setApproval(false);
+                        handleSwitch(approvalDetails.notification);
+                    }}
+                />
             </Dialog>
         </>
     );
@@ -189,7 +198,10 @@ export default function UpdatesList({updates, refresh, style}) {
 //Control panel settings for storybook
 UpdatesList.propTypes = {
     //List of updates to be rendered
-    updates: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string))
+    updates: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
+
+    //Function for refreshing list of updates
+    refresh: PropTypes.func
 };
 
 //Default values for this component
