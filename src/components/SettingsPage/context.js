@@ -4,7 +4,7 @@ import {
   fetchDepartments as getDepartments,
   fetchDepartmentsPeople as getDepartmentsPeople,
   fetchJobTitles as getJobTitles,
-  fetchEmployeesByDepartment as getEmployeesByDepartment,
+  fetchEmployees as getEmployees,
 } from "./api";
 
 const SettingsContext = createContext(undefined);
@@ -14,7 +14,7 @@ export const SettingsProvider = ({ children }) => {
   const [departments, setDepartments] = useState({});
   const [departmentsPeople, setDepartmentsPeople] = useState({});
   const [jobTitles, setJobTitles] = useState({});
-  const [employeesByDepartment, setEmployeesByDepartment] = useState({});
+  const [employees, setEmployees] = useState({});
 
   const fetchCompany = async () => {
     const companyData = await getCompany();
@@ -23,7 +23,6 @@ export const SettingsProvider = ({ children }) => {
 
   const fetchDepartments = async () => {
     const departmentsData = await getDepartments();
-    console.log(departmentsData);
     setDepartments(departmentsData);
   };
 
@@ -37,9 +36,9 @@ export const SettingsProvider = ({ children }) => {
     setJobTitles(jobTitlesData);
   };
 
-  const fetchEmployeesByDepartment = async (employeeId) => {
-    const employeesByDepartmentData = await getEmployeesByDepartment(employeeId);
-    setEmployeesByDepartment(employeesByDepartmentData);
+  const fetchEmployees = async () => {
+    const employees = await getEmployees();
+    setEmployees(employees);
   };
 
   useEffect(() => {
@@ -47,7 +46,7 @@ export const SettingsProvider = ({ children }) => {
     fetchDepartments();
     fetchDepartmentsPeople();
     fetchJobTitles();
-    fetchEmployeesByDepartment();
+    fetchEmployees();
   }, []);
 
   const value = useMemo(
@@ -56,14 +55,14 @@ export const SettingsProvider = ({ children }) => {
       departments,
       departmentsPeople,
       jobTitles,
-      employeesByDepartment,
+      employees,
       fetchCompany,
       fetchDepartments,
       fetchDepartmentsPeople,
       fetchJobTitles,
-      fetchEmployeesByDepartment,
+      fetchEmployees,
     }),
-    [company, departments, departmentsPeople, jobTitles, employeesByDepartment]
+    [company, departments, departmentsPeople, jobTitles, employees]
   );
 
   return (

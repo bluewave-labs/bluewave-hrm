@@ -12,7 +12,7 @@ import {
 import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
 import CloseIcon from "@mui/icons-material/Close";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 
 const Dialog = styled(MUIDialog)({
@@ -79,14 +79,25 @@ export default function CustomDialog({
   open,
   onClose,
   action,
-  checkedDepartment,
+  selectedDepartment,
   setToast,
 }) {
-  const { departments, fetchDepartmentsPeople } = useSettingsContext();
+  const { departments, fetchDepartments, fetchDepartmentsPeople, employees } =
+    useSettingsContext();
+  const transfDepartmentOptions = useMemo(() => {
+    if (!selectedDepartment) return [];
+
+    return departments
+      .filter((department) => department.id !== selectedDepartment.id)
+      .sort((a, b) => a.departmentName.localeCompare(b.departmentName));
+  }, [selectedDepartment]);
+
+  const [transferEmployeesDepartment, setTransferEmployeesDepartment] =
+    useState(transfDepartmentOptions[0] || {});
+
   const {
     register,
     handleSubmit,
-    setValue,
     setError,
     clearErrors,
     reset,
@@ -96,8 +107,12 @@ export default function CustomDialog({
   const deleteAction = action === "delete";
 
   useEffect(() => {
-    reset({ departmentName: checkedDepartment?.departmentName ?? "" });
+    reset({ departmentName: selectedDepartment?.departmentName ?? "" });
   }, [open]);
+
+  useEffect(() => {
+    setTransferEmployeesDepartment(transfDepartmentOptions[0] || {});
+  }, [transfDepartmentOptions]);
 
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);
@@ -143,7 +158,7 @@ export default function CustomDialog({
 
   const editDepartment = (data) => {
     const editDepartmentData = departments.find(
-      (department) => department.id === checkedDepartment.id
+      (department) => department.id === selectedDepartment.id
     );
 
     axios
@@ -155,12 +170,13 @@ export default function CustomDialog({
       .catch(handleError);
   };
 
-  const deleteDepartment = () => {
+  const deleteDepartment = () =>
     axios
-      .delete(`http://localhost:3000/api/departments/${checkedDepartment.id}`)
+      .delete(`http://localhost:3000/api/departments/${selectedDepartment.id}`)
       .then((response) => {
         console.log("Data deleted successfully:", response.data);
         fetchDepartmentsPeople();
+        fetchDepartments();
         onClose();
         setToast({
           open: true,
@@ -177,6 +193,32 @@ export default function CustomDialog({
           message: "Failed to delete department",
         });
       });
+
+  const transferEmployees = (employeesTransfer) =>
+    axios
+      .post(
+        `http://localhost:3000/api/employees/change/department`,
+        employeesTransfer
+      )
+      .then((response) => {
+        console.log("Transfer employess successfully:", response.data);
+        deleteDepartment();
+      })
+      .catch((error) => {
+        console.error("Transfer employess error data:", error);
+      });
+
+  const handleDeleteDepartment = () => {
+    const employeesByDepartment = employees
+      .filter((employee) => employee.departmentId === selectedDepartment.id)
+      .map((employee) => employee.empId);
+
+    const employeesTransfer = {
+      destinationDepartmentId: transferEmployeesDepartment.id,
+      employeeEmpIds: employeesByDepartment,
+    };
+
+    transferEmployees(employeesTransfer);
   };
 
   const handleDataSubmit = (data) => {
@@ -185,7 +227,7 @@ export default function CustomDialog({
     } else if (action === "edit") {
       editDepartment(data);
     } else if (action === "delete") {
-      deleteDepartment();
+      handleDeleteDepartment();
     }
   };
 
@@ -214,19 +256,20 @@ export default function CustomDialog({
         <TextLabel>{configs[action]?.label}</TextLabel>
         <form>
           {deleteAction ? (
-            <Autocomplete
-              disablePortal
-              options={departments}
-              getOptionLabel={(option) => option.departmentName}
-              renderInput={(params) => <TextField {...params} />}
-              value={departments[0]}
-              onChange={(_, value) => {
-                checkedDepartment = value;
-              }}
-              fullWidth
-              size="small"
-              color="secondary"
-            />
+             
+              <Autocomplete
+                options={transfDepartmentOptions}
+                getOptionLabel={(option) => option.departmentName}
+                renderInput={(params) => <TextField {...params} />}
+                value={transferEmployeesDepartment}
+                onChange={(_, value) => {
+                  setTransferEmployeesDepartment(value);
+                }}
+                fullWidth
+                size="small"
+                color="secondary"
+              />
+            
           ) : (
             <TextField
               size="small"

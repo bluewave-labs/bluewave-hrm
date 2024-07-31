@@ -18,10 +18,8 @@ const HeadText = styled(Typography)({
 
 export default function DepartmentsTabContent({ style }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { departmentsPeople, departments, fetchEmployeesByDepartment} =
-    useSettingsContext();
+  const { departmentsPeople, departments } = useSettingsContext();
   const [selectedDepartment, setSelectedDepartment] = useState({});
-  const [transferEmployees,setTransferEmployees] = useState([]);
   const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [toast, setToast] = useState({
@@ -33,8 +31,6 @@ export default function DepartmentsTabContent({ style }) {
   const openDialog = (department, action) => {
     if (action) setAction(action);
     if (department) setSelectedDepartment(department);
-    const employeesTransf = fetchEmployeesByDepartment(department.id);
-    console.log("employeesTransf", employeesTransf);
     setIsDialogOpen(true);
   };
 
@@ -43,13 +39,16 @@ export default function DepartmentsTabContent({ style }) {
     setSelectedDepartment();
   };
 
-  const departmentsToDisplay = departmentsPeople.slice((currentPage - 1) * 8, currentPage * 8);
+  const departmentsToDisplay = departmentsPeople.slice(
+    (currentPage - 1) * 8,
+    currentPage * 8
+  );
 
   const handlePage = (n) => {
     if (n > 0 && n <= Math.ceil(departments.length / 8)) {
       setCurrentPage(n);
     }
-  }
+  };
 
   const handleCloseToast = () => {
     setToast({ ...toast, open: false });
@@ -87,7 +86,7 @@ export default function DepartmentsTabContent({ style }) {
           open={isDialogOpen}
           onClose={closeDialog}
           action={action}
-          checkedDepartment={selectedDepartment}
+          selectedDepartment={selectedDepartment}
           setToast={setToast}
         />
 
@@ -118,4 +117,4 @@ export default function DepartmentsTabContent({ style }) {
       </Grid>
     </Box>
   );
-} 
+}
