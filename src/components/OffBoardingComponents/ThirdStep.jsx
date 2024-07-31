@@ -53,9 +53,9 @@ function ThirdStep() {
         label="[Answer]"
         multiline
         rows={3}
-        value={finalData["QuestionOne"]}
+        value={finalData["answer1"]}
         onChange={(e) => {
-          setFinalData({ ...finalData, QuestionOne: e.target.value });
+          setFinalData({ ...finalData, answer1: e.target.value });
         }}
       />
       <Typography
@@ -74,9 +74,9 @@ function ThirdStep() {
         label="[Answer]"
         multiline
         rows={3}
-        value={finalData["QuestionTwo"]}
+        value={finalData["answer2"]}
         onChange={(e) => {
-          setFinalData({ ...finalData, QuestionTwo: e.target.value });
+          setFinalData({ ...finalData, answer2: e.target.value });
         }}
       />
       <Typography
@@ -94,9 +94,9 @@ function ThirdStep() {
         label="[Answer]"
         multiline
         rows={3}
-        value={finalData["QuestionThree"]}
+        value={finalData["answer3"]}
         onChange={(e) => {
-          setFinalData({ ...finalData, QuestionThree: e.target.value });
+          setFinalData({ ...finalData, answer3: e.target.value });
         }}
       />
       <Typography
@@ -115,9 +115,9 @@ function ThirdStep() {
         label="[Answer]"
         multiline
         rows={3}
-        value={finalData["QuestionFour"]}
+        value={finalData["answer4"]}
         onChange={(e) => {
-          setFinalData({ ...finalData, QuestionFour: e.target.value });
+          setFinalData({ ...finalData, answer4: e.target.value });
         }}
       />
       <Typography
@@ -136,9 +136,9 @@ function ThirdStep() {
         label="[Answer]"
         multiline
         rows={3}
-        value={finalData["QuestionFive"]}
+        value={finalData["answer5"]}
         onChange={(e) => {
-          setFinalData({ ...finalData, QuestionFive: e.target.value });
+          setFinalData({ ...finalData, answer5: e.target.value });
         }}
       />
       <br />
@@ -155,7 +155,7 @@ function ThirdStep() {
           }}
           onClick={() => setCurrentStep(currentStep - 1)}
         >
-          <ArrowBackIcon></ArrowBackIcon>Previous
+          <ArrowBackIcon sx={{padding:"2px"}}></ArrowBackIcon>Previous
         </HRMButton>
         <HRMButton
           mode={"primary"}

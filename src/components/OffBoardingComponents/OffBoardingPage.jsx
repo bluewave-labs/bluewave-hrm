@@ -1,25 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
-import { Step, StepLabel, Stepper } from "@mui/material";
 import { multiStepContext } from "../../context/stepContext";
 import FinalStep from "./FinalStep";
-import {
-  bgcolor,
-  Box,
-  display,
-  height,
-  margin,
-  padding,
-  textAlign,
-  width,
-} from "@mui/system";
+import { Box } from "@mui/system";
 import CustomizedSteppers from "../CustomizedSteppers/CustomizedSteppers";
-import { Description } from "@mui/icons-material";
 
 function OffBoardingPage() {
-  const { currentStep } = useContext(multiStepContext);
+  const { currentStep, finalData } = useContext(multiStepContext);
+  
+
   const stepStyle = {
     "&.MuiStepper-root": {
       padding: "50px 50px",
@@ -77,12 +68,23 @@ function OffBoardingPage() {
         width={"1003px"}
         height={"166px"}
         margin={"20px auto"}
-        sx={{ border: "2px solid #ebebeb", justifyContent:"center", alignContent:"center"}}
+        sx={{
+          border: "2px solid #ebebeb",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
       >
-        <CustomizedSteppers stepnumber={currentStep - 1} steps={[{label:"Start",description:""},{label:"Sign and Upload",description:""},{label:"Complete questionnaire",description:""},{label:"Finish",description:""}]}/>
+        <CustomizedSteppers
+          stepnumber={currentStep - 1}
+          steps={[
+            { label: "Start", description: "" },
+            { label: "Sign and Upload", description: "" },
+            { label: "Complete questionnaire", description: "" },
+            { label: "Finish", description: "" },
+          ]}
+        />
       </Box>
       {showstep(currentStep)}
-      
     </>
   );
 }

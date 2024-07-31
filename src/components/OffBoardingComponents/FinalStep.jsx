@@ -3,10 +3,14 @@ import { Box } from '@mui/system'
 import React, { useContext } from 'react'
 import HRMButton from '../Button/HRMButton'
 import { multiStepContext } from '../../context/stepContext'
-import thankYouVector from '../../Images/thank-you-vector.svg';
+import thankYouVector from '../../Images/placeholder.svg';
 
 function FinalStep() {
-    const { currentStep,setCurrentStep } = useContext(multiStepContext);
+    const { FinalData } = useContext(multiStepContext);
+    const handleSubmit = () =>{
+      
+
+    }
     return (
       <Box
         width={"1003px"}
@@ -16,8 +20,17 @@ function FinalStep() {
       >
         <img src={thankYouVector} style={{margin:'20px auto'}} alt='thank-you-vector'/>
         <Typography variant="h1" fontSize={"16px"} fontWeight={600} margin={"0 auto 20px auto"}>
-        Thank you for completing the offboarding!
+        All set. Thank you for completing the offboarding!
         </Typography>
+        <Typography
+        fontSize={"13px"}
+        fontWeight={400}
+        width={"70%"}
+        margin={"20px auto"}
+        // textAlign={'ce'}
+      >
+        Note that your responses will only be sent to the HR admin, and not your manager.
+      </Typography>
         {/* <HRMButton
         mode={"secondaryA"}
         style={{
@@ -33,7 +46,7 @@ function FinalStep() {
         <HRMButton
           mode={"primary"}
           style={{ padding: "10px", width: "218px", height: "32px", margin:'0 auto 20px auto' }}
-          onClick={() => setCurrentStep(4)}
+          onClick={handleSubmit}
         >
           Complete and notify the HR
         </HRMButton>
