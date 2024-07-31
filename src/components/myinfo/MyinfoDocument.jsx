@@ -14,11 +14,11 @@ import axios from 'axios';
 import '../../App.css'
 import { upload } from '@testing-library/user-event/dist/upload';
 
-const rows = [
-  {name:"Offer letter",date:"Jan 4, 2022"},
-  {name:"Vacation types",date:"Jan 4, 2022"},
-  {name:"Offer letter2",date:"Jan 2, 2022"}
-]
+// const rows = [
+//   {name:"Offer letter",date:"Jan 4, 2022"},
+//   {name:"Vacation types",date:"Jan 4, 2022"},
+//   {name:"Offer letter2",date:"Jan 2, 2022"}
+// ]
 
 
 
@@ -28,7 +28,7 @@ const MyinfoDocument = () => {
   const fileInputRef = React.createRef();
   const [progress,setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
-  const [currentfile, setCurrentFile] = useState('')
+  const [currentfilename, setCurrentFileName] = useState('')
   const [filesize, setFileSize] = useState(0)
   const [filelist, setFileList] = useState([]);
   const [uploaded, setUploaded] = useState(false)
@@ -93,24 +93,21 @@ const MyinfoDocument = () => {
   // Handle file change event
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if(file) {
+    
       const name = file.name.split('.')[0]
-      const size = Math.round(file.size/1000000)
+      const size =(file.size/1000000).toFixed(1)
       const date = new Date();
       const newdate = date.toLocaleDateString();
       const uploadedDate = formatDate(newdate)
-
-      setCurrentFile(file.name.split('.')[0])
+      setCurrentFileName(file.name.split('.')[0])
       setFileSize(size)
+      console.log('File size in MB:', size);
       addFile({
         name: name,
         size: size,
         uploadedDate: uploadedDate
       })
-    }
-    console.log(filelist)
-    // uploadFileBackend()
-  
+    
   }
  // Trigger file input 
   const handleClick = () => {
@@ -223,7 +220,7 @@ const handleDelete = (index) => {
       sx={{ border: '2px solid #EAECF0',borderRadius:'12px', background: `linear-gradient(to right, #F9FAFB ${progress}%, transparent ${progress}%), transparent 100%` }}
     >
       <Stack>
-        <Typography sx={{fontSize:'14px',fontWeight:'medium',color:'#344054',fontFamily:'Inter',marginBottom:'4px'}}>{currentfile}</Typography>
+        <Typography sx={{fontSize:'14px',fontWeight:'medium',color:'#344054',fontFamily:'Inter',marginBottom:'4px'}}>{currentfilename}</Typography>
         <Typography sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter',marginBottom:'4px'}}>{filesize}MB – {progress}% uploaded</Typography>
       </Stack>
       <Stack sx={{ position: 'relative' }}>

@@ -75,7 +75,7 @@ const DocumentMyinfo = () => {
     const file = e.target.files[0];
     if(file) {
       const name = file.name.split('.')[0]
-      const size = Math.round(file.size/1000000)
+      const size =(file.size/1000000).toFixed(1)
       const date = new Date();
       const newdate = date.toLocaleDateString();
       const uploadedDate = formatDate(newdate)
