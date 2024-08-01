@@ -10,8 +10,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
-import DepartmentsTabContent from "./DepartmentsTabContent";
-import JobTitlesTabContent from "./JobTitlesTabContent";
+import DepartmentsTabContent from "./departments/DepartmentsTabContent";
+import JobTitlesTabContent from "./jobTitles/JobTitlesTabContent";
 import { SettingsProvider } from "./context";
 
 const StyledTab = styled(Tab)({
@@ -111,20 +111,17 @@ export default function SettingsPage({ style }) {
                       label="Employee fields"
                       value="Employee fields"
                     />
-                    <StyledTab
-                      label="Offboarding"
-                      value="Offboarding"
-                    />
+                    <StyledTab label="Offboarding" value="Offboarding" />
                   </TabList>
                 </Box>
                 <StyledTabPanel value="Company profile">
-                  <CompanyProfileForm/>
+                  <CompanyProfileForm />
                 </StyledTabPanel>
                 <StyledTabPanel value="Departments">
-                  <DepartmentsTabContent/>
+                  <DepartmentsTabContent flag="departments" />
                 </StyledTabPanel>
                 <StyledTabPanel value="Job titles">
-                  <JobTitlesTabContent/>
+                  <JobTitlesTabContent flag="jobTitles" />
                 </StyledTabPanel>
               </TabContext>
             </Box>

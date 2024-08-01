@@ -7,9 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import { Typography, Button } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
-import { colors, fonts } from "../../Styles";
+import { colors, fonts } from "../../../Styles";
 import Stack from "@mui/system/Stack";
-import { useSettingsContext } from "./context";
 
 const TextHeader = styled(Typography)({
   fontSize: "14px",

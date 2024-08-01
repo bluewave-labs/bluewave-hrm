@@ -1,15 +1,14 @@
+import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import Typography from "@mui/material/Typography";
+import { Typography, Button } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
-import { colors, fonts } from "../../Styles";
-import PropTypes from "prop-types";
+import { colors, fonts } from "../../../Styles";
 import Stack from "@mui/system/Stack";
-import HRMButton from "../Button/HRMButton";
 
 const TextHeader = styled(Typography)({
   fontSize: "14px",
@@ -24,8 +23,22 @@ const Text = styled(Typography)({
   lineHeight: "20px",
   color: "#101828",
 });
-export default function JobTitlesTable({ jobTitles, style }) {
-  //Custom style elements
+
+const EditButton = styled(Button)({
+  textTransform: "none",
+  color: "#7F56D9",
+  textDecoration: "none",
+  fontWeight: "600",
+});
+
+const DeleteButton = styled(Button)({
+  textTransform: "none",
+  color: "#475467",
+  textDecoration: "none",
+  fontWeight: "600",
+});
+export default function JobTitlesTable({ openDialog, departments, style }) {
+
   const TableHeaderCell = styled(TableCell)({
     color: colors.darkGrey,
     paddingTop: "10px",
@@ -49,7 +62,6 @@ export default function JobTitlesTable({ jobTitles, style }) {
       }}
     >
       <Table>
-        {/*Table header*/}
         <TableHead>
           <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
             <TableHeaderCell sx={{ width: "50%", paddingLeft: "25px" }}>
@@ -61,15 +73,14 @@ export default function JobTitlesTable({ jobTitles, style }) {
             <TableHeaderCell></TableHeaderCell>
           </TableRow>
         </TableHead>
-        {/*Policy information*/}
         <TableBody>
-          {jobTitles.map((jobTitle) => (
-            <TableRow>
+          {departments.map((department) => (
+            <TableRow key={department.id}>
               <TableBodyCell sx={{ width: "50%", paddingLeft: "25px" }}>
-                <Text>{jobTitle.roleTitle}</Text>
+                <Text>{department.departmentName}</Text>
               </TableBodyCell>
               <TableBodyCell>
-                <Text>{jobTitle.count}</Text>
+                <Text>{department.count}</Text>
               </TableBodyCell>
               <TableBodyCell>
                 <Stack
@@ -77,21 +88,14 @@ export default function JobTitlesTable({ jobTitles, style }) {
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  <HRMButton mode="tertiary">
+                  <DeleteButton
+                    onClick={() => openDialog(department, "delete")}
+                  >
                     <b>Delete</b>
-                  </HRMButton>
-                  <HRMButton mode="tertiary">
-                    <a
-                      href="#"
-                      style={{
-                        color: "#7F56D9",
-                        textDecoration: "none",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Edit
-                    </a>
-                  </HRMButton>
+                  </DeleteButton>
+                  <EditButton onClick={() => openDialog(department, "edit")}>
+                    Edit
+                  </EditButton>
                 </Stack>
               </TableBodyCell>
             </TableRow>
@@ -101,14 +105,3 @@ export default function JobTitlesTable({ jobTitles, style }) {
     </TableContainer>
   );
 }
-
-//Control panel settings for storybook
-JobTitlesTable.propTypes = {
-  //Time off policies to be displayed
-  jobtitles: PropTypes.objectOf(PropTypes.array),
-};
-
-//Default values for this component
-JobTitlesTable.defaultProps = {
-  style: {},
-};
