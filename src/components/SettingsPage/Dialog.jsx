@@ -22,13 +22,6 @@ const Dialog = styled(MUIDialog)({
   },
 });
 
-const HeadText = styled(Typography)({
-  fontSize: "18px",
-  fontWeight: "500",
-  lineHeight: "28px",
-  color: " #344054",
-});
-
 const DialogTitle = styled(MUIDialogTitle)({
   fontSize: "16px",
   fontWeight: "600",
@@ -126,6 +119,7 @@ export default function CustomDialog({
       });
     } else {
       fetchDepartmentsPeople();
+      fetchDepartments();
       onClose();
       setToast({
         open: true,
