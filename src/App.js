@@ -4,13 +4,14 @@ import MyInfoMain from './components/myinfo/MyInfoMain';
 import { MyInfoEdit } from './components/myinfo/MyInfoEdit';
 import Page from './components/StaticComponents/Page';
 import { EmployeeProvider } from './components/myinfo/EmployeeContext';
-import HeadcountChanges from './components/Reports/HeadcountChanges';
+
 import HeadcountChanges2 from './components/Reports/HeadcountChanges2';
+import MonthlyNewEmp from './components/Reports/MonthlyNewEmp'
 function App() {
   return (
     <div className="App">
-      {/* <HeadcountChanges/>
-      <HeadcountChanges2/> */}
+      <HeadcountChanges2/>
+      <MonthlyNewEmp/>
       <EmployeeProvider>
         <Routes>
         

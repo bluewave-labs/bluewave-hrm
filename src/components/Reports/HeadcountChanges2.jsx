@@ -3,6 +3,7 @@ import React, { useEffect,useState } from 'react';
 import { Card, Typography, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LineChart } from '@mui/x-charts/LineChart';
+import axios from 'axios';
 
 const theme = createTheme({
   typography: {
@@ -36,16 +37,16 @@ const theme = createTheme({
 });
 
 
-const getAllEmployeesAPI = async ()=> {
-  const res = await fetch('http://localhost:5000/api/employees', {
-    method:'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  });
-  const result = await res.json();
-  return result
-}
+// const getAllEmployeesAPI = async ()=> {
+//   const res = await fetch('http://localhost:5000/api/employees', {
+//     method:'GET',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     }
+//   });
+//   const result = await res.json();
+//   return result
+// }
 
 const xLabels = [
   'Jan',
@@ -63,33 +64,47 @@ const xLabels = [
 ];
 
 export default function HeadcountChanges() {
-  const [headcount,setHeadcount] = useState([])
+  const [cumulativeHireStats, setCumulativeHireStats] = useState([]);
 
   useEffect(() => {
-    const getEmployees = async () => {
+    const fetchEmployeeData = async () => {
       try {
-        const result = await getAllEmployeesAPI();
-        return result;
+        const response = await axios.get('http://localhost:5000/api/employees'); // Adjust the endpoint as needed
+        const employeeData = response.data;
+
+        // Initialize counts array
+        const counts = Array(12).fill(0);
+
+        // Process data to count employees by month
+        employeeData.forEach(emp => {
+          const hireDate = new Date(emp.hireDate);
+          const month = hireDate.getMonth(); // Months are 0-based in JS
+          counts[month] += 1;
+        });
+
+        // Calculate cumulative counts
+        const cumulativeCounts = counts.reduce((acc, count, index) => {
+          if (index === 0) {
+            acc[index] = count;
+          } else {
+            acc[index] = acc[index - 1] + count;
+          }
+          return acc;
+        }, []);
+
+        setCumulativeHireStats(cumulativeCounts);
+        console.log("cumulative",cumulativeCounts)
       } catch (error) {
-        console.log("Error getting user data for head counts", error);
-        return [];
+        console.error('Error fetching employee data:', error);
       }
     };
 
-    const fetchEmployees = async () => {
-      const result = await getEmployees();
-      console.log(result.length)
-      const headcount = result.length
-      setHeadcount(headcount);
-   
-    };
-
-    fetchEmployees();
+    fetchEmployeeData();
   }, []);
 
 
   
-const pData = [headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount];
+const pData = cumulativeHireStats
 // const pData = [headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount];
   return (
 
