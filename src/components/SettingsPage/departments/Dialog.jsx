@@ -9,8 +9,8 @@ import {
   DialogContent,
   Autocomplete,
 } from "@mui/material";
-import HRMButton from "../Button/HRMButton";
-import { useSettingsContext } from "./context";
+import HRMButton from "../../Button/HRMButton";
+import { useSettingsContext } from "../context";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
@@ -250,20 +250,18 @@ export default function CustomDialog({
         <TextLabel>{configs[action]?.label}</TextLabel>
         <form>
           {deleteAction ? (
-             
-              <Autocomplete
-                options={transfDepartmentOptions}
-                getOptionLabel={(option) => option.departmentName}
-                renderInput={(params) => <TextField {...params} />}
-                value={transferEmployeesDepartment}
-                onChange={(_, value) => {
-                  setTransferEmployeesDepartment(value);
-                }}
-                fullWidth
-                size="small"
-                color="secondary"
-              />
-            
+            <Autocomplete
+              options={transfDepartmentOptions}
+              getOptionLabel={(option) => option.departmentName}
+              renderInput={(params) => <TextField {...params} />}
+              value={transferEmployeesDepartment}
+              onChange={(_, value) => {
+                setTransferEmployeesDepartment(value);
+              }}
+              fullWidth
+              size="small"
+              color="secondary"
+            />
           ) : (
             <TextField
               size="small"

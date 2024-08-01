@@ -1,13 +1,13 @@
 import { Box, Stack } from "@mui/system";
 import { styled, Typography } from "@mui/material";
-import PagesNavBar from "../UpdatesPage/PagesNavBar";
+import PagesNavBar from "../../UpdatesPage/PagesNavBar";
 import { useState } from "react";
-import DepartmentsTable from "./DepartmentsTable";
-import HRMButton from "../Button/HRMButton";
-import Toast from "./Toast";
+import HRMButton from "../../Button/HRMButton";
+import Toast from "../Toast";
 import CustomDialog from "./Dialog";
-import { useSettingsContext } from "./context";
+import { useSettingsContext } from "../context";
 import Grid from "@mui/system/Unstable_Grid";
+import JobTitlesTable from "./JobTitlesTable";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -16,7 +16,7 @@ const HeadText = styled(Typography)({
   fontWeight: "500",
 });
 
-export default function DepartmentsTabContent({ style }) {
+export default function JobTitlesTabContent({ style }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { departmentsPeople, departments } = useSettingsContext();
   const [selectedDepartment, setSelectedDepartment] = useState({});
@@ -92,7 +92,7 @@ export default function DepartmentsTabContent({ style }) {
 
         {departmentsPeople.length > 0 ? (
           <>
-            <DepartmentsTable
+            <JobTitlesTable
               openDialog={openDialog}
               departments={departmentsToDisplay}
               sx={{ marginBottom: "40px" }}
