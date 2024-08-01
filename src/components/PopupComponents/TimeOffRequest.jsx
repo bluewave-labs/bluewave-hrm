@@ -18,8 +18,10 @@ import DateSelect from './DateSelect';
 import Checkbox from '../Checkbox/Checkbox';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import StateContext from '../../StateContext';
 
 //Function for determining if a time period is valid. A time period is only valid if the 
 //starting date is before or on the same day as the ending date.
@@ -74,7 +76,7 @@ function formatDate(date) {
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function TimeOffRequest({close, sendRequest, initialRequest, style}) {
+export default function TimeOffRequest({close, sendRequest, initialRequest,updatedRequest,style}) {
     //Time off starting and ending dates
     const [from, setFrom] = useState(initialRequest ? initialRequest.startDate : dayjs().toDate());
     const [to, setTo] = useState(initialRequest ? initialRequest.endDate : dayjs().toDate());
@@ -117,11 +119,28 @@ export default function TimeOffRequest({close, sendRequest, initialRequest, styl
     });
 
     //List of time off policies
-    const timeOffCategories = [
+    const timeOffCategories2 = [
         "Vacation - left: 15 days (180 hours)",
         "Sick - left: 15days (180 hours)",
         "Bereavement - left: 0 days (0 hours)"
     ];
+
+    const [timeOffCategories, setTimeOffCategories] = useState(timeOffCategories2);
+    const stateContext = useContext(StateContext)
+
+    useEffect(()=>{
+        const empId = stateContext.state.employee? stateContext.state.employee.empId:-1;
+
+        const fetchData = async () =>{
+            try{
+                const res = await axios.post(`http://localhost:5000/api/timeOffPolicies/${empId}`);
+                setTimeOffCategories(res.data);
+            } catch(err){
+                console.log(err)
+            }
+        };
+        fetchData();
+    }, []);
     
     //Date range for setting full and half days off
     const dateRange = [];
@@ -307,7 +326,7 @@ export default function TimeOffRequest({close, sendRequest, initialRequest, styl
             <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={3}>
                 <HRMButton mode="secondaryB" onClick={close}>Cancel</HRMButton>
                 {(initialRequest) ?
-                <HRMButton mode="primary" onClick={sendRequest}>Update</HRMButton> :
+                <HRMButton mode="primary" onClick={updatedRequest}>Update</HRMButton> :
                 <HRMButton mode="primary" onClick={sendRequest}>Send</HRMButton>}
             </Stack>
             {/*Popup components for setting starting and ending dates*/}
@@ -320,6 +339,7 @@ export default function TimeOffRequest({close, sendRequest, initialRequest, styl
         </Box>
     );
 };
+
 
 //Control panel settings for storybook
 TimeOffRequest.propTypes = {

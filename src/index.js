@@ -4,11 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import StepContext from './context/stepContext';
+import StateContext from './StateContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <StepContext>
+    <StepContext>   
     <App />
     </StepContext>
   </React.StrictMode>

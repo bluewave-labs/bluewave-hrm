@@ -23,23 +23,12 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function HistoryTabContent({timeOffPeriods, style}) {
-    const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+   // const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);  //The current page number
     //Flags for determining which buttons in the "customize" dropdown are selected
     const [typeFilter, setTypeFilter] = useState(true);
     const [amountFilter, setAmountFilter] = useState(true);
     const [noteFilter, setNoteFilter] = useState(true);
-
-    useEffect(() => {
-        axios.get('/timeoffhistories') // get time off periods data from the backend
-            .then(response => {
-                setTimeOffPeriods(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching time off periods:', error);
-            });
-    }, []);
-
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active

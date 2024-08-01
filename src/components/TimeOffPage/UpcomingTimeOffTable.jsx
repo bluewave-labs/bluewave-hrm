@@ -41,19 +41,6 @@ export default function UpcomingTimeOffTable({ timeOffPeriods, tableColumns, edi
     const [timeOffRequest, setTimeOffRequest] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Fetch time off request data from the backend
-    useEffect(() => {
-        axios.get('/upcomingtimeoffhistories') // get upcoming time off history from the backend
-            .then(response => {
-                setTimeOffRequest(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('Error fetching time off request:', error);
-                setLoading(false);
-            });
-    }, []);
-
     // Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey,
