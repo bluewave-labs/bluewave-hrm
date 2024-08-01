@@ -1,0 +1,15 @@
+{
+    "email": "peace4segun1@yahoo.com",
+    "id": 1,
+    "empId": null,
+    "firstName": "Olusegun",
+    "lastName": "Awowole",
+    "access": "Permitted",
+    "permission": {
+        "id": 1,
+        "type": "Administrator",
+        "description": "Admin role",
+        "createdAt": "2024-07-19T22:12:25.642Z",
+        "updatedAt": "2024-07-19T22:12:25.642Z"
+    }
+}

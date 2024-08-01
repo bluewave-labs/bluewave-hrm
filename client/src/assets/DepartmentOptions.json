@@ -1,0 +1,11 @@
+[
+  { "name": "Customer Success", "selected": false },
+  { "name": "Design", "selected": false },
+  { "name": "Finance", "selected": false },
+  { "name": "Human Resources", "selected": false },
+  { "name": "Information Technology", "selected": false },
+  { "name": "Management", "selected": false },
+  { "name": "Marketing", "selected": false },
+  { "name": "Operations", "selected": false },
+  { "name": "Sales", "selected": false }
+]
