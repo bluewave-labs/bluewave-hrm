@@ -7,6 +7,7 @@ import { styled } from '@mui/system';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 /**
  * Popup component for displaying the information of a time off request and the options to reject
@@ -15,30 +16,57 @@ import PropTypes from 'prop-types';
  * Props:
  * - request_information<Object>: Contains the request information.
  *      Syntax: {
+ *          timeOffId: <Integer>
  *          avatar: <Image Source>
  *          name: <String>
  *          role: <String>
  *          email: <String>
+ *          office: <String>
  *          effectiveDate: <String>
  *          timeOffBalance: <String>
  *          timeOffRequested: <String>
  *          requestedDaysTotal: <String>
  *          timeOffCategory: <String>
+ *          status: <String>
  *      }
  * 
  * - close<Function>: Function for closing this popup component
  *      Syntax: close()
  * 
+ * - refresh<Function>: Function for closing this popup and refreshing the list of updates in the
+ *      parent component.
+ *      Syntax: refresh()
+ * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function TimeOffApproval({request_information, close, style}) {
+export default function TimeOffApproval({request_information, close, refresh, style}) {
     //Custom style elements
     const StyledTD = styled('td')({
         textAlign: "start",
         paddingBottom: "15px",
         width: "50%"
     });
+
+    const url = `http://localhost:5000/api/timeoffhistories`;
+
+    function resolveRequest(newStatus) {
+        console.log("Running resolveRequest()");
+        axios.put(
+            url,
+            {
+                id: request_information.timeOffId,
+                status: newStatus
+            }
+        )
+        .then((response) => {
+            console.log(response);
+            refresh();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
 
     return (
         <Box sx={{...{
@@ -125,15 +153,23 @@ export default function TimeOffApproval({request_information, close, style}) {
                 />
             </Box>
             {/*Reject, approve or close*/}
+            {request_information.status === "Declined" && 
+                <b style={{color: "#D92D20", marginBottom: "15px"}}>Time off request has been rejected</b>}
+            {request_information.status === "Approved" &&
+                <b style={{color: "#079455", marginBottom: "15px"}}>Time off request has been approved</b>}
             <Stack 
                 direction="row" 
                 alignItems="center" 
                 justifyContent="flex-end"
                 spacing={2}
             >
-                <HRMButton mode="tertiary" onClick={close}>Cancel</HRMButton>
-                <HRMButton mode="error">Reject</HRMButton>
-                <HRMButton mode="primary">Approve</HRMButton>
+                {(request_information.status === "Pending") ? 
+                    <>
+                        <HRMButton mode="tertiary" onClick={close}>Cancel</HRMButton>
+                        <HRMButton mode="error" onClick={() => resolveRequest("Declined")}>Reject</HRMButton>
+                        <HRMButton mode="primary" onClick={() => resolveRequest("Approved")}>Approve</HRMButton>
+                    </> :
+                    <HRMButton mode="tertiary" onClick={close}>Close</HRMButton>}
             </Stack>
         </Box>
     );

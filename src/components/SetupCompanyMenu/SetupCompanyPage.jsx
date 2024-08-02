@@ -4,7 +4,7 @@ import SetupDepartmentsMenu from './SetupDepartmentsMenu';
 import SetupRolesMenu from './SetupRolesMenu';
 import SuccessMenu from './SuccessMenu';
 import CustomizedSteppers from '../CustomizedSteppers';
-import Logo from '../../Images/HRM_logo_large.svg'
+import Logo from '../../Images/bluewave_hrm_logo_large.png'
 import { useState } from 'react';
 
 /**

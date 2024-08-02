@@ -1,6 +1,6 @@
 import Box from '@mui/system/Box';
-import Header from '../StaticComponents/Header';
-import SideMenu from '../StaticComponents/SideMenu';
+import Header from './Header';
+import SideMenu from './SideMenu';
 import { colors, fonts } from '../../Styles';
 
 /**

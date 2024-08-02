@@ -6,7 +6,8 @@ import PagesNavBar from './PagesNavBar';
 import NoContentComponent from './NoContentComponent';
 import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
-const axios = require('axios').default;
+//const axios = require('axios');
+import axios from 'axios';
 
 /**
  * Menu component for the home menu page. Displays up to 10 updates at a time along with controls
@@ -21,15 +22,21 @@ export default function UpdatesMenu({style}) {
     const [filter, setFilter] = useState("All");
     const [allUpdates, setAllUpdates] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const currentUserId = 1;
 
     useEffect(() => {
         getUpdates();
     }, [refresh]);
 
-    const url = `${process.env.URL}/updates`;
+    const url = `http://localhost:5000/api/notifications/employee/1`;
+
+    function checkNotificationStatus(update, id) {
+        return update.recipients.filter((emp) => emp.empId === id)[0].notificationStatus;
+    };
 
     //Retrieve all the updates
     function getUpdates() {
+        console.log(`Running getUpdates()`);
         axios.get(url)
         .then((response) => {
             const updates = [];
@@ -48,7 +55,7 @@ export default function UpdatesMenu({style}) {
     //Either show all updates or only the unread ones
     const filteredUpdates = (filter === "All") ? 
         allUpdates : 
-        allUpdates.filter((update) => update.status !== "seen");
+        allUpdates.filter((update) => checkNotificationStatus(update, currentUserId) !== "seen");
 
     //Only show 10 updates at a time
     const updatesToDisplay = filteredUpdates.slice((currentPage - 1) * 10, currentPage * 10);
