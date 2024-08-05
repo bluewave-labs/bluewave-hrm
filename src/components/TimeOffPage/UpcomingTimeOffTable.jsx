@@ -32,11 +32,18 @@ import { colors, fonts } from '../../Styles';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, editFlag, style}) {
+export default function UpcomingTimeOffTable({
+    timeOffPeriods, 
+    tableColumns, 
+    editFlag, 
+    refresh, 
+    style
+}) {
     //States determining whether the edit time off request menu and delete time off request
     //component should be displayed
     const [editTimeOff, setEditTimeOff] = useState(false);
     const [deleteTimeOff, setDeleteTimeOff] = useState(false);
+    const [timeOffId, setTimeOffId] = useState(null);
 
     const timeOffRequest = {
         startDate: new Date(2024, 1, 1),
@@ -125,8 +132,8 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
                                             mode="status" 
                                             dot={
                                                 (period.status === "Approved") ? "green" :
-                                                (period.status === "Waiting") ? "orange" :
-                                                (period.status === "Rejected") ? "red" : null
+                                                (period.status === "Pending") ? "orange" :
+                                                (period.status === "Declined") ? "red" : null
                                             }
                                             label={period.status}
                                         />
@@ -138,7 +145,10 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
                                         <Stack direction="row" alignItems="center" justifyContent="flex-end">
                                             <HRMButton 
                                                 mode="tertiary" 
-                                                onClick={() => setDeleteTimeOff(true)}
+                                                onClick={() => {
+                                                    setTimeOffId(period.id);
+                                                    setDeleteTimeOff(true);
+                                                }}
                                             >
                                                 <b>Delete</b>
                                             </HRMButton>
@@ -175,8 +185,12 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
             {/*Delete time off request notification*/}
             <Dialog open={deleteTimeOff} onClose={() => setDeleteTimeOff(false)}>
                 <DeleteTimeOff 
+                    timeOffId={timeOffId}
                     close={() => setDeleteTimeOff(false)} 
-                    handleDelete={() => setDeleteTimeOff(false)} 
+                    refresh={() => {
+                        refresh();
+                        setDeleteTimeOff(false);
+                    }}
                 />
             </Dialog>
         </>

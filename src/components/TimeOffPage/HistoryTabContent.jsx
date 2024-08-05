@@ -1,14 +1,25 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import TuneIcon from '@mui/icons-material/Tune';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import NoContentComponent from '../UpdatesPage/NoContentComponent';
 import Label from '../Label/Label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import axios from 'axios';
+
+//Function for parsing a JavaScript date into a string format.
+function formatDate(date) {
+    const day = date.toLocaleString('default', { day: '2-digit' });
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.toLocaleString('default', { year: 'numeric' });
+    return `${month} ${day}, ${year}`;
+};
 
 /**
  * Displays the content for the History tab in the time off menu which includes the complete time
@@ -22,12 +33,16 @@ import PropTypes from 'prop-types';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function HistoryTabContent({timeOffPeriods, style}) {
+export default function HistoryTabContent({style}) {
     const [currentPage, setCurrentPage] = useState(1);  //The current page number
     //Flags for determining which buttons in the "customize" dropdown are selected
     const [typeFilter, setTypeFilter] = useState(true);
     const [amountFilter, setAmountFilter] = useState(true);
     const [noteFilter, setNoteFilter] = useState(true);
+    const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    const [refresh, setRefresh] = useState(false);
+
+    dayjs.extend(isSameOrBefore);
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active
@@ -35,6 +50,37 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
     if (typeFilter) { activeFilters.push("Type"); }
     if (amountFilter) { activeFilters.push("Amount"); }
     if (noteFilter) { activeFilters.push("Note"); }
+
+    const url = `http://localhost:5000/api/timeoffhistories/employee/1`;
+
+    useEffect(() => {
+        getTimeOffPeriods();
+    }, [refresh]);
+
+    function getTimeOffPeriods() {
+        console.log("Running getTimeOffPeriods()");
+        axios.post(url)
+        .then((response) => {
+            const periods = [];
+            const data = response.data;
+            for (const p of data) {
+                if (dayjs(p.startDate).isSameOrBefore(dayjs())) {
+                    periods.push({
+                        id: p.id,
+                        from: formatDate(dayjs(p.startDate).toDate()),
+                        to: formatDate(dayjs(p.endDate).toDate()),
+                        type: (p.timeOffId === 1) ? "Vacation" : (p.timeOffId === 2) ? "Sick Leave" : "Bereavement",
+                        amount: `${p.hours} hours`,
+                        note: p.note
+                    });
+                }
+            }
+            setTimeOffPeriods(periods);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    };
  
     //Only shows 10 periods at a time
     const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);

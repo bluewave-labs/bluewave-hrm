@@ -25,7 +25,9 @@ import PropTypes from 'prop-types';
  *      Default: {}
  */
 export default function DateSelect({close, setDate, style}) {
+    //Value of the date to be set
     const [value, setValue] = useState(dayjs());
+    //Date representing today
     const today = dayjs();
 
     function submit() {

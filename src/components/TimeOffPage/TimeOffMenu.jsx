@@ -400,15 +400,15 @@ export default function TimeOffMenu({style}) {
                 </Box>
                 {/*Board tab*/}
                 <StyledTabPanel value="Board">
-                    <BoardTabContent policies={policies} timeOffPeriods={timeOffPeriods} />
+                    <BoardTabContent policies={policies}/>
                 </StyledTabPanel>
                 {/*History tab*/}
                 <StyledTabPanel value="History">
-                    <HistoryTabContent timeOffPeriods={timeOffPeriods} />
+                    <HistoryTabContent />
                 </StyledTabPanel>
                 {/*Team tab*/}
                 <StyledTabPanel value="My team">
-                    <TeamTabContent timeOffPeriods={timeOffPeriods} />
+                    <TeamTabContent />
                 </StyledTabPanel>
             </TabContext>
         </Box>

@@ -5,8 +5,18 @@ import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import axios from 'axios';
+
+//Function for parsing a JavaScript date into a string format.
+function formatDate(date) {
+    const day = date.toLocaleString('default', { day: '2-digit' });
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.toLocaleString('default', { year: 'numeric' });
+    return `${month} ${day}, ${year}`;
+};
 
 /**
  * Displays the content for the Board tab in the time off menu which includes the available
@@ -15,14 +25,47 @@ import PropTypes from 'prop-types';
  * Props:
  * - policies<Array<Object>>: List of objects containing policy information to be displayed.
  * 
- * - timeOffPeriods<Array<Object>>: List of objects containing information of upcoming periods
- *      of time off.
- * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function BoardTabContent({policies, timeOffPeriods, style}) {
-    const [currentPage, setCurrentPage] = useState(1);  //The current page number 
+export default function BoardTabContent({policies, style}) {
+    //The current page number 
+    const [currentPage, setCurrentPage] = useState(1);  
+    const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    const [refresh, setRefresh] = useState(false);
+
+    const currentUser = 1;
+
+    const url = `http://localhost:5000/api/timeoffhistories/employee/1`;
+
+    useEffect(() => {
+        getUpcomingTimeOffPeriods();
+    }, [refresh]);
+
+    function getUpcomingTimeOffPeriods() {
+        console.log("Running getUpcomingTimeOffPeriods()");
+        axios.post(url)
+        .then((response) => {
+            const periods = [];
+            const data = response.data;
+            for (const p of data) {
+                if (dayjs(p.startDate).isAfter(dayjs()) && p.status === "Approved") {
+                    periods.push({
+                        id: p.id,
+                        from: formatDate(dayjs(p.startDate).toDate()),
+                        to: formatDate(dayjs(p.endDate).toDate()),
+                        type: (p.timeOffId === 1) ? "Vacation" : (p.timeOffId === 2) ? "Sick Leave" : "Bereavement",
+                        amount: `${p.hours} hours`,
+                        note: p.note
+                    });
+                }
+            }
+            setTimeOffPeriods(periods);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    };
 
     //Only shows 10 periods at a time
     const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);
@@ -64,6 +107,7 @@ export default function BoardTabContent({policies, timeOffPeriods, style}) {
                         timeOffPeriods={periodsToDisplay} 
                         tableColumns={['Type', 'Amount', 'Note']}
                         editFlag={true} 
+                        refresh={() => setRefresh(!refresh)}
                         style={{marginBottom: "30px"}}
                     />
                     {/*Upcoming time off navbar*/}

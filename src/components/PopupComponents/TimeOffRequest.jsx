@@ -6,19 +6,13 @@ import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 import Dialog from '@mui/material/Dialog';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/system';
 import dayjs from 'dayjs';
 import DateSelect from './DateSelect';
 import Checkbox from '../Checkbox/Checkbox';
 import HRMButton from '../Button/HRMButton';
+import TimeOffTable from './TimeOffTable';
 import { colors, fonts } from '../../Styles';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 
 //Function for determining if a time period is valid. A time period is only valid if the 
@@ -51,6 +45,13 @@ function formatDate(date) {
     return `${month} ${day}, ${year}`;
 };
 
+//List of time off policies
+const timeOffCategories = [
+    "Vacation - left: 15 days (180 hours)",
+    "Sick - left: 15days (180 hours)",
+    "Bereavement - left: 0 days (0 hours)"
+];
+
 /**
  * Popup component for displaying the form for submitting a time off request. Includes controls
  * for setting the time off policy, the length of the time off period and the amount of time
@@ -75,59 +76,98 @@ function formatDate(date) {
  *      Default: {}
  */
 export default function TimeOffRequest({close, sendRequest, initialRequest, style}) {
+    //Selected time off policy
+    const [category, setCategory] = useState(timeOffCategories[0]);
     //Time off starting and ending dates
     const [from, setFrom] = useState(initialRequest ? initialRequest.startDate : dayjs().toDate());
     const [to, setTo] = useState(initialRequest ? initialRequest.endDate : dayjs().toDate());
     //States determining whether the menus for setting dates should be open
     const [openFrom, setOpenFrom] = useState(false);
     const [openTo, setOpenTo] = useState(false);
+
+    const [totalHoursOff, setTotalHoursOff] = useState(0);
+    const [fullDaysOff, setFullDaysOff] = useState(0);
+    const [halfDaysOff, setHalfDaysOff] = useState(0);
     //Flag determining if the amount of time off should be set for each day or for just the
     //starting and ending dates 
-    const [eachDay, setEachday] = useState(false);          
+    const [eachDay, setEachday] = useState(false); 
 
     //Automatically adjust dates to ensure a valid period is set
     useEffect(() => {
         if (!isValidPeriod(from, to)) {
             setTo(from);
         }
+        calculateTimeOffHours();
     }, [from]);
 
     useEffect(() => {
         if (!isValidPeriod(from, to)) {
             setFrom(to);
         }
+        calculateTimeOffHours();
     }, [to]);
 
-    //Custom style elements
-    const TableHeaderCell = styled(TableCell)({
-        color: colors.darkGrey, 
-        paddingTop: "10px",
-        paddingBottom: "10px"
-    });
-
-    const TableBodyCell = styled(TableCell)({
-        color: colors.darkGrey,
-        paddingTop: "25px",
-        paddingBottom: "25px"
-    });
-
-    const StyledChip = styled(Chip)({
-        border: "1px solid #EAECF0",
-        backgroundColor: "#F9FAFB"
-    });
-
-    //List of time off policies
-    const timeOffCategories = [
-        "Vacation - left: 15 days (180 hours)",
-        "Sick - left: 15days (180 hours)",
-        "Bereavement - left: 0 days (0 hours)"
-    ];
+    const MemoTimeOffTable = memo(TimeOffTable);
     
     //Date range for setting full and half days off
     const dateRange = [];
     for (let d = new Date(from); isValidPeriod(d, to) ; d.setDate(d.getDate() + 1)) {
-        dateRange.push(new Date(d));
+        dateRange.push(formatDate(new Date(d)));
     }
+
+    function calculateTimeOffHours() {
+        console.log("running calculateTimeOffHours()");
+        let totalHours = 0;
+        let fullDays = 0;
+        let halfDays = 0;
+        if (eachDay) {
+            for (const d of dateRange) {
+                const day = document.querySelector(`input[name="${d}"]:checked`);
+                if (day) {
+                    if (day.value === "half") {
+                        totalHours += 4;
+                        halfDays++;
+                    }
+                    else if (day.value === "full") {
+                        totalHours += 8;
+                        fullDays++;
+                    }
+                }
+            }
+        }
+        else {
+            let day = document.querySelector(`input[name="${dateRange[0]}"]:checked`);
+            if (day) {
+                if (day.value === "half") {
+                    totalHours += 4;
+                    halfDays++;
+                }
+                else if (day.value === "full") {
+                    totalHours += 8;
+                    fullDays++;
+                }
+            }
+            if (dateRange.length >= 2) {
+                day = document.querySelector(`input[name="${dateRange[dateRange.length - 1]}"]:checked`);
+                if (day) {
+                    if (day.value === "half") {
+                        totalHours += 4;
+                        halfDays++;
+                    }
+                    else if (day.value === "full") {
+                        totalHours += 8;
+                        fullDays++;
+                    }
+                }
+                totalHours += (dateRange.length - 2) * 8;
+                fullDays += dateRange.length - 2;
+            }
+        }
+        console.log(totalHours);
+        setTotalHoursOff(totalHours);
+        //setFullDaysOff(fullDays);
+        //setHalfDaysOff(halfDays);
+    };
 
     return (
         <Box sx={{...{
@@ -163,6 +203,8 @@ export default function TimeOffRequest({close, sendRequest, initialRequest, styl
                 options={timeOffCategories} 
                 getOptionDisabled={(option) => option === timeOffCategories[2]}
                 renderInput={(params) => <TextField {...params} placeholder="Time off category" />}
+                value={category}
+                onChange={(e, newCategory) => setCategory(newCategory)}
                 sx={{
                     width: "100%",
                     marginBottom: "40px"
@@ -211,97 +253,14 @@ export default function TimeOffRequest({close, sendRequest, initialRequest, styl
                 <p>Set hours for each day during the time off period</p>
             </Stack>
             {/*Time off per day table*/}
-            <TableContainer sx={{width: "100%", maxHeight: "260px", marginY: "20px", overflowY: "auto"}}>
-                <Table>
-                    <TableHead>
-                        <TableRow sx={{backgroundColor: "#F9FAFB"}}>
-                            <TableHeaderCell><b>Day</b></TableHeaderCell>
-                            <TableHeaderCell align="center"><b>Full day</b></TableHeaderCell>
-                            <TableHeaderCell align="center"><b>Half day</b></TableHeaderCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {(eachDay) ? dateRange.map((date) => (
-                            <TableRow>
-                                <TableBodyCell>
-                                    <StyledChip label={<b>{formatDate(date)}</b>} />
-                                </TableBodyCell>
-                                <TableBodyCell align="center">
-                                    <Checkbox 
-                                        type="radio" 
-                                        id={`${formatDate(date)}-full`}
-                                        name={formatDate(date)}
-                                        value="full" 
-                                        checked={true}
-                                    />
-                                </TableBodyCell>
-                                <TableBodyCell align="center">
-                                    <Checkbox 
-                                        type="radio" 
-                                        id={`${formatDate(date)}-half`} 
-                                        name={formatDate(date)}
-                                        value="half" 
-                                    />
-                                </TableBodyCell>
-                            </TableRow>
-                        )) : (
-                            <>
-                                {dateRange.length > 0 &&
-                                    <TableRow>
-                                        <TableBodyCell>
-                                            <StyledChip label={<b>{formatDate(dateRange[0])}</b>} />
-                                        </TableBodyCell>
-                                        <TableBodyCell align="center">
-                                            <Checkbox 
-                                                type="radio" 
-                                                id={`${formatDate(dateRange[0])}-full`}
-                                                name={formatDate(dateRange[0])}
-                                                value="full" 
-                                                checked={true}
-                                            />
-                                        </TableBodyCell>
-                                        <TableBodyCell align="center">
-                                            <Checkbox 
-                                                type="radio"
-                                                id={`${formatDate(dateRange[0])}-half`}
-                                                name={formatDate(dateRange[0])}
-                                                value="half"
-                                            />
-                                        </TableBodyCell>
-                                    </TableRow>
-                                }
-                                {dateRange.length > 1 &&
-                                    <TableRow>
-                                        <TableBodyCell>
-                                            <StyledChip label={<b>{formatDate(dateRange[dateRange.length - 1])}</b>} />
-                                        </TableBodyCell>
-                                        <TableBodyCell align="center">
-                                            <Checkbox 
-                                                type="radio" 
-                                                id={`${formatDate(dateRange[dateRange.length - 1])}-full`}
-                                                name={formatDate(dateRange[dateRange.length - 1])}
-                                                value="full" 
-                                                checked={true}
-                                            />
-                                        </TableBodyCell>
-                                        <TableBodyCell align="center">
-                                            <Checkbox 
-                                                type="radio"
-                                                id={`${formatDate(dateRange[dateRange.length - 1])}-half`}
-                                                name={formatDate(dateRange[dateRange.length - 1])}
-                                                value="half"
-                                            />
-                                        </TableBodyCell>
-                                    </TableRow>
-                                }
-                            </>
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <MemoTimeOffTable 
+                dateRange={dateRange}
+                eachDay={eachDay}
+                onChange={calculateTimeOffHours}
+            />
             {/*Time off summary*/}
             <p style={{marginBottom: "30px"}}>
-                2 full days (16 hrs) and 1 half day (4hrs) will be requested (20hrs in total).
+                {fullDaysOff} full days ({fullDaysOff * 8} hrs) and {halfDaysOff} half day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in total).
             </p>
             {/*Send or cancel*/}
             <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={3}>
