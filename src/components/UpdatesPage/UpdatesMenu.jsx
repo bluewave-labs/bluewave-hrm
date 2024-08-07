@@ -6,7 +6,6 @@ import PagesNavBar from './PagesNavBar';
 import NoContentComponent from './NoContentComponent';
 import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
-//const axios = require('axios');
 import axios from 'axios';
 
 /**

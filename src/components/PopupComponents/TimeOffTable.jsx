@@ -8,18 +8,8 @@ import Chip from '@mui/material/Chip';
 import { styled } from '@mui/system';
 import Checkbox from '../Checkbox/Checkbox';
 import { colors } from '../../Styles';
-import { useState } from 'react';
 import PropTypes from 'prop-types';
-
-function initialInput(dateRange) {
-    console.log("Running initialInput()");
-    const radioInput = {};
-    for (const date of dateRange) {
-        radioInput[date] = "full";
-    }
-    console.log(radioInput);
-    return radioInput;
-};
+import { useEffect } from 'react';
 
 /**
  * Table component for displaying time off options for each day in the TimeOffRequest component.
@@ -38,18 +28,17 @@ export default function TimeOffTable({
     onChange,
     style
 }) {
-    const [radioInput, setRadioInput] = useState(() => initialInput(dateRange));
 
-    function handleChange(e) {
+    function handleChange(e, index, value) {
         console.log("Running handleChange()")
-        setRadioInput({
-            ...radioInput,
-            [e.target.name]: e.target.value
-        });
-        console.log(radioInput);
+        dateRange[index].day =  value;
         onChange();
+        
     }
-
+    useEffect(()=>{
+        onChange();
+    }, []);
+    
     //Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey, 
@@ -84,29 +73,27 @@ export default function TimeOffTable({
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {(eachDay) ? dateRange.map((date) => (
+                    {(eachDay) ? dateRange.map((day, index) => (
                         <TableRow>
                             <TableBodyCell>
-                                <StyledChip label={<b>{date}</b>} />
+                                <StyledChip label={<b>{day.date}</b>} />
                             </TableBodyCell>
                             <TableBodyCell align="center">
                                 <Checkbox 
                                     type="radio" 
-                                    id={`${date}-full`}
-                                    name={date}
+                                    name={day.date}
                                     value="full" 
-                                    onChange={handleChange}
-                                    checked={radioInput[date] === "full"}
+                                    onChange={(e) => handleChange(e, index, "full")}
+                                    checked={day.day === "full"}
                                 />
                             </TableBodyCell>
                             <TableBodyCell align="center">
                                 <Checkbox 
                                     type="radio" 
-                                    id={`${date}-half`} 
-                                    name={date}
+                                    name={day.date}
                                     value="half" 
-                                    onChange={handleChange}
-                                    checked={radioInput[date] === "half"}
+                                    onChange={(e) => handleChange(e, index, "half")}
+                                    checked={day.day === "half"}
                                 />
                             </TableBodyCell>
                         </TableRow>
@@ -115,53 +102,49 @@ export default function TimeOffTable({
                             {dateRange.length > 0 &&
                                 <TableRow>
                                     <TableBodyCell>
-                                        <StyledChip label={<b>{dateRange[0]}</b>} />
+                                        <StyledChip label={<b>{dateRange[0].date}</b>} />
                                     </TableBodyCell>
                                     <TableBodyCell align="center">
                                         <Checkbox 
                                             type="radio" 
-                                            id={`${dateRange[0]}-full`}
-                                            name={dateRange[0]}
+                                            name={dateRange[0].date}
                                             value="full" 
-                                            onChange={handleChange}
-                                            checked={radioInput[dateRange[0]] === "full"}
+                                            onChange={(e) => handleChange(e, 0, "full")}
+                                            checked={dateRange[0].day === "full"}
                                         />
                                     </TableBodyCell>
                                     <TableBodyCell align="center">
                                         <Checkbox 
                                             type="radio"
-                                            id={`${dateRange[0]}-half`}
-                                            name={dateRange[0]}
+                                            name={dateRange[0].date}
                                             value="half"
-                                            onChange={handleChange}
-                                            checked={radioInput[dateRange[0]] === "half"}
-                                        />
+                                            onChange={(e) => handleChange(e, 0, "half")}
+                                            checked={dateRange[0].day === "half"}
+                                                                        />
                                     </TableBodyCell>
                                 </TableRow>
                             }
                             {dateRange.length > 1 &&
                                 <TableRow>
                                     <TableBodyCell>
-                                        <StyledChip label={<b>{dateRange[dateRange.length - 1]}</b>} />
+                                        <StyledChip label={<b>{dateRange[dateRange.length - 1].date}</b>} />
                                     </TableBodyCell>
                                     <TableBodyCell align="center">
                                         <Checkbox 
                                             type="radio" 
-                                            id={`${dateRange[dateRange.length - 1]}-full`}
-                                            name={dateRange[dateRange.length - 1]}
+                                            name={dateRange[dateRange.length - 1].date}
                                             value="full" 
-                                            onChange={handleChange}
-                                            checked={radioInput[dateRange[dateRange.length - 1]] === "full"}
+                                            onChange={(e) => handleChange(e, dateRange.length -1, "full")}
+                                            checked={dateRange[dateRange.length - 1].day === "full"}
                                         />
                                     </TableBodyCell>
                                     <TableBodyCell align="center">
                                         <Checkbox 
                                             type="radio"
-                                            id={`${dateRange[dateRange.length - 1]}-half`}
-                                            name={dateRange[dateRange.length - 1]}
+                                            name={dateRange[dateRange.length - 1].date}
                                             value="half"
-                                            onChange={handleChange}
-                                            checked={radioInput[dateRange[dateRange.length - 1]] === "half"}
+                                            onChange={(e) => handleChange(e, dateRange.length - 1, "half")}
+                                            checked={dateRange[dateRange.length - 1].day === "half"}
                                         />
                                     </TableBodyCell>
                                 </TableRow>

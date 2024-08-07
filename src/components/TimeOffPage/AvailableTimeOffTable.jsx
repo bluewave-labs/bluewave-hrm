@@ -51,8 +51,10 @@ export default function AvailableTimeOffTable({policies, style}) {
                     {policies.map((policy) => (
                         <TableRow>
                             <TableBodyCell sx={{width: "50%", paddingLeft: "25px"}}><b>{policy.type}</b></TableBodyCell>
-                            <TableBodyCell>{policy.availableDays}</TableBodyCell>
-                            <TableBodyCell>{policy.hoursUsed}</TableBodyCell>
+                            <TableBodyCell>
+                                {Math.ceil(policy.availableHours / 24)} days ({policy.availableHours} hours) 
+                            </TableBodyCell>
+                            <TableBodyCell>{policy.hoursUsed} hours used</TableBodyCell>
                         </TableRow>
                     ))}
                 </TableBody>

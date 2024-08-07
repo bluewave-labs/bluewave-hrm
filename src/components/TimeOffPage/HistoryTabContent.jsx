@@ -70,7 +70,7 @@ export default function HistoryTabContent({style}) {
                         from: formatDate(dayjs(p.startDate).toDate()),
                         to: formatDate(dayjs(p.endDate).toDate()),
                         type: (p.timeOffId === 1) ? "Vacation" : (p.timeOffId === 2) ? "Sick Leave" : "Bereavement",
-                        amount: `${p.hours} hours`,
+                        hours: p.hours,
                         note: p.note
                     });
                 }
@@ -141,6 +141,7 @@ export default function HistoryTabContent({style}) {
                         timeOffPeriods={periodsToDisplay} 
                         tableColumns={activeFilters}
                         editFlag={true} 
+                        refresh={() => setRefresh(!refresh)}
                         style={{marginBottom: "30px"}}
                     />
                     {/*Upcoming time off navbar*/}

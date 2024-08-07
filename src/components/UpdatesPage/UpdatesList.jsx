@@ -69,45 +69,50 @@ export default function UpdatesList({updates, refresh, style}) {
     //Function for retrieving update details for popup component
     function retrieveDetails(up) {
         console.log("Running retrieveDetails()")
-        let details = {};
         //Retrieve details for "New team member added" update
         if (up.subject === "New team member added") {
-            details.avatar = up.employee.photo;
-            details.name = `${up.employee.firstName} ${up.employee.lastName}`;
-            details.role = up.employee.role.roleTitle;
-            details.email = up.employee.email;
-            details.office = up.employee.officeLocation;
-            details.effectiveDate = up.employee.effectiveDate;
+            const details = {
+                avatar: up.employee.photo,
+                name: `${up.employee.firstName} ${up.employee.lastName}`,
+                role: up.employee.role.roleTitle,
+                email: up.employee.email,
+                office: up.employee.location,
+                effectiveDate: up.employee.effectiveDate
+            };
             setNewMemberDetails(details);
         }
         //Retrieve details for "New time off request" update
         else if (up.subject === "New time off request") {
-            details.notification = up;
-            details.timeOffId = up.timeOffHistory.id;
-            details.avatar = up.employee.photo;
-            details.name = `${up.employee.firstName} ${up.employee.lastName}`;
-            details.role = up.employee.role.roleTitle;
-            details.email = up.employee.email;
-            details.office = up.employee.officeLocation;
-            details.effectiveDate = up.employee.effectiveDate;
-            details.timeOffBalance = (up.employeeAnnualTimeOff.hoursAllowed - 
-                up.employeeAnnualTimeOff.cumulativeHoursTaken);
-            details.timeOffRequested = `${up.timeOffHistory.startDate} - 
-                ${up.timeOffHistory.endDate}`;
-            details.requestedDaysTotal = Math.ceil(up.timeOffHistory.hours / 24);
-            details.timeOffCategory = up.timeOff.category;
-            details.status = up.timeOffHistory.status;
+            const details = {
+                notification: up,
+                timeOffId: up.timeOffHistory.id,
+                avatar: up.employee.photo,
+                name: `${up.employee.firstName} ${up.employee.lastName}`,
+                role: up.employee.role.roleTitle,
+                email: up.employee.email,
+                office: up.employee.officeLocation,
+                effectiveDate: up.employee.effectiveDate,
+                timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed - 
+                    up.employeeAnnualTimeOff.cumulativeHoursTaken),
+                timeOffRequested: `${up.timeOffHistory.startDate} - 
+                    ${up.timeOffHistory.endDate}`,
+                requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
+                timeOffCategory: up.timeOff.category,
+                status: up.timeOffHistory.status
+            };
             setApprovalDetails(details);
         }
         //Retrieve details for "Time off request sent" update
         else if (up.subject === "Your time off request has been sent") {
-            details.timeOffBalance = (up.employeeAnnualTimeOff.hoursAllowed -
-                up.employeeAnnualTimeOff.cumulativeHoursTaken);
-            details.timeOffRequested = `${up.timeOffHistory.startDate} -
-                ${up.timeOffHistory.endDate}`;
-            details.requestedDaysTotal = Math.ceil(up.timeOffHistory.hours / 24);
-            details.timeOffCategory = up.timeOff.category;
-            details.notes = up.timeOffHistory.note;
+            const details = {
+                timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed -
+                    up.employeeAnnualTimeOff.cumulativeHoursTaken),
+                timeOffRequested: `${up.timeOffHistory.startDate} -
+                    ${up.timeOffHistory.endDate}`,
+                requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
+                timeOffCategory: up.timeOff.category,
+                notes: up.timeOffHistory.note
+            };
             setRequestSentDetails(details);
         }
     };

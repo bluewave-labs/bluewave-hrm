@@ -16,6 +16,7 @@ import Label from '../Label/Label';
 import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import DeleteTimeOff from '../PopupComponents/DeleteTimeOff';
 import { colors, fonts } from '../../Styles';
+import dayjs from "dayjs";
 
 /**
  * Menu component for listing upcoming scheduled periods of time off
@@ -45,11 +46,7 @@ export default function UpcomingTimeOffTable({
     const [deleteTimeOff, setDeleteTimeOff] = useState(false);
     const [timeOffId, setTimeOffId] = useState(null);
 
-    const timeOffRequest = {
-        startDate: new Date(2024, 1, 1),
-        endDate: new Date(2024, 2, 1),
-        type: 'Vacation'
-    };
+    const [timeOffDetails, setTimeOffDetails] = useState({});
 
     //Custom style elements
     const TableHeaderCell = styled(TableCell)({
@@ -68,6 +65,19 @@ export default function UpcomingTimeOffTable({
         border: "1px solid #EAECF0",
         backgroundColor: "#F9FAFB"
     });
+
+    function retrieveDetails(period) {
+        console.log("Running retrieveDetails()")
+        const details = {
+            id: period.id,
+            from: dayjs(period.from).toDate(),
+            to: dayjs(period.to).toDate(),
+            type: period.type
+        }
+        console.log(details);
+        console.log(typeof details.from);
+        setTimeOffDetails(details);
+    }
 
     return (
         <>
@@ -122,7 +132,7 @@ export default function UpcomingTimeOffTable({
                                 {/*Time off category*/}
                                 {tableColumns.includes('Type') && <TableBodyCell>{period.type}</TableBodyCell>}
                                 {/*Time off amount*/}
-                                {tableColumns.includes('Amount') && <TableBodyCell>{period.amount}</TableBodyCell>}
+                                {tableColumns.includes('Amount') && <TableBodyCell>{period.hours} hours</TableBodyCell>}
                                 {/*Time off additional notes*/}
                                 {tableColumns.includes('Note') && <TableBodyCell>{period.note}</TableBodyCell>}
                                 {/*The status of the time off period*/}
@@ -154,7 +164,10 @@ export default function UpcomingTimeOffTable({
                                             </HRMButton>
                                             <HRMButton 
                                                 mode="tertiary"
-                                                onClick={() => setEditTimeOff(true)}
+                                                onClick={() => {
+                                                    retrieveDetails(period);
+                                                    setEditTimeOff(true);
+                                                }}
                                             >
                                                 <a 
                                                     style={{
@@ -178,8 +191,11 @@ export default function UpcomingTimeOffTable({
             <Dialog open={editTimeOff} onClose={() => setEditTimeOff(false)}>
                 <TimeOffRequest 
                     close={() => setEditTimeOff(false)} 
-                    sendRequest={() => setEditTimeOff(false)} 
-                    initialRequest={timeOffRequest} 
+                    sendRequest={() => {
+                        refresh();
+                        setEditTimeOff(false);
+                    }} 
+                    initialRequest={timeOffDetails}
                 />
             </Dialog>
             {/*Delete time off request notification*/}

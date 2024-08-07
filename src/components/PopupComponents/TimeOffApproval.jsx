@@ -48,11 +48,10 @@ export default function TimeOffApproval({request_information, close, refresh, st
         width: "50%"
     });
 
-    const url = `http://localhost:5000/api/timeoffhistories`;
-
     //Function for sending the PUT request to change the time off request status
     function resolveRequest(newStatus) {
         console.log("Running resolveRequest()");
+        const url = `http://localhost:5000/api/timeoffhistories`;
         axios.put(
             url,
             {
