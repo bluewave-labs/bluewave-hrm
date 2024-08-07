@@ -18,7 +18,7 @@ exports.showAll = async (req, res) => {
 exports.showOne = async (req, res) => {
   const empId = req.params.empid;
   const data = await db.employeeAnnualTimeOff.findAll({
-    where: { empId: empId },
+    where: { employeeEmpId: empId },
   });
   if (data === null) {
     res.status(400).send("Not found!");
