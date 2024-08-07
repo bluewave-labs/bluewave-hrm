@@ -5,7 +5,6 @@ import HRMButton from "../Button/HRMButton";
 import { multiStepContext } from "../../context/stepContext";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-
 function ThirdStep() {
   const { currentStep, setCurrentStep, finalData, setFinalData } =
     useContext(multiStepContext);
@@ -18,9 +17,9 @@ function ThirdStep() {
   return (
     <Box
       width={"1003px"}
-      margin={"0 auto"}
+      margin={"0 auto 40px auto"}
       textAlign={"center"}
-      sx={{ border: "2px solid #ebebeb" }}
+      sx={{ border: "2px solid #ebebeb", padding: "63px 0" }}
     >
       <Typography
         variant="h1"
@@ -28,7 +27,7 @@ function ThirdStep() {
         fontWeight={600}
         margin={"20px auto"}
       >
-        Answer below questions as detailed as possible
+        Answer questions below as detailed as possible
       </Typography>
       <Typography
         fontSize={"13px"}
@@ -50,7 +49,7 @@ function ThirdStep() {
 
       <TextField
         style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        label="[Answer]"
+        InputLabelProps={{ shrink: false }}
         multiline
         rows={3}
         value={finalData["answer1"]}
@@ -71,7 +70,7 @@ function ThirdStep() {
 
       <TextField
         style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        label="[Answer]"
+        InputLabelProps={{ shrink: false }}
         multiline
         rows={3}
         value={finalData["answer2"]}
@@ -91,7 +90,7 @@ function ThirdStep() {
 
       <TextField
         style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        label="[Answer]"
+        InputLabelProps={{ shrink: false }}
         multiline
         rows={3}
         value={finalData["answer3"]}
@@ -112,7 +111,7 @@ function ThirdStep() {
 
       <TextField
         style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        label="[Answer]"
+        InputLabelProps={{ shrink: false }}
         multiline
         rows={3}
         value={finalData["answer4"]}
@@ -133,29 +132,37 @@ function ThirdStep() {
 
       <TextField
         style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        label="[Answer]"
+        // label="[Answer]"
         multiline
         rows={3}
         value={finalData["answer5"]}
         onChange={(e) => {
           setFinalData({ ...finalData, answer5: e.target.value });
         }}
+        InputLabelProps={{ shrink: false }}
       />
       <br />
 
-      <div style={{display:"flex",justifyContent:"space-around", margin:"50px 0"}}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          marginTop: "50px",
+        }}
+      >
         <HRMButton
           mode={"secondaryA"}
+          startIcon={<ArrowBackIcon />}
           style={{
             padding: "10px",
             width: "132px",
             height: "32px",
-         
+
             fontSize: "13px",
           }}
           onClick={() => setCurrentStep(currentStep - 1)}
         >
-          <ArrowBackIcon sx={{padding:"2px"}}></ArrowBackIcon>Previous
+          Previous
         </HRMButton>
         <HRMButton
           mode={"primary"}

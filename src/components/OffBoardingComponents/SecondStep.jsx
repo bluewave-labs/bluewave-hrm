@@ -8,19 +8,44 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, display } from "@mui/system";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import HRMButton from "../Button/HRMButton";
 import { multiStepContext } from "../../context/stepContext";
 import DocumentMyinfo from "../DocumentMyinfo/DocumentMyinfo";
-import uploadDocument from "../../Images/upload-document.svg";
+
 import CheckBox from "../Checkbox/Checkbox";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useEffect } from "react";
+
+import arrow from "../../Images/Arrow.svg";
+import axios from "axios";
 
 function SecondStep() {
   const { currentStep, setCurrentStep, finalData, setFinalData } =
     useContext(multiStepContext);
- 
+
+  const [leavingLetter, setLeavingLetter] = useState("");
+  const [nda, setNda] = useState("");
+
+  const handleCheckBox = (e) =>
+    setFinalData({
+      ...finalData,
+      SignedDocumentAck: e.target.checked,
+    });
+  const fetchDocuments = () => {
+    axios.get(`http://localhost:5000/api/documents/lldoc`).then((blob) => {
+      // console.log(blob.data);
+      setLeavingLetter(blob.data);
+    });
+    axios.get(`http://localhost:5000/api/documents/nda`).then((blob) => {
+      // console.log(blob.data);
+      setNda(blob.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  });
+
   return (
     <>
       <Box
@@ -37,7 +62,7 @@ function SecondStep() {
           fontWeight={600}
           margin={"20px auto"}
         >
-          1. Download documents below, sign them and upload again
+          Download documents below, sign them and upload again
         </Typography>
         <Typography
           fontFamily="Inter"
@@ -98,7 +123,13 @@ function SecondStep() {
                     color: "#7F56D9",
                   }}
                 >
-                  Download
+                  <a
+                    href={`data:application/pdf;base64,${leavingLetter}`}
+                    download={"leavingLetter.pdf"}
+                    target="_blank"
+                  >
+                    Download
+                  </a>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -116,80 +147,34 @@ function SecondStep() {
                     color: "#7F56D9",
                   }}
                 >
-                  Download
+                  <a
+                    href={`data:application/pdf;base64,${nda}`}
+                    download={"NDA.pdf"}
+                    target="_blank"
+                  >
+                    Download
+                  </a>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+
       <Box
-        width={"1003px"}
-        margin={"49px auto 0 auto"}
-        textAlign={"center"}
-        sx={{ border: "2px solid #ebebeb" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "26px 0",
+        }}
       >
-        <Typography
-          fontFamily="Inter"
-          variant="h1"
-          fontSize={"16px"}
-          fontWeight={600}
-          margin={"51px auto 48px auto"}
-        >
-          2. Sign the documents
-        </Typography>
-        <img
-          src={uploadDocument}
-          style={{ margin: "29px auto" }}
-          alt="thank-you-vector"
-        />
-        <Typography
-          fontFamily="Inter"
-          fontSize={"11px"}
-          fontWeight={400}
-          margin={"0 auto 20px auto"}
-        >
-          You may sign them using Adobe Acrobat’s{" "}
-          <a
-            href="https://www.adobe.com/acrobat/online/sign-pdf.html"
-            target="_blank"
-          >
-            online signing tool
-          </a>
-          .
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 0 51px 0",
-          }}
-        >
-          <CheckBox
-          name="SignedDocmentAck"
-            checked={finalData["SignedDocmentAck"]}
-            value={finalData["SignedDocmentAck"]}
-            onChange={(e) => {
-              setFinalData({ ...finalData, SignedDocmentAck: !finalData["SignedDocmentAck"] });
-            }}
-          />
-          <Typography
-            fontFamily="Inter"
-            variant="h1"
-            fontSize={"13px"}
-            fontWeight={400}
-            // sx={{display:"inline"}}
-            margin={"0 5px"}
-            lineHeight={"10px"}
-          >
-            I have signed the documents and am ready to proceed to the next step
-          </Typography>
-        </Box>
+        <img src={arrow} alt="arrow-icon" width={50} height={50} />
       </Box>
+
       <Box
         width={"1003px"}
-        margin={"49px auto"}
+        margin={"0 auto 49px auto"}
         padding={"65px 0"}
         textAlign={"center"}
         sx={{ border: "2px solid #ebebeb" }}
@@ -201,7 +186,7 @@ function SecondStep() {
           fontWeight={600}
           margin={"20px auto"}
         >
-          3. Upload signed documents
+          Upload signed documents
         </Typography>
         <Typography
           fontFamily="Inter"
@@ -218,6 +203,31 @@ function SecondStep() {
         </Box>
 
         {/* table logic ends... */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "start",
+            width: "80%",
+            margin: "54px auto",
+          }}
+        >
+          <CheckBox
+            checked={false || finalData?.SignedDocumentAck}
+            onChange={handleCheckBox}
+          />
+          <Typography
+            fontFamily="Inter"
+            variant="h1"
+            fontSize={"13px"}
+            fontWeight={400}
+            // sx={{display:"inline"}}
+            margin={"0 5px"}
+            lineHeight={"10px"}
+          >
+            I have signed the documents and am ready to proceed to the next step
+          </Typography>
+        </Box>
 
         <div
           style={{
@@ -228,6 +238,7 @@ function SecondStep() {
         >
           <HRMButton
             mode={"secondaryA"}
+            startIcon={<ArrowBackIcon />}
             style={{
               padding: "10px",
               width: "132px",
@@ -237,7 +248,7 @@ function SecondStep() {
             }}
             onClick={() => setCurrentStep(currentStep - 1)}
           >
-            <ArrowBackIcon sx={{ padding: "2px" }}/>Previous
+            Previous
           </HRMButton>
           <HRMButton
             mode={"primary"}
@@ -246,10 +257,9 @@ function SecondStep() {
               width: "132px",
               height: "32px",
               fontSize: "13px",
-              
             }}
             onClick={() => setCurrentStep(3)}
-            enabled={finalData['SignedDocmentAck']}
+            enabled={finalData["SignedDocumentAck"]}
           >
             Save and next
           </HRMButton>

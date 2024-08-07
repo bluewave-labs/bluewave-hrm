@@ -9,7 +9,9 @@ import CustomizedSteppers from "../CustomizedSteppers/CustomizedSteppers";
 
 function OffBoardingPage() {
   const { currentStep, finalData } = useContext(multiStepContext);
-  
+  // useEffect(() => {
+  //   console.log("DATA>>>", finalData);
+  // });
 
   const stepStyle = {
     "&.MuiStepper-root": {
@@ -67,7 +69,7 @@ function OffBoardingPage() {
       <Box
         width={"1003px"}
         height={"166px"}
-        margin={"20px auto"}
+        margin={"125px auto 49px auto"}
         sx={{
           border: "2px solid #ebebeb",
           justifyContent: "center",

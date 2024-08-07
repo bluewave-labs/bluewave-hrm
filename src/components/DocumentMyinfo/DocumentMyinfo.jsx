@@ -36,9 +36,7 @@ const DocumentMyinfo = () => {
   const [filelist, setFileList] = useState([]);
   const [uploaded, setUploaded] = useState(false);
   const { finalData, setFinalData } = useContext(multiStepContext);
-  useEffect(() => {
-    
-  }, [finalData,filelist]);
+  useEffect(() => {}, [finalData, filelist]);
 
   const handleUpload = async (uploadFile) => {
     console.log("upfile", uploadFile);
@@ -68,7 +66,7 @@ const DocumentMyinfo = () => {
       console.log(response);
     } catch (error) {
       setUploaded(false);
-      console.log(error)
+      console.log(error);
     }
   };
   function delay(ms) {
@@ -118,27 +116,26 @@ const DocumentMyinfo = () => {
       setFileSize(size);
 
       var reader = new FileReader();
-      reader.onload = async function  (event) {
+      reader.onload = async function (event) {
         const base64String = await event.target.result.split(",")[1]; // Extract base64 string
         const uploadFile = {
-          empId:1,
+          empId: finalData.empId,
           documentName: name,
           documentExtension,
           documentCategory: "offboarding",
           dateUploaded: uploadedDate,
-          documentDescription:"this is a test file",
+          documentDescription: "this is a test file",
           documentFile: base64String,
-        }
+        };
         addFile({
-          empId:1,
+          empId: 1,
           documentName: name,
           documentExtension,
           documentCategory: "offboarding",
           uploadedDate: uploadedDate,
           documentFile: base64String,
         });
-        handleUpload(uploadFile)
-
+        handleUpload(uploadFile);
       };
       reader.readAsDataURL(file);
     }
