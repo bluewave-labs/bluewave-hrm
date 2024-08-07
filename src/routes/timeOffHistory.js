@@ -8,4 +8,5 @@ module.exports = (router) => {
   router.route("/timeoffhistories").post(controller.createRecord);
   router.route("/timeoffhistories").put(controller.updateRecord);
   router.route("/timeoffhistories/:id").delete(controller.deleteRecord);
+  router.route("/timeoffemployeehistory/:empid").post(controller.timeOffPeriods); // get the time off periods
 };

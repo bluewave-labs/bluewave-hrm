@@ -71,3 +71,59 @@ exports.deleteRecord = async (req, res) => {
     });
   }
 };
+
+/**
+ * {
+        type:
+        availableDays: 
+        hoursUsed:
+    }
+ * @param {empId} req 
+ * @param {timeOffPolicies} res 
+ */
+    exports.timeOffPolicies = async(req,res) =>{
+      const empId = req.params.empId;
+      try{
+        const timeOff = await db.employeeAnnualTimeOff.findAll({
+          where:{
+            empId: empId
+          },
+          include: [
+            {
+              model: db.employee
+            },
+          ]
+        })
+        const policies = []
+        for(const data of timeOff){
+            const policy = {
+    
+            }
+            if(data.timeOffId == 1){
+              policy.type = "Vacation",
+              policy.availableDays = data.hoursAllowed,
+              policy.hoursUsed = data.cumulativeHoursTaken
+            }
+            else if(data.timeOffId == 2){
+              policy.type = "Sick Leave",
+              policy.availableDays = data.hoursAllowed,
+              policy.hoursUsed = data.cumulativeHoursTaken
+            }
+            else if(data.timeOffId == 3){
+              policy.type = "Bereavement",
+              policy.availableDays = data.hoursAllowed,
+              policy.hoursUsed = data.cumulativeHoursTaken
+            }
+    
+            policies.push(policy)
+    
+            
+        }
+        res.send(policies)
+    
+      }catch(err){
+        res.send({
+          message: err.message || message.failed
+        });
+      }
+    }

@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
+const mjml2html = require("mjml");
 
 /**
  * Utility function to send an email to a user

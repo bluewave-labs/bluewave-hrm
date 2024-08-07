@@ -224,6 +224,18 @@ db.notification.belongsTo(db.timeOffHistory, {
   foreignKey: "timeOffHistoryId",
 });
 
+db.employeeAnnualTimeOff.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+
+db.employee.hasMany(db.employeeAnnualTimeOff, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+
 db.employee.belongsTo(db.employee, { foreignKey: "managerId", as: "Manager" });
 
 db.timeOff.belongsToMany(db.employee, {
