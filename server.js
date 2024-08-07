@@ -9,19 +9,17 @@ const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const app = express();
 const router = express.Router();
+
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+app.use(bodyParser.json({ limit: "100mb" }));
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
-
-app.use(
-  cors({
-    credentials: true,
-  })
-);
-app.use(bodyParser.json());
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Work in progress" });
@@ -41,8 +39,7 @@ app.listen(HTTP_PORT, () => {
 // Uncomment the following codes to populate your database
 
 // db.sequelize.sync({ force: true }).then(async () => {
-// let data = require("./constants/data");
-// await data.populateTables(db);
-// console.log("Sync operation successful.");
+//   let data = require("./constants/data");
+//   await data.populateTables(db);
+//   console.log("Sync operation successful.");
 // });
-

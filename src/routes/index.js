@@ -13,6 +13,7 @@ const team = require("./team");
 const timeOff = require("./timeOff");
 const timeOffHistory = require("./timeOffHistory");
 const appUser = require("./appUser");
+const offBoarding = require('./offBoarding')
 
 module.exports = (router) => {
   authentication(router);
@@ -30,6 +31,7 @@ module.exports = (router) => {
   timeOff(router);
   timeOffHistory(router);
   appUser(router);
+  offBoarding(router)
 
   return router;
 };
