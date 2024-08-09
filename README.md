@@ -10,8 +10,9 @@
 
 <p align="center"><strong>An open source human resource management application</strong></p>
 
-
 ![Time off settings](https://github.com/bluewave-labs/hrm/blob/main/Time%20off.png?raw=true)
+
+## Features 
 
 The BlueWave HRM is a people and resource management application for your organization. It has the following features: 
 
@@ -19,4 +20,31 @@ The BlueWave HRM is a people and resource management application for your organi
 - Employee management
 - Time off & vacation management
 - Reporting
+
+## Tech stack
+
+* [ReactJs](https://react.dev/)
+* [MUI (React framework)](https://mui.com/)
+* [Node.js](https://nodejs.org/en)
+* [PostgreSQL](https://www.postgresql.org/)
+
+This application doesn't rely on any 3rd party proprietary software to run.
+
+## Contributing
+
+We love contributors. Here's how you can contribute:
+
+* Check [Contributor's guideline](https://github.com/bluewave-labs/bluewave-hrm/blob/master/CONTRIBUTING.md).
+* Have a look at our Figma designs [here](https://www.figma.com/design/GC5nLN8GAXV9NJkzEnDRj3/HRM-app?node-id=1-1207&t=adcmoAcr96lq7Fkb-1). We encourage you to copy to your own Figma page, then work on it as it is read-only.
+* Open an issue if you believe you've encountered a bug.
+* Make a pull request to add new features/make quality-of-life improvements/fix bugs.
+
+Additional links: 
+
+- [Authorized viewers list and pages they can view](https://docs.google.com/spreadsheets/d/14uDT2n0oRYgZLE3BzrQIvzmSzGA2C8588glhEPP7ILA/edit?gid=0#gid=0)
+
+<a href="https://github.com/bluewave-labs/hrm/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=bluewave-labs/hrm" />
+</a>
+
 
