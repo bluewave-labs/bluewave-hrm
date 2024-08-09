@@ -12,6 +12,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
 import DepartmentsTabContent from "./departments/DepartmentsTabContent";
 import JobTitlesTabContent from "./jobTitles/JobTitlesTabContent";
+import ListTabContent from "./ListTabContent";
 import { SettingsProvider } from "./context";
 
 const StyledTab = styled(Tab)({
@@ -118,10 +119,10 @@ export default function SettingsPage({ style }) {
                   <CompanyProfileForm />
                 </StyledTabPanel>
                 <StyledTabPanel value="Departments">
-                  <DepartmentsTabContent flag="departments" />
+                  <ListTabContent content="departments" />
                 </StyledTabPanel>
                 <StyledTabPanel value="Job titles">
-                  <JobTitlesTabContent flag="jobTitles" />
+                  <ListTabContent content="jobTitles" />
                 </StyledTabPanel>
               </TabContext>
             </Box>

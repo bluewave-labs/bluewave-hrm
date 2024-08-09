@@ -3,6 +3,7 @@ import {
   fetchCompany as getCompany,
   fetchDepartments as getDepartments,
   fetchDepartmentsPeople as getDepartmentsPeople,
+  fetchJobTitlesPeople as getJobTitlesPeople,
   fetchJobTitles as getJobTitles,
   fetchEmployees as getEmployees,
 } from "./api";
@@ -14,6 +15,7 @@ export const SettingsProvider = ({ children }) => {
   const [departments, setDepartments] = useState({});
   const [departmentsPeople, setDepartmentsPeople] = useState({});
   const [jobTitles, setJobTitles] = useState({});
+  const [jobTitlesPeople, setJobTitlesPeople] = useState({});
   const [employees, setEmployees] = useState({});
 
   const fetchCompany = async () => {
@@ -36,6 +38,11 @@ export const SettingsProvider = ({ children }) => {
     setJobTitles(jobTitlesData);
   };
 
+  const fetchJobTitlesPeople = async () => {
+    const jobTitlesPeopleData = await getJobTitlesPeople();
+    setJobTitlesPeople(jobTitlesPeopleData);
+  };
+
   const fetchEmployees = async () => {
     const employees = await getEmployees();
     setEmployees(employees);
@@ -46,6 +53,7 @@ export const SettingsProvider = ({ children }) => {
     fetchDepartments();
     fetchDepartmentsPeople();
     fetchJobTitles();
+    fetchJobTitlesPeople();
     fetchEmployees();
   }, []);
 
@@ -55,14 +63,16 @@ export const SettingsProvider = ({ children }) => {
       departments,
       departmentsPeople,
       jobTitles,
+      jobTitlesPeople,
       employees,
       fetchCompany,
       fetchDepartments,
       fetchDepartmentsPeople,
       fetchJobTitles,
+      fetchJobTitlesPeople,
       fetchEmployees,
     }),
-    [company, departments, departmentsPeople, jobTitles, employees]
+    [company, departments, departmentsPeople, jobTitles, jobTitlesPeople, employees]
   );
 
   return (
