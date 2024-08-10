@@ -61,7 +61,6 @@ export default function CustomDialog({
   selectedItem,
   setToast,
 }) {
-  const [isDepartment, setIsDepartment] = useState(false);
   const {
     departments,
     fetchDepartments,
@@ -72,6 +71,8 @@ export default function CustomDialog({
     employees,
   } = useSettingsContext();
 
+  const isDepartment = content === "departments";
+
   useEffect(() => {
     reset(
       isDepartment
@@ -79,11 +80,6 @@ export default function CustomDialog({
         : { roleTitle: selectedItem?.roleTitle ?? "" }
     );
   }, [open]);
-
-  useEffect(() => {
-    const isDepartmentCheck = content === "departments";
-    setIsDepartment(isDepartmentCheck);
-  }, [content]);
 
   const configs = {
     add: {
@@ -101,7 +97,6 @@ export default function CustomDialog({
   };
 
   const fieldName = isDepartment ? "departmentName" : "roleTitle";
-  console.log("fieldName", fieldName);
 
   const validationRules = {
     required: isDepartment
@@ -120,7 +115,7 @@ export default function CustomDialog({
 
     const items = isDepartment
       ? departments.filter((department) => department.id !== selectedItem.id)
-      : jobTitles.filter((jobTitle) => jobTitle.id !== selectedItem.id);
+      : jobTitles.filter((jobTitle) => jobTitle.roleId !== selectedItem.roleId);
 
     return items.sort((a, b) =>
       isDepartment
@@ -201,9 +196,11 @@ export default function CustomDialog({
   };
 
   const editData = (formData) => {
-    const fetchedData = content === "departments" ? departments : jobTitles;
+    const fetchedData = isDepartment ? departments : jobTitles;
     const editData = fetchedData.find(
-      (fetchItem) => fetchItem.id === selectedItem.id
+      (fetchItem) =>
+        fetchItem[isDepartment ? "id" : "roleId"] ===
+        selectedItem[isDepartment ? "id" : "roleId"]
     );
 
     const data = {
@@ -222,10 +219,10 @@ export default function CustomDialog({
       .catch(handleError);
   };
 
-  const deleteDepartment = () =>
+  const handleDeleteData = () =>
     axios
       .delete(
-        `http://localhost:3000/api/${isDepartment ? "departments" : "roles"}/${selectedItem.id}`
+        `http://localhost:3000/api/${isDepartment ? "departments" : "roles"}/${isDepartment ? selectedItem.id : selectedItem.roleId}`
       )
       .then((response) => {
         console.log("Data deleted successfully:", response.data);
@@ -258,24 +255,32 @@ export default function CustomDialog({
       )
       .then((response) => {
         console.log("Transfer employess successfully:", response.data);
-        deleteDepartment();
+        handleDeleteData();
       })
       .catch((error) => {
         console.error("Transfer employess error:", error);
       });
 
   const deleteData = () => {
-    const targetId = isDepartment ? "departmentId" : "roleId";
-    const filterEmployees = employees
-      .filter((employee) => employee[targetId] === selectedItem.id)
+    const employeeEmpIds = employees
+      .filter((employee) => {
+        if (isDepartment) {
+          return employee.departmentId === selectedItem.id;
+        }
+        return employee.roleId === selectedItem.roleId;
+      })
       .map((employee) => employee.empId);
-
-    const employeesTransfer = {
-      destinationDepartmentId: transferEmployees.id,
-      employeeEmpIds: filterEmployees,
-    };
-
-    handleTransferEmployees(employeesTransfer);
+      
+    if (isDepartment) {
+      return handleTransferEmployees({
+        employeeEmpIds,
+        destinationDepartmentId: transferEmployees.id,
+      });
+    }
+    return handleTransferEmployees({
+      employeeEmpIds,
+      destinationRoleId: transferEmployees.roleId,
+    });
   };
 
   const handleDataSubmit = (data) => {

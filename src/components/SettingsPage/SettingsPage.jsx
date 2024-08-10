@@ -10,8 +10,6 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
-import DepartmentsTabContent from "./departments/DepartmentsTabContent";
-import JobTitlesTabContent from "./jobTitles/JobTitlesTabContent";
 import ListTabContent from "./ListTabContent";
 import { SettingsProvider } from "./context";
 
