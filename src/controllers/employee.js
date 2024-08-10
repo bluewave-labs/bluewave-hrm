@@ -220,7 +220,7 @@ exports.deleteRecord = async (req, res) => {
 // Routes for data summaries
 exports.summarizeByDepartments = async (req, res) => {
   try {
-    const query = `select d."id", d."departmentName", count(e."empId") as "count" from department d left join employee e on d."id" = e."departmentId" group by d."id", d."departmentName" order by d."departmentName"`;
+    const query = `select d."id", d."departmentName", count(e."empId") as "count" from department d LEFT JOIN employee e ON d."id" = e."departmentId" group by d."id", d."departmentName" order by d."departmentName"`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).json(results);
   } catch (error) {
@@ -234,7 +234,7 @@ exports.summarizeByDepartments = async (req, res) => {
 
 exports.summarizeByJobTitles = async (req, res) => {
   try {
-    const query = `select r."roleTitle", count(e."empId") from employee e JOIN role r ON e."roleId" = r."roleId" GROUP BY r."roleTitle" ORDER BY 1`;
+    const query = `select r."roleId", r."roleTitle", count(e."empId") FROM role r LEFT JOIN employee e ON e."roleId" = r."roleId" group by r."roleId", r."roleTitle" order by r."roleTitle"`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).send(results);
   } catch (error) {
