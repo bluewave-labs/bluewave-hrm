@@ -10,7 +10,7 @@
 
 <p align="center"><strong>An open source human resource management application</strong></p>
 
-![Time off settings](https://github.com/bluewave-labs/hrm/blob/main/Time%20off.png?raw=true)
+![Github social](https://github.com/user-attachments/assets/0ce6f478-bed8-4fd6-a287-2a5cf31148ed)
 
 ## Features 
 
