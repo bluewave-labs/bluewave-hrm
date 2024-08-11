@@ -1,0 +1,171 @@
+.PopupModals {
+    display: flex;
+    justify-content: center;
+}
+
+.unsavedPopupBody {
+    width: 391px;
+    height: 123px;
+    border-radius: var(--radius-xs, 4px);
+    box-shadow: 0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 24px;
+    margin: 8px;
+    font: 400 13px/20px Inter, sans-serif;
+}
+
+
+.modal-header-h2 {
+    color: #101828;
+    font: 600 16px/28px Inter, sans-serif;
+    font-style: 'semi-bold';
+}
+
+.modal-header-p {
+    color: #475467;
+    font: 400 13px/20px Inter, sans-serif;
+    font-style: 'regular';
+    line-height: 154%;
+    margin-top: 4px;
+}
+
+.btngroup1 {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+
+.discardLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font: 400 13px/24px Inter, sans-serif;
+    color: #344054;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.createNewDepartmentPopupBody {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    margin: 4px;
+    width: 484px;
+    height: 239px;
+    border-radius: var(--radius-xs, 4px);
+    box-shadow: 0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+    background-color: var(--Colors-Background-bg-primary, #fff);
+    justify-content: center;
+    font: 400 13px/20px Inter, sans-serif;
+    
+}
+
+.modal-header {
+    display: flex;
+    align-items: start;
+    width: 484px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.modal-header-title {
+    margin-top: 7px;
+}
+
+.modal-header-title label {
+    color: #344054;
+    font: bold 16px/30px Inter, sans-serif;
+}
+
+.modal-content {
+    margin-top: 20px;
+}
+
+.labelname {
+    color: #344054;
+    font: 600 13px/154% Inter, sans-serif;
+}
+
+.inputname {
+    border: 2px solid #D0D5DD;
+    border-radius: 8px;
+    width: 454px;
+    height: 34px auto;
+    resize: horizontal;
+    padding: 5px 8px;
+}
+
+.inputname:focus {
+    outline: none;
+    border-color: #AEBDBD;
+}
+
+.createbtngroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-top: 50px;
+  
+}
+
+.button-secondary {
+    width: 124px;
+    height: 34px;
+    border-radius: 8px;
+    border: 2px solid #D0D5DD;
+    background-color: var(
+      --Component-colors-Components-Buttons-Secondary-button-secondary-bg,
+      #fff
+    );
+    color: var(
+      --Component-colors-Components-Buttons-Secondary-button-secondary-fg,
+      #344054
+    );
+    cursor: pointer;
+  }
+
+  .button-primary2 {
+    width: 120px;
+    height: 34px;
+    border-radius: 8px;
+    border: 2px solid #7F56D9;
+    background-color: var(
+      --Component-colors-Components-Buttons-Primary-button-primary-bg,
+      #7f56d9
+    );
+    color: var(
+      --Component-colors-Components-Buttons-Primary-button-primary-fg,
+      #fff
+    );
+    cursor: pointer;
+  }
+
+.button-primary2:hover {
+    background-color: #7f56d9;
+}
+
+.button-primary2:active {
+    background-color: #7f56d9;
+    box-shadow: none;
+}
+
+.button-primary2:focus-visible {
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    outline: none;
+}
+
+.button-primary2.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+    &:hover {
+    background-color: #7f56d9;
+    }
+}
