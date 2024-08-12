@@ -1,7 +1,5 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
-import Header from "../StaticComponents/Header";
-import SideMenu from "../StaticComponents/SideMenu";
 import { colors, fonts } from "../../Styles";
 import { useState } from "react";
 import { styled } from "@mui/system";
@@ -12,6 +10,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
 import { SettingsProvider } from "./context";
+import Page from "../StaticComponents/Page";
 
 const StyledTab = styled(Tab)({
   textTransform: "none",
@@ -21,7 +20,7 @@ const StyledTabPanel = styled(TabPanel)({
   padding: 0,
 });
 
-export default function SettingsPage({ style }) {
+export default function SettingsPage({ style, innerStyle }) {
   const [tab, setTab] = useState("Company profile");
 
   function handleChange(e, newValue) {
@@ -30,103 +29,62 @@ export default function SettingsPage({ style }) {
 
   return (
     <SettingsProvider>
-      <Box
-        sx={{
-          ...{
-            width: "100%",
-            height: "100%",
-            color: colors.darkGrey,
-            fontFamily: fonts.fontFamily,
-          },
-          ...style,
-        }}
-      >
-        {/*Header*/}
-        <Header />
-        <Box
+      <Page style={style} innerStyle={innerStyle}>
+        {/*Main page content*/}
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#F9FAFB",
+            marginBottom: "40px",
           }}
         >
-          {/*Side menu*/}
-          <Box>
-            <SideMenu />
-          </Box>
-          <Box
-            sx={{
-              paddingX: "75px",
-              paddingY: "40px",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            {/*Main page content*/}
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{
-                marginBottom: "40px",
-              }}
-            >
-              <h3>Settings</h3>
-            </Stack>
-            <Box
-              sx={{
-                ...{
-                  boxSizing: "border-box",
-                  minWidth: "980px",
-                  paddingX: "45px",
-                  paddingY: "42px",
-                  border: "1px solid #EBEBEB",
-                  borderRadius: "5px",
-                  backgroundColor: "#FFFFFF",
-                  color: colors.darkGrey,
-                  fontFamily: fonts.fontFamily,
-                },
-                ...style,
-              }}
-            >
-              <TabContext value={tab}>
-                <Box sx={{ borderBottom: 1, borderColor: "#EAECF0" }}>
-                  <TabList
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    onChange={handleChange}
-                  >
-                    <StyledTab
-                      label="Company profile"
-                      value="Company profile"
-                    />
-                    <StyledTab label="Departments" value="Departments" />
-                    <StyledTab label="Job titles" value="Job titles" />
-                    <StyledTab label="Time off" value="Time off" />
-                    <StyledTab label="Permissions" value="Permissions" />
-                    <StyledTab
-                      label="Employee fields"
-                      value="Employee fields"
-                    />
-                    <StyledTab label="Offboarding" value="Offboarding" />
-                  </TabList>
-                </Box>
-                <StyledTabPanel value="Company profile">
-                  <CompanyProfileForm />
-                </StyledTabPanel>
-                <StyledTabPanel value="Departments">
-                  <ListTabContent content="departments" />
-                </StyledTabPanel>
-                <StyledTabPanel value="Job titles">
-                  <ListTabContent content="jobTitles" />
-                </StyledTabPanel>
-              </TabContext>
+          <h3>Settings</h3>
+        </Stack>
+        <Box
+          sx={{
+            ...{
+              boxSizing: "border-box",
+              border: "1px solid #EBEBEB",
+              borderRadius: "5px",
+              backgroundColor: "#FFFFFF",
+              color: colors.darkGrey,
+              fontFamily: fonts.fontFamily,
+              minWidth: "980px",
+              paddingX: "45px",
+              paddingY: "42px",
+            },
+            ...style,
+          }}
+        >
+          <TabContext value={tab}>
+            <Box sx={{ borderBottom: 1, borderColor: "#EAECF0" }}>
+              <TabList
+                textColor="secondary"
+                indicatorColor="secondary"
+                onChange={handleChange}
+              >
+                <StyledTab label="Company profile" value="Company profile" />
+                <StyledTab label="Departments" value="Departments" />
+                <StyledTab label="Job titles" value="Job titles" />
+                <StyledTab label="Time off" value="Time off" />
+                <StyledTab label="Permissions" value="Permissions" />
+                <StyledTab label="Employee fields" value="Employee fields" />
+                <StyledTab label="Offboarding" value="Offboarding" />
+              </TabList>
             </Box>
-          </Box>
+            <StyledTabPanel value="Company profile">
+              <CompanyProfileForm />
+            </StyledTabPanel>
+            <StyledTabPanel value="Departments">
+              <ListTabContent content="departments" />
+            </StyledTabPanel>
+            <StyledTabPanel value="Job titles">
+              <ListTabContent content="jobTitles" />
+            </StyledTabPanel>
+          </TabContext>
         </Box>
-      </Box>
+      </Page>
     </SettingsProvider>
   );
 }
