@@ -1,8 +1,7 @@
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
-const { getComparator } = require("../helper/utils");
-const { Where } = require("sequelize/lib/utils");
+const { attribute } = require("@sequelize/core/_non-semver-use-at-your-own-risk_/expression-builders/attribute.js");
 
 exports.showAll = async (req, res) => {
   const data = await db.employeeAnnualTimeOff.findAll({
@@ -17,14 +16,29 @@ exports.showAll = async (req, res) => {
 
 exports.showOne = async (req, res) => {
   const empId = req.params.empid;
-  const data = await db.employeeAnnualTimeOff.findAll({
-    where: { employeeEmpId: empId },
-  });
-  if (data === null) {
-    res.status(400).send("Not found!");
-  } else {
-    res.status(200).send(data);
-  }
+try {
+  const query = `SELECT e.id, e."yearNumber" AS "year", e."hoursAllowed", e."cumulativeHoursTaken" AS "hoursUsed",(e."hoursAllowed" - e."cumulativeHoursTaken") AS "hoursLeft", t."id" AS "timeOffId", t.category FROM "employeeAnnualTimeOff" e JOIN "timeOff" t ON e."timeOffId" = t.id  WHERE e."employeeEmpId" = :empId ORDER BY 2;`;
+const [results, metadata] = await db.sequelize.query(query, {
+  replacements: { empId: empId },
+});
+     res.status(200).send(results);
+
+} catch (err) {
+  console.log(err);
+  res.status(400).send("Not found!");
+
+}
+
+
+
+  // const data = await db.employeeAnnualTimeOff.findAll({
+  //   where: { employeeEmpId: empId },
+  // });
+  // if (data) {
+  //   res.status(200).send(data);
+  // } else {
+  //   res.status(400).send("Not found!");
+  // }
 };
 
 exports.createRecord = async (req, res) => {

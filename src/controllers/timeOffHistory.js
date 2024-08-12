@@ -32,7 +32,7 @@ exports.showAllByEmployee = async (req, res) => {
   //Query using empId
   const data = await db.timeOffHistory.findAll({ 
     where: { empId: empId },
-    include: "employee"
+    include: ["employee", "timeOff"]
   }); 
   if (data === null) {
     res.status(400).send("Not found!");

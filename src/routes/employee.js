@@ -4,6 +4,7 @@ const { requireAuth } = require("../../config/authJwt");
 module.exports = (router) => {
   router.route("/employees").get(controller.showAll);
   router.route("/managers").get(controller.showManagers);
+  router.route("/managers/employees/:id").get(controller.showAllByManager);
   router.route("/employees/:id").post(controller.showOne);
   router.route("/employees/find/email").post(controller.findOneByEmail);
   router.route("/employees").post(controller.createRecord);
