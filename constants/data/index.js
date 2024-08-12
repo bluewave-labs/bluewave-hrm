@@ -66,9 +66,7 @@ module.exports = {
   populateCompanyTable: async function (db) {
     const data = require("./company.json");
     removeKey(data, "id");
-    const imageFile = fs.readFileSync("./constants/data/logo.png", {
-      encoding: "base64",
-    });
+    const imageFile = fs.readFileSync("./constants/data/logo.jpeg");
     for (let d of data) {
       d.companyLogo = imageFile;
     }
