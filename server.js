@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 });
 
 const routes = require("./src/routes/index");
-const HTTP_PORT = process.env.HTTP_PORT || 5000;
+const HTTP_PORT = process.env.HTTP_PORT || 3000;
 
 // Pass the router to the routes defined in the index file
 routes(router);
