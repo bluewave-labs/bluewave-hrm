@@ -220,7 +220,21 @@ exports.deleteRecord = async (req, res) => {
 // Routes for data summaries
 exports.summarizeByDepartments = async (req, res) => {
   try {
-    const query = `select  d."departmentName", count(e."empId") as "count" from employee e JOIN department d ON e."departmentId" = d."id" GROUP BY e."departmentId", d."departmentName" ORDER BY d."departmentName"`;
+    const query = `select d."id", d."departmentName", count(e."empId") as "count" from department d left join employee e on d."id" = e."departmentId" group by d."id", d."departmentName" order by d."departmentName"`;
+    const [results, metadata] = await db.sequelize.query(query);
+    res.status(200).json(results);
+  } catch (error) {
+    console.error("Error in summarizeByDepartments:", error);
+    res.status(400).json({
+      message: "Failed to summarize by departments",
+      error: error.message,
+    });
+  }
+};
+
+exports.summarizeByJobTitles = async (req, res) => {
+  try {
+    const query = `select r."roleTitle", count(e."empId") from employee e JOIN role r ON e."roleId" = r."roleId" GROUP BY r."roleTitle" ORDER BY 1`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).send(results);
   } catch (error) {

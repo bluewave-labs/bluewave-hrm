@@ -64,7 +64,7 @@ exports.updateRecord = async (req, res) => {
     },
   });
   if (check) {
-    return res.send(`${req.body.departmentNames} already exists.`);
+    return res.send(`${req.body.departmentName} already exists.`);
   }
   try {
     const data = await db.department.findByPk(updatedData.id);
