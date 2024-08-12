@@ -262,6 +262,7 @@ export default function Form({ company, style }) {
               fullWidth
               size="small"
               color="secondary"
+              inputProps={{ ...register("country") }}
             />
           </Grid>
           {/*Textfield for Social profiles*/}
@@ -329,6 +330,7 @@ export default function Form({ company, style }) {
           >
             Save changes
           </HRMButton>
+          {/* <input type="submit" /> */}
         </Grid>
       </Box>
     </form>
