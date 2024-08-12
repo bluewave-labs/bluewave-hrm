@@ -4,13 +4,11 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { Typography } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
-import PropTypes from "prop-types";
 import Stack from "@mui/system/Stack";
-import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
 
 const TextHeader = styled(Typography)({
@@ -26,8 +24,21 @@ const Text = styled(Typography)({
   lineHeight: "20px",
   color: "#101828",
 });
-export default function DepartmentsTable({ openDialog, style }) {
-  const { departmentsPeople } = useSettingsContext();
+
+const EditButton = styled(Button)({
+  textTransform: "none",
+  color: "#7F56D9",
+  textDecoration: "none",
+  fontWeight: "600",
+});
+
+const DeleteButton = styled(Button)({
+  textTransform: "none",
+  color: "#475467",
+  textDecoration: "none",
+  fontWeight: "600",
+});
+export default function DepartmentsTable({ openDialog, departments, style }) {
 
   const TableHeaderCell = styled(TableCell)({
     color: colors.darkGrey,
@@ -52,7 +63,6 @@ export default function DepartmentsTable({ openDialog, style }) {
       }}
     >
       <Table>
-        {/*Table header*/}
         <TableHead>
           <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
             <TableHeaderCell sx={{ width: "50%", paddingLeft: "25px" }}>
@@ -65,7 +75,7 @@ export default function DepartmentsTable({ openDialog, style }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {departmentsPeople.map((department) => (
+          {departments.map((department) => (
             <TableRow key={department.id}>
               <TableBodyCell sx={{ width: "50%", paddingLeft: "25px" }}>
                 <Text>{department.departmentName}</Text>
@@ -79,24 +89,14 @@ export default function DepartmentsTable({ openDialog, style }) {
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  <HRMButton mode="primary" onClick={() => openDialog(department, "delete")}>
-                    <b>Delete</b>
-                  </HRMButton>
-                  <HRMButton
-                    mode="primary"
-                    onClick={() => openDialog(department, "edit")}
+                  <DeleteButton
+                    onClick={() => openDialog(department, "delete")}
                   >
-                    {/* <a
-                      href="#"
-                      style={{
-                        color: "#7F56D9",
-                        textDecoration: "none",
-                        fontWeight: "bold",
-                      }}
-                    > */}
-                      Edit
-                    {/* </a> */}
-                  </HRMButton>
+                    <b>Delete</b>
+                  </DeleteButton>
+                  <EditButton onClick={() => openDialog(department, "edit")}>
+                    Edit
+                  </EditButton>
                 </Stack>
               </TableBodyCell>
             </TableRow>
@@ -106,11 +106,3 @@ export default function DepartmentsTable({ openDialog, style }) {
     </TableContainer>
   );
 }
-
-DepartmentsTable.propTypes = {
-  departments: PropTypes.objectOf(PropTypes.array),
-};
-
-DepartmentsTable.defaultProps = {
-  style: {},
-};

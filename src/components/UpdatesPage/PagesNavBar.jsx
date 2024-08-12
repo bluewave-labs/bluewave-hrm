@@ -91,7 +91,9 @@ export default function PagesNavBar({numOfEntries, currentPage, handlePage, styl
         <Box sx={{...{
             boxSizing: "border-box",
             minWidth: "925px",
+            width: "100%",
             display: "flex",
+            marginTop: "24px",
             padding: 2,
             justifyContent: "space-between",
             border: "1px solid #EAECF0",
