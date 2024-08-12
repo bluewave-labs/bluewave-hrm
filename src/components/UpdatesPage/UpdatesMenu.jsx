@@ -6,7 +6,6 @@ import PagesNavBar from './PagesNavBar';
 import NoContentComponent from './NoContentComponent';
 import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
-//const axios = require('axios');
 import axios from 'axios';
 
 /**
@@ -18,18 +17,26 @@ import axios from 'axios';
  *      Default: {}
  */
 export default function UpdatesMenu({style}) {
+    //Current page number
     const [currentPage, setCurrentPage] = useState(1);  
+    //Flag determining whether to display all or unread notifications
     const [filter, setFilter] = useState("All");
+    //List of notifications to be displayed
     const [allUpdates, setAllUpdates] = useState([]);
+    //Hook for refreshing the list of notifications
     const [refresh, setRefresh] = useState(false);
+
+    //ID of the currently logged in employee
     const currentUserId = 1;
 
+    //Refresh the list of notifications whenever the refresh hook is changed
     useEffect(() => {
         getUpdates();
     }, [refresh]);
 
     const url = `http://localhost:5000/api/notifications/employee/1`;
 
+    //Retrieve the status of a notification for a given employee
     function checkNotificationStatus(update, id) {
         return update.recipients.filter((emp) => emp.empId === id)[0].notificationStatus;
     };
@@ -41,10 +48,9 @@ export default function UpdatesMenu({style}) {
         .then((response) => {
             const updates = [];
             const data = response.data;
-            for (const up of data) {
-                //console.log(up);
-                updates.push(up)
-            }
+            data.forEach((up) => {
+                updates.push(up);
+            });
             setAllUpdates(updates);
         })
         .catch((error) => {

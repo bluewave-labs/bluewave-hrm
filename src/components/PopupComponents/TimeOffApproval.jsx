@@ -48,10 +48,10 @@ export default function TimeOffApproval({request_information, close, refresh, st
         width: "50%"
     });
 
-    const url = `http://localhost:5000/api/timeoffhistories`;
-
+    //Function for sending the PUT request to change the time off request status
     function resolveRequest(newStatus) {
         console.log("Running resolveRequest()");
+        const url = `http://localhost:5000/api/timeoffhistories`;
         axios.put(
             url,
             {
@@ -178,7 +178,13 @@ export default function TimeOffApproval({request_information, close, refresh, st
 //Control panel settings for storybook
 TimeOffApproval.propTypes = {
     //Information included in the time off request
-    request_information: PropTypes.objectOf(PropTypes.string)
+    request_information: PropTypes.objectOf(PropTypes.string),
+
+    //Function for closing this popup component
+    close: PropTypes.func,
+
+    //Function for closing this popup and refreshing the list of updates in the parent component
+    refresh: PropTypes.func
 };
 
 //Default values for this component

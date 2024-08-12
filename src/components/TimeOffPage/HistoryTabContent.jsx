@@ -6,9 +6,19 @@ import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import NoContentComponent from '../UpdatesPage/NoContentComponent';
 import Label from '../Label/Label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import axios from 'axios';
+
+//Function for parsing a JavaScript date into a string format.
+function formatDate(date) {
+    const day = date.toLocaleString('default', { day: '2-digit' });
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.toLocaleString('default', { year: 'numeric' });
+    return `${month} ${day}, ${year}`;
+};
 
 /**
  * Displays the content for the History tab in the time off menu which includes the complete time
@@ -22,12 +32,16 @@ import PropTypes from 'prop-types';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function HistoryTabContent({timeOffPeriods, style}) {
+export default function HistoryTabContent({style}) {
     const [currentPage, setCurrentPage] = useState(1);  //The current page number
     //Flags for determining which buttons in the "customize" dropdown are selected
     const [typeFilter, setTypeFilter] = useState(true);
     const [amountFilter, setAmountFilter] = useState(true);
     const [noteFilter, setNoteFilter] = useState(true);
+    //Time off periods to be displayed
+    const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    //Hook for refreshing the list of time off periods
+    const [refresh, setRefresh] = useState(false);
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active
@@ -35,6 +49,42 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
     if (typeFilter) { activeFilters.push("Type"); }
     if (amountFilter) { activeFilters.push("Amount"); }
     if (noteFilter) { activeFilters.push("Note"); }
+
+    const currentUser = 1;
+
+    //Refresh the list of time off periods
+    useEffect(() => {
+        getTimeOffPeriods();
+    }, [refresh]);
+
+    //Function for retrieving any past time off periods
+    function getTimeOffPeriods() {
+        console.log("Running getTimeOffPeriods()");
+        const url = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
+        //Send request to database for time off periods
+        axios.post(url)
+        .then((response) => {
+            const periods = [];
+            const data = response.data;
+            data.forEach((p) => {
+                //Only retrieve and display past periods
+                if (dayjs(p.startDate).isBefore(dayjs())) {
+                    periods.push({
+                        id: p.id,
+                        from: formatDate(dayjs(p.startDate).toDate()),
+                        to: formatDate(dayjs(p.endDate).toDate()),
+                        type: p.timeOff.category,
+                        hours: p.hours,
+                        note: p.note
+                    });
+                }
+            });
+            setTimeOffPeriods(periods);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    };
  
     //Only shows 10 periods at a time
     const periodsToDisplay = timeOffPeriods.slice((currentPage - 1) * 10, currentPage * 10);
@@ -94,7 +144,8 @@ export default function HistoryTabContent({timeOffPeriods, style}) {
                     <UpcomingTimeOffTable 
                         timeOffPeriods={periodsToDisplay} 
                         tableColumns={activeFilters}
-                        editFlag={true} 
+                        editFlag={false} 
+                        //refresh={() => setRefresh(!refresh)}
                         style={{marginBottom: "30px"}}
                     />
                     {/*Upcoming time off navbar*/}

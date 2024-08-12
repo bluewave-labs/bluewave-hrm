@@ -16,6 +16,7 @@ import Label from '../Label/Label';
 import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import DeleteTimeOff from '../PopupComponents/DeleteTimeOff';
 import { colors, fonts } from '../../Styles';
+import dayjs from "dayjs";
 
 /**
  * Menu component for listing upcoming scheduled periods of time off
@@ -32,17 +33,19 @@ import { colors, fonts } from '../../Styles';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, editFlag, style}) {
+export default function UpcomingTimeOffTable({
+    timeOffPeriods, 
+    tableColumns, 
+    editFlag, 
+    refresh, 
+    style
+}) {
     //States determining whether the edit time off request menu and delete time off request
     //component should be displayed
     const [editTimeOff, setEditTimeOff] = useState(false);
     const [deleteTimeOff, setDeleteTimeOff] = useState(false);
-
-    const timeOffRequest = {
-        startDate: new Date(2024, 1, 1),
-        endDate: new Date(2024, 2, 1),
-        type: 'Vacation'
-    };
+    //Initial details of time off period to be displayed when editing
+    const [timeOffDetails, setTimeOffDetails] = useState({});
 
     //Custom style elements
     const TableHeaderCell = styled(TableCell)({
@@ -61,6 +64,19 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
         border: "1px solid #EAECF0",
         backgroundColor: "#F9FAFB"
     });
+
+    //Function for retrieving time off period details when editing
+    function retrieveDetails(period) {
+        const details = {
+            id: period.id,
+            timeOffId: period.timeOffId,
+            from: dayjs(period.from).toDate(),
+            to: dayjs(period.to).toDate(),
+            hours: period.hours,
+            type: period.type
+        }
+        setTimeOffDetails(details);
+    };
 
     return (
         <>
@@ -115,7 +131,7 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
                                 {/*Time off category*/}
                                 {tableColumns.includes('Type') && <TableBodyCell>{period.type}</TableBodyCell>}
                                 {/*Time off amount*/}
-                                {tableColumns.includes('Amount') && <TableBodyCell>{period.amount}</TableBodyCell>}
+                                {tableColumns.includes('Amount') && <TableBodyCell>{period.hours} hours</TableBodyCell>}
                                 {/*Time off additional notes*/}
                                 {tableColumns.includes('Note') && <TableBodyCell>{period.note}</TableBodyCell>}
                                 {/*The status of the time off period*/}
@@ -125,8 +141,8 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
                                             mode="status" 
                                             dot={
                                                 (period.status === "Approved") ? "green" :
-                                                (period.status === "Waiting") ? "orange" :
-                                                (period.status === "Rejected") ? "red" : null
+                                                (period.status === "Pending") ? "orange" :
+                                                (period.status === "Declined") ? "red" : null
                                             }
                                             label={period.status}
                                         />
@@ -138,13 +154,19 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
                                         <Stack direction="row" alignItems="center" justifyContent="flex-end">
                                             <HRMButton 
                                                 mode="tertiary" 
-                                                onClick={() => setDeleteTimeOff(true)}
+                                                onClick={() => {
+                                                    retrieveDetails(period);
+                                                    setDeleteTimeOff(true);
+                                                }}
                                             >
                                                 <b>Delete</b>
                                             </HRMButton>
                                             <HRMButton 
                                                 mode="tertiary"
-                                                onClick={() => setEditTimeOff(true)}
+                                                onClick={() => {
+                                                    retrieveDetails(period);
+                                                    setEditTimeOff(true);
+                                                }}
                                             >
                                                 <a 
                                                     style={{
@@ -168,15 +190,22 @@ export default function UpcomingTimeOffTable({timeOffPeriods, tableColumns, edit
             <Dialog open={editTimeOff} onClose={() => setEditTimeOff(false)}>
                 <TimeOffRequest 
                     close={() => setEditTimeOff(false)} 
-                    sendRequest={() => setEditTimeOff(false)} 
-                    initialRequest={timeOffRequest} 
+                    sendRequest={() => {
+                        refresh();
+                        setEditTimeOff(false);
+                    }} 
+                    initialRequest={timeOffDetails}
                 />
             </Dialog>
             {/*Delete time off request notification*/}
             <Dialog open={deleteTimeOff} onClose={() => setDeleteTimeOff(false)}>
                 <DeleteTimeOff 
+                    period={timeOffDetails}
                     close={() => setDeleteTimeOff(false)} 
-                    handleDelete={() => setDeleteTimeOff(false)} 
+                    refresh={() => {
+                        refresh();
+                        setDeleteTimeOff(false);
+                    }}
                 />
             </Dialog>
         </>

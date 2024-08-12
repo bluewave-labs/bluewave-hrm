@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import UpdatesPage from './components/UpdatesPage/UpdatesPage';
+import TimeOffPage from './components/TimeOffPage/TimeOffPage';
 
 function App() {
   return (
-    <UpdatesPage />
+    <TimeOffPage />
   );
 }
 
