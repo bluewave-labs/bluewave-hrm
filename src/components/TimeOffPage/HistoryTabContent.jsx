@@ -1,7 +1,6 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import TuneIcon from '@mui/icons-material/Tune';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
@@ -39,10 +38,10 @@ export default function HistoryTabContent({style}) {
     const [typeFilter, setTypeFilter] = useState(true);
     const [amountFilter, setAmountFilter] = useState(true);
     const [noteFilter, setNoteFilter] = useState(true);
+    //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
-
-    dayjs.extend(isSameOrBefore);
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active
@@ -51,30 +50,35 @@ export default function HistoryTabContent({style}) {
     if (amountFilter) { activeFilters.push("Amount"); }
     if (noteFilter) { activeFilters.push("Note"); }
 
-    const url = `http://localhost:5000/api/timeoffhistories/employee/1`;
+    const currentUser = 1;
 
+    //Refresh the list of time off periods
     useEffect(() => {
         getTimeOffPeriods();
     }, [refresh]);
 
+    //Function for retrieving any past time off periods
     function getTimeOffPeriods() {
         console.log("Running getTimeOffPeriods()");
+        const url = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
+        //Send request to database for time off periods
         axios.post(url)
         .then((response) => {
             const periods = [];
             const data = response.data;
-            for (const p of data) {
-                if (dayjs(p.startDate).isSameOrBefore(dayjs())) {
+            data.forEach((p) => {
+                //Only retrieve and display past periods
+                if (dayjs(p.startDate).isBefore(dayjs())) {
                     periods.push({
                         id: p.id,
                         from: formatDate(dayjs(p.startDate).toDate()),
                         to: formatDate(dayjs(p.endDate).toDate()),
-                        type: (p.timeOffId === 1) ? "Vacation" : (p.timeOffId === 2) ? "Sick Leave" : "Bereavement",
+                        type: p.timeOff.category,
                         hours: p.hours,
                         note: p.note
                     });
                 }
-            }
+            });
             setTimeOffPeriods(periods);
         })
         .catch((error) => {
@@ -140,8 +144,8 @@ export default function HistoryTabContent({style}) {
                     <UpcomingTimeOffTable 
                         timeOffPeriods={periodsToDisplay} 
                         tableColumns={activeFilters}
-                        editFlag={true} 
-                        refresh={() => setRefresh(!refresh)}
+                        editFlag={false} 
+                        //refresh={() => setRefresh(!refresh)}
                         style={{marginBottom: "30px"}}
                     />
                     {/*Upcoming time off navbar*/}

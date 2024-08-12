@@ -39,6 +39,7 @@ export default function UpdatesList({updates, refresh, style}) {
 
     const currentUserId = 1;
 
+    //Retrieve the status of a notification for a given employee
     function checkNotificationStatus(update, id) {
         return update.recipients.filter((emp) => emp.empId === id)[0].notificationStatus;
     };

@@ -42,13 +42,6 @@ function formatDate(date) {
     return `${month} ${day}, ${year}`;
     }
 
-//List of time off policies
-const timeOffCategories = [
-    "Vacation",
-    "Sick",
-    "Bereavement",
-];
-
 /**
  * Popup component for displaying the form for submitting a time off request. Includes controls
  * for setting the time off policy, the length of the time off period and the amount of time
@@ -64,8 +57,11 @@ const timeOffCategories = [
  * - initialRequest<Object>: When editing a time off request, this object shows the original
  *      details of the request
  *      Syntax: {
+ *          id: <Integer>
+ *          timeOffId: <Integer>
  *          from: <Date>
  *          to: <Date>
+ *          hours: <Float>
  *          type: <String>
  *      }
  *
@@ -78,23 +74,10 @@ export default function TimeOffRequest({
   initialRequest,
   style,
 }) {
+    //Time off policy menu
+    const [categoryMenu, setCategoryMenu] = useState([]);
     //Selected time off policy
-    const [category, setCategory] = useState(() => {
-        if (initialRequest) {
-            if (initialRequest.type === "Vacation") {
-                return timeOffCategories[0];
-            }
-            if (initialRequest.type === "Sick") {
-                return timeOffCategories[1];
-            }
-            else {
-                return timeOffCategories[2];
-            }
-        }
-        else {
-            return timeOffCategories[0]
-        }
-    });
+    const [category, setCategory] = useState(null);
     //Time off starting and ending dates
     const [from, setFrom] = useState(
         initialRequest ? initialRequest.from : dayjs().toDate()
@@ -114,11 +97,38 @@ export default function TimeOffRequest({
     //Flag determining if the amount of time off should be set for each day or for just the
     //starting and ending dates
     const [eachDay, setEachday] = useState(false);
+    //Flag determining if there is enough time off balance for the given policy to grant the
+    //requested time off amount
+    const [validRequest, setValidRequest] = useState(true);
+    //Flag determining if an error has occured
+    const [errorOccurred, setErrorOccurred] = useState(false);
+
+    //Retrieve policy category options
+    useEffect(() => {
+        getTimeOffPolicies();
+    }, []);
+
+    //Set initial time off policy option
+    useEffect(() => {
+        setCategory(
+            (initialRequest) ? 
+            categoryMenu.filter((item) => item.timeOffId === initialRequest.timeOffId)[0] : 
+            categoryMenu[0]
+        );
+    }, [categoryMenu]);
+
+    /*
+    useEffect(() => {
+        if (category) {
+            setValidRequest(totalHoursOff <= category.availableHours); 
+        }
+    }, [category]);
+    */
 
     //Automatically adjust dates to ensure a valid period is set
     useEffect(() => {
         if (!isValidPeriod(from, to)) {
-        setTo(from);
+            setTo(from);
         }
         setDateRange(getDateRange());
         calculateTimeOffHours();
@@ -126,7 +136,7 @@ export default function TimeOffRequest({
 
     useEffect(() => {
         if (!isValidPeriod(from, to)) {
-        setFrom(to);
+            setFrom(to);
         }
         setDateRange(getDateRange());
         calculateTimeOffHours();
@@ -135,101 +145,204 @@ export default function TimeOffRequest({
     const MemoTimeOffTable = memo(TimeOffTable);
 
     const currentUser = 1;
+    const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
+    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
+
+    //Function for retrieving the time off category options
+    function getTimeOffPolicies() {
+        //Retrieve employeeAnnualTimeOff records from database
+        axios.post(timeOffPolicyPOSTURL)
+        .then((response) => {
+            const policies = {};
+            //We are only interested in the records for the current year
+            const data = response.data.filter((p) => p.year === dayjs().year());
+            data.forEach((p) => {
+                policies[p.category] = {
+                    id: p.id,
+                    timeOffId: p.timeOffId,
+                    type: p.category,
+                    availableHours: p.hoursLeft + ((initialRequest && initialRequest.timeOffId === p.timeOffId) ? initialRequest.hours : 0),
+                    hoursUsed: p.hoursUsed
+                }
+            });
+            //Set each policy as a selectable item in the dropdown
+            setCategoryMenu(Object.values(policies));
+        })
+        .catch((error) => console.log(error));
+    };
 
     //Date range for setting full and half days off
     function getDateRange() {
         const range = [];
         for (
-        let d = new Date(from);
-        isValidPeriod(d, to);
-        d.setDate(d.getDate() + 1)
+            let d = new Date(from);
+            isValidPeriod(d, to);
+            d.setDate(d.getDate() + 1)
         ) {
-        const data = {
-            date: formatDate(new Date(d)),
-            day: "full", // full by default
-        };
-        range.push(data);
+            const data = {
+                date: formatDate(new Date(d)),
+                day: "full", // full by default
+            };
+            range.push(data);
         }
         return range;
-    }
+    };
 
     //Calculate the total hours, full days and half days off based on the radio inputs selected
     function calculateTimeOffHours() {
-        console.log("running calculateTimeOffHours()");
         let totalHours = 0;
         let fullDays = 0;
         let halfDays = 0;
+        //If setting the time off for each day individually
         if (eachDay) {
-        for (const d of dateRange) {
-            if (d.day === "half") {
-            totalHours += 4;
-            halfDays++;
-            } else {
-            totalHours += 8;
-            fullDays++;
+            //Iterate through each day, calculating the time off hours individually
+            dateRange.forEach((d) => {
+                if (d.day === "half") {
+                    totalHours += 4;
+                    halfDays++;
+                } else {
+                    totalHours += 8;
+                    fullDays++;
+                }
+            });
+        } 
+        //If only setting time off for the first and last day
+        else {
+            if (dateRange.length === 0) {
+                return;
             }
-        }
-        } else {
-        if (dateRange.length === 0) {
-            return;
-        }
-        let d = dateRange[0];
-        if (d.day === "half") {
-            totalHours += 4;
-            halfDays++;
-        } else {
-            totalHours += 8;
-            fullDays++;
-        }
-        if (dateRange.length >= 2) {
-            d = dateRange[dateRange.length - 1];
+            let d = dateRange[0];
+            //Calculate the time off hours for the first day
             if (d.day === "half") {
-            totalHours += 4;
-            halfDays++;
-            } else {
-            totalHours += 8;
-            fullDays++;
+                totalHours += 4;
+                halfDays++;
+            } 
+            else {
+                totalHours += 8;
+                fullDays++;
             }
-            totalHours += (dateRange.length - 2) * 8;
-            fullDays += dateRange.length - 2;
-        }
+            if (dateRange.length >= 2) {
+                d = dateRange[dateRange.length - 1];
+                //Calculate the time off hours for the last day
+                if (d.day === "half") {
+                    totalHours += 4;
+                    halfDays++;
+                } else {
+                    totalHours += 8;
+                    fullDays++;
+                }
+                //Assume all days in between are full days off
+                totalHours += (dateRange.length - 2) * 8;
+                fullDays += dateRange.length - 2;
+            }
         }
         setTotalHoursOff(totalHours);
         setFullDaysOff(fullDays);
         setHalfDaysOff(halfDays);
-    }
+        //If the amount of time off requested exceeds what the selected time off policy allows,
+        //then the send or update button will be disabled
+        if (category) { 
+            setValidRequest(totalHours <= category.availableHours); 
+        }
+    };
 
+    //Function for submitting a time off request
     function handleSubmit() {
-        console.log("Running handleSubmit()");
-        const url = `http://localhost:5000/api/timeoffhistories`
-        axios.post(url, {
+        //console.log("running handleSubmit()");
+        //Create and submit a new time off period to the database
+        const newPeriod = {
             startDate: dayjs(from).toString(),
             endDate: dayjs(to).toString(),
             hours: totalHoursOff,
             empId: currentUser,
-            timeOffId: (category === "Vacation") ? 1 : (category === "Sick") ? 2 : 3,
+            timeOffId: category.timeOffId,
             requestDate: dayjs().toString(),
             decisionDate: dayjs().add(1, "day").toString()
+        };
+        console.log(newPeriod);
+        axios.post(timeOffPeriodURL, newPeriod)
+        .then((response) => {
+            console.log(response);
+            //Update the time off balance
+            const newBalance = {
+                id: category.id,
+                cumulativeHoursTaken: category.hoursUsed + totalHoursOff
+            }
+            axios.put(timeOffPolicyPUTURL, newBalance)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => console.log(error));
+            sendRequest();
         })
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
-        sendRequest();
-    }
+        .catch((error) => {
+            console.log(error);
+            setErrorOccurred(true);
+        });
+    };
 
+    //Function for modifying an existing time off request
     function handleEdit() {
-        console.log("Running handleEdit()");
-        const url = `http://localhost:5000/api/timeoffhistories`
-        axios.put(url, {
+        //Update the initial time off period
+        const updatedPeriod = {
             id: initialRequest.id,
             startDate: dayjs(from).toString(),
             endDate: dayjs(to).toString(),
             hours: totalHoursOff,
-            timeOffId: (category === "Vacation") ? 1 : (category === "Sick") ? 2 : 3
+            timeOffId: category.timeOffId
+        };
+        axios.put(timeOffPeriodURL, updatedPeriod)
+        .then((response) => {
+            console.log(response);
+            //If the time off policy has changed
+            if (initialRequest.timeOffId !== category.timeOffId) {
+                //Refund the hours used in the original policy
+                const refundBalance = {
+                    //Need to get employeeAnnualTimeOff id
+                    id: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].id,
+                    cumulativeHoursTaken: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].hoursUsed - initialRequest.hours
+                }
+                axios.put(timeOffPolicyPUTURL, refundBalance)
+                .then((response) => {
+                    console.log(response);
+                    //Subtract the hours used in the new policy
+                    const newBalance = {
+                        id: category.id,
+                        cumulativeHoursTaken: category.hoursUsed + totalHoursOff
+                    };
+                    axios.put(timeOffPolicyPUTURL, newBalance)
+                    .then((response) => {
+                        console.log(response);
+                        sendRequest();
+                    })
+                    .catch((error) => console.log(error));
+                })
+                .catch((error) => console.log(error));
+            }
+            //If the time off policy is the same but the amount of time off has changed
+            else if (initialRequest.hours !== totalHoursOff) {
+                //Update the new balance for the current policy
+                const newBalance = {
+                    id: category.id,
+                    cumulativeHoursTaken: category.hoursUsed + totalHoursOff - initialRequest.hours
+                };
+                axios.put(timeOffPolicyPUTURL, newBalance)
+                .then((response) => {
+                    console.log(response);
+                    sendRequest();
+                })
+                .catch((error) => console.log(error));
+            }
+            else {
+                sendRequest();
+            }
         })
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
-        sendRequest();
-    }
+        .catch((error) => {
+            console.log(error);
+            setErrorOccurred(true);
+        });
+    };
 
     return (
         <Box
@@ -274,7 +387,8 @@ export default function TimeOffRequest({
         <h4>Time off category</h4>
         <Autocomplete
             disablePortal
-            options={timeOffCategories}
+            options={categoryMenu}
+            getOptionLabel={(option) => `${option.type} - left: ${Math.floor(option.availableHours / 8)} days (${option.availableHours} hours)`}
             renderInput={(params) => (
             <TextField {...params} placeholder="Time off category" />
             )}
@@ -339,6 +453,14 @@ export default function TimeOffRequest({
             day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in
             total).
         </p>
+        {!validRequest && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+            You are requesting {totalHoursOff} hours off. The selected time off policy only 
+            has {category.availableHours} hours available.
+        </h4>}
+        {/*Error message to be displayed if an error occurs*/}
+        {errorOccurred && <h3 style={{color: "#D92D20", marginBottom: "15px"}}>
+            An error occurred. Could not send time off request.
+        </h3>}
         {/*Send or cancel*/}
         <Stack
             direction="row"
@@ -350,11 +472,11 @@ export default function TimeOffRequest({
             Cancel
             </HRMButton>
             {initialRequest ? (
-            <HRMButton mode="primary" onClick={handleEdit}>
+            <HRMButton mode="primary" onClick={handleEdit} enabled={validRequest}>
                 Update
             </HRMButton>
             ) : (
-            <HRMButton mode="primary" onClick={handleSubmit}>
+            <HRMButton mode="primary" onClick={handleSubmit} enabled={validRequest}>
                 Send
             </HRMButton>
             )}

@@ -44,8 +44,7 @@ export default function UpcomingTimeOffTable({
     //component should be displayed
     const [editTimeOff, setEditTimeOff] = useState(false);
     const [deleteTimeOff, setDeleteTimeOff] = useState(false);
-    const [timeOffId, setTimeOffId] = useState(null);
-
+    //Initial details of time off period to be displayed when editing
     const [timeOffDetails, setTimeOffDetails] = useState({});
 
     //Custom style elements
@@ -66,18 +65,18 @@ export default function UpcomingTimeOffTable({
         backgroundColor: "#F9FAFB"
     });
 
+    //Function for retrieving time off period details when editing
     function retrieveDetails(period) {
-        console.log("Running retrieveDetails()")
         const details = {
             id: period.id,
+            timeOffId: period.timeOffId,
             from: dayjs(period.from).toDate(),
             to: dayjs(period.to).toDate(),
+            hours: period.hours,
             type: period.type
         }
-        console.log(details);
-        console.log(typeof details.from);
         setTimeOffDetails(details);
-    }
+    };
 
     return (
         <>
@@ -156,7 +155,7 @@ export default function UpcomingTimeOffTable({
                                             <HRMButton 
                                                 mode="tertiary" 
                                                 onClick={() => {
-                                                    setTimeOffId(period.id);
+                                                    retrieveDetails(period);
                                                     setDeleteTimeOff(true);
                                                 }}
                                             >
@@ -201,7 +200,7 @@ export default function UpcomingTimeOffTable({
             {/*Delete time off request notification*/}
             <Dialog open={deleteTimeOff} onClose={() => setDeleteTimeOff(false)}>
                 <DeleteTimeOff 
-                    timeOffId={timeOffId}
+                    period={timeOffDetails}
                     close={() => setDeleteTimeOff(false)} 
                     refresh={() => {
                         refresh();

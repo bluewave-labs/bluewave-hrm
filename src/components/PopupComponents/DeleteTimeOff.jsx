@@ -4,12 +4,21 @@ import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import dayjs from "dayjs";
 
 /**
  * Popup component for confirming a request to delete an upcoming period of time off
  * 
  * Props:
- * - timeOffId<Integer>: Primary key of the corresponding time off period to be deleted.
+ * - period<Object>: Time off period to be deleted
+ *      Syntax: {
+ *          id: <Integer>
+ *          timeOffId: <Integer>
+ *          from: <Date>
+ *          to: <Date>
+ *          hours: <Float>
+ *          type: <String>
+ *      }
  * 
  * - close<Function>: Function for closing this popup component.
  *      Syntax: close()
@@ -21,18 +30,39 @@ import axios from 'axios';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function DeleteTimeOff({timeOffId, close, refresh, style}) {
-    const url = `http://localhost:5000/api/timeoffhistories/${timeOffId}`;
+export default function DeleteTimeOff({period, close, refresh, style}) {
+    const currentUser = 1;
 
+    const deleteURL = `http://localhost:5000/api/timeoffhistories/${period.id}`;
+    const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
+
+    //Function for deleting a time off request
     function handleDelete() {
-        axios.delete(url)
+        //Delete the given time off request
+        axios.delete(deleteURL)
         .then((response) => {
             console.log(response);
+            //Retrieve the related employeeAnnualTimeOff record
+            axios.post(timeOffPolicyPOSTURL)
+            .then((response) => {
+                console.log(response);
+                const policy = response.data.filter((p) => (p.year === dayjs().year() && p.timeOffId === period.timeOffId))[0];
+                const refundBalance = {
+                    id: policy.id,
+                    cumulativeHoursTaken: policy.hoursUsed - period.hours
+                }
+                //Refund the hours used in the time off request
+                axios.put(timeOffPolicyPUTURL, refundBalance)
+                .then((response) => {
+                    console.log(response);
+                    refresh();
+                })
+                .catch((error) => console.log(error));
+            })
+            .catch((error) => console.log(error));
         })
-        .catch((error) => {
-            console.log(error);
-        })
-        refresh();
+        .catch((error) => console.log(error));
     }
 
     return (

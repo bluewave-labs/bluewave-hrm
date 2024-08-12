@@ -48,9 +48,9 @@ export default function UpdatesMenu({style}) {
         .then((response) => {
             const updates = [];
             const data = response.data;
-            for (const up of data) {
-                updates.push(up)
-            }
+            data.forEach((up) => {
+                updates.push(up);
+            });
             setAllUpdates(updates);
         })
         .catch((error) => {

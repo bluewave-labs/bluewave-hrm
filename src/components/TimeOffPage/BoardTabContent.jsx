@@ -8,6 +8,7 @@ import { colors, fonts } from '../../Styles';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import axios from 'axios';
 
 //Function for parsing a JavaScript date into a string format.
@@ -29,85 +30,67 @@ function formatDate(date) {
 export default function BoardTabContent({style}) {
     //The current page number 
     const [currentPage, setCurrentPage] = useState(1);  
+    //Time off policies to be displayed
+    const [timeOffPolicies, setTimeOffPolicies] = useState({});
+    //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
-    const [timeOffPolicies, setTimeOffPolicies] = useState([]);
+    //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
 
     const currentUser = 1;
 
+    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
+    const timeOffPolicyURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    dayjs.extend(isSameOrAfter);
+
+    //Refresh the list of time off periods
     useEffect(() => {
         getTimeOffPolicies();
         getUpcomingTimeOffPeriods();
     }, [refresh]);
 
+    //Function for retrieving the time off policies and their respective hours used and available
     function getTimeOffPolicies() {
-        console.log("Running getTimeOffPolicies()");
-        const url = `http://localhost:5000/api//employeeannualtimeoffs/1`;
-        axios.post(url)
+        //console.log("Running getTimeOffPolicies()");
+        axios.post(timeOffPolicyURL)
         .then((response) => {
-            const policies = [];
-            const data = response.data;
-            let vacationTimeOffAvailable = 0;
-            let vacationTimeOffUsed = 0;
-            let sickTimeOffAvailable = 0;
-            let sickTimeOffUsed = 0;
-            let bereavementTimeOffAvailable = 0;
-            let bereavementTimeOffUsed = 0;
-            for (const e of data) {
-                switch (e.timeOffId) {
-                    case 1:
-                        vacationTimeOffAvailable += e.hoursAllowed - e.cumulativeHoursTaken;
-                        vacationTimeOffUsed += e.cumulativeHoursTaken;
-                        break;
-                    case 2:
-                        sickTimeOffAvailable += e.hoursAllowed - e.cumulativeHoursTaken;
-                        sickTimeOffUsed += e.cumulativeHoursTaken;
-                        break;
-                    case 3:
-                        bereavementTimeOffAvailable += e.hoursAllowed - e.cumulativeHoursTaken;
-                        bereavementTimeOffUsed += e.cumulativeHoursTaken;
-                        break;
+            const policies = {};
+            const data = response.data.filter((p) => p.year === dayjs().year());
+            data.forEach((p) => {
+                policies[p.category] = {
+                    id: p.timeOffId,
+                    type: p.category,
+                    availableHours: p.hoursLeft,
+                    hoursUsed: p.hoursUsed
                 }
-            }
-            policies.push({
-                type: "Vacation",
-                availableHours: vacationTimeOffAvailable,
-                hoursUsed: vacationTimeOffUsed 
-            });
-            policies.push({
-                type: "Sick",
-                availableHours: sickTimeOffAvailable,
-                hoursUsed: sickTimeOffUsed
-            });
-            policies.push({
-                type: "Bereavement",
-                availableHours: bereavementTimeOffAvailable,
-                hoursUsed: bereavementTimeOffUsed
             });
             setTimeOffPolicies(policies);
         })
         .catch((error) => console.log(error));
     }
 
+    //Function for retrieving any upcoming time off periods
     function getUpcomingTimeOffPeriods() {
-        console.log("Running getUpcomingTimeOffPeriods()");
-        const url = `http://localhost:5000/api/timeoffhistories/employee/1`;
-        axios.post(url)
+        //console.log("Running getUpcomingTimeOffPeriods()");
+        //Send request to database for time off periods
+        axios.post(timeOffPeriodURL)
         .then((response) => {
             const periods = [];
             const data = response.data;
-            for (const p of data) {
-                if (dayjs(p.startDate).isAfter(dayjs()) && (p.status === "Approved" || p.status === "Pending")) {
+            data.forEach((p) => {
+                //Only retrieve and display periods that are upcoming
+                if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && (p.status === "Approved" || p.status === "Pending")) {
                     periods.push({
                         id: p.id,
+                        timeOffId: p.timeOffId,
                         from: formatDate(dayjs(p.startDate).toDate()),
                         to: formatDate(dayjs(p.endDate).toDate()),
-                        type: (p.timeOffId === 1) ? "Vacation" : (p.timeOffId === 2) ? "Sick Leave" : "Bereavement",
+                        type: p.timeOff.category,
                         hours: p.hours,
                         note: p.note
                     });
                 }
-            }
+            });
             setTimeOffPeriods(periods);
         })
         .catch((error) => {

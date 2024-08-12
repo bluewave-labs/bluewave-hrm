@@ -38,49 +38,61 @@ export default function TeamTabContent({style}) {
     const [approvedFilter, setApprovedFilter] = useState(true);
     const [waitingFilter, setWaitingFilter] = useState(true);
     const [rejectedFilter, setRejectedFilter] = useState(true);
-
+    //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
 
     const currentUser = 1;
-
-    const url = `http://localhost:5000/api/timeoffhistories/employee/1`;
 
     //Set the current page back to 1 each time the filters are changed
     useEffect(() => {
         setCurrentPage(1);
     }, [approvedFilter, waitingFilter, rejectedFilter]);
 
+    //Refresh the list of time off periods
     useEffect(() => {
         getTimeOffPeriods();
     }, [refresh]);
 
+    //Function for retrieving all the time off periods for the current manager's team
     function getTimeOffPeriods() {
         console.log("Running getTimeOffPeriods()");
-        axios.post(url)
+        const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
+        axios.get(empUrl)
         .then((response) => {
+            //Retrieve all employee IDs in current team
+            let data = response.data;
+            const team = data.map((emp) => emp.empId);
+            let timeOffUrl;
             const periods = [];
-            const data = response.data;
-            for (const p of data) {
-                periods.push({
-                    id: p.id,
-                    user: {
-                        name: `${p.employee.firstName} ${p.employee.lastName}`,
-                        avatar: p.employee.photo
-                    },
-                    from: formatDate(dayjs(p.startDate).toDate()),
-                    to: formatDate(dayjs(p.endDate).toDate()),
-                    type: (p.timeOffId === 1) ? "Vacation" : (p.timeOffId === 2) ? "Sick Leave" : "Bereavement",
-                    hours: p.hours,
-                    note: p.note,
-                    status: p.status
-                });
-            }
-            setTimeOffPeriods(periods);
+            //Retrieve the time off periods for each employee
+            team.forEach((id) => {
+                timeOffUrl = `http://localhost:5000/api/timeoffhistories/employee/${id}`;
+                axios.post(timeOffUrl)
+                .then((response) => {
+                    data = response.data;
+                    data.forEach((p) => {
+                        periods.push({
+                            id: p.id,
+                            user: {
+                                name: `${p.employee.firstName} ${p.employee.lastName}`,
+                                avatar: p.employee.photo
+                            },
+                            from: formatDate(dayjs(p.startDate).toDate()),
+                            to: formatDate(dayjs(p.endDate).toDate()),
+                            type: p.timeOff.category,
+                            hours: p.hours,
+                            note: p.note,
+                            status: p.status
+                        });
+                    })
+                    setTimeOffPeriods([...timeOffPeriods, ...periods]);
+                })
+                .catch((error) => console.log(error));
+            });
         })
-        .catch((error) => {
-            console.log(error);
-        })
+        .catch((error) => console.log(error));
     };
 
     //Filter out time off periods depending on which filters are active
