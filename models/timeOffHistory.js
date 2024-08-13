@@ -42,7 +42,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       decisionDate: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
         validate: {
           isAfterRequestDate(value) {
             if (value < this.requestDate) {
@@ -54,7 +54,7 @@ module.exports = (sequelize, Sequelize) => {
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaltValue: "Pending",
+        defaultValue: "Pending",
         validate: {
           isIn: [["Approved", "Declined", "Pending"]],
         },

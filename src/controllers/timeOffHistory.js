@@ -16,7 +16,10 @@ exports.showAll = async (req, res) => {
 
 exports.showOne = async (req, res) => {
   const id = req.params.id;
-  const data = await db.timeOffHistory.findByPk(id); //Query using empId
+  //Query using empId
+  const data = await db.timeOffHistory.findByPk(id, {
+    include: "employee"
+  });
   if (data === null) {
     res.status(400).send("Not found!");
   } else {
@@ -26,7 +29,11 @@ exports.showOne = async (req, res) => {
 
 exports.showAllByEmployee = async (req, res) => {
   const empId = req.params.empid;
-  const data = await db.timeOffHistory.findAll({ where: { empId: empId } }); //Query using empId
+  //Query using empId
+  const data = await db.timeOffHistory.findAll({ 
+    where: { empId: empId },
+    include: ["employee", "timeOff"]
+  }); 
   if (data === null) {
     res.status(400).send("Not found!");
   } else {
