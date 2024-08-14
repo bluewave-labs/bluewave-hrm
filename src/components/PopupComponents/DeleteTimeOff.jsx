@@ -31,8 +31,10 @@ import dayjs from "dayjs";
  *      Default: {}
  */
 export default function DeleteTimeOff({period, close, refresh, style}) {
+    //ID of the currently logged in employee
     const currentUser = 1;
 
+    //URL endpoints to be used for API calls
     const deleteURL = `http://localhost:5000/api/timeoffhistories/${period.id}`;
     const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
     const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;

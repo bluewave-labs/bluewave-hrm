@@ -43,7 +43,12 @@ export default function TeamTabContent({style}) {
     //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
 
+    //ID of the currently logged in employee
     const currentUser = 1;
+
+    //URL endpoints to be used in API calls
+    const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
+    const timeOffURL = `http://localhost:5000/api/timeoffhistories/employee`;
 
     //Set the current page back to 1 each time the filters are changed
     useEffect(() => {
@@ -57,19 +62,15 @@ export default function TeamTabContent({style}) {
 
     //Function for retrieving all the time off periods for the current manager's team
     function getTimeOffPeriods() {
-        console.log("Running getTimeOffPeriods()");
-        const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
         axios.get(empUrl)
         .then((response) => {
             //Retrieve all employee IDs in current team
             let data = response.data;
             const team = data.map((emp) => emp.empId);
-            let timeOffUrl;
             const periods = [];
             //Retrieve the time off periods for each employee
             team.forEach((id) => {
-                timeOffUrl = `http://localhost:5000/api/timeoffhistories/employee/${id}`;
-                axios.post(timeOffUrl)
+                axios.post(`${timeOffURL}/${id}`)
                 .then((response) => {
                     data = response.data;
                     data.forEach((p) => {

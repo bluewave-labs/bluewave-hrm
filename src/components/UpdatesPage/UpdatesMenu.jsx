@@ -34,7 +34,8 @@ export default function UpdatesMenu({style}) {
         getUpdates();
     }, [refresh]);
 
-    const url = `http://localhost:5000/api/notifications/employee/1`;
+    //URL endpoints to be used for API calls
+    const notificationsURL = `http://localhost:5000/api/notifications/employee/${currentUserId}`;
 
     //Retrieve the status of a notification for a given employee
     function checkNotificationStatus(update, id) {
@@ -43,8 +44,8 @@ export default function UpdatesMenu({style}) {
 
     //Retrieve all the updates
     function getUpdates() {
-        console.log(`Running getUpdates()`);
-        axios.get(url)
+        //Retrieve notification records from database
+        axios.get(notificationsURL)
         .then((response) => {
             const updates = [];
             const data = response.data;

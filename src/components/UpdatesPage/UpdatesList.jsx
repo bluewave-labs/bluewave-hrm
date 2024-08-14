@@ -19,8 +19,7 @@ import axios from 'axios';
  * Props:
  * - updates<Array<Object>>: List of objects containing update information to be displayed.
  * 
- * - refresh<Function>: Function for refreshing the list of updates. Mainly used after marking
- *      an update as read or unread
+ * - refresh<Function>: Function for refreshing the list of updates. 
  *      Syntax: refresh()
  * 
  * - style<Object>: Optional prop for adding further inline styling.
@@ -37,7 +36,11 @@ export default function UpdatesList({updates, refresh, style}) {
     const [requestSentDetails, setRequestSentDetails] = useState({});
     const [approvalDetails, setApprovalDetails] = useState({});
 
+    //ID of the currently logged in employee
     const currentUserId = 1;
+
+    //URL endpoints to be used for API calls
+    const notificationURL = `http://localhost:5000/api/notifications/`;
 
     //Retrieve the status of a notification for a given employee
     function checkNotificationStatus(update, id) {
@@ -46,10 +49,9 @@ export default function UpdatesList({updates, refresh, style}) {
 
     //Function for updating the status of an update 
     function handleSwitch(up) {
-        const url = `http://localhost:5000/api/notifications/`;
-        console.log("Running handleSwitch()");
+        //Update the given notification record in the database
         axios.put(
-            url, 
+            notificationURL, 
             { 
                 notificationId: up.id, 
                 employeeEmpId: currentUserId,

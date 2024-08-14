@@ -90,40 +90,47 @@ export default function TimeOffRequest({
     const [openTo, setOpenTo] = useState(false);
     //Range of dates between the starting and ending date
     const [dateRange, setDateRange] = useState(getDateRange());
+    const [timeOffDates, setTimeOffDates] = useState([]);
     //Total number of hours, full days and half days off
     const [totalHoursOff, setTotalHoursOff] = useState(0);
     const [fullDaysOff, setFullDaysOff] = useState(0);
     const [halfDaysOff, setHalfDaysOff] = useState(0);
     //Flag determining if the amount of time off should be set for each day or for just the
     //starting and ending dates
-    const [eachDay, setEachday] = useState(false);
+    const [eachDay, setEachDay] = useState(false);
     //Flag determining if there is enough time off balance for the given policy to grant the
     //requested time off amount
-    const [validRequest, setValidRequest] = useState(true);
+    const [sufficientTime, setSufficientTime] = useState(true);
+    //Flag determining if the time off periods conflict with each other
+    const [validDates, setValidDates] = useState(true);
     //Flag determining if an error has occured
     const [errorOccurred, setErrorOccurred] = useState(false);
 
     //Retrieve policy category options
     useEffect(() => {
         getTimeOffPolicies();
+        getUpcomingTimeOffDates();
     }, []);
+
+    useEffect(() => {
+        setValidDates(validateDates());
+    }, [timeOffDates]);
 
     //Set initial time off policy option
     useEffect(() => {
         setCategory(
-            (initialRequest) ? 
+            initialRequest ? 
             categoryMenu.filter((item) => item.timeOffId === initialRequest.timeOffId)[0] : 
             categoryMenu[0]
         );
     }, [categoryMenu]);
-
-    /*
+    
+    //Validate time off request duration when changing time off policies
     useEffect(() => {
         if (category) {
-            setValidRequest(totalHoursOff <= category.availableHours); 
+            setSufficientTime(totalHoursOff <= category.availableHours); 
         }
     }, [category]);
-    */
 
     //Automatically adjust dates to ensure a valid period is set
     useEffect(() => {
@@ -132,6 +139,7 @@ export default function TimeOffRequest({
         }
         setDateRange(getDateRange());
         calculateTimeOffHours();
+        setValidDates(validateDates());
     }, [from]);
 
     useEffect(() => {
@@ -140,11 +148,15 @@ export default function TimeOffRequest({
         }
         setDateRange(getDateRange());
         calculateTimeOffHours();
+        setValidDates(validateDates());
     }, [to]);
 
     const MemoTimeOffTable = memo(TimeOffTable);
 
+    //ID of the currently logged in employee
     const currentUser = 1;
+
+    //URL endpoints to be used for API calls
     const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
     const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
     const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
@@ -170,6 +182,37 @@ export default function TimeOffRequest({
             setCategoryMenu(Object.values(policies));
         })
         .catch((error) => console.log(error));
+    };
+
+    //Function for retrieving the dates of the upcoming time off periods for ensuring there are
+    //no conflicts between time off periods
+    function getUpcomingTimeOffDates() {
+        //Send request to database for time off periods
+        axios.post(`http://localhost:5000/api/timeoffhistories/employee/${currentUser}`)
+        .then((response) => {
+            let periods = [];
+            const data = response.data;
+            data.forEach((p) => {
+                //Only retrieve periods that are upcoming
+                if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && 
+                    (p.status === "Approved" || p.status === "Pending")) 
+                {
+                    periods.push({
+                        id: p.id,
+                        from: dayjs(p.startDate).toDate(),
+                        to: dayjs(p.endDate).toDate(),
+                    });
+                }
+            });
+            //If we are editing an existing period, then this period should not be included
+            if (initialRequest) {
+                periods = periods.filter((p) => p.id !== initialRequest.id);
+            }
+            setTimeOffDates(periods);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     };
 
     //Date range for setting full and half days off
@@ -243,13 +286,26 @@ export default function TimeOffRequest({
         //If the amount of time off requested exceeds what the selected time off policy allows,
         //then the send or update button will be disabled
         if (category) { 
-            setValidRequest(totalHours <= category.availableHours); 
+            setSufficientTime(totalHours <= category.availableHours); 
         }
+    };
+
+    //Function for determining if the current time off request would overlap with any upcoming
+    //time off periods
+    function validateDates() {
+        for (const p of timeOffDates) {
+            if ((p.from <= from && from <= p.to) || 
+                (p.from <= to && to <= p.to) ||
+                (from < p.from && p.to < to))
+            {
+                return false;
+            }
+        };
+        return true;
     };
 
     //Function for submitting a time off request
     function handleSubmit() {
-        //console.log("running handleSubmit()");
         //Create and submit a new time off period to the database
         const newPeriod = {
             startDate: dayjs(from).toString(),
@@ -367,11 +423,7 @@ export default function TimeOffRequest({
             marginBottom: "30px",
             }}
         >
-            {initialRequest ? (
-            <h3>Edit my time off</h3>
-            ) : (
-            <h3>Request new time off</h3>
-            )}
+            {initialRequest ? <h3>Edit my time off</h3> : <h3>Request new time off</h3>}
             <CloseIcon
             onClick={close}
             sx={{
@@ -436,7 +488,7 @@ export default function TimeOffRequest({
             name="setHours"
             value="setHours"
             size="large"
-            onChange={() => setEachday(!eachDay)}
+            onChange={() => setEachDay(!eachDay)}
             style={{ marginRight: "10px" }}
             />
             <p>Set hours for each day during the time off period</p>
@@ -453,7 +505,10 @@ export default function TimeOffRequest({
             day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in
             total).
         </p>
-        {!validRequest && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+        {!validDates && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+            Your time off request dates overlap with existing upcoming time off periods.
+        </h4>}
+        {!sufficientTime && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
             You are requesting {totalHoursOff} hours off. The selected time off policy only 
             has {category.availableHours} hours available.
         </h4>}
@@ -472,21 +527,21 @@ export default function TimeOffRequest({
             Cancel
             </HRMButton>
             {initialRequest ? (
-            <HRMButton mode="primary" onClick={handleEdit} enabled={validRequest}>
+            <HRMButton mode="primary" onClick={handleEdit} enabled={sufficientTime && validDates}>
                 Update
             </HRMButton>
             ) : (
-            <HRMButton mode="primary" onClick={handleSubmit} enabled={validRequest}>
+            <HRMButton mode="primary" onClick={handleSubmit} enabled={sufficientTime && validDates}>
                 Send
             </HRMButton>
             )}
         </Stack>
         {/*Popup components for setting starting and ending dates*/}
         <Dialog open={openFrom} onClose={() => setOpenFrom(false)}>
-            <DateSelect close={() => setOpenFrom(false)} setDate={setFrom} />
+            <DateSelect close={() => setOpenFrom(false)} setDate={setFrom} initialValue={from} />
         </Dialog>
         <Dialog open={openTo} onClose={() => setOpenTo(false)}>
-            <DateSelect close={() => setOpenTo(false)} setDate={setTo} />
+            <DateSelect close={() => setOpenTo(false)} setDate={setTo} initialValue={to} />
         </Dialog>
         </Box>
     );
@@ -499,6 +554,9 @@ TimeOffRequest.propTypes = {
 
     //The function to send the request and close this component
     sendRequest: PropTypes.func,
+
+    //When editing a time off request, this object shows the original details of the request
+    initialRequest: PropTypes.object
 };
 
 //Default values for this component

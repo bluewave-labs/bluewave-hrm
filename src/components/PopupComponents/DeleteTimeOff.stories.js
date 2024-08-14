@@ -13,7 +13,7 @@ export default {
 //Stories for each DeleteTimeOff type
 export const Primary = {
     args: {
-        timeOffId: null,
+        period: {},
         close: () => {},
         refresh: () => {}
     }

@@ -25,10 +25,12 @@ import dayjs from "dayjs";
  * - timeOffPeriods<Array<Object>>: List of objects containing information of upcoming periods 
  *      of time off.
  * 
- * - tableColumns<Array<String>>: List of table columns to be displayed
+ * - tableColumns<Array<String>>: List of table columns to be displayed.
  * 
  * - editFlag<Boolean>: Boolean determining if time off periods can be edited or deleted.
  *      Default: false
+ * 
+ * - refresh<Function>: Function for refreshing the list of upcoming time off periods.
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
@@ -221,7 +223,10 @@ UpcomingTimeOffTable.propTypes = {
     tableColumns: PropTypes.arrayOf(PropTypes.string),
 
     //Boolean determining if time off periods can be edited or deleted in this menu
-    editFlag: PropTypes.bool
+    editFlag: PropTypes.bool,
+
+    //Function for refreshing the list of upcoming time off periods
+    refresh: PropTypes.func
 };
 
 //Default values for this component

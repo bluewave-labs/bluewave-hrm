@@ -37,10 +37,13 @@ export default function BoardTabContent({style}) {
     //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
 
+    //ID of the currently logged in employee
     const currentUser = 1;
 
+    //URL endpoints to be used for API calls
     const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
     const timeOffPolicyURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    
     dayjs.extend(isSameOrAfter);
 
     //Refresh the list of time off periods
