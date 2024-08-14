@@ -45,6 +45,9 @@ const getReportTo = async (db, empId) => {
  * @returns sequelize object
  */
 const getComparator = (db, colName, item) => {
+  if (!item) {
+    return null;
+  }
   return db.sequelize.where(
     db.Sequelize.fn("lower", db.Sequelize.col(colName)),
     item.toLowerCase()

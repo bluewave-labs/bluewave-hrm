@@ -3,8 +3,10 @@ const { requireAuth } = require("../../config/authJwt");
 
 module.exports = (router) => {
   router.route("/timeoffhistories").get(controller.showAll);
-  router.route("/timeoffhistories/:empid").post(controller.showOne);
+  router.route("/timeoffhistories/:id").post(controller.showOne);
+  router.route("/timeoffhistories/employee/:empid").post(controller.showAllByEmployee);
   router.route("/timeoffhistories").post(controller.createRecord);
   router.route("/timeoffhistories").put(controller.updateRecord);
   router.route("/timeoffhistories/:id").delete(controller.deleteRecord);
+  router.route("/timeoffemployeehistory/:empid").post(controller.timeOffPeriods); // get the time off periods
 };

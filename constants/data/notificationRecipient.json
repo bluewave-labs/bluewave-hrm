@@ -1,0 +1,415 @@
+[
+  {
+    "notificationId": 1,
+    "employeeEmpId": 79,
+    "status": "seen"
+  },
+  {
+    "notificationId": 1,
+    "employeeEmpId": 101,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 1,
+    "employeeEmpId": 67,
+    "status": "seen"
+  },
+  {
+    "notificationId": 1,
+    "employeeEmpId": 8,
+    "status": "seen"
+  },
+  {
+    "notificationId": 1,
+    "employeeEmpId": 99,
+    "status": "seen"
+  },
+  {
+    "notificationId": 1,
+    "employeeEmpId": 80,
+    "status": "seen"
+  },
+  {
+    "notificationId": 2,
+    "employeeEmpId": 57,
+    "status": "seen"
+  },
+  {
+    "notificationId": 2,
+    "employeeEmpId": 19,
+    "status": "seen"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 47,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 69,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 91,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 97,
+    "status": "seen"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 73,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 80,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 72,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 3,
+    "employeeEmpId": 84,
+    "status": "seen"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 88,
+    "status": "seen"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 66,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 47,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 11,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 50,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 90,
+    "status": "seen"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 17,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 4,
+    "employeeEmpId": 85,
+    "status": "seen"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 84,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 91,
+    "status": "seen"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 52,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 63,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 97,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 85,
+    "status": "seen"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 7,
+    "status": "seen"
+  },
+  {
+    "notificationId": 5,
+    "employeeEmpId": 52,
+    "status": "seen"
+  },
+  {
+    "notificationId": 6,
+    "employeeEmpId": 37,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 6,
+    "employeeEmpId": 30,
+    "status": "seen"
+  },
+  {
+    "notificationId": 6,
+    "employeeEmpId": 26,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 6,
+    "employeeEmpId": 95,
+    "status": "seen"
+  },
+  {
+    "notificationId": 6,
+    "employeeEmpId": 16,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 6,
+    "employeeEmpId": 84,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 7,
+    "employeeEmpId": 9,
+    "status": "seen"
+  },
+  {
+    "notificationId": 7,
+    "employeeEmpId": 84,
+    "status": "seen"
+  },
+  {
+    "notificationId": 7,
+    "employeeEmpId": 38,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 7,
+    "employeeEmpId": 34,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 8,
+    "employeeEmpId": 43,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 8,
+    "employeeEmpId": 12,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 8,
+    "employeeEmpId": 79,
+    "status": "seen"
+  },
+  {
+    "notificationId": 8,
+    "employeeEmpId": 44,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 8,
+    "employeeEmpId": 101,
+    "status": "seen"
+  },
+  {
+    "notificationId": 8,
+    "employeeEmpId": 45,
+    "status": "seen"
+  },
+  {
+    "notificationId": 8,
+    "employeeEmpId": 72,
+    "status": "seen"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 47,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 9,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 54,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 49,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 20,
+    "status": "seen"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 83,
+    "status": "seen"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 21,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 88,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 9,
+    "employeeEmpId": 99,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 10,
+    "employeeEmpId": 33,
+    "status": "seen"
+  },
+  {
+    "notificationId": 10,
+    "employeeEmpId": 14,
+    "status": "seen"
+  },
+  {
+    "notificationId": 10,
+    "employeeEmpId": 92,
+    "status": "seen"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 10,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 35,
+    "status": "seen"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 20,
+    "status": "seen"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 50,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 13,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 26,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 84,
+    "status": "seen"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 88,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 11,
+    "employeeEmpId": 8,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 12,
+    "employeeEmpId": 63,
+    "status": "seen"
+  },
+  {
+    "notificationId": 12,
+    "employeeEmpId": 78,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 12,
+    "employeeEmpId": 77,
+    "status": "seen"
+  },
+  {
+    "notificationId": 13,
+    "employeeEmpId": 90,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 13,
+    "employeeEmpId": 80,
+    "status": "seen"
+  },
+  {
+    "notificationId": 13,
+    "employeeEmpId": 22,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 13,
+    "employeeEmpId": 95,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 13,
+    "employeeEmpId": 49,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 13,
+    "employeeEmpId": 38,
+    "status": "waiting"
+  },
+  {
+    "notificationId": 13,
+    "employeeEmpId": 51,
+    "status": "waiting"
+  },
+  { "notificationId": 13, "employeeEmpId": 1, "status": "seen" },
+  { "notificationId": 1, "employeeEmpId": 1, "status": "waiting" },
+  { "notificationId": 2, "employeeEmpId": 1, "status": "waiting" },
+  { "notificationId": 3, "employeeEmpId": 1, "status": "new" },
+  { "notificationId": 4, "employeeEmpId": 1, "status": "seen" },
+  { "notificationId": 5, "employeeEmpId": 1, "status": "waiting" },
+  { "notificationId": 6, "employeeEmpId": 1, "status": "seen" },
+  { "notificationId": 7, "employeeEmpId": 1, "status": "seen" },
+  { "notificationId": 8, "employeeEmpId": 1, "status": "new" },
+  { "notificationId": 9, "employeeEmpId": 1, "status": "seen" },
+  { "notificationId": 10, "employeeEmpId": 1, "status": "seen" },
+  { "notificationId": 11, "employeeEmpId": 1, "status": "seen" },
+  { "notificationId": 12, "employeeEmpId": 1, "status": "waiting" }
+]

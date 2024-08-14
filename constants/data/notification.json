@@ -1,0 +1,80 @@
+[
+    {
+        "empId": 50,
+        "timeOffHistoryId": 34,
+        "subject": "New time off request",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 26,
+        "timeOffHistoryId" : 86,
+        "subject": "New team member added",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 41,
+        "timeOffHistoryId": 120,
+        "subject": "New time off request",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 19,
+        "timeOffHistoryId" : 50,
+        "subject": "Your time off request has been sent",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 77,
+        "timeOffHistoryId": 15,
+        "subject": "New time off request",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 6,
+        "timeOffHistoryId": 69,
+        "subject": "Your time off request has been sent",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 88,
+        "timeOffHistoryId": 300,
+        "subject": "New time off request",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 36,
+        "timeOffHistoryId": 360,
+        "subject": "Your time off request has been sent",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 55,
+        "timeOffHistoryId": 412,
+        "subject": "New time off request",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 4,
+        "timeOffHistoryId": 123,
+        "subject": "New team member added",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 18,
+        "timeOffHistoryId": 188,
+        "subject": "New team member added",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 11,
+        "timeOffHistoryId": 76,
+        "subject": "New time off request",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    },
+    {
+        "empId": 27,
+        "timeOffHistoryId": 75,
+        "subject": "Your time off request has been sent",
+        "message": "Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day"
+    }
+  ]

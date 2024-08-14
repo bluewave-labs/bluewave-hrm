@@ -10,8 +10,9 @@ exports.showAll = async (req, res) => {
   });
   if (!data) {
     res.send("No results found");
+  } else {
+    res.send(data);
   }
-  res.send(data);
 };
 
 exports.showOne = async (req, res) => {
@@ -24,7 +25,6 @@ exports.showOne = async (req, res) => {
   }
 };
 
-
 exports.findOne = async (req, res) => {
   const { empId, profileUrl } = req.body;
   let profile = null;
@@ -36,7 +36,8 @@ exports.findOne = async (req, res) => {
         where: getComparator(db, "profileUrl", profileUrl),
       },
     });
-  } else {// This check all profileUrls. It is useful when creating a new profile.
+  } else {
+    // This check all profileUrls. It is useful when creating a new profile.
     profile = await db.socialProfile.findOne({
       where: {
         where: getComparator(db, "profileUrl", profileUrl),

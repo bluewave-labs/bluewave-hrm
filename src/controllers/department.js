@@ -1,9 +1,7 @@
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
-const {getComparator} = require("../helper/utils");
-
-
+const { getComparator } = require("../helper/utils");
 
 exports.showAll = async (req, res) => {
   const data = await db.department.findAll({
@@ -11,8 +9,9 @@ exports.showAll = async (req, res) => {
   });
   if (!data) {
     res.send("No results found");
+  } else {
+    res.send(data);
   }
-  res.send(data);
 };
 
 exports.showOne = async (req, res) => {
@@ -28,15 +27,28 @@ exports.showOne = async (req, res) => {
 exports.createRecord = async (req, res) => {
   //checking for department name already exists
   try {
-    const check = await db.department.findOne({ where: getComparator(db, 'departmentName', req.body.departmentName)});
+    const check = await db.department.findOne({
+      where: getComparator(db, "departmentName", req.body.departmentName),
+    });
     if (check) {
       return res.send(`${req.body.departmentName} already exists.`);
     }
     const data = await db.department.create(req.body);
-    res.status(201).json({data});
+    res.status(201).json({ data });
   } catch (err) {
     console.log(err);
-    res.send({message : message.failed});
+    res.send({ message: message.failed });
+  }
+};
+
+exports.createBulkRecord = async (req, res) => {
+  try {
+    const data = await db.department.bulkCreate(req.body.data);
+    console.log(req.body.data);
+    res.status(201).json({ data });
+  } catch (err) {
+    console.log("err");
+    res.send({ message: message.failed });
   }
 };
 
@@ -44,12 +56,13 @@ exports.updateRecord = async (req, res) => {
   const updatedData = req.body;
   //checking for department name already exists
   const check = await db.department.findOne({
-    where:{  id: {
+    where: {
+      id: {
         [db.Sequelize.Op.not]: updatedData.id,
       },
-    where: getComparator(db, 'departmentName', req.body.departmentName),        
+      where: getComparator(db, "departmentName", req.body.departmentName),
     },
-});
+  });
   if (check) {
     return res.send(`${req.body.departmentNames} already exists.`);
   }
@@ -60,8 +73,32 @@ exports.updateRecord = async (req, res) => {
     res.status(200).json({ message: data });
   } catch (err) {
     console.log(err);
-    res.status(400).json({message: message.failed});
+    res.status(400).json({ message: message.failed });
   }
+};
+
+exports.checkRecord = async (req, res) => {
+  let departmentName = req.params.departmentname;
+  if (!departmentName || departmentName.trim().length === 0) {
+    return res
+      .status(400)
+      .json({ exists: false, message: "Null or empty parameter." });
+  }
+  const query = `SELECT count(id) FROM department WHERE lower("departmentName") = :departmentName`;
+  const [results, metadata] = await db.sequelize.query(query, {
+    replacements: { departmentName: departmentName.trim().toLowerCase() },
+  });
+  const count = results[0].count > 0;
+  if (count) {
+    return res.json({
+      exists: true,
+      message: `${departmentName} already exists.`,
+    });
+  }
+  return res.json({
+    exists: false,
+    message: `${departmentName} does not exist.`,
+  });
 };
 
 exports.deleteRecord = async (req, res) => {
