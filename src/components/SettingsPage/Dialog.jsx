@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
+import { departmentsApi } from "./api";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
@@ -186,13 +187,7 @@ export default function CustomDialog({
       minimumSalary: 0,
       maximumSalary: 0,
     };
-    axios
-      .post(
-        `http://localhost:3000/api/${isDepartment ? "departments" : "roles"}`,
-        isDepartment ? formData : jobTitleData
-      )
-      .then(handleSuccess)
-      .catch(handleError);
+    departmentsApi.create(formData).then(handleSuccess).catch(handleError);
   };
 
   const editData = (formData) => {
@@ -270,7 +265,7 @@ export default function CustomDialog({
         return employee.roleId === selectedItem.roleId;
       })
       .map((employee) => employee.empId);
-      
+
     if (isDepartment) {
       return handleTransferEmployees({
         employeeEmpIds,

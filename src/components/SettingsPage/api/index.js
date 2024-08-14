@@ -4,3 +4,6 @@ export { fetchDepartmentsPeople } from "./fetchDepartmentsPeople";
 export { fetchJobTitles } from "./fetchJobTitles";
 export { fetchJobTitlesPeople } from "./fetchJobTitlesPeople";
 export { fetchEmployees } from "./fetchEmployees";
+export { getEmployeesByDepartment } from "./getEmployeesByDepartment";
+export { transferEmployeesDepartment } from "./transferEmployeesDepartment";
+export { departmentsApi } from "./departments";
