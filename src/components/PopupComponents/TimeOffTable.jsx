@@ -21,6 +21,7 @@ import { useEffect } from 'react';
  *      table.
  * 
  * - onChange<Function>: Function to handle changes made by the user to the radio buttons.
+ *      Syntax: onChange()
  */
 export default function TimeOffTable({
     dateRange, 
@@ -29,12 +30,13 @@ export default function TimeOffTable({
     style
 }) {
 
+    //Function for setting the user input in the parent component
     function handleChange(e, index, value) {
-        console.log("Running handleChange()")
         dateRange[index].day =  value;
         onChange();
-        
     }
+
+    //Sync the user input with the parent component 
     useEffect(()=>{
         onChange();
     }, []);
@@ -65,6 +67,7 @@ export default function TimeOffTable({
             overflowY: "auto"
         }, ...style}}>
             <Table>
+                {/*Table header*/}
                 <TableHead>
                     <TableRow sx={{backgroundColor: "#F9FAFB"}}>
                         <TableHeaderCell><b>Day</b></TableHeaderCell>
@@ -72,7 +75,9 @@ export default function TimeOffTable({
                         <TableHeaderCell align="center"><b>Half day</b></TableHeaderCell>
                     </TableRow>
                 </TableHead>
+                {/*Table options*/}
                 <TableBody>
+                    {/*If the eachDay checkbox is selected, then display input options for each day*/}
                     {(eachDay) ? dateRange.map((day, index) => (
                         <TableRow>
                             <TableBodyCell>
@@ -99,6 +104,7 @@ export default function TimeOffTable({
                         </TableRow>
                     )) : (
                         <>
+                            {/*Otherwise, only display the input options for the first and last day*/}
                             {dateRange.length > 0 &&
                                 <TableRow>
                                     <TableBodyCell>
@@ -120,7 +126,7 @@ export default function TimeOffTable({
                                             value="half"
                                             onChange={(e) => handleChange(e, 0, "half")}
                                             checked={dateRange[0].day === "half"}
-                                                                        />
+                                        />
                                     </TableBodyCell>
                                 </TableRow>
                             }

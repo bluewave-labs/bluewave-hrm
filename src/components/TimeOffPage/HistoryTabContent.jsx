@@ -50,7 +50,11 @@ export default function HistoryTabContent({style}) {
     if (amountFilter) { activeFilters.push("Amount"); }
     if (noteFilter) { activeFilters.push("Note"); }
 
+    //ID of the currently logged in employee
     const currentUser = 1;
+
+    //URL endpoints to be used for API calls
+    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
 
     //Refresh the list of time off periods
     useEffect(() => {
@@ -59,10 +63,9 @@ export default function HistoryTabContent({style}) {
 
     //Function for retrieving any past time off periods
     function getTimeOffPeriods() {
-        console.log("Running getTimeOffPeriods()");
-        const url = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
+        //console.log("Running getTimeOffPeriods()");
         //Send request to database for time off periods
-        axios.post(url)
+        axios.post(timeOffPeriodURL)
         .then((response) => {
             const periods = [];
             const data = response.data;

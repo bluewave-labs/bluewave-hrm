@@ -1,6 +1,5 @@
 import Box from '@mui/system/Box';
 import UserDropdown from './UserDropdown';
-import Logo from '../../Images/bluewave_hrm_logo_large.png';
 import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 
 /**
@@ -24,15 +23,15 @@ export default function Header({style}) {
             height: "87px",
             padding: "20px",
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "center",
-            //backgroundColor: "#FFFFFF",
-            //borderBottom: "1px solid #EBEBEB",
-            //boxShadow: "0 10px 6px #10182808",
+            backgroundColor: "#FFFFFF",
+            borderBottom: "1px solid #EBEBEB",
+            boxShadow: "0 10px 6px #10182808",
             position: "fixed",
-            zIndex: 2
+            zIndex: 1
         }, ...style}}>
-            <img src={Logo} alt="Company Logo" style={{width: "136px", height: "16px"}} />
+            
             <UserDropdown user={user} />
         </Box>
     );
@@ -42,4 +41,6 @@ export default function Header({style}) {
 Header.propTypes = {};
 
 //Default values for this component
-Header.defaultProps = {};
+Header.defaultProps = {
+    style: {}
+};

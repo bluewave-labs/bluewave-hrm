@@ -21,15 +21,16 @@ import PropTypes from 'prop-types';
  * - setDate<Function>: Function for setting the date in the parent component.
  *      Syntax: setDate(<JavaScript date>)
  * 
+ * - initialValue<Date>: Default value for the date selector.
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function DateSelect({close, setDate, style}) {
+export default function DateSelect({close, setDate, initialValue, style}) {
     //Value of the date to be set
-    const [value, setValue] = useState(dayjs());
-    //Date representing today
-    const today = dayjs();
+    const [value, setValue] = useState(dayjs(initialValue));
 
+    //Function for setting the date in the parent component
     function submit() {
         setDate(value.toDate());
         close();
@@ -48,7 +49,7 @@ export default function DateSelect({close, setDate, style}) {
                     <DateCalendar 
                         value={value} 
                         onChange={(newValue) => setValue(newValue)} 
-                        minDate={today}
+                        minDate={dayjs()}
                     />
                 </LocalizationProvider>
                 <Divider />
