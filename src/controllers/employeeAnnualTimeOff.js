@@ -95,49 +95,53 @@ exports.deleteRecord = async (req, res) => {
  * @param {empId} req 
  * @param {timeOffPolicies} res 
  */
-    exports.timeOffPolicies = async(req,res) =>{
+    exports.timeOffPolicies = async (req, res) => {
       const empId = req.params.empId;
-      try{
-        const timeOff = await db.employeeAnnualTimeOff.findAll({
-          where:{
-            empId: empId
-          },
-          include: [
-            {
-              model: db.employee
-            },
-          ]
-        })
-        const policies = []
-        for(const data of timeOff){
-            const policy = {
-    
-            }
-            if(data.timeOffId == 1){
-              policy.type = "Vacation",
-              policy.availableDays = data.hoursAllowed,
-              policy.hoursUsed = data.cumulativeHoursTaken
-            }
-            else if(data.timeOffId == 2){
-              policy.type = "Sick Leave",
-              policy.availableDays = data.hoursAllowed,
-              policy.hoursUsed = data.cumulativeHoursTaken
-            }
-            else if(data.timeOffId == 3){
-              policy.type = "Bereavement",
-              policy.availableDays = data.hoursAllowed,
-              policy.hoursUsed = data.cumulativeHoursTaken
-            }
-    
-            policies.push(policy)
-    
-            
-        }
-        res.send(policies)
-    
-      }catch(err){
-        res.send({
-          message: err.message || message.failed
+      try {
+        const query = `
+          SELECT 
+            e.id, 
+            e."yearNumber" AS "year", 
+            e."hoursAllowed", 
+            e."cumulativeHoursTaken" AS "hoursUsed",
+            (e."hoursAllowed" - e."cumulativeHoursTaken") AS "hoursLeft", 
+            t."id" AS "timeOffId", 
+            t.category 
+          FROM 
+            "employeeAnnualTimeOff" e 
+          JOIN 
+            "timeOff" t 
+          ON 
+            e."timeOffId" = t.id  
+          WHERE 
+            e."employeeEmpId" = :empId 
+          ORDER BY 2;
+        `;
+        
+        const [results, metadata] = await db.sequelize.query(query, {
+          replacements: { empId: empId },
         });
+    
+        const policies = [];
+        const now = new Date();
+        const year = now.getFullYear();
+    
+        for (const result of results) {
+          if (result.year === year) {
+            const policy = {
+              type: result.category,
+              availableDays: Math.floor(result.hoursLeft / 8),
+              hoursUsed: result.hoursUsed,
+            };
+            
+            policies.push(policy);
+          }
+        }
+    
+        res.status(200).send(policies);
+    
+      } catch (err) {
+        console.log(err);
+        res.status(400).send("Not found!");
       }
-    }
+    };
