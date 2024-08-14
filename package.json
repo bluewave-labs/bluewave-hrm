@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "base64topdf": "^1.1.8",
     "@sequelize/core": "^7.0.0-alpha.37",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
@@ -27,5 +28,8 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3",
     "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
   }
 }

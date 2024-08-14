@@ -4,6 +4,8 @@ const { requireAuth } = require("../../config/authJwt");
 module.exports = (router) => {
   router.route("/documents").get(controller.showAll);
   router.route("/documents/:empid").post(controller.showOne);
+  router.route("/documents/lldoc").get(controller.fectchLeavingLetterDoc);
+  router.route("/documents/nda").get(controller.fectchNDADoc);
   router.route("/documents").post(controller.createRecord);
   router.route("/documents/create/bulk").post(controller.createBulkRecord);
   router.route("/documents").put(controller.updateRecord);

@@ -1,0 +1,4 @@
+{
+  "editor.maxTokenizationLineLength": 2000000,
+  "editor.experimental.asyncTokenizationVerification": true
+}
