@@ -242,16 +242,6 @@ exports.summarizeByJobTitles = async (req, res) => {
   }
 };
 
-exports.summarizeByJobTitles = async (req, res) => {
-  try {
-    const query = `select r."roleTitle", count(e."empId") from employee e JOIN role r ON e."roleId" = r."roleId" GROUP BY r."roleTitle" ORDER BY 1;`;
-    const [results, metadata] = await db.sequelize.query(query);
-    res.status(200).send(results);
-  } catch (error) {
-    res.status(400).json({ message: message.failed });
-  }
-};
-
 exports.summarizeByDepartmentsChartData = async (req, res) => {
   try {
     const query = `SELECT count(e."empId") AS "value", d."departmentName" AS "label" from employee e JOIN department d ON e."departmentId" = d."id" GROUP BY 2 ORDER BY 1 DESC, 2;`;
