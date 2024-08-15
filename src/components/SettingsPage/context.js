@@ -13,11 +13,11 @@ const SettingsContext = createContext(undefined);
 
 export const SettingsProvider = ({ children }) => {
   const [company, setCompany] = useState({});
-  const [departments, setDepartments] = useState({});
-  const [departmentsPeople, setDepartmentsPeople] = useState({});
-  const [jobTitles, setJobTitles] = useState({});
-  const [jobTitlesPeople, setJobTitlesPeople] = useState({});
-  const [employees, setEmployees] = useState({});
+  const [departments, setDepartments] = useState([]);
+  const [departmentsPeople, setDepartmentsPeople] = useState([]);
+  const [jobTitles, setJobTitles] = useState([]);
+  const [jobTitlesPeople, setJobTitlesPeople] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
   const fetchCompany = async () => {
     const companyData = await companyApi.fetch();

@@ -8,7 +8,6 @@ import CustomDialog from "./Dialog";
 import { useSettingsContext } from "./context";
 import Grid from "@mui/system/Unstable_Grid";
 import ListTable from "./ListTable";
-import TimeOffTable from "./TimeOffTable";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -17,41 +16,46 @@ const HeadText = styled(Typography)({
   fontWeight: "500",
 });
 
+// const departmentColumns = [
+//   { header: "Name", contentKey: "departmentName" },
+//   { header: "People", contentKey: "count" },
+// ];
+
 const PAGE_SIZE = 10; //items per page (pagination)
 
-export default function ListTabContent({ style, content }) {
+export default function ListTabContent({
+  columns,
+  contentList,
+  titleTabPage,
+  style,
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { departmentsPeople, jobTitlesPeople } = useSettingsContext();
   const [selectedItem, setSelectedItem] = useState({});
   const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log("content", content);
+  // const isDepartment = content === "departments";
 
-  const isDepartment = content === "departments";
+  // const tabPageTitle = (() => {
+  //   switch (content) {
+  //     case "jobTitles":
+  //       return "Job Titles";
+  //     case "timeoff":
+  //       return "Time Off";
+  //     default:
+  //       return "Departments";
+  //   }
+  // })();
 
-  const tabPageTitle = (() => {
-    switch (content) {
-      case "jobTitles":
-        return "Job Titles";
-      case "timeoff":
-        return "Time Off";
-      default:
-        return "Departments";
-    }
-  })();
-
-  const contentList = useMemo(() => {
-    const fetch = isDepartment ? departmentsPeople : jobTitlesPeople;
-    return fetch.sort((a, b) =>
-      isDepartment
-        ? a.departmentName.localeCompare(b.departmentName)
-        : a.roleTitle.localeCompare(b.roleTitle)
-    );
-  }, [isDepartment, departmentsPeople, jobTitlesPeople]);
-
-  console.log("jobTitlesPeople", jobTitlesPeople);
-  console.log("contentList", contentList);
+  // const contentList = useMemo(() => {
+  //   const fetch = isDepartment ? departmentsPeople : jobTitlesPeople;
+  //   return fetch.sort((a, b) =>
+  //     isDepartment
+  //       ? a.departmentName.localeCompare(b.departmentName)
+  //       : a.roleTitle.localeCompare(b.roleTitle)
+  //   );
+  // }, [isDepartment, departmentsPeople, jobTitlesPeople]);
 
   const itemsToDisplay = useMemo(
     () =>
@@ -108,9 +112,7 @@ export default function ListTabContent({ style, content }) {
             justifyContent="space-between"
             style={{ marginBottom: "20px" }}
           >
-            <HeadText component="h3">
-              {tabPageTitle}
-            </HeadText>
+            <HeadText component="h3">{titleTabPage}</HeadText>
             <HRMButton
               mode="primary"
               onClick={() => openDialog(undefined, "add")}
@@ -119,32 +121,23 @@ export default function ListTabContent({ style, content }) {
             </HRMButton>
           </Stack>
         </Grid>
-        <CustomDialog
+        {/* <CustomDialog
           open={isDialogOpen}
           onClose={closeDialog}
           content={content}
           action={action}
           selectedItem={selectedItem}
           setToast={setToast}
-        />
+        /> */}
 
         {contentList.length > 0 ? (
           <>
-            {content === "timeoff" ? (
-              <TimeOffTable
-                openDialog={openDialog}
-                content={"departments"}
-                contentList={itemsToDisplay}
-                sx={{ marginBottom: "40px" }}
-              />
-            ) : (
-              <ListTable
-                openDialog={openDialog}
-                content={content}
-                contentList={itemsToDisplay}
-                sx={{ marginBottom: "40px" }}
-              />
-            )}
+            <ListTable
+              openDialog={openDialog}
+              columns={columns}
+              contentList={itemsToDisplay}
+              sx={{ marginBottom: "40px" }}
+            />
             {contentList.length > PAGE_SIZE && (
               <PagesNavBar
                 numOfEntries={contentList.length}
@@ -153,10 +146,8 @@ export default function ListTabContent({ style, content }) {
               />
             )}
           </>
-        ) : isDepartment ? (
-          <p>There is no departments right now.</p>
         ) : (
-          <p>There is no job titles right now.</p>
+          <p>There is no {titleTabPage} right now.</p>
         )}
         <Toast
           open={toast.open}

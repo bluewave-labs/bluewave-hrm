@@ -36,62 +36,54 @@ const DeleteButton = styled(Button)({
   textDecoration: "none",
   fontWeight: "600",
 });
-export default function ListTable({ openDialog, content, contentList, style }) {
 
-  const isDepartmentContent = content === "departments";
+const TableHeaderCell = styled(TableCell)({
+  color: colors.darkGrey,
+  paddingTop: "10px",
+  paddingBottom: "10px",
+});
 
-  const TableHeaderCell = styled(TableCell)({
-    color: colors.darkGrey,
-    paddingTop: "10px",
-    paddingBottom: "10px",
-  });
+const TableBodyCell = styled(TableCell)({
+  color: colors.darkGrey,
+  paddingTop: "25px",
+  paddingBottom: "25px",
+});
 
-  const TableBodyCell = styled(TableCell)({
-    color: colors.darkGrey,
-    paddingTop: "25px",
-    paddingBottom: "25px",
-  });
-
+export default function ListTable({ openDialog, columns, contentList, style }) {
   return (
     <TableContainer
       sx={{
-        ...{
-          minWidth: "885px",
-          fontFamily: fonts.fontFamily,
-        },
+        minWidth: "885px",
+        fontFamily: fonts.fontFamily,
         ...style,
       }}
     >
       <Table>
         <TableHead>
           <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
-            <TableHeaderCell sx={{ width: "50%", paddingLeft: "25px" }}>
-              <TextHeader>Name</TextHeader>
-            </TableHeaderCell>
-            <TableHeaderCell>
-              <TextHeader>People</TextHeader>
-            </TableHeaderCell>
-            <TableHeaderCell></TableHeaderCell>
+            {columns?.map(({ header }) => (
+              <TableHeaderCell key={header}>
+                <TextHeader>{header}</TextHeader>
+              </TableHeaderCell>
+            ))}
+            <TableHeaderCell/>
           </TableRow>
         </TableHead>
         <TableBody>
           {contentList?.map((item) => (
             <TableRow key={item.id}>
-              <TableBodyCell sx={{ width: "50%", paddingLeft: "25px" }}>
-                <Text>{isDepartmentContent ? item.departmentName : item.roleTitle}</Text>
-              </TableBodyCell>
-              <TableBodyCell>
-                <Text>{item.count}</Text>
-              </TableBodyCell>
+              {columns?.map(({ contentKey }) => (
+                <TableBodyCell key={contentKey}>
+                  <Text>{item[contentKey]}</Text>
+                </TableBodyCell>
+              ))}
               <TableBodyCell>
                 <Stack
                   direction="row"
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  <DeleteButton
-                    onClick={() => openDialog(item, "delete")}
-                  >
+                  <DeleteButton onClick={() => openDialog(item, "delete")}>
                     <b>Delete</b>
                   </DeleteButton>
                   <EditButton onClick={() => openDialog(item, "edit")}>
