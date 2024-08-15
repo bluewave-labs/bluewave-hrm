@@ -8,6 +8,7 @@ import CustomDialog from "./Dialog";
 import { useSettingsContext } from "./context";
 import Grid from "@mui/system/Unstable_Grid";
 import ListTable from "./ListTable";
+import TimeOffTable from "./TimeOffTable";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -25,7 +26,20 @@ export default function ListTabContent({ style, content }) {
   const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
+  console.log("content", content);
+
   const isDepartment = content === "departments";
+
+  const tabPageTitle = (() => {
+    switch (content) {
+      case "jobTitles":
+        return "Job Titles";
+      case "timeoff":
+        return "Time Off";
+      default:
+        return "Departments";
+    }
+  })();
 
   const contentList = useMemo(() => {
     const fetch = isDepartment ? departmentsPeople : jobTitlesPeople;
@@ -35,6 +49,9 @@ export default function ListTabContent({ style, content }) {
         : a.roleTitle.localeCompare(b.roleTitle)
     );
   }, [isDepartment, departmentsPeople, jobTitlesPeople]);
+
+  console.log("jobTitlesPeople", jobTitlesPeople);
+  console.log("contentList", contentList);
 
   const itemsToDisplay = useMemo(
     () =>
@@ -92,7 +109,7 @@ export default function ListTabContent({ style, content }) {
             style={{ marginBottom: "20px" }}
           >
             <HeadText component="h3">
-              {isDepartment ? "Departments" : "Job Titles"}
+              {tabPageTitle}
             </HeadText>
             <HRMButton
               mode="primary"
@@ -113,12 +130,21 @@ export default function ListTabContent({ style, content }) {
 
         {contentList.length > 0 ? (
           <>
-            <ListTable
-              openDialog={openDialog}
-              content={content}
-              contentList={itemsToDisplay}
-              sx={{ marginBottom: "40px" }}
-            />
+            {content === "timeoff" ? (
+              <TimeOffTable
+                openDialog={openDialog}
+                content={"departments"}
+                contentList={itemsToDisplay}
+                sx={{ marginBottom: "40px" }}
+              />
+            ) : (
+              <ListTable
+                openDialog={openDialog}
+                content={content}
+                contentList={itemsToDisplay}
+                sx={{ marginBottom: "40px" }}
+              />
+            )}
             {contentList.length > PAGE_SIZE && (
               <PagesNavBar
                 numOfEntries={contentList.length}

@@ -1,5 +1,5 @@
 import axios from "axios";
-export const fetchEmployees = async () => {
+const getEmployees = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/employees");
     return response.data;
@@ -7,4 +7,8 @@ export const fetchEmployees = async () => {
     console.error("Error fetching employees:", error);
     throw error;
   }
+};
+
+export const employeesApi = {
+  fetch: getEmployees,
 };

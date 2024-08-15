@@ -82,6 +82,9 @@ export default function SettingsPage({ style, innerStyle }) {
             <StyledTabPanel value="Job titles">
               <ListTabContent content="jobTitles" />
             </StyledTabPanel>
+            <StyledTabPanel value="Time off">
+              <ListTabContent content="timeoff" />
+            </StyledTabPanel>
           </TabContext>
         </Box>
       </Page>

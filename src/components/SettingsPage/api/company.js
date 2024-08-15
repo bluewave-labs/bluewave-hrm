@@ -1,7 +1,6 @@
 import axios from "axios";
-
 const companyId = 1;
-export const fetchCompany = async () => {
+const getCompanyDetails = async () => {
   try {
     const response = await axios.post(
       `http://localhost:3000/api/company/${companyId}`
@@ -12,3 +11,8 @@ export const fetchCompany = async () => {
     throw error;
   }
 };
+
+
+export const companyApi = {
+  fetch: getCompanyDetails,
+}

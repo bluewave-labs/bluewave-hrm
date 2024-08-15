@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
 import {
-  fetchCompany as getCompany,
-  fetchDepartments as getDepartments,
-  fetchDepartmentsPeople as getDepartmentsPeople,
-  fetchJobTitlesPeople as getJobTitlesPeople,
-  fetchJobTitles as getJobTitles,
-  fetchEmployees as getEmployees,
+  companyApi,
+  departmentsApi,
+  jobTitlesApi,
+  employeesApi,
+  getEmployeesByDepartment,
+  getEmployeesByJobTitle,
 } from "./api";
 
 const SettingsContext = createContext(undefined);
@@ -19,32 +20,33 @@ export const SettingsProvider = ({ children }) => {
   const [employees, setEmployees] = useState({});
 
   const fetchCompany = async () => {
-    const companyData = await getCompany();
+    const companyData = await companyApi.fetch();
     setCompany(companyData);
   };
 
   const fetchDepartments = async () => {
-    const departmentsData = await getDepartments();
+    const departmentsData = await departmentsApi.fetch();
     setDepartments(departmentsData);
   };
 
   const fetchDepartmentsPeople = async () => {
-    const departmentsPeopleData = await getDepartmentsPeople();
+    const departmentsPeopleData = await getEmployeesByDepartment();
     setDepartmentsPeople(departmentsPeopleData);
   };
 
   const fetchJobTitles = async () => {
-    const jobTitlesData = await getJobTitles();
+    const jobTitlesData = await jobTitlesApi.fetch();
     setJobTitles(jobTitlesData);
   };
 
   const fetchJobTitlesPeople = async () => {
-    const jobTitlesPeopleData = await getJobTitlesPeople();
+    const jobTitlesPeopleData = await getEmployeesByJobTitle();
     setJobTitlesPeople(jobTitlesPeopleData);
+    console.log("jobTitlesPeopleData context", jobTitlesPeopleData);
   };
 
   const fetchEmployees = async () => {
-    const employees = await getEmployees();
+    const employees = await employeesApi.fetch();
     setEmployees(employees);
   };
 
@@ -72,7 +74,14 @@ export const SettingsProvider = ({ children }) => {
       fetchJobTitlesPeople,
       fetchEmployees,
     }),
-    [company, departments, departmentsPeople, jobTitles, jobTitlesPeople, employees]
+    [
+      company,
+      departments,
+      departmentsPeople,
+      jobTitles,
+      jobTitlesPeople,
+      employees,
+    ]
   );
 
   return (

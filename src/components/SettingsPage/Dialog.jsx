@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
-import { departmentsApi } from "./api";
+import { departmentsApi, jobTitlesApi } from "./api";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
@@ -53,6 +53,20 @@ const TextField = styled(MUITextField)({
     textAlign: "left",
   },
 });
+
+const successMessage = (action, isDepartment) => {
+  const item = isDepartment ? "Department" : "Job title";
+  switch (action) {
+    case "edit":
+      return `${item} edited successfully`;
+    case "delete":
+      return `${item} deleted successfully`;
+    default:
+      return `${item} added successfully`;
+  }
+};
+
+const errorMessage = (action) => `Failed to ${action}`;
 
 export default function CustomDialog({
   open,
@@ -166,7 +180,7 @@ export default function CustomDialog({
       setToast({
         open: true,
         severity: "success",
-        message: `${isDepartment ? "Department" : "Job title"} ${addAction ? "created" : "edited"} successfully`,
+        message: successMessage(action, isDepartment),
       });
     }
   };
@@ -177,7 +191,7 @@ export default function CustomDialog({
     setToast({
       open: true,
       severity: "error",
-      message: addAction ? "Failed to add data" : "Failed to edit data",
+      message: errorMessage(action),
     });
   };
 
@@ -187,7 +201,10 @@ export default function CustomDialog({
       minimumSalary: 0,
       maximumSalary: 0,
     };
-    departmentsApi.create(formData).then(handleSuccess).catch(handleError);
+    if (isDepartment)
+      departmentsApi.create(formData).then(handleSuccess).catch(handleError);
+    else
+      jobTitlesApi.create(jobTitleData).then(handleSuccess).catch(handleError);
   };
 
   const editData = (formData) => {
@@ -205,42 +222,23 @@ export default function CustomDialog({
         : { roleTitle: formData.roleTitle }),
     };
 
-    axios
-      .put(
-        `http://localhost:3000/api/${isDepartment ? "departments" : "roles"}`,
-        data
-      )
-      .then(handleSuccess)
-      .catch(handleError);
+    if (isDepartment)
+      departmentsApi.update(data).then(handleSuccess).catch(handleError);
+    else jobTitlesApi.update(data).then(handleSuccess).catch(handleError);
   };
 
-  const handleDeleteData = () =>
-    axios
-      .delete(
-        `http://localhost:3000/api/${isDepartment ? "departments" : "roles"}/${isDepartment ? selectedItem.id : selectedItem.roleId}`
-      )
-      .then((response) => {
-        console.log("Data deleted successfully:", response.data);
-        fetchDepartmentsPeople();
-        fetchDepartments();
-        fetchJobTitlesPeople();
-        fetchJobTitles();
-        onClose();
-        setToast({
-          open: true,
-          severity: "success",
-          message: "Data deleted successfully",
-        });
-      })
-      .catch((error) => {
-        console.error("Error submitting data:", error);
-        onClose();
-        setToast({
-          open: true,
-          severity: "error",
-          message: "Failed to delete",
-        });
-      });
+  const handleDeleteData = () => {
+    if (isDepartment)
+      departmentsApi
+        .delete(selectedItem.id)
+        .then(handleSuccess)
+        .catch(handleError);
+    else
+      jobTitlesApi
+        .delete(selectedItem.roleId)
+        .then(handleSuccess)
+        .catch(handleError);
+  };
 
   const handleTransferEmployees = (employeesTransfer) =>
     axios

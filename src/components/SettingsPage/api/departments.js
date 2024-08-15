@@ -49,7 +49,6 @@ const deleteDepartment = async (departmentId) => {
 };
 
 
-
 export const departmentsApi = {
   create: createDepartment,
   fetch: getDepartments,

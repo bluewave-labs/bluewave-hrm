@@ -1,9 +1,9 @@
-export { fetchCompany } from "./fetchCompany";
-export { fetchDepartments } from "./fetchDepartments";
-export { fetchDepartmentsPeople } from "./fetchDepartmentsPeople";
-export { fetchJobTitles } from "./fetchJobTitles";
-export { fetchJobTitlesPeople } from "./fetchJobTitlesPeople";
-export { fetchEmployees } from "./fetchEmployees";
+export { companyApi } from "./company";
+export { departmentsApi } from "./departments";
+export { jobTitlesApi } from "./jobTitles";
+export { employeesApi } from "./employees";
+export { timeOffApi } from "./timeOff";
 export { getEmployeesByDepartment } from "./getEmployeesByDepartment";
 export { transferEmployeesDepartment } from "./transferEmployeesDepartment";
-export { departmentsApi } from "./departments";
+export { getEmployeesByJobTitle } from "./getEmployeesByJobTitle";
+export { transferEmployeesJobTitle } from "./transferEmployeesJobTitle";
