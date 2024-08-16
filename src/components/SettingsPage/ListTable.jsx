@@ -83,10 +83,10 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  <DeleteButton onClick={() => openDialog(item, "delete")}>
+                  <DeleteButton onClick={() => openDialog("delete", item)}>
                     <b>Delete</b>
                   </DeleteButton>
-                  <EditButton onClick={() => openDialog(item, "edit")}>
+                  <EditButton onClick={() => openDialog("edit", item)}>
                     Edit
                   </EditButton>
                 </Stack>

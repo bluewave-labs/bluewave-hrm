@@ -1,7 +1,7 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
 import { colors, fonts } from "../../Styles";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { styled } from "@mui/system";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -9,8 +9,8 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
-import { useSettingsContext } from "./context";
 import Page from "../StaticComponents/Page";
+import { useDepartmentPeople, useJobTitlesPeople } from "./hooks";
 
 const StyledTab = styled(Tab)({
   textTransform: "none",
@@ -20,30 +20,24 @@ const StyledTabPanel = styled(TabPanel)({
   padding: 0,
 });
 
-const departmentColumns = [
-  { header: "Name", contentKey: "departmentName" },
-  { header: "People", contentKey: "count" },
-];
+export const tabNames = {
+  departments: "departments",
+  jobtitles: "jobtitles",
+}
 
 export default function SettingsPage({ style, innerStyle }) {
   const [tab, setTab] = useState("Company profile");
-  const { departmentsPeople } = useSettingsContext();
+  const { data: departmentsPeopleData, columns: departmentsPeopleColumns } =
+    useDepartmentPeople();
+  const { data: jobTitlesPeopleData, columns: jobTitlesPeopleColumns } =
+    useJobTitlesPeople();
 
   function handleChange(e, newValue) {
     setTab(newValue);
   }
 
-  const contentList = useMemo(
-    () =>
-      departmentsPeople.sort((a, b) =>
-        a.departmentName.localeCompare(b.departmentName)
-      ),
-    [departmentsPeople]
-  );
-
   return (
     <Page style={style} innerStyle={innerStyle}>
-      {/*Main page content*/}
       <Stack
         direction="row"
         alignItems="center"
@@ -91,13 +85,19 @@ export default function SettingsPage({ style, innerStyle }) {
           </StyledTabPanel>
           <StyledTabPanel value="Departments">
             <ListTabContent
-              contentList={contentList}
+              contentList={departmentsPeopleData}
               titleTabPage="Departments"
-              columns={departmentColumns}
+              columns={departmentsPeopleColumns}
+              tabName={tabNames.departments}
             />
           </StyledTabPanel>
           <StyledTabPanel value="Job titles">
-            <ListTabContent content="jobTitles" />
+            <ListTabContent
+              contentList={jobTitlesPeopleData}
+              titleTabPage="Job Title"
+              columns={jobTitlesPeopleColumns}
+              tabName={tabNames.jobtitles}
+            />
           </StyledTabPanel>
           <StyledTabPanel value="Time off">
             <ListTabContent content="timeoff" />

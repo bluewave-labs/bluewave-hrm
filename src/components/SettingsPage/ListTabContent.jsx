@@ -4,8 +4,7 @@ import PagesNavBar from "../UpdatesPage/PagesNavBar";
 import { useMemo, useState } from "react";
 import HRMButton from "../Button/HRMButton";
 import Toast from "./Toast";
-import CustomDialog from "./Dialog";
-import { useSettingsContext } from "./context";
+import SettingsDialog from "./SettingsDialog";
 import Grid from "@mui/system/Unstable_Grid";
 import ListTable from "./ListTable";
 
@@ -16,46 +15,19 @@ const HeadText = styled(Typography)({
   fontWeight: "500",
 });
 
-// const departmentColumns = [
-//   { header: "Name", contentKey: "departmentName" },
-//   { header: "People", contentKey: "count" },
-// ];
-
 const PAGE_SIZE = 10; //items per page (pagination)
 
 export default function ListTabContent({
   columns,
   contentList,
   titleTabPage,
+  tabName,
   style,
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { departmentsPeople, jobTitlesPeople } = useSettingsContext();
   const [selectedItem, setSelectedItem] = useState({});
   const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-
-  // const isDepartment = content === "departments";
-
-  // const tabPageTitle = (() => {
-  //   switch (content) {
-  //     case "jobTitles":
-  //       return "Job Titles";
-  //     case "timeoff":
-  //       return "Time Off";
-  //     default:
-  //       return "Departments";
-  //   }
-  // })();
-
-  // const contentList = useMemo(() => {
-  //   const fetch = isDepartment ? departmentsPeople : jobTitlesPeople;
-  //   return fetch.sort((a, b) =>
-  //     isDepartment
-  //       ? a.departmentName.localeCompare(b.departmentName)
-  //       : a.roleTitle.localeCompare(b.roleTitle)
-  //   );
-  // }, [isDepartment, departmentsPeople, jobTitlesPeople]);
 
   const itemsToDisplay = useMemo(
     () =>
@@ -69,7 +41,7 @@ export default function ListTabContent({
     message: "",
   });
 
-  const openDialog = (item, action) => {
+  const openDialog = (action, item) => {
     if (action) setAction(action);
     if (item) setSelectedItem(item);
     setIsDialogOpen(true);
@@ -115,20 +87,20 @@ export default function ListTabContent({
             <HeadText component="h3">{titleTabPage}</HeadText>
             <HRMButton
               mode="primary"
-              onClick={() => openDialog(undefined, "add")}
+              onClick={() => openDialog("add")}
             >
               Add new
             </HRMButton>
           </Stack>
         </Grid>
-        {/* <CustomDialog
+        <SettingsDialog
           open={isDialogOpen}
           onClose={closeDialog}
-          content={content}
+          onSave={() => {}}
+          title={"abc"}
           action={action}
-          selectedItem={selectedItem}
-          setToast={setToast}
-        /> */}
+          tabName={tabName}
+        />
 
         {contentList.length > 0 ? (
           <>

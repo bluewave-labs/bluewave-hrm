@@ -31,7 +31,9 @@ export const SettingsProvider = ({ children }) => {
 
   const fetchDepartmentsPeople = async () => {
     const departmentsPeopleData = await getEmployeesByDepartment();
-    setDepartmentsPeople(departmentsPeopleData);
+    setDepartmentsPeople(departmentsPeopleData.sort((a, b) =>
+      a.departmentName.localeCompare(b.departmentName)
+    ));
   };
 
   const fetchJobTitles = async () => {
@@ -41,8 +43,9 @@ export const SettingsProvider = ({ children }) => {
 
   const fetchJobTitlesPeople = async () => {
     const jobTitlesPeopleData = await getEmployeesByJobTitle();
-    setJobTitlesPeople(jobTitlesPeopleData);
-    console.log("jobTitlesPeopleData context", jobTitlesPeopleData);
+    setJobTitlesPeople(jobTitlesPeopleData.sort((a, b) =>
+      a.roleTitle.localeCompare(b.roleTitle)
+    ));
   };
 
   const fetchEmployees = async () => {
