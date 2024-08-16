@@ -3,7 +3,7 @@ import Stack from '@mui/system/Stack';
 import SelectItem from './SelectItem';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 const axios = require('axios');
 

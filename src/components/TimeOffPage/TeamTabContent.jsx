@@ -1,10 +1,12 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect } from 'react';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
-import NoContentComponent from '../UpdatesPage/NoContentComponent';
+import NoContentComponent from '../StaticComponents/NoContentComponent';
+import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
@@ -42,6 +44,8 @@ export default function TeamTabContent({style}) {
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
+    //Flag determining if the database servers can be reached
+    const [serverStatus, setServerStatus] = useState("Pending");
 
     //ID of the currently logged in employee
     const currentUser = 1;
@@ -72,6 +76,7 @@ export default function TeamTabContent({style}) {
             team.forEach((id) => {
                 axios.post(`${timeOffURL}/${id}`)
                 .then((response) => {
+                    setServerStatus("Success");
                     data = response.data;
                     data.forEach((p) => {
                         periods.push({
@@ -93,7 +98,12 @@ export default function TeamTabContent({style}) {
                 .catch((error) => console.log(error));
             });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+            console.log(error);
+            if (!error.response) {
+                setServerStatus("Failure");
+            }
+        });
     };
 
     //Filter out time off periods depending on which filters are active
@@ -117,74 +127,89 @@ export default function TeamTabContent({style}) {
 
     return (
         <Box sx={{...{
+            marginTop: "40px",
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
-            {/*Time off header*/}
-            <Stack 
-                direction="row" 
-                alignItems="center" 
-                justifyContent="space-between"
-                sx={{
-                    marginY: "40px"
-                }}
-            >
-                <Stack 
-                    direction="row" 
-                    alignItems="center" 
-                    spacing={3} 
-                >
-                    <h3>My team's history</h3>
-                    <Label 
-                        mode="brand" 
-                        label={timeOffPeriods.length} 
-                        style={{borderRadius: "50%"}} 
-                    />
-                </Stack>
-                {/*Filter by status button*/}
-                {timeOffPeriods.length > 0 &&
-                    <MenuToggleButton 
-                        label="Filter by status" 
-                        menuItems={{
-                            "Approved": [approvedFilter, (value) => {
-                                if (activeFilters.length >= 2 || !approvedFilter) {setApprovedFilter(value)}
-                            }],
-                            "Waiting": [waitingFilter, (value) => {
-                                if (activeFilters.length >= 2 || !waitingFilter) {setWaitingFilter(value)}
-                            }],
-                            "Rejected": [rejectedFilter, (value) => {
-                                if (activeFilters.length >= 2 || !rejectedFilter) {setRejectedFilter(value)}
-                            }]
-                        }} 
-                        icon={<FilterListIcon />} 
-                    />
-                }
-            </Stack>
-            {/*If there are periods of time off, display the time off period list and navbar */}
-            {timeOffPeriods.length > 0 ?
+            {serverStatus === "Pending" &&
+                <CircularProgress sx={{marginY: "30%", marginX: "50%"}} />
+            }
+            {serverStatus === "Success" && 
                 <>
-                    <UpcomingTimeOffTable 
-                        timeOffPeriods={periodsToDisplay}
-                        tableColumns={['Person', 'Type', 'Amount', 'Note', 'Status']}
-                        editFlag={false}  
-                        style={{marginBottom: "30px"}}
-                    />
-                    {filteredPeriods.length > 10 && 
-                        <PagesNavBar 
-                            numOfEntries={filteredPeriods.length} 
-                            currentPage={currentPage}
-                            handlePage={handlePage}
-                        />
-                    }
-                </> :
-                <>
-                    {/*Otherwise, display a message that there is no history*/}
-                    <NoContentComponent>
-                        <h3>There is no time off history</h3>
-                        <p>Any updates about your time off history will be shown here.</p>
-                    </NoContentComponent>
-                </>
+                    {/*Time off header*/}
+                    <Stack 
+                        direction="row" 
+                        alignItems="center" 
+                        justifyContent="space-between"
+                        sx={{
+                            marginY: "40px"
+                        }}
+                    >
+                        <Stack 
+                            direction="row" 
+                            alignItems="center" 
+                            spacing={3} 
+                        >
+                            <h3>My team's history</h3>
+                            <Label 
+                                mode="brand" 
+                                label={timeOffPeriods.length} 
+                                style={{borderRadius: "50%"}} 
+                            />
+                        </Stack>
+                        {/*Filter by status button*/}
+                        {timeOffPeriods.length > 0 &&
+                            <MenuToggleButton 
+                                label="Filter by status" 
+                                menuItems={{
+                                    "Approved": [approvedFilter, (value) => {
+                                        if (activeFilters.length >= 2 || !approvedFilter) {setApprovedFilter(value)}
+                                    }],
+                                    "Waiting": [waitingFilter, (value) => {
+                                        if (activeFilters.length >= 2 || !waitingFilter) {setWaitingFilter(value)}
+                                    }],
+                                    "Rejected": [rejectedFilter, (value) => {
+                                        if (activeFilters.length >= 2 || !rejectedFilter) {setRejectedFilter(value)}
+                                    }]
+                                }} 
+                                icon={<FilterListIcon />} 
+                            />
+                        }
+                    </Stack>
+                    {/*If there are periods of time off, display the time off period list and navbar */}
+                    {timeOffPeriods.length > 0 ?
+                        <>
+                            <UpcomingTimeOffTable 
+                                timeOffPeriods={periodsToDisplay}
+                                tableColumns={['Person', 'Type', 'Amount', 'Note', 'Status']}
+                                editFlag={false}  
+                                style={{marginBottom: "30px"}}
+                            />
+                            {filteredPeriods.length > 10 && 
+                                <PagesNavBar 
+                                    numOfEntries={filteredPeriods.length} 
+                                    currentPage={currentPage}
+                                    handlePage={handlePage}
+                                />
+                            }
+                        </> :
+                        <>
+                            {/*Otherwise, display a message that there is no history*/}
+                            <NoContentComponent>
+                                <h3>There is no time off history</h3>
+                                <p>Any updates about your time off history will be shown here.</p>
+                            </NoContentComponent>
+                        </>
 
+                    }
+                </>
+            } 
+            {/*Error message to be displayed if servers are unresponsive*/}
+            {serverStatus === "Failure" &&
+                <NoConnectionComponent >
+                    <h3 style={{color: "#D92D20"}}>Servers are unavailable</h3>
+                    <p style={{color: "#D92D20"}}>Cannot retrieve time off periods.</p>
+                </NoConnectionComponent>
             }
         </Box>
     );

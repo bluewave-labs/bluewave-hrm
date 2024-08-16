@@ -8,7 +8,7 @@ const content = <>
 
 //Storybook display settings
 export default {
-    title: 'HomeMenu/NoContentComponent',
+    title: 'StaticMenus/NoContentComponent',
     component: NoContentComponent,
     parameters: {
         layout: 'centered'

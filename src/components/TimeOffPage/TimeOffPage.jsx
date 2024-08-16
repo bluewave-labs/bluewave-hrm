@@ -28,6 +28,7 @@ export default function TimeOffPage({style, innerStyle}) {
     function sendRequest() {
         setOpenRequest(false);
         setRequestSuccess(true);
+        setTimeout(() => setRequestSuccess(false), 5000);
     }
 
     return (
