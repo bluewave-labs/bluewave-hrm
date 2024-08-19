@@ -1,11 +1,9 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
 import AvailableTimeOffTable from './AvailableTimeOffTable';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import Label from '../Label/Label';
-import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import { colors, fonts } from '../../Styles';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -38,8 +36,6 @@ export default function BoardTabContent({style}) {
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
-    //Flag determining if the database servers can be reached
-    const [serverStatus, setServerStatus] = useState("Pending");
 
     //ID of the currently logged in employee
     const currentUser = 1;
@@ -61,7 +57,6 @@ export default function BoardTabContent({style}) {
         //Send Request to database for time off policies
         axios.post(timeOffPolicyURL)
         .then((response) => {
-            setServerStatus("Success");
             const policies = {};
             //Only display the information for the current year
             const data = response.data.filter((p) => p.year === dayjs().year());
@@ -77,9 +72,6 @@ export default function BoardTabContent({style}) {
         })
         .catch((error) => {
             console.log(error);
-            if (!error.response) {
-                setServerStatus("Failure");
-            }
         });
     }
 
@@ -127,57 +119,43 @@ export default function BoardTabContent({style}) {
             color: colors.darkGrey, 
             fontFamily: fonts.fontFamily
         }, ...style}}>
-            {serverStatus === "Pending" &&
-                <CircularProgress sx={{marginY: "30%", marginX: "50%"}} />
-            }
-            {serverStatus === "Success" && 
+            {/*Available time off header and table*/}
+            <h3 style={{marginBottom: "40px"}}>Available time offs</h3>
+            <AvailableTimeOffTable policies={timeOffPolicies} />
+            {/*Upcoming time off header*/}
+            <Stack 
+                direction="row" 
+                alignItems="center" 
+                spacing={2} 
+                sx={{marginTop: "50px", marginBottom: "25px"}}
+            >
+                <h3>Upcoming time offs</h3>
+                <Label 
+                    mode="brand" 
+                    label={timeOffPeriods.length} 
+                    style={{borderRadius: "50%"}} 
+                />
+            </Stack>
+            {timeOffPeriods.length > 0 ?
                 <>
-                    {/*Available time off header and table*/}
-                    <h3 style={{marginBottom: "40px"}}>Available time offs</h3>
-                    <AvailableTimeOffTable policies={timeOffPolicies} />
-                    {/*Upcoming time off header*/}
-                    <Stack 
-                        direction="row" 
-                        alignItems="center" 
-                        spacing={2} 
-                        sx={{marginTop: "50px", marginBottom: "25px"}}
-                    >
-                        <h3>Upcoming time offs</h3>
-                        <Label 
-                            mode="brand" 
-                            label={timeOffPeriods.length} 
-                            style={{borderRadius: "50%"}} 
-                        />
-                    </Stack>
-                    {timeOffPeriods.length > 0 ?
-                        <>
-                            {/*Upcoming time off table*/}
-                            <UpcomingTimeOffTable 
-                                timeOffPeriods={periodsToDisplay} 
-                                tableColumns={['Type', 'Amount', 'Note']}
-                                editFlag={true} 
-                                refresh={() => setRefresh(!refresh)}
-                                style={{marginBottom: "30px"}}
-                            />
-                            {/*Upcoming time off navbar*/}
-                            {timeOffPeriods.length > 10 &&
-                                <PagesNavBar 
-                                    numOfEntries={timeOffPeriods.length} 
-                                    currentPage={currentPage} 
-                                    handlePage={handlePage}
-                                /> 
-                            }  
-                        </> :
-                        <p>There is no upcoming time off right now.</p>
-                    }
-                </>
-            }  
-            {/*Error message to be displayed if servers are unresponsive */}
-            {serverStatus === "Failure" &&
-                <NoConnectionComponent>
-                    <h3 style={{color: "#D92D20"}}>Servers are unavailable</h3>
-                    <p style={{color: "#D92D20"}}>Cannot retrieve time off policies or periods.</p>
-                </NoConnectionComponent>
+                    {/*Upcoming time off table*/}
+                    <UpcomingTimeOffTable 
+                        timeOffPeriods={periodsToDisplay} 
+                        tableColumns={['Type', 'Amount', 'Note']}
+                        editFlag={true} 
+                        refresh={() => setRefresh(!refresh)}
+                        style={{marginBottom: "30px"}}
+                    />
+                    {/*Upcoming time off navbar*/}
+                    {timeOffPeriods.length > 10 &&
+                        <PagesNavBar 
+                            numOfEntries={timeOffPeriods.length} 
+                            currentPage={currentPage} 
+                            handlePage={handlePage}
+                        /> 
+                    }  
+                </> :
+                <p>There is no upcoming time off right now.</p>
             }
         </Box>
     );

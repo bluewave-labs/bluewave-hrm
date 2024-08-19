@@ -21,6 +21,7 @@ export default function NoConnectionComponent({children, style}) {
         }, ...style}}>
             <img src={Logo} alt="No Connection Logo" style={{
                 width: "256px",
+                marginTop: "100px",
                 marginBottom: "20px",
                 marginLeft: "auto",
                 marginRight: "auto"

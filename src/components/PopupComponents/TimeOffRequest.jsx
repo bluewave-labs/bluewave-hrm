@@ -7,13 +7,11 @@ import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import { styled } from '@mui/system';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import CircularProgress from '@mui/material/CircularProgress';
 import dayjs from "dayjs";
 import DateSelect from "./DateSelect";
 import Checkbox from "../Checkbox/Checkbox";
 import HRMButton from "../Button/HRMButton";
 import TimeOffTable from "./TimeOffTable";
-import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import { colors, fonts } from "../../Styles";
 import { useState, useEffect, memo } from "react";
 import PropTypes from "prop-types";
@@ -108,8 +106,6 @@ export default function TimeOffRequest({
     const [validDates, setValidDates] = useState(true);
     //Flag determining if an error has occured
     const [errorOccurred, setErrorOccurred] = useState(false);
-    //Flag determining if the database servers can be reached
-    const [serverStatus, setServerStatus] = useState("Pending");
 
     //Retrieve policy category options
     useEffect(() => {
@@ -177,7 +173,6 @@ export default function TimeOffRequest({
         //Retrieve employeeAnnualTimeOff records from database
         axios.post(timeOffPolicyPOSTURL)
         .then((response) => {
-            setServerStatus("Success");
             const policies = {};
             //We are only interested in the records for the current year
             const data = response.data.filter((p) => p.year === dayjs().year());
@@ -195,9 +190,6 @@ export default function TimeOffRequest({
         })
         .catch((error) => {
             console.log(error);
-            if (!error.response) {
-                setServerStatus("Failure");
-            }
         });
     };
 
@@ -261,7 +253,8 @@ export default function TimeOffRequest({
                 if (d.day === "half") {
                     totalHours += 4;
                     halfDays++;
-                } else {
+                } 
+                else {
                     totalHours += 8;
                     fullDays++;
                 }
@@ -454,129 +447,114 @@ export default function TimeOffRequest({
             }}
             />
         </Stack>
-        {serverStatus === "Pending" &&
-            <CircularProgress sx={{marginY: "30%", marginX: "50%"}} />
-        }
-        {serverStatus === "Success" && 
-            <>
-                {/*Set time off category*/}
-                <Header4>Time off category</Header4>
-                <Select 
-                    value={category} 
-                    onChange={(e) => setCategory(e.target.value)}
-                    sx={{
-                        width: "100%",
-                        marginBottom: "30px",
-                    }}
-                >
-                    {categoryMenu.map((option) => (
-                        <MenuItem value={option}>
-                            {option.type} - left: {Math.floor(option.availableHours / 8)} days ({option.availableHours} hours)
-                        </MenuItem>
-                    ))}
-                </Select>
-                {/*Set starting and ending dates of time off period*/}
-                <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={4}
-                    sx={{ marginBottom: "40px" }}
-                >
-                    <Box>
-                    <Header4>From</Header4>
-                    <Chip
-                        icon={<CalendarMonthIcon />}
-                        label={formatDate(from)}
-                        variant="outlined"
-                        onClick={() => setOpenFrom(true)}
-                        sx={{ borderRadius: "4px" }}
-                    />
-                    </Box>
-                    <Box>
-                    <Header4>To</Header4>
-                    <Chip
-                        icon={<CalendarMonthIcon />}
-                        label={formatDate(to)}
-                        variant="outlined"
-                        onClick={() => setOpenTo(true)}
-                        sx={{ borderRadius: "4px" }}
-                    />
-                    </Box>
-                </Stack>
-                {/*Set amount of time off per day*/}
-                <Header4>Amount</Header4>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                    <Checkbox
-                    type="checkbox"
-                    id="setHours"
-                    name="setHours"
-                    value="setHours"
-                    size="large"
-                    onChange={() => setEachDay(!eachDay)}
-                    style={{ marginRight: "10px" }}
-                    />
-                    <p>Set hours for each day during the time off period</p>
-                </Stack>
-                {/*Time off per day table*/}
-                <MemoTimeOffTable
-                    dateRange={dateRange}
-                    eachDay={eachDay}
-                    onChange={calculateTimeOffHours}
+            {/*Set time off category*/}
+            <Header4>Time off category</Header4>
+            <Select 
+                value={category} 
+                onChange={(e) => setCategory(e.target.value)}
+                sx={{
+                    width: "100%",
+                    marginBottom: "30px",
+                }}
+            >
+                {categoryMenu.map((option) => (
+                    <MenuItem value={option}>
+                        {option.type} - left: {Math.floor(option.availableHours / 8)} days ({option.availableHours} hours)
+                    </MenuItem>
+                ))}
+            </Select>
+            {/*Set starting and ending dates of time off period*/}
+            <Stack
+                direction="row"
+                alignItems="center"
+                spacing={4}
+                sx={{ marginBottom: "40px" }}
+            >
+                <Box>
+                <Header4>From</Header4>
+                <Chip
+                    icon={<CalendarMonthIcon />}
+                    label={formatDate(from)}
+                    variant="outlined"
+                    onClick={() => setOpenFrom(true)}
+                    sx={{ borderRadius: "4px" }}
                 />
-                {/*Time off summary*/}
-                <p style={{ marginBottom: "30px" }}>
-                    {fullDaysOff} full days ({fullDaysOff * 8} hrs) and {halfDaysOff} half
-                    day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in
-                    total).
-                </p>
-                {!validDates && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
-                    Your time off request dates overlap with existing upcoming time off periods.
-                </h4>}
-                {!sufficientTime && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
-                    You are requesting {totalHoursOff} hours off. The selected time off policy only 
-                    has {category.availableHours} hours available.
-                </h4>}
-                {/*Error message to be displayed if an error occurs*/}
-                {errorOccurred && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
-                    An error occurred. Could not send time off request.
-                </h4>}
-                {/*Send or cancel*/}
-                <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="flex-end"
-                    spacing={3}
-                >
-                    <HRMButton mode="secondaryB" onClick={close}>
-                    Cancel
-                    </HRMButton>
-                    {initialRequest ? (
-                    <HRMButton mode="primary" onClick={handleEdit} enabled={sufficientTime && validDates}>
-                        Update
-                    </HRMButton>
-                    ) : (
-                    <HRMButton mode="primary" onClick={handleSubmit} enabled={sufficientTime && validDates}>
-                        Send
-                    </HRMButton>
-                    )}
-                </Stack>
-                {/*Popup components for setting starting and ending dates*/}
-                <Dialog open={openFrom} onClose={() => setOpenFrom(false)}>
-                    <DateSelect close={() => setOpenFrom(false)} setDate={setFrom} initialValue={from} />
-                </Dialog>
-                <Dialog open={openTo} onClose={() => setOpenTo(false)}>
-                    <DateSelect close={() => setOpenTo(false)} setDate={setTo} initialValue={to} />
-                </Dialog>
-            </>
-        }
-
-        {/*Error message to be displayed if servers are unresponsive*/}
-        {serverStatus === "Failure" &&
-            <NoConnectionComponent>
-                <h3 style={{color: "#D92D20"}}>Servers are unavailable</h3>
-                <p style={{color: "#D92D20"}}>Cannot send time off requests.</p>
-            </NoConnectionComponent>
-        }
+                </Box>
+                <Box>
+                <Header4>To</Header4>
+                <Chip
+                    icon={<CalendarMonthIcon />}
+                    label={formatDate(to)}
+                    variant="outlined"
+                    onClick={() => setOpenTo(true)}
+                    sx={{ borderRadius: "4px" }}
+                />
+                </Box>
+            </Stack>
+            {/*Set amount of time off per day*/}
+            <Header4>Amount</Header4>
+            <Stack direction="row" alignItems="center" spacing={1}>
+                <Checkbox
+                type="checkbox"
+                id="setHours"
+                name="setHours"
+                value="setHours"
+                size="large"
+                onChange={() => setEachDay(!eachDay)}
+                style={{ marginRight: "10px" }}
+                />
+                <p>Set hours for each day during the time off period</p>
+            </Stack>
+            {/*Time off per day table*/}
+            <MemoTimeOffTable
+                dateRange={dateRange}
+                eachDay={eachDay}
+                onChange={calculateTimeOffHours}
+            />
+            {/*Time off summary*/}
+            <p style={{ marginBottom: "30px" }}>
+                {fullDaysOff} full days ({fullDaysOff * 8} hrs) and {halfDaysOff} half
+                day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in
+                total).
+            </p>
+            {!validDates && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+                Your time off request dates overlap with existing upcoming time off periods.
+            </h4>}
+            {!sufficientTime && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+                You are requesting {totalHoursOff} hours off. The selected time off policy only 
+                has {category.availableHours} hours available.
+            </h4>}
+            {/*Error message to be displayed if an error occurs*/}
+            {errorOccurred && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+                An error occurred. Could not send time off request.
+            </h4>}
+            {/*Send or cancel*/}
+            <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-end"
+                spacing={3}
+            >
+                <HRMButton mode="secondaryB" onClick={close}>
+                Cancel
+                </HRMButton>
+                {initialRequest ? (
+                <HRMButton mode="primary" onClick={handleEdit} enabled={sufficientTime && validDates}>
+                    Update
+                </HRMButton>
+                ) : (
+                <HRMButton mode="primary" onClick={handleSubmit} enabled={sufficientTime && validDates}>
+                    Send
+                </HRMButton>
+                )}
+            </Stack>
+            {/*Popup components for setting starting and ending dates*/}
+            <Dialog open={openFrom} onClose={() => setOpenFrom(false)}>
+                <DateSelect close={() => setOpenFrom(false)} setDate={setFrom} initialValue={from} />
+            </Dialog>
+            <Dialog open={openTo} onClose={() => setOpenTo(false)}>
+                <DateSelect close={() => setOpenTo(false)} setDate={setTo} initialValue={to} />
+            </Dialog>
         </Box>
     );
 }

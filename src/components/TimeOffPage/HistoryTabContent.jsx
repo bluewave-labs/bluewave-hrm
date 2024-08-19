@@ -1,12 +1,10 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import TuneIcon from '@mui/icons-material/Tune';
-import CircularProgress from '@mui/material/CircularProgress';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
-import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import Label from '../Label/Label';
 import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
@@ -44,8 +42,6 @@ export default function HistoryTabContent({style}) {
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
-    //Flag determining if the database servers can be reached
-    const [serverStatus, setServerStatus] = useState("Pending");
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active
@@ -67,11 +63,9 @@ export default function HistoryTabContent({style}) {
 
     //Function for retrieving any past time off periods
     function getTimeOffPeriods() {
-        //console.log("Running getTimeOffPeriods()");
         //Send request to database for time off periods
         axios.post(timeOffPeriodURL)
         .then((response) => {
-            setServerStatus("Success")
             const periods = [];
             const data = response.data;
             data.forEach((p) => {
@@ -91,9 +85,6 @@ export default function HistoryTabContent({style}) {
         })
         .catch((error) => {
             console.log(error);
-            if (!error.response) {
-                setServerStatus("Failure");
-            }
         })
     };
  
@@ -113,83 +104,69 @@ export default function HistoryTabContent({style}) {
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
-            {serverStatus === "Pending" &&
-                <CircularProgress sx={{marginY: "30%", marginX: "50%"}} />
-            }
-            {serverStatus === "Success" && 
-                <>
-                    {/*Time off header*/}
-                    <Stack 
-                        direction="row" 
-                        alignItems="center" 
-                        justifyContent="space-between"
-                        sx={{
-                            marginY: "40px"
+            {/*Time off header*/}
+            <Stack 
+                direction="row" 
+                alignItems="center" 
+                justifyContent="space-between"
+                sx={{
+                    marginY: "40px"
+                }}
+            >
+                <Stack direction="row" alignItems="center" spacing={3}>
+                    <h3>Time off history</h3>
+                    <Label 
+                        mode="brand" 
+                        label={timeOffPeriods.length} 
+                        style={{borderRadius: "50%"}} 
+                    />
+                </Stack>
+                {/*Customize button*/}
+                {timeOffPeriods.length > 0 &&
+                    <MenuToggleButton 
+                        label="Customize" 
+                        menuItems={{
+                            "Type": [typeFilter, (value) => {
+                                if (activeFilters.length >= 2 || !typeFilter) {setTypeFilter(value)}
+                            }],
+                            "Amount": [amountFilter, (value) => {
+                                if (activeFilters.length >= 2 || !amountFilter) {setAmountFilter(value)}
+                            }],
+                            "Note": [noteFilter, (value) => {
+                                if (activeFilters.length >= 2 || !noteFilter) {setNoteFilter(value)}
+                            }]
                         }}
-                    >
-                        <Stack direction="row" alignItems="center" spacing={3}>
-                            <h3>Time off history</h3>
-                            <Label 
-                                mode="brand" 
-                                label={timeOffPeriods.length} 
-                                style={{borderRadius: "50%"}} 
-                            />
-                        </Stack>
-                        {/*Customize button*/}
-                        {timeOffPeriods.length > 0 &&
-                            <MenuToggleButton 
-                                label="Customize" 
-                                menuItems={{
-                                    "Type": [typeFilter, (value) => {
-                                        if (activeFilters.length >= 2 || !typeFilter) {setTypeFilter(value)}
-                                    }],
-                                    "Amount": [amountFilter, (value) => {
-                                        if (activeFilters.length >= 2 || !amountFilter) {setAmountFilter(value)}
-                                    }],
-                                    "Note": [noteFilter, (value) => {
-                                        if (activeFilters.length >= 2 || !noteFilter) {setNoteFilter(value)}
-                                    }]
-                                }}
-                                icon={<TuneIcon />} 
-                            />
-                        }
-                    </Stack>
-                    {/*If there are periods of time off, display the time off period list and navbar */}
-                    {(timeOffPeriods.length > 0) ?
-                        <>
-                            {/*Upcoming time off table*/}
-                            <UpcomingTimeOffTable 
-                                timeOffPeriods={periodsToDisplay} 
-                                tableColumns={activeFilters}
-                                editFlag={false} 
-                                //refresh={() => setRefresh(!refresh)}
-                                style={{marginBottom: "30px"}}
-                            />
-                            {/*Upcoming time off navbar*/}
-                            {timeOffPeriods.length > 10 &&
-                                <PagesNavBar 
-                                    numOfEntries={timeOffPeriods.length} 
-                                    currentPage={currentPage} 
-                                    handlePage={handlePage}
-                                /> 
-                            }  
-                        </> :
-                        <>
-                            {/*Otherwise, display a message that there is no history*/}
-                            <NoContentComponent>
-                                <h3>There is no time off history</h3>
-                                <p>Any updates about your time off history will be shown here.</p>
-                            </NoContentComponent>
-                        </>
-                    }
+                        icon={<TuneIcon />} 
+                    />
+                }
+            </Stack>
+            {/*If there are periods of time off, display the time off period list and navbar */}
+            {(timeOffPeriods.length > 0) ?
+                <>
+                    {/*Upcoming time off table*/}
+                    <UpcomingTimeOffTable 
+                        timeOffPeriods={periodsToDisplay} 
+                        tableColumns={activeFilters}
+                        editFlag={false} 
+                        //refresh={() => setRefresh(!refresh)}
+                        style={{marginBottom: "30px"}}
+                    />
+                    {/*Upcoming time off navbar*/}
+                    {timeOffPeriods.length > 10 &&
+                        <PagesNavBar 
+                            numOfEntries={timeOffPeriods.length} 
+                            currentPage={currentPage} 
+                            handlePage={handlePage}
+                        /> 
+                    }  
+                </> :
+                <>
+                    {/*Otherwise, display a message that there is no history*/}
+                    <NoContentComponent>
+                        <h3>There is no time off history</h3>
+                        <p>Any updates about your time off history will be shown here.</p>
+                    </NoContentComponent>
                 </>
-            }
-            {/*Error message to be displayed if servers are unresponsive*/}
-            {serverStatus === "Failure" &&
-                <NoConnectionComponent >
-                    <h3 style={{color: "#D92D20"}}>Servers are unavailable</h3>
-                    <p style={{color: "#D92D20"}}>Cannot retrieve time off periods.</p>
-                </NoConnectionComponent>
             }
         </Box>
     );
