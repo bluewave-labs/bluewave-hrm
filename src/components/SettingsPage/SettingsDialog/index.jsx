@@ -1,37 +1,35 @@
+import { useMemo, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Stack } from "@mui/system";
-import {
-  styled,
-  Dialog as MUIDialog,
-  DialogTitle as MUIDialogTitle,
-  DialogContent,
-} from "@mui/material";
+import { DialogContent } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import HRMButton from "../../Button/HRMButton";
+import { dialogTitle, dialogContent } from "./constants";
+import { Dialog, DialogTitle } from "./styles";
+import { useDepartmentData } from "./useDepartmentData";
+export { tabNames } from "./constants";
 
-const Dialog = styled(MUIDialog)({
-  "& .MuiDialog-paper": {
-    width: "500px",
-    borderRadius: "10px",
-  },
-});
+export default function CustomDialog({ open, onClose, action, tabName }) {
+  const form = useForm();
+  const departmentData = useDepartmentData();
 
-const DialogTitle = styled(MUIDialogTitle)({
-  fontSize: "16px",
-  fontWeight: "600",
-  color: "#344054",
-});
+  const Content = useMemo(() => {
+    if (!action || !tabName) return null;
+    return dialogContent[action][tabName];
+  }, [action, tabName]);
 
-export default function CustomDialog({
-  open,
-  onClose,
-  onSave,
-  title,
-  children,
-}) {
+  useEffect(() => {
+    form.reset();
+  }, [open]);
+
+  const onSubmit = (data) => {
+    return departmentData[action](data);
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
-        <DialogTitle>{title}</DialogTitle>
+        <DialogTitle>{dialogTitle?.[action]?.[tabName]}</DialogTitle>
         <CloseIcon
           onClick={onClose}
           sx={{
@@ -48,7 +46,7 @@ export default function CustomDialog({
         />
       </Stack>
       <DialogContent>
-        {children}
+        <Content form={form} />
         <Stack
           direction="row"
           alignItems="center"
@@ -59,7 +57,7 @@ export default function CustomDialog({
           <HRMButton mode="secondaryB" onClick={onClose} color="primary">
             Cancel
           </HRMButton>
-          <HRMButton mode="primary" onClick={onSave}>
+          <HRMButton mode="primary" onClick={form.handleSubmit(onSubmit)}>
             Save
           </HRMButton>
         </Stack>

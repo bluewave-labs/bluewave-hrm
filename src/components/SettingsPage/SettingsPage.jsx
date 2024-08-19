@@ -11,6 +11,7 @@ import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
 import Page from "../StaticComponents/Page";
 import { useDepartmentPeople, useJobTitlesPeople } from "./hooks";
+import { tabNames } from "./SettingsDialog";
 
 const StyledTab = styled(Tab)({
   textTransform: "none",
@@ -19,11 +20,6 @@ const StyledTab = styled(Tab)({
 const StyledTabPanel = styled(TabPanel)({
   padding: 0,
 });
-
-export const tabNames = {
-  departments: "departments",
-  jobtitles: "jobtitles",
-}
 
 export default function SettingsPage({ style, innerStyle }) {
   const [tab, setTab] = useState("Company profile");

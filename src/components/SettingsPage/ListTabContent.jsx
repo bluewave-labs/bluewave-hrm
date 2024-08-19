@@ -96,8 +96,6 @@ export default function ListTabContent({
         <SettingsDialog
           open={isDialogOpen}
           onClose={closeDialog}
-          onSave={() => {}}
-          title={"abc"}
           action={action}
           tabName={tabName}
         />

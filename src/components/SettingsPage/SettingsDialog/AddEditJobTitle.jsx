@@ -1,0 +1,1 @@
+export const AddEditJobTitle = () => "Hello from AddEditJobTitle";
