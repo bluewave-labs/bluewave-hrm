@@ -9,9 +9,16 @@ import { Dialog, DialogTitle } from "./styles";
 import { useDepartmentData } from "./useDepartmentData";
 export { tabNames } from "./constants";
 
-export default function CustomDialog({ open, onClose, action, tabName }) {
+export default function CustomDialog({
+  open,
+  onClose,
+  action,
+  tabName,
+  selectedItem,
+}) {
   const form = useForm();
   const departmentData = useDepartmentData();
+  console.log("selectedItem", selectedItem);
 
   const Content = useMemo(() => {
     if (!action || !tabName) return null;
@@ -23,7 +30,7 @@ export default function CustomDialog({ open, onClose, action, tabName }) {
   }, [open]);
 
   const onSubmit = (data) => {
-    return departmentData[action](data);
+    return departmentData[action](selectedItem, data);
   };
 
   return (

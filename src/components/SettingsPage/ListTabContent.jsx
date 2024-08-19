@@ -98,6 +98,7 @@ export default function ListTabContent({
           onClose={closeDialog}
           action={action}
           tabName={tabName}
+          selectedItem={selectedItem}
         />
 
         {contentList.length > 0 ? (
