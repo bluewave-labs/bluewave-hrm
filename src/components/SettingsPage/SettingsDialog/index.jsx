@@ -7,6 +7,8 @@ import HRMButton from "../../Button/HRMButton";
 import { dialogTitle, dialogContent } from "./constants";
 import { Dialog, DialogTitle } from "./styles";
 import { useDepartmentData } from "./useDepartmentData";
+import { useJobTitleData } from "./useJobTitleData";
+import { tabNames } from "./constants";
 export { tabNames } from "./constants";
 
 export default function CustomDialog({
@@ -15,10 +17,23 @@ export default function CustomDialog({
   action,
   tabName,
   selectedItem,
+  setToast,
 }) {
   const form = useForm();
-  const departmentData = useDepartmentData();
-  console.log("selectedItem", selectedItem);
+  const departmentData = useDepartmentData({
+    onClose,
+    setError: form.setError,
+    selectedItem,
+    setToast,
+    action,
+  });
+  const jobTitleData = useJobTitleData({
+    onClose,
+    setError: form.setError,
+    selectedItem,
+    setToast,
+    action,
+  });
 
   const Content = useMemo(() => {
     if (!action || !tabName) return null;
@@ -26,11 +41,15 @@ export default function CustomDialog({
   }, [action, tabName]);
 
   useEffect(() => {
-    form.reset();
-  }, [open]);
+    form.reset({
+      departmentName: selectedItem?.departmentName ?? "",
+      roleTitle: selectedItem?.roleTitle ?? "",
+    });
+  }, [open, selectedItem]);
 
   const onSubmit = (data) => {
-    return departmentData[action](selectedItem, data);
+    if (tabName === tabNames.departments) return departmentData[action](data);
+    if (tabName === tabNames.jobtitles) return jobTitleData[action](data);
   };
 
   return (
@@ -53,7 +72,9 @@ export default function CustomDialog({
         />
       </Stack>
       <DialogContent>
-        <Content form={form} />
+        {Content && (
+          <Content form={form} selectedItem={selectedItem} action={action} />
+        )}
         <Stack
           direction="row"
           alignItems="center"

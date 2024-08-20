@@ -99,6 +99,7 @@ export default function ListTabContent({
           action={action}
           tabName={tabName}
           selectedItem={selectedItem}
+          setToast={setToast}
         />
 
         {contentList.length > 0 ? (

@@ -10,7 +10,7 @@ const validationRules = {
   },
 };
 
-export const AddEditDepartment = ({ form }) => {
+export const AddEditDepartment = ({ form, action }) => {
   const {
     register,
     formState: { errors },
@@ -18,7 +18,7 @@ export const AddEditDepartment = ({ form }) => {
 
   return (
     <>
-      <TextLabel>Name</TextLabel>
+      <TextLabel>{action === "add" ? "Name" : "New name"}</TextLabel>
       <TextField
         size="small"
         fullWidth

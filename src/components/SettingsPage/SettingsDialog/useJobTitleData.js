@@ -1,29 +1,29 @@
 import { useSettingsContext } from "../context";
-import { departmentsApi, transferEmployeesDepartment } from "../api";
+import { jobTitlesApi, transferEmployeesJobTitle } from "../api";
 
-const successMessage = (action) => `Department ${action}ed successfully`;
+const successMessage = (action) => `Job title ${action}ed successfully`;
 
 const errorMessage = (action) => `Failed to ${action}`;
 
-export const useDepartmentData = ({
+export const useJobTitleData = ({
   onClose,
   setError,
   selectedItem,
   setToast,
   action,
 }) => {
-  const { departments, fetchDepartmentsPeople, fetchDepartments, employees } =
+  const { jobTitles, fetchJobTitlesPeople, fetchJobTitles, employees } =
     useSettingsContext();
 
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);
     if (typeof response === "string" && response?.includes("already exists")) {
-      setError("departmentName", {
+      setError("roleTitle", {
         message: response,
       });
     } else {
-      fetchDepartmentsPeople();
-      fetchDepartments();
+      fetchJobTitlesPeople();
+      fetchJobTitles();
       onClose();
       setToast({
         open: true,
@@ -43,51 +43,55 @@ export const useDepartmentData = ({
     });
   };
 
-  const addDepartment = (data) => {
-    departmentsApi.create(data).then(handleSuccess).catch(handleError);
+  const addJobTitle = (data) => {
+    const jobTitleData = {
+      roleTitle: data.roleTitle,
+      minimumSalary: 0,
+      maximumSalary: 0,
+    };
+    jobTitlesApi.create(jobTitleData).then(handleSuccess).catch(handleError);
   };
 
-  const editDepartment = (data) => {
-    const departmentById = departments.find(
-      (item) => item.id === selectedItem.id
+  const editJobTitle = (data) => {
+    const jobTitleById = jobTitles.find(
+      (item) => item.roleId === selectedItem.roleId
     );
 
-    if (!departmentById) {
-      console.error("Department not found!");
+    if (!jobTitleById) {
+      console.error("Job title not found!");
       return;
     }
 
     const formattedData = {
-      ...departmentById,
-      departmentName: data.departmentName,
+      ...jobTitleById,
+      roleTitle: data.roleTitle,
     };
 
-    departmentsApi.update(formattedData).then(handleSuccess).catch(handleError);
+    jobTitlesApi.update(formattedData).then(handleSuccess).catch(handleError);
   };
 
-  const deleteDepartment = () => {
-    departmentsApi
-      .delete(selectedItem.id)
+  const deleteJobTitle = () => {
+    jobTitlesApi
+      .delete(selectedItem.roleId)
       .then(handleSuccess)
       .catch(handleError);
   };
 
   const transferEmployees = (data) => {
-    const { departmentDestination } = data;
-
+    const { jobTitleDestination } = data;
     const employeeEmpIds = employees
-      .filter((employee) => employee.departmentId === selectedItem.id)
+      .filter((employee) => employee.roleId === selectedItem.roleId)
       .map((employee) => employee.empId);
 
     const transferData = {
       employeeEmpIds,
-      destinationDepartmentId: departmentDestination.id,
+      destinationRoleId: jobTitleDestination.roleId,
     };
 
-    transferEmployeesDepartment(transferData)
+    transferEmployeesJobTitle(transferData)
       .then((response) => {
         console.log("Transfer employess successfully:", response.data);
-        deleteDepartment();
+        deleteJobTitle();
       })
       .catch((error) => {
         console.error("Transfer employess error:", error);
@@ -95,8 +99,8 @@ export const useDepartmentData = ({
   };
 
   return {
-    add: addDepartment,
-    edit: editDepartment,
+    add: addJobTitle,
+    edit: editJobTitle,
     delete: transferEmployees,
   };
 };
