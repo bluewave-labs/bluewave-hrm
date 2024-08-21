@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     port: process.env.PORT,
-    dialect: process.env.dialect,
+    dialect: process.env.DIALECT,
     define: {
       //freezeTableName: true,
     },
