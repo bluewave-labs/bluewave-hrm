@@ -4,14 +4,12 @@ import MyInfoMain from './components/myinfo/MyInfoMain';
 import { MyInfoEdit } from './components/myinfo/MyInfoEdit';
 import Page from './components/StaticComponents/Page';
 import { EmployeeProvider } from './components/myinfo/EmployeeContext';
+import ReportPage from './components/Reports/ReportPage'
 
-import HeadcountChanges2 from './components/Reports/HeadcountChanges2';
-import MonthlyNewEmp from './components/Reports/MonthlyNewEmp'
 function App() {
   return (
     <div className="App">
-      <HeadcountChanges2/>
-      <MonthlyNewEmp/>
+      
       <EmployeeProvider>
         <Routes>
         
@@ -19,6 +17,7 @@ function App() {
           <Route path="/myinfo" element={<MyInfoMain />} />
           <Route path="/myinfoedit" element={<MyInfoEdit />} />
           <Route path="/page" element={<Page />} />
+          <Route path="/report" element={<ReportPage />} />
         </Routes>
       </EmployeeProvider>
     </div>

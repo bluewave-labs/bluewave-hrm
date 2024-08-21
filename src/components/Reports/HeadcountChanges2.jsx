@@ -119,6 +119,7 @@ const pData = cumulativeHireStats
         display: 'flex',
         flexDirection: 'column',
         padding: '24px',
+        mb:"42px"
       }}
     >
       <Box
@@ -144,7 +145,7 @@ const pData = cumulativeHireStats
               ]}
               xAxis={[{ scaleType: 'point', data: xLabels }]}
               yAxis={[{ label: ''}]} 
-              width={532}
+              width={500}
               height={290}
               grid={{ horizontal: true }}
               leftAxis={{

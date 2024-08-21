@@ -2,69 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
-// import { dataset } from '../dataset/weather';
-
-// export const dataset = [
-//   {
-//     heads: 21,
-//     month: 'Jan',
-//   },
-//   {
-    
-//     heads: 28,
-//     month: 'Feb',
-//   },
-//   {
-    
-//     heads: 41,
-//     month: 'Mar',
-//   },
-//   {
-    
-//     heads: 73,
-//     month: 'Apr',
-//   },
-//   {
-    
-//     heads: 99,
-//     month: 'May',
-//   },
-//   {
-    
-//     heads: 144,
-//     month: 'June',
-//   },
-//   {
-    
-//     heads: 319,
-//     month: 'July',
-//   },
-//   {
-    
-//     heads: 249,
-//     month: 'Aug',
-//   },
-//   {
-    
-//     heads: 131,
-//     month: 'Sept',
-//   },
-//   {
-    
-//     heads: 55,
-//     month: 'Oct',
-//   },
-//   {
-    
-//     heads: 48,
-//     month: 'Nov',
-//   },
-//   {
-    
-//     heads: 25,
-//     month: 'Dec',
-//   },
-// ];
 
 
 const valueFormatter = (value) => `${value}mm`;
@@ -123,7 +60,7 @@ export default function TickPlacementBars() {
   }, []);
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '600px' }}>
     
       <BarChart
         dataset={hireStats}
