@@ -10,7 +10,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
 import Page from "../StaticComponents/Page";
-import { useDepartmentPeople, useJobTitlesPeople } from "./hooks";
+import { useDepartmentPeople, useJobTitlesPeople, useTimeOffPolicies } from "./hooks";
 import { tabNames } from "./SettingsDialog";
 
 const StyledTab = styled(Tab)({
@@ -27,6 +27,9 @@ export default function SettingsPage({ style, innerStyle }) {
     useDepartmentPeople();
   const { data: jobTitlesPeopleData, columns: jobTitlesPeopleColumns } =
     useJobTitlesPeople();
+
+  const { data: timeoffPoliciesData, columns: timeOffPoliciesColumns } =
+    useTimeOffPolicies();
 
   function handleChange(e, newValue) {
     setTab(newValue);
@@ -96,7 +99,12 @@ export default function SettingsPage({ style, innerStyle }) {
             />
           </StyledTabPanel>
           <StyledTabPanel value="Time off">
-            <ListTabContent content="timeoff" />
+            <ListTabContent
+              contentList={timeoffPoliciesData}
+              titleTabPage="Edit time off policies"
+              columns={timeOffPoliciesColumns}
+              tabName={tabNames.timeoffs}
+            />
           </StyledTabPanel>
         </TabContext>
       </Box>

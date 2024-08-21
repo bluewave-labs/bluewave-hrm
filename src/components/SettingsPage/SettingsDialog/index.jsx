@@ -8,6 +8,7 @@ import { dialogTitle, dialogContent } from "./constants";
 import { Dialog, DialogTitle } from "./styles";
 import { useDepartmentData } from "./useDepartmentData";
 import { useJobTitleData } from "./useJobTitleData";
+import { useTimeOffPoliciesData } from "./useTimeOffPoliciesData";
 import { tabNames } from "./constants";
 export { tabNames } from "./constants";
 
@@ -27,7 +28,16 @@ export default function CustomDialog({
     setToast,
     action,
   });
+
   const jobTitleData = useJobTitleData({
+    onClose,
+    setError: form.setError,
+    selectedItem,
+    setToast,
+    action,
+  });
+
+  const TimeOffPoliciesData = useTimeOffPoliciesData({
     onClose,
     setError: form.setError,
     selectedItem,
@@ -48,8 +58,11 @@ export default function CustomDialog({
   }, [open, selectedItem]);
 
   const onSubmit = (data) => {
+    console.log("data", data);
     if (tabName === tabNames.departments) return departmentData[action](data);
     if (tabName === tabNames.jobtitles) return jobTitleData[action](data);
+    if (tabName === tabNames.timeoffs)
+      return TimeOffPoliciesData[action](data);
   };
 
   return (

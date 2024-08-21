@@ -21,7 +21,7 @@ export const DialogTitle = styled(MUIDialogTitle)({
 
 export const TextField = styled(MUITextField)({
   "& .MuiInputBase-input.MuiOutlinedInput-input": {
-    padding: "4px 10px",
+    padding: "8px",
   },
   "& .MuiInputBase-root.MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline":
     {
@@ -38,8 +38,9 @@ export const TextField = styled(MUITextField)({
 });
 
 export const TextLabel = styled(Typography)({
+  fontFamily: "Inter",
   fontSize: "13px",
-  fontWeight: "400",
-  marginBottom: "10px",
-  color: "#000000",
+  fontWeight: "600",
+  marginBottom: "12px",
+  color: "#344054",
 });

@@ -10,18 +10,19 @@ import { colors, fonts } from "../../Styles";
 import Stack from "@mui/system/Stack";
 
 const TextHeader = styled(Typography)({
-  fontSize: "14px",
+  fontFamily: "Inter",
+  fontSize: "12px",
   fontWeight: "500",
   lineHeight: "18px",
   color: "#475467",
 });
 
-const Text = styled(Typography)({
-  fontSize: "16px",
-  fontWeight: "500",
-  lineHeight: "20px",
-  color: "#101828",
-});
+// const Text = styled(Typography)({
+//   fontSize: "14px",
+//   lineHeight: "20px",
+//   color: "#101828",
+//   fontFamily: "Inter",
+// });
 
 const EditButton = styled(Button)({
   textTransform: "none",
@@ -66,15 +67,29 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                 <TextHeader>{header}</TextHeader>
               </TableHeaderCell>
             ))}
-            <TableHeaderCell/>
+            <TableHeaderCell />
           </TableRow>
         </TableHead>
         <TableBody>
           {contentList?.map((item) => (
             <TableRow key={item.id}>
-              {columns?.map(({ contentKey }) => (
+              {columns?.map(({ header, contentKey }, index) => (
                 <TableBodyCell key={contentKey}>
-                  <Text>{item[contentKey]}</Text>
+                  <Typography
+                    sx={{
+                      fontFamily: "Inter",
+                      lineHeight: "20px",
+                      fontWeight: index === 0 ? "500" : "400",
+                      color: index === 0 ? "#101828" : "#475467",
+                      fontSize: index === 0 ? "14px" : "13px",
+                    }}
+                  >
+                    {header === "Default Balance"
+                      ? `${item[contentKey]} days`
+                      : header === "Times used"
+                        ? `${item[contentKey]} times`
+                        : item[contentKey]}
+                  </Typography>
                 </TableBodyCell>
               ))}
               <TableBodyCell>

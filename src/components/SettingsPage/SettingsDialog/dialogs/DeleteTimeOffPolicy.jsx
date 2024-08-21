@@ -1,10 +1,10 @@
-import { useSettingsContext } from "../context";
+import { useSettingsContext } from "../../context";
 import { Controller } from "react-hook-form";
 import { useMemo } from "react";
 import { Autocomplete } from "@mui/material";
-import { TextField } from "./styles";
+import { TextField } from "../styles";
 
-export const DeleteDepartment = ({ form, selectedItem }) => {
+export const DeleteTimeOffPolicy = ({ form, selectedItem }) => {
   const { departments } = useSettingsContext();
 
   const transferDepartmentOptions = useMemo(() => {

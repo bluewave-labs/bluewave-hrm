@@ -1,4 +1,4 @@
-import { TextLabel, TextField } from "./styles";
+import { TextLabel, TextField } from "../styles";
 
 const fieldName = "roleTitle";
 

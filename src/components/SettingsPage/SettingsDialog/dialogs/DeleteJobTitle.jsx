@@ -1,8 +1,8 @@
-import { useSettingsContext } from "../context";
+import { useSettingsContext } from "../../context";
 import { useMemo } from "react";
 import { Controller } from "react-hook-form";
 import { Autocomplete } from "@mui/material";
-import { TextField } from "./styles";
+import { TextField } from "../styles";
 
 export const DeleteJobTitle = ({ form, selectedItem }) => {
   const { jobTitles } = useSettingsContext();
