@@ -65,18 +65,14 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
           sx={{ width: "100px", color: unlimited && "#667085" }}
           disabled={unlimited}
           {...register("balance", {
-            required: "Balance is required.",
-            // pattern: {
-            //   value: /^\d+$/,
-            //   message: "Balance must be a number.",
-            // },
-            // min: {
-            //   value: 1,
-            //   message: "Balance must be greater than 0.",
-            // },
+            validate: (value) => {
+              if (unlimited) return true;
+              if (!unlimited && value.trim() === "")
+                return "Balance is required.";
+              return true;
+            },
           })}
-          error={!!errors["balance"]}
-          helperText={errors["balance"]?.message || ""}
+          error={!unlimited && !!errors["balance"]}
           FormHelperTextProps={{
             className: errors["balance"] ? "error" : "",
           }}
@@ -92,6 +88,19 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
           days
         </Typography>
       </Stack>
+      {!!errors["balance"] && !unlimited && (
+        <Typography
+          sx={{
+            color: "#D92D20",
+            fontSize: "11px",
+            fontWeight: 400,
+            fontFamily: "Inter",
+            marginTop: "10px",
+          }}
+        >
+          {errors["balance"]?.message}
+        </Typography>
+      )}
       <Stack
         direction="row"
         alignItems="center"
@@ -105,8 +114,8 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
           {...register("unlimitedBalance")}
           checked={isUnlimitedChecked}
           onChange={(e) => {
-            setUnlimited(e.target.checked); // Update the local state
-            setValue("unlimitedBalance", e.target.checked); // Update form value
+            setUnlimited(e.target.checked);
+            setValue("unlimitedBalance", e.target.checked);
           }}
           size="large"
           sx={{ marginRight: "100px", borderColor: "red" }}
