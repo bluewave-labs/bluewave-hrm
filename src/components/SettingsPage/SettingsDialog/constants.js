@@ -9,6 +9,7 @@ export const tabNames = {
   departments: "departments",
   jobtitles: "jobtitles",
   timeoffs: "timeoffs",
+  permissions: "permissions",
 };
 
 export const dialogTitle = {

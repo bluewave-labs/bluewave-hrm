@@ -9,8 +9,9 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
+import ManagePermissions from "./ManagePermissions";
 import Page from "../StaticComponents/Page";
-import { useDepartmentPeople, useJobTitlesPeople, useTimeOffPolicies } from "./hooks";
+import { useDepartmentPeople, useJobTitlesPeople, useTimeOffPolicies, usePermissions } from "./hooks";
 import { tabNames } from "./SettingsDialog";
 
 const StyledTab = styled(Tab)({
@@ -31,6 +32,9 @@ export default function SettingsPage({ style, innerStyle }) {
   const { data: timeoffPoliciesData, columns: timeOffPoliciesColumns } =
     useTimeOffPolicies();
 
+  const { data: permissionsData, columns: permissionsColumns } =
+    usePermissions();
+
   function handleChange(e, newValue) {
     setTab(newValue);
   }
@@ -42,7 +46,7 @@ export default function SettingsPage({ style, innerStyle }) {
         alignItems="center"
         justifyContent="space-between"
         sx={{
-          marginBottom: "40px",
+          marginBottom: "10px",
         }}
       >
         <h3>Settings</h3>
@@ -104,6 +108,13 @@ export default function SettingsPage({ style, innerStyle }) {
               titleTabPage="Edit time off policies"
               columns={timeOffPoliciesColumns}
               tabName={tabNames.timeoffs}
+            />
+          </StyledTabPanel>
+          <StyledTabPanel value="Permissions">
+            <ManagePermissions
+              contentList={permissionsData}
+              titleTabPage="Manage permissions"
+              columns={permissionsColumns}
             />
           </StyledTabPanel>
         </TabContext>
