@@ -11,12 +11,12 @@ import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import dayjs from "dayjs";
 import HRMButton from '../Button/HRMButton';
 import Label from '../Label/Label';
 import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import DeleteTimeOff from '../PopupComponents/DeleteTimeOff';
 import { colors, fonts } from '../../Styles';
-import dayjs from "dayjs";
 
 /**
  * Menu component for listing upcoming scheduled periods of time off

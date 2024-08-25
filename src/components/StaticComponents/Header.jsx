@@ -1,4 +1,5 @@
 import Box from '@mui/system/Box';
+import { useScrollTrigger } from '@mui/material';
 import UserDropdown from './UserDropdown';
 import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 
@@ -9,7 +10,13 @@ import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function Header({style}) {
+export default function Header({window, style}) {
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 0
+    });
+
     const user = {
         avatar: AvatarImage,
         name: "Gabriel Chan",
@@ -17,7 +24,9 @@ export default function Header({style}) {
     };
 
     return (
-        <Box sx={{...{
+        <Box 
+        className={trigger ? "scrolled" : ""}
+        sx={{...{
             boxSizing: "border-box",
             width: "100%",
             height: "87px",
@@ -25,11 +34,13 @@ export default function Header({style}) {
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-            backgroundColor: "#FFFFFF",
-            borderBottom: "1px solid #EBEBEB",
-            boxShadow: "0 10px 6px #10182808",
             position: "fixed",
-            zIndex: 1
+            zIndex: 1,
+            "&.scrolled": {
+                backgroundColor: "#FFFFFF",
+                borderBottom: "1px solid #EBEBEB",
+                boxShadow: "0 10px 6px #10182808",
+            }
         }, ...style}}>
             
             <UserDropdown user={user} />

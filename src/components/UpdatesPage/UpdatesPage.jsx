@@ -1,11 +1,13 @@
 import Stack from '@mui/system/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Page from '../StaticComponents/Page';
 import HRMButton from '../Button/HRMButton';
 import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import UpdatesMenu from './UpdatesMenu';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { currentUserID } from '../../testConfig';
+
 
 /**
  * Home page of the HRM application. Contains the updates menu.
@@ -26,7 +28,7 @@ export default function UpdatesPage({style, innerStyle}) {
     }, []);
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const currentUser = currentUserID;
 
     //URL endpoints to be used for API calls
     const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;

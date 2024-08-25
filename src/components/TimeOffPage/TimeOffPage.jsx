@@ -1,14 +1,17 @@
 import Stack from '@mui/system/Stack';
 import Dialog from '@mui/material/Dialog';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import TimeOffMenu from './TimeOffMenu';
 import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import TimeOffRequestSent from '../PopupComponents/TimeOffRequestSent';
-import HRMButton from '../Button/HRMButton';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Page from '../StaticComponents/Page';
 import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
+import HRMButton from '../Button/HRMButton';
+import { currentUserID } from '../../testConfig';
+
+
 
 /**
  * Time off page of the HRM application. Contains the time off menu as well as controls for 
@@ -34,7 +37,7 @@ export default function TimeOffPage({style, innerStyle}) {
     }, []);
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const currentUser = currentUserID;
 
     //URL endpoints to be used for API calls
     const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;

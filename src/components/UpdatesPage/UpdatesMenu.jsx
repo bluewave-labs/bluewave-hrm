@@ -1,13 +1,14 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useState, useEffect } from 'react';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
 import PagesNavBar from './PagesNavBar';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
-import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
-import { useState, useEffect } from 'react';
 import { colors, fonts } from '../../Styles';
+import { currentUserID } from '../../testConfig';
+
+
 import axios from 'axios';
 
 /**
@@ -27,11 +28,9 @@ export default function UpdatesMenu({style}) {
     const [allUpdates, setAllUpdates] = useState([]);
     //Hook for refreshing the list of notifications
     const [refresh, setRefresh] = useState(false);
-    //Flag determining if the database servers can be reached
-    const [serverStatus, setServerStatus] = useState("Pending");
 
     //ID of the currently logged in employee
-    const currentUserId = 1;
+    const currentUserId = currentUserID;
 
     //Refresh the list of notifications whenever the refresh hook is changed
     useEffect(() => {
@@ -51,7 +50,6 @@ export default function UpdatesMenu({style}) {
         //Retrieve notification records from database
         axios.get(notificationsURL)
         .then((response) => {
-            setServerStatus("Success");
             const updates = [];
             const data = response.data;
             data.forEach((up) => {
@@ -61,7 +59,6 @@ export default function UpdatesMenu({style}) {
         })
         .catch((error) => {
             console.log(error);
-            setServerStatus("Failure");
         });
     };
 
@@ -98,56 +95,43 @@ export default function UpdatesMenu({style}) {
             borderRadius: "10px",
             backgroundColor: "#FFFFFF"
         }, ...style}}>
-            {serverStatus === "Pending" &&
-                <CircularProgress sx={{marginY: "30%", marginX: "50%"}} />
-            }
-            {serverStatus === "Success" &&
+            {/*If there are updates, display the updates list and navbar */}
+            {(allUpdates.length > 0) ?
                 <>
-                    {/*If there are updates, display the updates list and navbar */}
-                    {(allUpdates.length > 0) ?
-                        <>
-                            <Stack 
-                                direction="row" 
-                                justifyContent="space-between" 
-                                alignItems="center" 
-                                sx={{
-                                    fontFamily: fonts.fontFamily,
-                                    marginBottom: "10px"
-                                }}
-                            >
-                                <h3 style={{color: colors.darkGrey}}>Latest updates</h3>
-                                <UpdatesFilter handleFilter={handleFilter} />
-                            </Stack>
-                            {/*Updates list*/}
-                            <UpdatesList 
-                                updates={updatesToDisplay} 
-                                refresh={() => {setRefresh(!refresh)}} 
-                                style={{marginBottom: "20px"}} 
-                            />
-                            {/*Updates nav bar*/}
-                            {filteredUpdates.length > 10 &&
-                                <PagesNavBar 
-                                    numOfEntries={filteredUpdates.length} 
-                                    currentPage={currentPage} 
-                                    handlePage={handlePage}
-                                /> 
-                            }       
-                        </> :
-                        <>
-                            {/*Otherwise, display a message that there are no updates*/}
-                            <NoContentComponent>
-                                <h3 style={{color:colors.darkGrey}}>You don't have any updates yet</h3>
-                                <p style={{color:colors.darkGrey}}>Any updates about your company will be shown here.</p>
-                            </NoContentComponent>
-                        </>
-                    }
+                    <Stack 
+                        direction="row" 
+                        justifyContent="space-between" 
+                        alignItems="center" 
+                        sx={{
+                            fontFamily: fonts.fontFamily,
+                            marginBottom: "10px"
+                        }}
+                    >
+                        <h3 style={{color: colors.darkGrey}}>Latest updates</h3>
+                        <UpdatesFilter handleFilter={handleFilter} />
+                    </Stack>
+                    {/*Updates list*/}
+                    <UpdatesList 
+                        updates={updatesToDisplay} 
+                        refresh={() => {setRefresh(!refresh)}} 
+                        style={{marginBottom: "20px"}} 
+                    />
+                    {/*Updates nav bar*/}
+                    {filteredUpdates.length > 10 &&
+                        <PagesNavBar 
+                            numOfEntries={filteredUpdates.length} 
+                            currentPage={currentPage} 
+                            handlePage={handlePage}
+                        /> 
+                    }       
+                </> :
+                <>
+                    {/*Otherwise, display a message that there are no updates*/}
+                    <NoContentComponent>
+                        <h3 style={{color:colors.darkGrey}}>You don't have any updates yet</h3>
+                        <p style={{color:colors.darkGrey}}>Any updates about your company will be shown here.</p>
+                    </NoContentComponent>
                 </>
-            }
-            {serverStatus === "Failure" &&
-                <NoConnectionComponent>
-                    <h3 style={{color: "#D92D20"}}>Servers are unavailable</h3>
-                    <p style={{color: "#D92D20"}}>Cannot retrieve notifications.</p>
-                </NoConnectionComponent>
             }
         </Box>
     );

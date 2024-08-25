@@ -1,21 +1,22 @@
-import Box from "@mui/system/Box";
-import Stack from "@mui/system/Stack";
-import CloseIcon from "@mui/icons-material/Close";
-import Select from "@mui/material/Select";
+import Box from '@mui/system/Box';
+import Stack from '@mui/system/Stack';
+import CloseIcon from '@mui/icons-material/Close';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Chip from "@mui/material/Chip";
-import Dialog from "@mui/material/Dialog";
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/system';
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import dayjs from "dayjs";
-import DateSelect from "./DateSelect";
-import Checkbox from "../Checkbox/Checkbox";
-import HRMButton from "../Button/HRMButton";
-import TimeOffTable from "./TimeOffTable";
-import { colors, fonts } from "../../Styles";
-import { useState, useEffect, memo } from "react";
-import PropTypes from "prop-types";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { useState, useEffect, memo } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import DateSelect from './DateSelect';
+import Checkbox from '../Checkbox/Checkbox';
+import HRMButton from '../Button/HRMButton';
+import TimeOffTable from './TimeOffTable';
+import { colors, fonts } from '../../Styles';
+import { currentUserID } from '../../testConfig';
 
 //Function for determining if a time period is valid. A time period is only valid if the
 //starting date is before or on the same day as the ending date.
@@ -161,7 +162,7 @@ export default function TimeOffRequest({
     const MemoTimeOffTable = memo(TimeOffTable);
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const currentUser = currentUserID;
 
     //URL endpoints to be used for API calls
     const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;

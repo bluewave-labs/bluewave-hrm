@@ -4,14 +4,16 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Dialog from '@mui/material/Dialog';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import dayjs from 'dayjs';
 import Label from '../Label/Label';
 import HRMButton from '../Button/HRMButton';
 import NewTeamMember from '../PopupComponents/NewTeamMember';
 import TimeOffRequestSentWindow from '../PopupComponents/TimeOffRequestSentWindow';
 import TimeOffApproval from '../PopupComponents/TimeOffApproval';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
+import { currentUserID } from '../../testConfig';
 
 /**
  * Menu component for listing update notifications in the home page.
@@ -37,7 +39,7 @@ export default function UpdatesList({updates, refresh, style}) {
     const [approvalDetails, setApprovalDetails] = useState({});
 
     //ID of the currently logged in employee
-    const currentUserId = 1;
+    const currentUserId = currentUserID;
 
     //URL endpoints to be used for API calls
     const notificationURL = `http://localhost:5000/api/notifications/`;
@@ -94,11 +96,11 @@ export default function UpdatesList({updates, refresh, style}) {
                 role: up.employee.role.roleTitle,
                 email: up.employee.email,
                 office: up.employee.officeLocation,
-                effectiveDate: up.employee.effectiveDate,
+                effectiveDate: dayjs(up.employee.effectiveDate).format("DD/MM/YYYY"),
                 timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed - 
                     up.employeeAnnualTimeOff.cumulativeHoursTaken),
-                timeOffRequested: `${up.timeOffHistory.startDate} - 
-                    ${up.timeOffHistory.endDate}`,
+                timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} - 
+                    ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
                 requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
                 timeOffCategory: up.timeOff.category,
                 status: up.timeOffHistory.status
@@ -110,8 +112,8 @@ export default function UpdatesList({updates, refresh, style}) {
             const details = {
                 timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed -
                     up.employeeAnnualTimeOff.cumulativeHoursTaken),
-                timeOffRequested: `${up.timeOffHistory.startDate} -
-                    ${up.timeOffHistory.endDate}`,
+                timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} -
+                    ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
                 requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
                 timeOffCategory: up.timeOff.category,
                 notes: up.timeOffHistory.note

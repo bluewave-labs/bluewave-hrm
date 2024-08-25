@@ -2,15 +2,17 @@ import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import axios from 'axios';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import axios from 'axios';
+import { currentUserID } from '../../testConfig';
+
 
 //Function for parsing a JavaScript date into a string format.
 function formatDate(date) {
@@ -44,7 +46,7 @@ export default function TeamTabContent({style}) {
     const [refresh, setRefresh] = useState(false);
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const currentUser = currentUserID;
 
     //URL endpoints to be used in API calls
     const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
