@@ -14,8 +14,6 @@ import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutl
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SupportIcon from '@mui/icons-material/Support';
 import { styled } from '@mui/system';
-import Logo from '../../Images/bluewave_hrm_logo_large.png';
-import { fonts, colors } from '../../Styles';
 
 /**
  * Side menu component for most pages. Contains buttons and links to multiple pages.
@@ -37,86 +35,67 @@ export default function SideMenu({style}) {
         paddingLeft: 0
     });
 
-    const ItemText = styled("p")({
-        margin: 0,
-        padding: 0,
-        fontFamily: fonts.fontFamily,
-        fontSize: fonts.default.size,
-        color: colors.darkGrey
-    });
-
     return (
         <Stack sx={{...{
-            boxSizing: "border-box",
-            width: "280px",
+            width: "15%",
+            minWidth: "280px",
             height: "100%",
             paddingRight: "15px",
             direction: "column",
             justifyContent: "space-between",
             borderRight: "1px solid #EBEBEB",
-            backgroundColor: "#FFFFFF",
-            position: "fixed",
-            paddingTop: "30px",
-            zIndex: 2
+            backgroundColor: "#FFFFFF"
         }, ...style}}>
-            <Box>
-                <img src={Logo} alt="Company Logo" style={{
-                    width: "136px", 
-                    height: "16px", 
-                    marginLeft: "20px",
-                    marginBottom: "15px"
-                }} />
-                <List>
-                    <StyledListItem disablePadding>
-                        <StyledListItemButton>
-                            <StyledListItemIcon>
-                                <HomeOutlinedIcon />
-                            </StyledListItemIcon>
-                            <ListItemText primary={<ItemText>Home</ItemText>} />
-                        </StyledListItemButton>
-                    </StyledListItem>
-                    <StyledListItem disablePadding>
-                        <StyledListItemButton>
-                            <StyledListItemIcon>
-                                <PersonOutlineIcon />
-                            </StyledListItemIcon>
-                            <ListItemText primary={<ItemText>My info</ItemText>} />
-                        </StyledListItemButton>
-                    </StyledListItem>
-                    <StyledListItem disablePadding>
-                        <StyledListItemButton>
-                            <StyledListItemIcon>
-                                <PeopleOutlineIcon />
-                            </StyledListItemIcon>
-                            <ListItemText primary={<ItemText>People</ItemText>} />
-                        </StyledListItemButton>
-                    </StyledListItem>
-                    <StyledListItem disablePadding>
-                        <StyledListItemButton>
-                            <StyledListItemIcon>
-                                <AccessTimeIcon />
-                            </StyledListItemIcon>
-                            <ListItemText primary={<ItemText>Time off</ItemText>} />
-                        </StyledListItemButton>
-                    </StyledListItem>
-                    <StyledListItem disablePadding>
-                        <StyledListItemButton>
-                            <StyledListItemIcon>
-                                <PieChartOutlineOutlinedIcon />
-                            </StyledListItemIcon>
-                            <ListItemText primary={<ItemText>Reporting</ItemText>} />
-                        </StyledListItemButton>
-                    </StyledListItem>
-                    <StyledListItem disablePadding>
-                        <StyledListItemButton>
-                            <StyledListItemIcon>
-                                <SettingsOutlinedIcon />
-                            </StyledListItemIcon>
-                            <ListItemText primary={<ItemText>Settings</ItemText>} />
-                        </StyledListItemButton>
-                    </StyledListItem>
-                </List>
-            </Box>
+            <List>
+                <StyledListItem disablePadding>
+                    <StyledListItemButton>
+                        <StyledListItemIcon>
+                            <HomeOutlinedIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary="Home" />
+                    </StyledListItemButton>
+                </StyledListItem>
+                <StyledListItem disablePadding>
+                    <StyledListItemButton>
+                        <StyledListItemIcon>
+                            <PersonOutlineIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary="My info" />
+                    </StyledListItemButton>
+                </StyledListItem>
+                <StyledListItem disablePadding>
+                    <StyledListItemButton>
+                        <StyledListItemIcon>
+                            <PeopleOutlineIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary="People" />
+                    </StyledListItemButton>
+                </StyledListItem>
+                <StyledListItem disablePadding>
+                    <StyledListItemButton>
+                        <StyledListItemIcon>
+                            <AccessTimeIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary="Time off" />
+                    </StyledListItemButton>
+                </StyledListItem>
+                <StyledListItem disablePadding>
+                    <StyledListItemButton>
+                        <StyledListItemIcon>
+                            <PieChartOutlineOutlinedIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary="Reporting" />
+                    </StyledListItemButton>
+                </StyledListItem>
+                <StyledListItem disablePadding>
+                    <StyledListItemButton>
+                        <StyledListItemIcon>
+                            <SettingsOutlinedIcon />
+                        </StyledListItemIcon>
+                        <ListItemText primary="Settings" />
+                    </StyledListItemButton>
+                </StyledListItem>
+            </List>
             <Box>
                 <Divider />
                 <StyledListItem sx={{marginY: "10px"}} disablePadding>
@@ -124,7 +103,7 @@ export default function SideMenu({style}) {
                         <StyledListItemIcon>
                             <SupportIcon />
                         </StyledListItemIcon>
-                        <ListItemText primary={<ItemText>Support</ItemText>} />
+                        <ListItemText primary="Support" />
                     </StyledListItemButton>
                 </StyledListItem>
             </Box>

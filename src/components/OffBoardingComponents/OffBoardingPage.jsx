@@ -1,23 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
-import { Step, StepLabel, Stepper } from "@mui/material";
 import { multiStepContext } from "../../context/stepContext";
 import FinalStep from "./FinalStep";
-import {
-  bgcolor,
-  Box,
-  display,
-  height,
-  margin,
-  padding,
-  textAlign,
-  width,
-} from "@mui/system";
+import { Box } from "@mui/system";
+import CustomizedSteppers from "../CustomizedSteppers/CustomizedSteppers";
 
 function OffBoardingPage() {
-  const { currentStep } = useContext(multiStepContext);
+  const { currentStep, finalData } = useContext(multiStepContext);
+  // useEffect(() => {
+  //   console.log("DATA>>>", finalData);
+  // });
+
   const stepStyle = {
     "&.MuiStepper-root": {
       padding: "50px 50px",
@@ -73,28 +68,23 @@ function OffBoardingPage() {
     <>
       <Box
         width={"1003px"}
-        margin={"20px auto"}
-        paddingInline={0}
-        sx={{ border: "2px solid #ebebeb" }}
+        height={"166px"}
+        margin={"125px auto 49px auto"}
+        sx={{
+          border: "2px solid #ebebeb",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
       >
-        <Stepper
-          activeStep={currentStep - 1}
-          orientation="horizontal"
-          sx={stepStyle}
-        >
-          <Step>
-            <StepLabel>Start</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Sign and Upload</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Complete questionnaire </StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Finish </StepLabel>
-          </Step>
-        </Stepper>
+        <CustomizedSteppers
+          stepnumber={currentStep - 1}
+          steps={[
+            { label: "Start", description: "" },
+            { label: "Sign and Upload", description: "" },
+            { label: "Complete questionnaire", description: "" },
+            { label: "Finish", description: "" },
+          ]}
+        />
       </Box>
       {showstep(currentStep)}
     </>

@@ -5,7 +5,7 @@ export default {
     title: 'TimeOffMenu/TimeOffPage',
     component: TimeOffPage,
     parameters: {
-        layout: 'fullscreen'
+        layout: 'centered'
     },
     tags: ['autodocs']
 };

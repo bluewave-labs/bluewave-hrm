@@ -127,26 +127,23 @@ export default {
 export const Board = {
     args: {
         timeOffPeriods: timeOffPeriods,
-        tableColumns: ['Type', 'Amount', 'Note'],
         editFlag: true,
-        refresh: () => {}
+        teamFlag: false
     }
 };
 
 export const History = {
     args: {
         timeOffPeriods: timeOffPeriods,
-        tableColumns: ['Type', 'Amount', 'Note'],
         editFlag: false,
-        refresh: () => {}
+        teamFlag: false
     }
 };
 
 export const Team = {
     args: {
         timeOffPeriods: teamTimeOffPeriods,
-        tableColumns: ['Person', 'Type', 'Amount', 'Note', 'Status'],
         editFlag: false,
-        refresh: () => {}
+        teamFlag: true,
     }
 }
