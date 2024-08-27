@@ -4,10 +4,12 @@ import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
-import HRMButton from '../Button/HRMButton';
-import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { useState } from 'react';
+import HRMButton from '../Button/HRMButton';
+import { colors, fonts } from '../../Styles';
+
 
 /**
  * Popup component for displaying the information of a time off request and the options to reject
@@ -41,6 +43,11 @@ import axios from 'axios';
  *      Default: {}
  */
 export default function TimeOffApproval({request_information, close, refresh, style}) {
+    const [notes, setNotes] = useState("");
+
+    //URL endpoints to be used for API calls
+    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
+
     //Custom style elements
     const StyledTD = styled('td')({
         textAlign: "start",
@@ -51,10 +58,10 @@ export default function TimeOffApproval({request_information, close, refresh, st
     //Function for sending the PUT request to change the time off request status
     function resolveRequest(newStatus) {
         //Update the time off period status
-        const url = `http://localhost:5000/api/timeoffhistories`;
-        axios.put(url, {
+        axios.put(timeOffPeriodURL, {
             id: request_information.timeOffId,
-            status: newStatus
+            status: newStatus,
+            note: notes
         })
         .then((response) => {
             console.log(response);
@@ -142,6 +149,8 @@ export default function TimeOffApproval({request_information, close, refresh, st
                 <TextField 
                     rows={4} 
                     multiline 
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
                     sx={{
                         border: "1px solid #D0D5DD", 
                         borderRadius: "8px",
