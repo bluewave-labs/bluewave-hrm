@@ -7,7 +7,6 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const router = express.Router();
 
-
 const corsOptions = {
   origin: "*",
   credentials: true, //access-control-allow-credentials:true
@@ -18,8 +17,6 @@ app.use(bodyParser.json({ limit: "100mb" }));
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
-
 
 // simple route
 app.get("/", (req, res) => {
@@ -47,9 +44,7 @@ Table(s) that must be prepopulated in production
 // db.sequelize.sync({ force: true }).then(async () => {
 //   let data = require("./constants/data");
 
-
-
-//   //await data.populateTables(db);
+//   await data.populateTables(db);
 
 //   //await data.populatePermissionTable(db);
 

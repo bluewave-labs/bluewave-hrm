@@ -1,0 +1,80 @@
+<mjml>
+  <mj-body>
+    <mj-section background-color="#f8f8f8" padding="20px">
+      <mj-column>
+        <mj-text align="center" font-size="22px" font-weight="bold">
+          Employee Offboarding Notice
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" padding="20px">
+      <mj-column>
+        <mj-text font-size="16px">
+          Dear <strong>{{hrManagerName}}</strong> and
+          <strong>{{adminName}}</strong>,
+        </mj-text>
+
+        <mj-text font-size="16px">
+          Please be informed that <strong>{{employeeName}}</strong> will be
+          leaving our organization on <strong>{{lastWorkingDay}}</strong>.
+        </mj-text>
+
+        <mj-text font-size="16px">
+          Below are the key offboarding tasks that need to be completed:
+        </mj-text>
+
+        <mj-text font-size="16px">
+          <ul>
+            <li>
+              Ensure all company property (laptops, phones, ID badges, etc.) is
+              returned by <strong>{{employeeName}}</strong>.
+            </li>
+            <li>
+              Disable access to company systems and email accounts effective
+              from <strong>{{lastWorkingDay}}</strong>.
+            </li>
+            <li>
+              Coordinate with payroll to process the final paycheck and any
+              outstanding benefits.
+            </li>
+            <li>
+              Conduct an exit interview and gather feedback from the employee.
+            </li>
+          </ul>
+        </mj-text>
+
+        <mj-text font-size="16px">
+          Please ensure all the above tasks are completed by
+          <strong>{{completionDeadline}}</strong>.
+        </mj-text>
+
+        <mj-text font-size="16px">
+          If you have any questions or need further assistance, please feel free
+          to reach out.
+        </mj-text>
+
+        <mj-divider
+          border-width="1px"
+          border-color="#cccccc"
+          padding="20px 0"
+        />
+
+        <mj-text font-size="14px" color="#888888">
+          Best regards,<br />
+          <strong>{{senderName}}</strong><br />
+          [Your Company]
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#f8f8f8" padding="10px">
+      <mj-column>
+        <mj-text align="center" font-size="12px" color="#888888">
+          This email was sent by [Your Company]. For any queries, please contact
+          HR.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
