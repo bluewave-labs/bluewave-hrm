@@ -11,7 +11,12 @@ import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
 import ManagePermissions from "./ManagePermissions";
 import Page from "../StaticComponents/Page";
-import { useDepartmentPeople, useJobTitlesPeople, useTimeOffPolicies, usePermissions } from "./hooks";
+import {
+  useDepartmentPeople,
+  useJobTitlesPeople,
+  useTimeOffPolicies,
+  usePermissions,
+} from "./hooks";
 import { tabNames } from "./SettingsDialog";
 
 const StyledTab = styled(Tab)({
@@ -32,8 +37,7 @@ export default function SettingsPage({ style, innerStyle }) {
   const { data: timeoffPoliciesData, columns: timeOffPoliciesColumns } =
     useTimeOffPolicies();
 
-  const { data: permissionsData, columns: permissionsColumns } =
-    usePermissions();
+  const { data: permissionsData } = usePermissions();
 
   function handleChange(e, newValue) {
     setTab(newValue);
@@ -114,7 +118,7 @@ export default function SettingsPage({ style, innerStyle }) {
             <ManagePermissions
               contentList={permissionsData}
               titleTabPage="Manage permissions"
-              columns={permissionsColumns}
+              tabName={tabNames.permissions}
             />
           </StyledTabPanel>
         </TabContext>

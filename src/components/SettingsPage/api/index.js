@@ -2,6 +2,7 @@ export { companyApi } from "./company";
 export { departmentsApi } from "./departments";
 export { jobTitlesApi } from "./jobTitles";
 export { employeesApi } from "./employees";
+export { usersApi } from "./users";
 export { timeOffApi } from "./timeOff";
 export { getEmployeesByDepartment } from "./getEmployeesByDepartment";
 export { transferEmployeesDepartment } from "./transferEmployeesDepartment";

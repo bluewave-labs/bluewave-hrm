@@ -1,13 +1,13 @@
+import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
-import Stack from "@mui/system/Stack";
 import Checkbox from "../Checkbox/Checkbox";
 
 const TextHeader = styled(Typography)({
@@ -16,6 +16,14 @@ const TextHeader = styled(Typography)({
   fontWeight: "500",
   lineHeight: "18px",
   color: "#475467",
+});
+
+const Text = styled(Typography)({
+  fontFamily: "Inter",
+  lineHeight: "20px",
+  fontWeight: "400",
+  color: "#475467",
+  fontSize: "13px",
 });
 
 const TableHeaderCell = styled(TableCell)({
@@ -30,7 +38,7 @@ const TableBodyCell = styled(TableCell)({
   paddingBottom: "25px",
 });
 
-export default function PermissionsTable({ columns, contentList, style }) {
+export default function PermissionsTable({ openDialog, contentList, style }) {
   return (
     <TableContainer
       sx={{
@@ -42,43 +50,69 @@ export default function PermissionsTable({ columns, contentList, style }) {
       <Table>
         <TableHead>
           <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
-            {columns?.map(({ header }) => (
-              <TableHeaderCell key={header}>
-                <TextHeader>{header}</TextHeader>
-              </TableHeaderCell>
-            ))}
+            <TableHeaderCell key="Name">
+              <TextHeader>Name</TextHeader>
+            </TableHeaderCell>
+            <TableHeaderCell key="Role">
+              <TextHeader>Role</TextHeader>
+            </TableHeaderCell>
+            <TableHeaderCell key="Team">
+              <TextHeader>Team</TextHeader>
+            </TableHeaderCell>
+            <TableHeaderCell key="Admin">
+              <TextHeader>Admin</TextHeader>
+            </TableHeaderCell>
+            <TableHeaderCell key="Manager">
+              <TextHeader>Manager</TextHeader>
+            </TableHeaderCell>
+            <TableHeaderCell key="Employee">
+              <TextHeader>Employee</TextHeader>
+            </TableHeaderCell>
             <TableHeaderCell />
           </TableRow>
         </TableHead>
         <TableBody>
           {contentList?.map((item) => (
             <TableRow key={item.id}>
-              {columns?.map(({ header, contentKey }, index) => (
-                <TableBodyCell key={contentKey}>
-                  {header === "Admin" ||
-                  header === "Manager" ||
-                  header === "Employee" ? (
-                    <Checkbox
-                      type="radio"
-                      id="permission"
-                      name="permission"
-                      value="full"
-                    />
-                  ) : (
-                    <Typography
-                      sx={{
-                        fontFamily: "Inter",
-                        lineHeight: "20px",
-                        fontWeight: index === 0 ? "500" : "400",
-                        color: index === 0 ? "#101828" : "#475467",
-                        fontSize: index === 0 ? "14px" : "13px",
-                      }}
-                    >
-                      {item[contentKey]}
-                    </Typography>
-                  )}
-                </TableBodyCell>
-              ))}
+              <TableBodyCell>
+                <Text>{`${item.firstName} ${item.lastName}`}</Text>
+              </TableBodyCell>
+              <TableBodyCell>
+                <Text>{item.role.roleTitle}</Text>
+              </TableBodyCell>
+              <TableBodyCell>
+                <Text>{item.team.teamName}</Text>
+              </TableBodyCell>
+              <TableBodyCell>
+                <Checkbox
+                  type="radio"
+                  id={`permission-admin-${item.id}`}
+                  name={`permission-${item.id}`}
+                  value="Administrator"
+                  checked={item.permission.type === "Administrator"}
+                  onChange={() => openDialog("edit", item)}
+                />
+              </TableBodyCell>
+              <TableBodyCell>
+                <Checkbox
+                  type="radio"
+                  id={`permission-manager-${item.id}`}
+                  name={`permission-${item.id}`}
+                  value="Manager"
+                  checked={item.permission.type === "Manager"}
+                  onChange={() => openDialog("edit", item)}
+                />
+              </TableBodyCell>
+              <TableBodyCell>
+                <Checkbox
+                  type="radio"
+                  id={`permission-employee-${item.id}`}
+                  name={`permission-${item.id}`}
+                  value="Employee"
+                  checked={item.permission.type === "Employee"}
+                  onChange={() => openDialog("edit", item)}
+                />
+              </TableBodyCell>
             </TableRow>
           ))}
         </TableBody>

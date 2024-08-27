@@ -4,6 +4,7 @@ import { AddEditTimeOffPolicy } from "./dialogs/AddEditTimeOffPolicy";
 import { DeleteDepartment } from "./dialogs/DeleteDepartment";
 import { DeleteJobTitle } from "./dialogs/DeleteJobTitle";
 import { DeleteTimeOffPolicy } from "./dialogs/DeleteTimeOffPolicy";
+import { UpdatePermission } from "./dialogs/UpdatePermission";
 
 export const tabNames = {
   departments: "departments",
@@ -22,6 +23,7 @@ export const dialogTitle = {
     [tabNames.departments]: "Rename department",
     [tabNames.jobtitles]: "Rename job title",
     [tabNames.timeoffs]: "Edit policy",
+    [tabNames.permissions]: "Do you want to approve following changes?",
   },
   delete: {
     [tabNames.departments]: "Where do you want to transfer affected employees?",
@@ -40,6 +42,7 @@ export const dialogContent = {
     [tabNames.departments]: AddEditDepartment,
     [tabNames.jobtitles]: AddEditJobTitle,
     [tabNames.timeoffs]: AddEditTimeOffPolicy,
+    [tabNames.permissions]: UpdatePermission,
   },
   delete: {
     [tabNames.departments]: DeleteDepartment,

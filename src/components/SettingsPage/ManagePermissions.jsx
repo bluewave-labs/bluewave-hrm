@@ -1,10 +1,19 @@
 import { Box, Stack } from "@mui/system";
-import { styled, Typography, TextField } from "@mui/material";
+import {
+  styled,
+  Typography,
+  TextField,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
 import PagesNavBar from "../UpdatesPage/PagesNavBar";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Grid from "@mui/system/Unstable_Grid";
 import PermissionsTable from "./PermissionsTable";
-import { useForm } from "react-hook-form";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import Toast from "./Toast";
+import SettingsDialog from "./SettingsDialog";
+import HRMButton from "../Button/HRMButton";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -16,20 +25,38 @@ const HeadText = styled(Typography)({
 const PAGE_SIZE = 10;
 
 export default function ManagePermissions({
-  columns,
   contentList,
   titleTabPage,
+  tabName,
   style,
 }) {
-  const { register } = useForm();
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [filteredContentList, setFilteredContentList] = useState(contentList);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [action, setAction] = useState();
+  const [selectedItem, setSelectedItem] = useState({});
+  const [toast, setToast] = useState({
+    open: false,
+    severity: "success",
+    message: "",
+  });
 
-  const itemsToDisplay = useMemo(
-    () =>
-      contentList.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
-    [currentPage, contentList]
-  );
+  useEffect(() => {
+    const filteredItems = contentList.filter((item) =>
+      `${item.firstName} ${item.lastName}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+    setFilteredContentList(filteredItems);
+    setCurrentPage(1);
+  }, [searchTerm, contentList]);
+
+  const itemsToDisplay = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    return filteredContentList.slice(start, end);
+  }, [currentPage, filteredContentList]);
 
   const handlePage = (pageNumber) => {
     if (
@@ -38,6 +65,23 @@ export default function ManagePermissions({
     ) {
       setCurrentPage(pageNumber);
     }
+  };
+
+  const openDialog = (action, item) => {
+    console.log("olha eu aqui", item);
+    console.log("olha eu aqui action", action);
+    if (action) setAction(action);
+    if (item) setSelectedItem(item);
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedItem();
+  };
+
+  const handleCloseToast = () => {
+    setToast({ ...toast, open: false });
   };
 
   return (
@@ -59,22 +103,52 @@ export default function ManagePermissions({
             justifyContent="space-between"
             style={{ marginBottom: "20px" }}
           >
-            <HeadText component="h3">{titleTabPage}</HeadText>
+            <Stack
+              direction="row"
+              alignContent="center"
+              justifyContent="space-between"
+            >
+              <HeadText component="h3">{titleTabPage}</HeadText>
+              <Tooltip
+                title="Assign roles such as Admin, Manager, or Employee to define the level of access and control each user has. Admins have full access to all settings and can add or remove employees. Managers can approve time-off requests for their teams and view full information about their team members, while Employees can request time off and view only their own information."
+                placement="right"
+              >
+                <IconButton
+                  sx={{
+                    padding: "6px",
+                    height: "fit-content",
+                    color: "#98A2B3",
+                  }}
+                >
+                  <HelpOutlineIcon sx={{ fontSize: "medium" }} />
+                </IconButton>
+              </Tooltip>
+            </Stack>
             <TextField
               placeholder="Search employee name"
               sx={{ width: "200px" }}
               size="small"
               fullWidth
               color="secondary"
-              {...register("employeeName")}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </Stack>
         </Grid>
 
+        <SettingsDialog
+          open={isDialogOpen}
+          onClose={closeDialog}
+          action={action}
+          tabName={tabName}
+          selectedItem={selectedItem}
+          setToast={setToast}
+        />
+
         {contentList.length > 0 ? (
           <>
             <PermissionsTable
-              columns={columns}
+              openDialog={openDialog}
               contentList={itemsToDisplay}
               sx={{ marginBottom: "40px" }}
             />
@@ -89,6 +163,22 @@ export default function ManagePermissions({
         ) : (
           <p>There is no {titleTabPage} right now.</p>
         )}
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          sx={{ marginTop: "20px", width: "100%" }}
+        >
+          <HRMButton mode="primary" onClick={() => console.log("save changes")}>
+            Save changes
+          </HRMButton>
+        </Stack>
+
+        <Toast
+          open={toast.open}
+          severity={toast.severity}
+          message={toast.message}
+          onClose={handleCloseToast}
+        />
       </Grid>
     </Box>
   );

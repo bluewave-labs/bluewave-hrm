@@ -9,6 +9,7 @@ import { Dialog, DialogTitle } from "./styles";
 import { useDepartmentData } from "./useDepartmentData";
 import { useJobTitleData } from "./useJobTitleData";
 import { useTimeOffPoliciesData } from "./useTimeOffPoliciesData";
+import { usePermissionData } from "./usePermissionData";
 import { tabNames } from "./constants";
 export { tabNames } from "./constants";
 
@@ -37,7 +38,7 @@ export default function CustomDialog({
     action,
   });
 
-  const TimeOffPoliciesData = useTimeOffPoliciesData({
+  const timeOffPoliciesData = useTimeOffPoliciesData({
     onClose,
     setError: form.setError,
     selectedItem,
@@ -45,7 +46,17 @@ export default function CustomDialog({
     action,
   });
 
+  const permissionData = usePermissionData({
+    onClose,
+    selectedItem,
+    setToast,
+    action: "edit",
+  });
+
+  console.log("Custom Dialogg ", permissionData);
+
   const Content = useMemo(() => {
+    console.log("action" + action, "tabName:" + tabName);
     if (!action || !tabName) return null;
     return dialogContent[action][tabName];
   }, [action, tabName]);
@@ -61,8 +72,8 @@ export default function CustomDialog({
     console.log("data", data);
     if (tabName === tabNames.departments) return departmentData[action](data);
     if (tabName === tabNames.jobtitles) return jobTitleData[action](data);
-    if (tabName === tabNames.timeoffs)
-      return TimeOffPoliciesData[action](data);
+    if (tabName === tabNames.timeoffs) return timeOffPoliciesData[action](data);
+    if (tabName === tabNames.permissions) return permissionData["edit"](data);
   };
 
   return (

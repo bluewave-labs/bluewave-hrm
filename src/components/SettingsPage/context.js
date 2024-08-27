@@ -5,6 +5,7 @@ import {
   departmentsApi,
   jobTitlesApi,
   employeesApi,
+  usersApi,
   getEmployeesByDepartment,
   getEmployeesByJobTitle,
 } from "./api";
@@ -18,10 +19,21 @@ export const SettingsProvider = ({ children }) => {
   const [jobTitles, setJobTitles] = useState([]);
   const [jobTitlesPeople, setJobTitlesPeople] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const fetchCompany = async () => {
     const companyData = await companyApi.fetch();
     setCompany(companyData);
+  };
+
+  const fetchUsers = async () => {
+    const usersData = await usersApi.fetch();
+    setUsers(usersData);
+  };
+
+  const fetchEmployees = async () => {
+    const employees = await employeesApi.fetch();
+    setEmployees(employees);
   };
 
   const fetchDepartments = async () => {
@@ -31,9 +43,11 @@ export const SettingsProvider = ({ children }) => {
 
   const fetchDepartmentsPeople = async () => {
     const departmentsPeopleData = await getEmployeesByDepartment();
-    setDepartmentsPeople(departmentsPeopleData.sort((a, b) =>
-      a.departmentName.localeCompare(b.departmentName)
-    ));
+    setDepartmentsPeople(
+      departmentsPeopleData.sort((a, b) =>
+        a.departmentName.localeCompare(b.departmentName)
+      )
+    );
   };
 
   const fetchJobTitles = async () => {
@@ -43,14 +57,9 @@ export const SettingsProvider = ({ children }) => {
 
   const fetchJobTitlesPeople = async () => {
     const jobTitlesPeopleData = await getEmployeesByJobTitle();
-    setJobTitlesPeople(jobTitlesPeopleData.sort((a, b) =>
-      a.roleTitle.localeCompare(b.roleTitle)
-    ));
-  };
-
-  const fetchEmployees = async () => {
-    const employees = await employeesApi.fetch();
-    setEmployees(employees);
+    setJobTitlesPeople(
+      jobTitlesPeopleData.sort((a, b) => a.roleTitle.localeCompare(b.roleTitle))
+    );
   };
 
   useEffect(() => {
@@ -60,6 +69,7 @@ export const SettingsProvider = ({ children }) => {
     fetchJobTitles();
     fetchJobTitlesPeople();
     fetchEmployees();
+    fetchUsers();
   }, []);
 
   const value = useMemo(
@@ -70,12 +80,14 @@ export const SettingsProvider = ({ children }) => {
       jobTitles,
       jobTitlesPeople,
       employees,
+      users,
       fetchCompany,
       fetchDepartments,
       fetchDepartmentsPeople,
       fetchJobTitles,
       fetchJobTitlesPeople,
       fetchEmployees,
+      fetchUsers,
     }),
     [
       company,
@@ -84,6 +96,7 @@ export const SettingsProvider = ({ children }) => {
       jobTitles,
       jobTitlesPeople,
       employees,
+      users,
     ]
   );
 

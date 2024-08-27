@@ -1,19 +1,18 @@
 import { useSettingsContext } from "../context";
 
-const permissionsColumns = [
-  { header: "Name", contentKey: "departmentName" },
-  { header: "Role", contentKey: "count" },
-  { header: "Team", contentKey: "count" },
-  { header: "Admin", contentKey: "count" },
-  { header: "Manager", contentKey: "count" },
-  { header: "Employee", contentKey: "count" },
-];
-
 export const usePermissions = () => {
-  const { departmentsPeople } = useSettingsContext();
+  const { users, employees } =
+    useSettingsContext();
+
+  const mergedUsers = users.map((user) => {
+    const employee = employees.find((emp) => emp.empId === user.empId);
+    if (employee) {
+      return { ...user, ...employee };
+    }
+    return user;
+  });
 
   return {
-    data: departmentsPeople,
-    columns: permissionsColumns,
+    data: mergedUsers,
   };
 };
