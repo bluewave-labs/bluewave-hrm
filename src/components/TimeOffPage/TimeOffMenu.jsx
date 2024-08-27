@@ -8,6 +8,7 @@ import { useState } from 'react';
 import BoardTabContent from './BoardTabContent';
 import HistoryTabContent from './HistoryTabContent';
 import TeamTabContent from './TeamTabContent';
+import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 import { colors, fonts } from '../../Styles';
 
 /**
@@ -56,6 +57,323 @@ export default function TimeOffMenu({style}) {
         }
     ];
 
+    //List of time off periods
+    const timeOffPeriods = [
+        
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Rejected'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Rejected'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Rejected'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Approved'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+        {
+            user: {
+                avatar: AvatarImage,
+                name: "Gabriel Chan",
+                role: "Administrator"
+            },
+            from: '11 Jan 2024',
+            to: '11 Jan 2024',
+            type: 'Vacation',
+            amount: '32 hours',
+            note: 'Family in town for the holidays.',
+            status: 'Waiting'
+        },
+    ];
+
     return (
         <Box sx={{...{
             boxSizing: "border-box",
@@ -82,15 +400,15 @@ export default function TimeOffMenu({style}) {
                 </Box>
                 {/*Board tab*/}
                 <StyledTabPanel value="Board">
-                    <BoardTabContent policies={policies}/>
+                    <BoardTabContent policies={policies} timeOffPeriods={timeOffPeriods} />
                 </StyledTabPanel>
                 {/*History tab*/}
                 <StyledTabPanel value="History">
-                    <HistoryTabContent />
+                    <HistoryTabContent timeOffPeriods={timeOffPeriods} />
                 </StyledTabPanel>
                 {/*Team tab*/}
                 <StyledTabPanel value="My team">
-                    <TeamTabContent />
+                    <TeamTabContent timeOffPeriods={timeOffPeriods} />
                 </StyledTabPanel>
             </TabContext>
         </Box>

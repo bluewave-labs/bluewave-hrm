@@ -9,16 +9,6 @@ import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import axios from 'axios';
-
-//Function for parsing a JavaScript date into a string format.
-function formatDate(date) {
-    const day = date.toLocaleString('default', { day: '2-digit' });
-    const month = date.toLocaleString('default', { month: 'short' });
-    const year = date.toLocaleString('default', { year: 'numeric' });
-    return `${month} ${day}, ${year}`;
-};
 
 /**
  * Displays the content for the Team tag in the time off menu which includes the time off periods
@@ -32,72 +22,19 @@ function formatDate(date) {
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function TeamTabContent({style}) {
+export default function TeamTabContent({timeOffPeriods, style}) {
     const [currentPage, setCurrentPage] = useState(1);  //The current page number
     //Flags for determining which buttons in the "filter by status" dropdown are selected
     const [approvedFilter, setApprovedFilter] = useState(true);
     const [waitingFilter, setWaitingFilter] = useState(true);
     const [rejectedFilter, setRejectedFilter] = useState(true);
-    //Time off periods to be displayed
-    const [timeOffPeriods, setTimeOffPeriods] = useState([]);
-    //Hook for refreshing the list of time off periods
-    const [refresh, setRefresh] = useState(false);
-
-    //ID of the currently logged in employee
-    const currentUser = 1;
-
-    //URL endpoints to be used in API calls
-    const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
-    const timeOffURL = `http://localhost:5000/api/timeoffhistories/employee`;
 
     //Set the current page back to 1 each time the filters are changed
     useEffect(() => {
         setCurrentPage(1);
     }, [approvedFilter, waitingFilter, rejectedFilter]);
 
-    //Refresh the list of time off periods
-    useEffect(() => {
-        getTimeOffPeriods();
-    }, [refresh]);
-
-    //Function for retrieving all the time off periods for the current manager's team
-    function getTimeOffPeriods() {
-        axios.get(empUrl)
-        .then((response) => {
-            //Retrieve all employee IDs in current team
-            let data = response.data;
-            const team = data.map((emp) => emp.empId);
-            const periods = [];
-            //Retrieve the time off periods for each employee
-            team.forEach((id) => {
-                axios.post(`${timeOffURL}/${id}`)
-                .then((response) => {
-                    data = response.data;
-                    data.forEach((p) => {
-                        periods.push({
-                            id: p.id,
-                            user: {
-                                name: `${p.employee.firstName} ${p.employee.lastName}`,
-                                avatar: p.employee.photo
-                            },
-                            from: formatDate(dayjs(p.startDate).toDate()),
-                            to: formatDate(dayjs(p.endDate).toDate()),
-                            type: p.timeOff.category,
-                            hours: p.hours,
-                            note: p.note,
-                            status: p.status
-                        });
-                    })
-                    setTimeOffPeriods([...timeOffPeriods, ...periods]);
-                })
-                .catch((error) => console.log(error));
-            });
-        })
-        .catch((error) => console.log(error));
-    };
-
     //Filter out time off periods depending on which filters are active
-    //At least one filter will always be active
     const activeFilters = [];
     if (approvedFilter) { activeFilters.push("Approved"); }
     if (waitingFilter) { activeFilters.push("Waiting"); }
@@ -146,15 +83,9 @@ export default function TeamTabContent({style}) {
                     <MenuToggleButton 
                         label="Filter by status" 
                         menuItems={{
-                            "Approved": [approvedFilter, (value) => {
-                                if (activeFilters.length >= 2 || !approvedFilter) {setApprovedFilter(value)}
-                            }],
-                            "Waiting": [waitingFilter, (value) => {
-                                if (activeFilters.length >= 2 || !waitingFilter) {setWaitingFilter(value)}
-                            }],
-                            "Rejected": [rejectedFilter, (value) => {
-                                if (activeFilters.length >= 2 || !rejectedFilter) {setRejectedFilter(value)}
-                            }]
+                            "Approved": [approvedFilter, setApprovedFilter],
+                            "Waiting": [waitingFilter, setWaitingFilter],
+                            "Rejected": [rejectedFilter, setRejectedFilter]
                         }} 
                         icon={<FilterListIcon />} 
                     />
@@ -164,9 +95,9 @@ export default function TeamTabContent({style}) {
             {timeOffPeriods.length > 0 ?
                 <>
                     <UpcomingTimeOffTable 
-                        timeOffPeriods={periodsToDisplay}
-                        tableColumns={['Person', 'Type', 'Amount', 'Note', 'Status']}
-                        editFlag={false}  
+                        timeOffPeriods={periodsToDisplay} 
+                        editFlag={false} 
+                        teamFlag={true} 
                         style={{marginBottom: "30px"}}
                     />
                     {filteredPeriods.length > 10 && 

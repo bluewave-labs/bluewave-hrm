@@ -7,9 +7,9 @@
 ![](https://img.shields.io/github/issues/bluewave-labs/bluewave-hrm)
 
 
-# BlueWave HRM
+# BlueWave HR
 
-The BlueWave HRM is a people and resource management application for your organization. It has the following features: 
+The BlueWave HR is a people and resource management application for your organization. It has the following features: 
 
 - Team management
 - Employee management
