@@ -145,3 +145,60 @@ exports.deleteRecord = async (req, res) => {
         res.status(400).send("Not found!");
       }
     };
+
+
+/**
+ * @param {timeOffPolicies} req 
+ * @param {timeOffPolicies} res 
+ */
+exports.getAllTimeOffPolicies = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        e."employeeEmpId" AS "empId", 
+        e.id, 
+        e."yearNumber" AS "year", 
+        e."hoursAllowed", 
+        e."cumulativeHoursTaken" AS "hoursUsed",
+        (e."hoursAllowed" - e."cumulativeHoursTaken") AS "hoursLeft", 
+        t."id" AS "timeOffId", 
+        t.category 
+      FROM 
+        "employeeAnnualTimeOff" e 
+      JOIN 
+        "timeOff" t 
+      ON 
+        e."timeOffId" = t.id  
+      ORDER BY 
+        e."employeeEmpId", e."yearNumber";
+    `;
+    
+    const [results, metadata] = await db.sequelize.query(query);
+    
+    const policiesByEmployee = {};
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    for (const result of results) {
+      if (result.year === currentYear) {
+        if (!policiesByEmployee[result.empId]) {
+          policiesByEmployee[result.empId] = [];
+        }
+
+        const policy = {
+          type: result.category,
+          availableDays: Math.floor(result.hoursLeft / 8),
+          hoursUsed: result.hoursUsed,
+        };
+
+        policiesByEmployee[result.empId].push(policy);
+      }
+    }
+    
+    res.status(200).send(policiesByEmployee);
+
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Not found!");
+  }
+};

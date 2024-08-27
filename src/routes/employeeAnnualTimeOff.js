@@ -8,4 +8,6 @@ module.exports = (router) => {
   router.route("/employeeannualtimeoffs").put(controller.updateRecord);
   router.route("/employeeannualtimeoffs/:id").delete(controller.deleteRecord);
   router.route("/timeOffPolicies/:empId").post(controller.timeOffPolicies);
+  router.route("/allTimeOffPolicies").post(controller.getAllTimeOffPolicies); // time off data for the whole company
+
 };
