@@ -1,7 +1,8 @@
 const nodemailer = require("nodemailer");
 const { compile } = require("handlebars");
 const mjml2html = require("mjml");
-
+const path = require("path");
+const fs = require("fs");
 /**
  * Represents an email service that can load templates, build, and send emails.
  */
@@ -19,8 +20,9 @@ class EmailService {
     this.loadTemplate = (templateName) => {
       const templatePath = path.join(
         __dirname,
-        `../templates/${templateName}.mjml`
+        `../../client/templates/${templateName}.mjml`
       );
+      console.log("path:", templatePath);
       const templateContent = fs.readFileSync(templatePath, "utf8");
       return compile(templateContent);
     };
@@ -33,7 +35,7 @@ class EmailService {
     this.templateLookup = {
       //welcomeEmailTemplate: this.loadTemplate("welcomeEmail"),
       timeOff: this.loadTemplate("timeoff"),
-      
+      offboarding: this.loadTemplate("offboarding"),
     };
 
     /**
@@ -41,12 +43,13 @@ class EmailService {
      * @type {Object}
      */
     this.transporter = nodemailer.createTransport({
-      host: process.env.SYSTEM_EMAIL_HOST,
-      port: process.env.SYSTEM_EMAIL_PORT,
-      secure: true, // Use `true` for port 465, `false` for all other ports
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      service: "gmail",
+      secure: false,
       auth: {
-        user: process.env.SYSTEM_EMAIL_ADDRESS,
-        pass: process.env.SYSTEM_EMAIL_PASSWORD,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
   }
