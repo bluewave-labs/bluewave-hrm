@@ -26,3 +26,8 @@ yarn-error.log*
 *storybook.log
 .storybook/
 /src/stories
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
