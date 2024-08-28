@@ -1,5 +1,5 @@
-import { useSettingsContext } from "../context";
-import { usersApi } from "../api";
+import { useSettingsContext } from "./context";
+import { usersApi } from "./api";
 
 const successMessage = () => `Permission updated successfully`;
 
@@ -12,19 +12,18 @@ export const usePermissionData = ({
   setToast,
   action,
 }) => {
-  const { users, fetchUsers, fetchEmployees, employees } =
-    useSettingsContext();
+  const { users, fetchUsers, fetchEmployees, employees } = useSettingsContext();
 
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);
-      fetchUsers();
-      fetchEmployees();
-      onClose();
-      setToast({
-        open: true,
-        severity: "success",
-        message: successMessage(action),
-      });
+    fetchUsers();
+    fetchEmployees();
+    onClose();
+    setToast({
+      open: true,
+      severity: "success",
+      message: successMessage(action),
+    });
   };
 
   const handleError = (error) => {

@@ -4,7 +4,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { Typography } from "@mui/material";
+import { Typography, Stack, Avatar } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
@@ -75,7 +75,10 @@ export default function PermissionsTable({ openDialog, contentList, style }) {
           {contentList?.map((item) => (
             <TableRow key={item.id}>
               <TableBodyCell>
-                <Text>{`${item.firstName} ${item.lastName}`}</Text>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Avatar alt="Employee Photo" src={item.photo} />
+                  <Text>{`${item.firstName} ${item.lastName}`}</Text>
+                </Stack>
               </TableBodyCell>
               <TableBodyCell>
                 <Text>{item.role.roleTitle}</Text>

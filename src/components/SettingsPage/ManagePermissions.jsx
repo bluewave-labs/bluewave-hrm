@@ -12,7 +12,7 @@ import Grid from "@mui/system/Unstable_Grid";
 import PermissionsTable from "./PermissionsTable";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Toast from "./Toast";
-import SettingsDialog from "./SettingsDialog";
+import PermissionsDialog from "./PermissionsDialog";
 import HRMButton from "../Button/HRMButton";
 
 const HeadText = styled(Typography)({
@@ -27,15 +27,12 @@ const PAGE_SIZE = 10;
 export default function ManagePermissions({
   contentList,
   titleTabPage,
-  tabName,
   style,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredContentList, setFilteredContentList] = useState(contentList);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [action, setAction] = useState();
-  const [selectedItem, setSelectedItem] = useState({});
   const [toast, setToast] = useState({
     open: false,
     severity: "success",
@@ -67,18 +64,8 @@ export default function ManagePermissions({
     }
   };
 
-  const openDialog = (action, item) => {
-    console.log("olha eu aqui", item);
-    console.log("olha eu aqui action", action);
-    if (action) setAction(action);
-    if (item) setSelectedItem(item);
-    setIsDialogOpen(true);
-  };
-
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-    setSelectedItem();
-  };
+  const openDialog = () => setIsDialogOpen(true);
+  const closeDialog = () => setIsDialogOpen(false);
 
   const handleCloseToast = () => {
     setToast({ ...toast, open: false });
@@ -107,6 +94,7 @@ export default function ManagePermissions({
               direction="row"
               alignContent="center"
               justifyContent="space-between"
+              spacing={1}
             >
               <HeadText component="h3">{titleTabPage}</HeadText>
               <Tooltip
@@ -136,14 +124,7 @@ export default function ManagePermissions({
           </Stack>
         </Grid>
 
-        <SettingsDialog
-          open={isDialogOpen}
-          onClose={closeDialog}
-          action={action}
-          tabName={tabName}
-          selectedItem={selectedItem}
-          setToast={setToast}
-        />
+        <PermissionsDialog open={isDialogOpen} onClose={closeDialog} />
 
         {contentList.length > 0 ? (
           <>
@@ -168,7 +149,7 @@ export default function ManagePermissions({
           justifyContent="flex-end"
           sx={{ marginTop: "20px", width: "100%" }}
         >
-          <HRMButton mode="primary" onClick={() => console.log("save changes")}>
+          <HRMButton mode="primary" onClick={openDialog}>
             Save changes
           </HRMButton>
         </Stack>
