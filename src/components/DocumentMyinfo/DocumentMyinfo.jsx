@@ -29,7 +29,7 @@ const DocumentMyinfo = forwardRef((props, ref) => {
   });
   const fileInputRef = React.createRef();
   const [progress, setProgress] = useState(0);
-  const [dragOver, setDragOver] = useState(false);
+  // const [dragOver, setDragOver] = useState(false);
   const [currentfile, setCurrentFile] = useState("");
   const [filesize, setFileSize] = useState(0);
   const [filelist, setFileList] = useState([]);
@@ -80,7 +80,7 @@ const DocumentMyinfo = forwardRef((props, ref) => {
 
   const uploadLocalStorage = (newFile) => {
     if (localStorage.getItem("files") == null) {
-      const newArr = new Array();
+      const newArr = [];
       localStorage.setItem("files", JSON.stringify(newArr));
     }
     // upload to local storage
@@ -167,15 +167,15 @@ const DocumentMyinfo = forwardRef((props, ref) => {
 
   const handleDragOver = (e) => {
     e.preventDefault();
-    setDragOver(true);
+    // setDragOver(true);
   };
-  const handleDragLeave = () => {
-    setDragOver(false);
-  };
+  // const handleDragLeave = () => {
+  //   setDragOver(false);
+  // };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    setDragOver(false);
+    // setDragOver(false);
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       fileInputRef.current.files = files;
@@ -195,7 +195,7 @@ const DocumentMyinfo = forwardRef((props, ref) => {
     <>
       <div
         onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
+        // onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         <Box

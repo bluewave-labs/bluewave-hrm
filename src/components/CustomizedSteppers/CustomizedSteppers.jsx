@@ -1,20 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import CheckIcon from '@mui/icons-material/Check';
-import AdjustIcon from '@mui/icons-material/Adjust';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import StepContent from '@mui/material/StepContent';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 // import '../App.css';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
