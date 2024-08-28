@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
@@ -8,60 +8,21 @@ import { Box } from "@mui/system";
 import CustomizedSteppers from "../CustomizedSteppers/CustomizedSteppers";
 
 function OffBoardingPage() {
-  const { currentStep, finalData } = useContext(multiStepContext);
+  const { currentStep } = useContext(multiStepContext);
   // useEffect(() => {
   //   console.log("DATA>>>", finalData);
   // });
 
-  const stepStyle = {
-    "&.MuiStepper-root": {
-      padding: "50px 50px",
-    },
-    "& .MuiStepConnector-line": {
-      marginTop: "-15px",
-      width: "100%",
-    },
-    "& .Mui-active": {
-      "&.MuiStepIcon-root": {
-        color: "#7F56D9",
-      },
-      "& .MuiStepConnector-line": {
-        border: "1px solid #7f56d9",
-      },
-      "& .MuiSvgIcon-root": {
-        fontSize: "30px",
-      },
-    },
-    "& .Mui-completed": {
-      "&.MuiStepIcon-root": {
-        color: "#7F56D9",
-      },
-      "& .MuiStepConnector-line": {
-        border: "1px solid #7f56d9",
-      },
-      "& .MuiSvgIcon-root": {
-        fontSize: "30px",
-      },
-    },
-    "& .MuiStepLabel-root": {
-      display: "flex",
-      flexDirection: "column",
-      textAlign: "center",
-      "& .MuiStepLabel-label": {
-        marginTop: "10px",
-      },
-    },
-  };
   function showstep(step) {
     switch (step) {
-      case 1:
-        return <FirstStep />;
       case 2:
         return <SecondStep />;
       case 3:
         return <ThirdStep />;
       case 4:
         return <FinalStep />;
+      default:
+        return <FirstStep />;
     }
   }
   return (

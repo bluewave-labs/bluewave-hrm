@@ -1,4 +1,4 @@
-import { Box, margin, padding } from "@mui/system";
+import { Box } from "@mui/system";
 import React, { useContext } from "react";
 import "./OffBoardingPage.css";
 import HRMButton from "../Button/HRMButton";

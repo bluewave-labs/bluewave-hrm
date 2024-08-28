@@ -7,7 +7,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Box, display } from "@mui/system";
+import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
 import HRMButton from "../Button/HRMButton";
 import { multiStepContext } from "../../context/stepContext";
@@ -139,6 +139,7 @@ function SecondStep() {
                   <a
                     href={`data:application/pdf;base64,${leavingLetter}`}
                     download={"leavingLetter.pdf"}
+                    rel="noreferrer"
                     target="_blank"
                   >
                     Download
@@ -163,6 +164,7 @@ function SecondStep() {
                   <a
                     href={`data:application/pdf;base64,${nda}`}
                     download={"NDA.pdf"}
+                    rel="noreferrer"
                     target="_blank"
                   >
                     Download
