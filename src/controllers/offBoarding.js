@@ -81,30 +81,29 @@ exports.deleteRecord = async (req, res) => {
 
 exports.submitSurvey = async (req, res) => {
   const id = req.params.id;
-  // const data = await db.offBoarding.fineOne({ where: { empID: id } });
+  const employee = await db.employee.findByPk(id);
+  const { firstName, lastName } = employee;
+  const { answer1, answer2, answer3, answer4, answer5 } = req.body;
+  // console.log(firstName, lastName, answer1, answer2, answer3, answer4, answer5);
+
   try {
-    // await mailService.sendEmail({
-    //   email: "fazlul2k@gmail.com",
-    //   subject: "Offboarding Survey",
-    //   message: "This is a offboarding Survey",
-    // });
     const context = {
-      hrManagerName: "Jane Doe", // HR Manager's name
-      adminName: "John Smith", // Admin's name
-      employeeName: "Alex Johnson", // Employee's name
-      lastWorkingDay: "2024-09-15", // Employee's last working day
-      completionDeadline: "2024-09-14", // Deadline to complete offboarding tasks
-      senderName: "Michael Brown", // The person sending the email
+      employeeName: `${firstName} ${lastName}`, // Employee's name
+      senderName: "Bluewave Labs Management", // The person sending the email
+      answer1,
+      answer2,
+      answer3,
+      answer4,
+      answer5,
     };
 
     const emailService = new EmailService();
     const messageId = await emailService.buildAndSendEmail(
       "offboarding",
       context,
-      "fazlul2k@gmail.com",
-      "Offboarding Survey"
+      "fazlul2k@gmail.com", // to be replaced with the receiver's email
+      "Offboarding Survey" // Subject
     );
-
     console.log(`Email sent successfully! Message ID: ${messageId}`);
     res.status(200).send("Email sent");
   } catch (err) {

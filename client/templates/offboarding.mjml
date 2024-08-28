@@ -11,47 +11,55 @@
     <mj-section background-color="#ffffff" padding="20px">
       <mj-column>
         <mj-text font-size="16px">
-          Dear <strong>{{hrManagerName}}</strong> and
-          <strong>{{adminName}}</strong>,
+          Dear <strong>HR Admin</strong> and the <strong>Manager</strong>,
         </mj-text>
 
         <mj-text font-size="16px">
-          Please be informed that <strong>{{employeeName}}</strong> will be
-          leaving our organization on <strong>{{lastWorkingDay}}</strong>.
+          Please be informed that <strong>{{employeeName}}</strong> is in the
+          process of leaving our organization.
         </mj-text>
 
         <mj-text font-size="16px">
-          Below are the key offboarding tasks that need to be completed:
+          As part of the offboarding process,
+          <strong>{{employeeName}}</strong> has completed an exit survey. Below
+          are the responses:
         </mj-text>
 
         <mj-text font-size="16px">
-          <ul>
-            <li>
-              Ensure all company property (laptops, phones, ID badges, etc.) is
-              returned by <strong>{{employeeName}}</strong>.
-            </li>
-            <li>
-              Disable access to company systems and email accounts effective
-              from <strong>{{lastWorkingDay}}</strong>.
-            </li>
-            <li>
-              Coordinate with payroll to process the final paycheck and any
-              outstanding benefits.
-            </li>
-            <li>
-              Conduct an exit interview and gather feedback from the employee.
-            </li>
-          </ul>
+          <strong
+            >1. What suggestions do you have for improving the company culture
+            or work environment?</strong
+          ><br />
+          {{answer1}}
         </mj-text>
 
         <mj-text font-size="16px">
-          Please ensure all the above tasks are completed by
-          <strong>{{completionDeadline}}</strong>.
+          <strong
+            >2. Do you have any feedback on your manager or team that you'd like
+            to share?</strong
+          ><br />
+          {{answer2}}
         </mj-text>
 
         <mj-text font-size="16px">
-          If you have any questions or need further assistance, please feel free
-          to reach out.
+          <strong>3. How was your experience working here?</strong><br />
+          {{answer3}}
+        </mj-text>
+
+        <mj-text font-size="16px">
+          <strong
+            >4. Do you have any feedback on your manager or team that you'd like
+            to share?</strong
+          ><br />
+          {{answer4}}
+        </mj-text>
+
+        <mj-text font-size="16px">
+          <strong
+            >5. Is there anything else you would like to share that we haven’t
+            discussed?</strong
+          ><br />
+          {{answer5}}
         </mj-text>
 
         <mj-divider
@@ -63,16 +71,6 @@
         <mj-text font-size="14px" color="#888888">
           Best regards,<br />
           <strong>{{senderName}}</strong><br />
-          [Your Company]
-        </mj-text>
-      </mj-column>
-    </mj-section>
-
-    <mj-section background-color="#f8f8f8" padding="10px">
-      <mj-column>
-        <mj-text align="center" font-size="12px" color="#888888">
-          This email was sent by [Your Company]. For any queries, please contact
-          HR.
         </mj-text>
       </mj-column>
     </mj-section>
