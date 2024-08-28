@@ -6,7 +6,11 @@ import { fonts } from '../../Styles';
  * the parent component.
  * 
  * Props:
+<<<<<<< HEAD
  * - children<Any>: Text or web elements to be displayed with the logo
+=======
+ * - children<Any>: Text or web elements to be displayed with the logo.
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}

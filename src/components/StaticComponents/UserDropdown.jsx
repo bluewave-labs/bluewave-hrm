@@ -2,6 +2,7 @@ import Stack from '@mui/system/Stack';
 import Avatar from '@mui/material/Avatar';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { fonts } from '../../Styles';
+import PropTypes from 'prop-types';
 
 /**
  * Header component for displaying the current user's information.
@@ -32,7 +33,10 @@ export default function UserDropdown({user, style}) {
 };
 
 //Control panel settings for storybook
-UserDropdown.propTypes = {};
+UserDropdown.propTypes = {
+    //Object containing the current user's information
+    user: PropTypes.objectOf(PropTypes.string)
+};
 
 //Default values for this component
 UserDropdown.defaultProps = {};

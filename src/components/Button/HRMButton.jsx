@@ -102,17 +102,42 @@ export default function HRMButton({mode, children, startIcon, endIcon, onClick, 
 
     if (mode === "primary" || mode === "error") {
         return (
-            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="contained" onClick={onClick} disabled={!enabled} disableElevation>{children}</StyledButton>
+            <StyledButton 
+                startIcon={startIcon} 
+                endIcon={endIcon} 
+                variant="contained" 
+                onClick={onClick} 
+                disabled={!enabled} 
+                disableElevation
+            >
+                {children}
+            </StyledButton>
         );
     }
     else if (mode === "secondaryA" || mode === "secondaryB") {
         return (
-            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="outlined" onClick={onClick} disabled={!enabled}>{children}</StyledButton>
+            <StyledButton 
+                startIcon={startIcon} 
+                endIcon={endIcon} 
+                variant="outlined" 
+                onClick={onClick} 
+                disabled={!enabled}
+            >
+                {children}
+            </StyledButton>
         );
     }
     else {
         return (
-            <StyledButton startIcon={startIcon} endIcon={endIcon} variant="text" disabled={!enabled}>{children}</StyledButton>
+            <StyledButton 
+                startIcon={startIcon} 
+                endIcon={endIcon} 
+                variant="text" 
+                onClick={onClick}
+                disabled={!enabled}
+            >
+                {children}
+            </StyledButton>
         );
     }
 };

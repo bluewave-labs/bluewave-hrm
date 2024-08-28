@@ -4,6 +4,23 @@ import CheckIcon from './CheckIcon';
 export default {
     title: 'Visuals/CheckIcon',
     component: CheckIcon,
+<<<<<<< HEAD
+=======
+    argTypes: {
+        type: {
+            options: ['outline', 'solid'],
+            control: { type: 'radio' }
+        },
+        size: {
+            options: ['small', 'medium', 'large'],
+            control: { type: 'radio' }
+        },
+        color: {
+            options: ['purple', 'black', 'green'],
+            control: { type: 'radio' }
+        }
+    },
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
     parameters: {
         layout: "centered"
     },

@@ -9,14 +9,26 @@ import PropTypes from 'prop-types';
  * 
  * Props:
  * - mode<String>: Determines the type of the label. 
+<<<<<<< HEAD
  *      Valid values: ['orange', 'gray', 'brand', 'success', 'new', 'waiting', 'seen']
+=======
+ *      Valid values: ['orange', 'gray', 'brand', 'success', 'status']
+ * 
+ * - dot<String>: Determines the colour of the dot icon, if applicable.
+ *      Valid values: ['orange', 'red', 'grey', 'green', 'blue']
+ *      Default: null
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
  * 
  * - label<String>: Text to be used for the label.
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
+<<<<<<< HEAD
 export default function Label({mode, label, style}) {
+=======
+export default function Label({mode, dot, label, style}) {
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
     //Label styles
     const StyledChip = styled(Chip)({...{
         backgroundColor: (mode === "orange") ? "#FEF6EE" :
@@ -32,7 +44,11 @@ export default function Label({mode, label, style}) {
             (mode === "brand") ? "1px solid #E9D7FE" :
             (mode === "success") ? "1px solid #ABEFC6" : "1px solid #D0D5DD",
         fontFamily: fonts.fontFamily,
+<<<<<<< HEAD
         fontWeight: (mode === "new" || mode === "waiting" || mode === "seen") ? 
+=======
+        fontWeight: (mode === "status") ? 
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
             fonts.bold.fontWeight : fonts.default.fontWeight,
         fontSize: "12px",
         borderRadius: "4px"
@@ -40,9 +56,17 @@ export default function Label({mode, label, style}) {
 
     //Colored dot styles if using a status label
     const coloredDot = <span style={{
+<<<<<<< HEAD
         backgroundColor: (mode === "new") ? "#F79009" :
             (mode === "waiting") ? "#D92D20" :
             (mode === "seen") ? "#344054" : "#FFFFFF",
+=======
+        backgroundColor: (dot === "orange") ? "#F79009" :
+            (dot === "red") ? "#D92D20" :
+            (dot === "grey") ? "#344054" : 
+            (dot === "green") ? "#17B26A" : 
+            (dot === "blue") ? "#2E90FA" : "#FFFFFF",
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
         height: "6px",
         width: "6px",
         borderRadius: "50%",
@@ -51,7 +75,11 @@ export default function Label({mode, label, style}) {
 
     return (
         <StyledChip 
+<<<<<<< HEAD
             icon={(mode === "new" || mode === "waiting" || mode === "seen") ? coloredDot : null} 
+=======
+            icon={(mode === "status") ? coloredDot : null} 
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
             label={label} 
             size="small"
             variant="outlined" 
@@ -62,7 +90,14 @@ export default function Label({mode, label, style}) {
 //Control panel settings for storybook 
 Label.propTypes = {
     //Label type
+<<<<<<< HEAD
     mode: PropTypes.oneOf(['orange', 'gray', 'brand', 'success']),
+=======
+    mode: PropTypes.oneOf(['orange', 'gray', 'brand', 'success', 'status']),
+
+    //Label coloured dot if applicable
+    dot: PropTypes.oneOf(['orange', 'red', 'grey', 'green', 'blue', null]),
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
 
     //Label text
     label: PropTypes.string.isRequired
@@ -70,5 +105,9 @@ Label.propTypes = {
 
 //Default values for this component
 Label.defaultProps = {
+<<<<<<< HEAD
+=======
+    dot: null,
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
     style: {}
 };

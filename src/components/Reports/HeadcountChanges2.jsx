@@ -114,12 +114,11 @@ const pData = cumulativeHireStats
         borderRadius: '12px',
         boxShadow: 'none',
         width: '532px',
-        height: '530px',
+        height: '296px',
         backgroundColor: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
         padding: '24px',
-        mb:"42px"
       }}
     >
       <Box
@@ -145,7 +144,7 @@ const pData = cumulativeHireStats
               ]}
               xAxis={[{ scaleType: 'point', data: xLabels }]}
               yAxis={[{ label: ''}]} 
-              width={500}
+              width={532}
               height={290}
               grid={{ horizontal: true }}
               leftAxis={{

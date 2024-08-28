@@ -2,10 +2,18 @@ import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
+<<<<<<< HEAD
 import UpdatesNavBar from './UpdatesNavBar';
 import NoContentComponent from './NoContentComponent';
 import { useState } from 'react';
 import { colors, fonts } from '../../Styles';
+=======
+import PagesNavBar from './PagesNavBar';
+import NoContentComponent from './NoContentComponent';
+import { useState, useEffect } from 'react';
+import { colors, fonts } from '../../Styles';
+import axios from 'axios';
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
 
 /**
  * Menu component for the home menu page. Displays up to 10 updates at a time along with controls
@@ -16,6 +24,7 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function UpdatesMenu({style}) {
+<<<<<<< HEAD
     const [currentPage, setCurrentPage] = useState(1);
     const [filter, setFilter] = useState("All");
 
@@ -134,11 +143,58 @@ export default function UpdatesMenu({style}) {
         },
         
     ];
+=======
+    //Current page number
+    const [currentPage, setCurrentPage] = useState(1);  
+    //Flag determining whether to display all or unread notifications
+    const [filter, setFilter] = useState("All");
+    //List of notifications to be displayed
+    const [allUpdates, setAllUpdates] = useState([]);
+    //Hook for refreshing the list of notifications
+    const [refresh, setRefresh] = useState(false);
+
+    //ID of the currently logged in employee
+    const currentUserId = 1;
+
+    //Refresh the list of notifications whenever the refresh hook is changed
+    useEffect(() => {
+        getUpdates();
+    }, [refresh]);
+
+    //URL endpoints to be used for API calls
+    const notificationsURL = `http://localhost:5000/api/notifications/employee/${currentUserId}`;
+
+    //Retrieve the status of a notification for a given employee
+    function checkNotificationStatus(update, id) {
+        return update.recipients.filter((emp) => emp.empId === id)[0].notificationStatus;
+    };
+
+    //Retrieve all the updates
+    function getUpdates() {
+        //Retrieve notification records from database
+        axios.get(notificationsURL)
+        .then((response) => {
+            const updates = [];
+            const data = response.data;
+            data.forEach((up) => {
+                updates.push(up);
+            });
+            setAllUpdates(updates);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    };
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
 
     //Either show all updates or only the unread ones
     const filteredUpdates = (filter === "All") ? 
         allUpdates : 
+<<<<<<< HEAD
         allUpdates.filter((update) => update.status !== "seen");
+=======
+        allUpdates.filter((update) => checkNotificationStatus(update, currentUserId) !== "seen");
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
 
     //Only show 10 updates at a time
     const updatesToDisplay = filteredUpdates.slice((currentPage - 1) * 10, currentPage * 10);
@@ -184,11 +240,23 @@ export default function UpdatesMenu({style}) {
                         <UpdatesFilter handleFilter={handleFilter} />
                     </Stack>
                     {/*Updates list*/}
+<<<<<<< HEAD
                     <UpdatesList updates={updatesToDisplay} style={{marginBottom: "20px"}} />
                     {/*Updates nav bar*/}
                     {filteredUpdates.length > 10 &&
                         <UpdatesNavBar 
                             numOfUpdates={filteredUpdates.length} 
+=======
+                    <UpdatesList 
+                        updates={updatesToDisplay} 
+                        refresh={() => {setRefresh(!refresh)}} 
+                        style={{marginBottom: "20px"}} 
+                    />
+                    {/*Updates nav bar*/}
+                    {filteredUpdates.length > 10 &&
+                        <PagesNavBar 
+                            numOfEntries={filteredUpdates.length} 
+>>>>>>> e3a266988eb969a3200e7d956ea1baeb3a93dcea
                             currentPage={currentPage} 
                             handlePage={handlePage}
                         /> 
