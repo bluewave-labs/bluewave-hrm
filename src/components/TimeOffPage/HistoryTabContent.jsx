@@ -43,7 +43,7 @@ export default function HistoryTabContent({style}) {
     //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Hook for refreshing the list of time off periods
-    const [refresh, setRefresh] = useState(false);
+    //const [refresh, setRefresh] = useState(false);
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active
@@ -61,7 +61,7 @@ export default function HistoryTabContent({style}) {
     //Refresh the list of time off periods
     useEffect(() => {
         getTimeOffPeriods();
-    }, [refresh]);
+    }, []);
 
     //Function for retrieving any past time off periods
     function getTimeOffPeriods() {

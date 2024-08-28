@@ -171,15 +171,9 @@ export default function UpcomingTimeOffTable({
                                                     setEditTimeOff(true);
                                                 }}
                                             >
-                                                <a 
-                                                    style={{
-                                                        color: "#7F56D9", 
-                                                        textDecoration: "none", 
-                                                        fontWeight: "bold"
-                                                    }}
-                                                >
+                                                <b style={{color: "#7F56D9"}}>
                                                     Edit
-                                                </a>
+                                                </b>
                                             </HRMButton>
                                         </Stack>
                                     </TableBodyCell>

@@ -43,7 +43,7 @@ export default function TeamTabContent({style}) {
     //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Hook for refreshing the list of time off periods
-    const [refresh, setRefresh] = useState(false);
+    //const [refresh, setRefresh] = useState(false);
 
     //ID of the currently logged in employee
     const currentUser = currentUserID;
@@ -60,7 +60,7 @@ export default function TeamTabContent({style}) {
     //Refresh the list of time off periods
     useEffect(() => {
         getTimeOffPeriods();
-    }, [refresh]);
+    }, []);
 
     //Function for retrieving all the time off periods for the current manager's team
     function getTimeOffPeriods() {
