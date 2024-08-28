@@ -1,13 +1,35 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import HRMButton from "../Button/HRMButton";
 import { multiStepContext } from "../../context/stepContext";
 import thankYouVector from "../../Images/placeholder.svg";
+import Swal from "sweetalert2";
 import axios from "axios";
 
 function FinalStep() {
   const { finalData } = useContext(multiStepContext);
+  const [isSubmitted, setIsSubmitted] = useState(true);
+
+  const handleAlert = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#7F56D9",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("Saved!", "", "success");
+        handleSubmit();
+        setIsSubmitted(false);
+      }
+    });
+  };
+
   const handleSubmit = async () => {
     const {
       empId,
@@ -37,7 +59,17 @@ function FinalStep() {
         },
       }
     );
-    console.log(response);
+    const emailData = response.data.data;
+    const emailReq = await axios.post(
+      `http://localhost:5000/api/offboarding/${empId}/submit`,
+      JSON.stringify(emailData),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(emailReq);
   };
   return (
     <Box
@@ -90,7 +122,8 @@ function FinalStep() {
           height: "32px",
           margin: "0 auto 20px auto",
         }}
-        onClick={handleSubmit}
+        onClick={handleAlert}
+        enabled={isSubmitted}
       >
         Complete and notify the HR
       </HRMButton>
