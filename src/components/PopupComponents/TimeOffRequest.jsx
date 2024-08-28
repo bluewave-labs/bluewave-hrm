@@ -357,7 +357,8 @@ export default function TimeOffRequest({
             startDate: dayjs(from).toString(),
             endDate: dayjs(to).toString(),
             hours: totalHoursOff,
-            timeOffId: category.timeOffId
+            timeOffId: category.timeOffId,
+            status: "Pending"
         };
         axios.put(timeOffPeriodURL, updatedPeriod)
         .then((response) => {
@@ -518,6 +519,14 @@ export default function TimeOffRequest({
                 day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in
                 total).
             </p>
+            {/*Warning message when editing an already approved request*/}
+            {(initialRequest && initialRequest.status === "Approved") && 
+                <h4 style={{color: "#F79009", marginBottom: "15px"}}>
+                    This time off request has already been approved. If you make any changes to 
+                    this request, it will need to be approved again.
+                </h4>
+            }
+            {/*Validation messages to be displayed if the request being submitted is invalid */}
             {!validDates && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
                 Your time off request dates overlap with existing upcoming time off periods.
             </h4>}

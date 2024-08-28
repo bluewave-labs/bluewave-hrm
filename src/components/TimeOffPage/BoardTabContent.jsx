@@ -93,7 +93,8 @@ export default function BoardTabContent({style}) {
                         to: formatDate(dayjs(p.endDate).toDate()),
                         type: p.timeOff.category,
                         hours: p.hours,
-                        note: p.note
+                        note: p.note,
+                        status: p.status
                     });
                 }
             });
@@ -142,7 +143,7 @@ export default function BoardTabContent({style}) {
                     {/*Upcoming time off table*/}
                     <UpcomingTimeOffTable 
                         timeOffPeriods={periodsToDisplay} 
-                        tableColumns={['Type', 'Amount', 'Note']}
+                        tableColumns={['Type', 'Amount', 'Note', 'Status']}
                         editFlag={true} 
                         refresh={() => setRefresh(!refresh)}
                         style={{marginBottom: "30px"}}

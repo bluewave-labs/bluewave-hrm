@@ -104,7 +104,7 @@ export default function UpdatesList({updates, refresh, style}) {
                     up.employeeAnnualTimeOff.cumulativeHoursTaken),
                 timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} - 
                     ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
-                requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
+                requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
                 timeOffCategory: up.timeOff.category,
                 status: up.timeOffHistory.status
             };
@@ -117,7 +117,7 @@ export default function UpdatesList({updates, refresh, style}) {
                     up.employeeAnnualTimeOff.cumulativeHoursTaken),
                 timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} -
                     ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
-                requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
+                requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
                 timeOffCategory: up.timeOff.category,
                 notes: up.timeOffHistory.note
             };

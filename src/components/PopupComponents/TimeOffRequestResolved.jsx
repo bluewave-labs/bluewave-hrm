@@ -45,7 +45,7 @@ export default function TimeOffRequestResolved({time_off_information, close, sty
                 <h3>
                     Your time off request has been {result}
                 </h3>
-                <CloseIcon  onClick={close} sx={{
+                <CloseIcon onClick={close} sx={{
                     backgroundColor: "#FFFFFF",
                     "&:hover": {
                         cursor: "pointer",

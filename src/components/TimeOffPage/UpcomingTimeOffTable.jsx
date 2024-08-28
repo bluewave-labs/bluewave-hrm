@@ -75,7 +75,8 @@ export default function UpcomingTimeOffTable({
             from: dayjs(period.from).toDate(),
             to: dayjs(period.to).toDate(),
             hours: period.hours,
-            type: period.type
+            type: period.type,
+            status: period.status
         }
         setTimeOffDetails(details);
     };
@@ -107,7 +108,7 @@ export default function UpcomingTimeOffTable({
                                     <b>Note</b>
                                 </TableHeaderCell>
                             }
-                            {tableColumns.includes("Status") && <TableHeaderCell><b>Status</b></TableHeaderCell>}
+                            {tableColumns.includes("Status") && <TableHeaderCell colSpan={2}><b>Status</b></TableHeaderCell>}
                             
                         </TableRow>
                     </TableHead>
