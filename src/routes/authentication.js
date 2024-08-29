@@ -1,4 +1,6 @@
 const controller = require("../controllers/authentication");
+const { requireAuth } = require("../../config/authJwt");
+
 
 module.exports = (router) => {
     router.route("/login").post(controller.login);
@@ -7,5 +9,5 @@ module.exports = (router) => {
     router.route("/logout").get(controller.logout);
     router.route("/forgotpassword").post(controller.forgotPassword);
     router.route("/resetpassword/:token").patch(controller.resetPassword);
-    router.route("/resetPasswordauth").patch(controller.resetPasswordAuth);
+    router.route("/resetPasswordauth").patch(requireAuth, controller.resetPasswordAuth);
 };

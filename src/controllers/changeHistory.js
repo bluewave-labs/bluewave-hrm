@@ -38,7 +38,7 @@ exports.createRecord = async (req, res) => {
 };
 
 exports.updateRecord = async (req, res) => {
-  const updatedData = req.body;
+  const updatedData = req.body; console.log(updatedData)
   try {
     const data = await db.changeHistory.findByPk(updatedData.id);
     data.set(updatedData);

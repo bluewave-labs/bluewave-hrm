@@ -55,6 +55,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       permissionId: {
         type: Sequelize.INTEGER,
+        defaultValue: 3,
         allowNull: true,
       },
       passwordChangedAt: {
@@ -69,11 +70,16 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      autoDeleteAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
     },
     {
       sequelize,
       freezeTableName: true,
       timestamps: true,
+      paranoid: true,
     }
   );
 };

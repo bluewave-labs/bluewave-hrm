@@ -1,8 +1,56 @@
+const dayjs = require("dayjs");
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
-const { Value } = require("@sequelize/core");
-const { produce } = require("immer");
+const appUser = require("./appUser");
+const { getAuthUser } = require("../../config/authJwt");
+const { runAtSpecificTimeOfDay } = require("../helper/utils");
+
+const autoDelete = async () => {
+  let employeeCount = 0;
+  let userCount = 0;
+  console.log("Executing auto delete...");
+  const startTime = dayjs();
+  const employees = await db.employee.findAll({
+    where: { autoDeleteAt: { [db.Sequelize.Op.ne]: null } },
+  });
+  for (let employee of employees) {
+    const daysLeft = dayjs(employee.autoDeleteAt).diff(dayjs(), "d");
+    if (daysLeft < 1) {
+      employee.set({
+        autoDeleteAt: null,
+      });
+      await employee.save();
+      await employee.destroy();
+      employeeCount++;
+    }
+  }
+  const users = await db.appUser.findAll({
+    where: { autoDeleteAt: { [db.Sequelize.Op.ne]: null } },
+  });
+  for (let user of users) {
+    const daysLeft = dayjs(user.autoDeleteAt).diff(dayjs(), "d");
+    if (daysLeft < 1) {
+      user.set({
+        access: "Revoked",
+        autoDeleteAt: null,
+      });
+      await user.save();
+      await user.destroy();
+      userCount++;
+    }
+  }
+  const endTime = dayjs();
+  console.log(
+    `Auto delete completed at" ${dayjs().format("YYYY-MM-DD hh:mm:ss:A")}`
+  );
+  const str = `${employeeCount} employee record(s) and ${userCount} user record(s) removed in ${endTime.diff(
+    startTime
+  )} millisecond(s)`;
+  console.log(str);
+};
+
+runAtSpecificTimeOfDay(23, 59, autoDelete);
 
 const predefinedColors = [
   "#7F56D9", // 1st place
@@ -41,88 +89,102 @@ const getTopFive = (results) => {
   return arr;
 };
 
+//Utility function to change photo to base64
+const convertPhotoToBase64 = (employee) => {
+  employee.photo = employee.photo && employee.photo.toString("base64");
+  if (employee.Manager) {
+    employee.Manager.photo =
+      employee.Manager.photo && employee.Manager.photo.toString("base64");
+  }
+};
+
+const employeeQueryObject = {
+  include: [
+    "role",
+    "department",
+    "team",
+    "socialProfiles",
+    {
+      model: db.employee,
+      as: "Manager",
+    },
+  ],
+};
+
 exports.showManagers = async (req, res) => {
-  const departmentLeadId = await db.department.findAll({
-    attributes: [["departmentManagerId", "id"]],
+  const data = await db.employee.aggregate("managerId", "DISTINCT", {
+    plain: false,
   });
-
-  const teamLeadId = await db.team.findAll({
-    attributes: [["teamLeadId", "id"]],
-  });
-
   const ids = [];
-  for (let emp of departmentLeadId) {
-    if (emp.id && !ids.includes(emp.id)) {
-      ids.push(emp.id);
+  for (let d of data) {
+    const managerId = d.DISTINCT;
+    if (managerId) {
+      ids.push(managerId);
     }
   }
-  for (let emp of teamLeadId) {
-    if (emp.id && !ids.includes(emp.id)) {
-      ids.push(emp.id);
-    }
-  }
-
   const managers = await db.employee.findAll({
-    attributes: ["empId", "firstName", "lastName"],
+    attributes: ["empId", "firstName", "lastName", "email"],
     order: ["firstName", "lastName"],
     where: { empId: ids },
   });
-
   res.json(managers);
 };
 
 exports.showAll = async (req, res) => {
+  //include: { all: true, nested: false }, // This will display all the data pertaining to employee table
+  const employee = await db.employee.findAll(employeeQueryObject);
+  if (!employee) {
+    return res.send("No results found");
+  }
+  for (let index = 0; index < employee.length; index++) {
+    convertPhotoToBase64(employee[index]);
+  }
+  res.send(employee);
+};
+
+exports.showAllTerminated = async (req, res) => {
+  //include: { all: true, nested: false }, // This will display all the data pertaining to employee table
   const employee = await db.employee.findAll({
-    //include: { all: true, nested: false }, // This will display all the data pertaining to employee table
-    include: [
-      "role",
-      "department",
-      "team",
-      "socialProfiles",
-      {
-        model: db.employee,
-        as: "Manager",
-      },
-    ],
+    ...employeeQueryObject,
+    where: { deletedAt: { [db.Sequelize.Op.ne]: null } },
+    paranoid: false,
   });
   if (!employee) {
     return res.send("No results found");
   }
   for (let index = 0; index < employee.length; index++) {
-    employee[index].photo =
-      employee[index].photo && employee[index].photo.toString("base64");
-    if (employee[index].Manager) {
-      employee[index].Manager.photo =
-        employee[index].Manager.photo &&
-        employee[index].Manager.photo.toString("base64");
-    }
+    convertPhotoToBase64(employee[index]);
   }
+  res.send(employee);
+};
+
+exports.showMyTeam = async (req, res) => {
+  const managerId = req.body.managerId;
+  if (!managerId) {
+    return res.send([]);
+  }
+  const employee = await db.employee.findAll({
+    ...employeeQueryObject,
+    where: { managerId: managerId },
+  });
+  if (!employee) {
+    return res.send([]);
+  }
+  for (let index = 0; index < employee.length; index++) {
+    convertPhotoToBase64(employee[index]);
+  }
+  // console.log(employee.length);
   res.send(employee);
 };
 
 exports.showOne = async (req, res) => {
   const id = req.params.id;
-  const employee = await db.employee.findByPk(id, {
-    include: [
-      "role",
-      "department",
-      "team",
-      "socialProfiles",
-      {
-        model: db.employee,
-        as: "Manager",
-      },
-    ],
-  });
-  if (employee === null) {
-    res.status(400).send("Not found!");
-  } else {
-    employee.photo = employee.photo && employee.photo.toString("base64");
-    if (employee.Manager) {
-      employee.Manager.photo =
-        employee.Manager.photo && employee.Manager.photo.toString("base64");
-    }
+  const employee = await db.employee.findByPk(id, employeeQueryObject);
+  if (employee) {
+    convertPhotoToBase64(employee);
     res.status(200).send(employee);
+  } else {
+    res.status(400).send("Not found!");
   }
 };
 
@@ -130,93 +192,175 @@ exports.findOneByEmail = async (req, res) => {
   if (!req.body.email) {
     return res.send(null);
   }
-  const employee = await db.employee.findOne({
-    include: [
-      "role",
-      "department",
-      "team",
-      "socialProfiles",
-      {
-        model: db.employee,
-        as: "Manager",
-      },
-    ],
+  const query = {
+    ...employeeQueryObject,
     where: { email: req.body.email.toLowerCase() },
-  });
-  if (employee === null) {
-    res.send(null);
-  } else {
-    employee.photo = employee.photo && employee.photo.toString("base64");
-    if (employee.Manager) {
-      employee.Manager.photo =
-        employee.Manager.photo && employee.Manager.photo.toString("base64");
-    }
+  };
+  const employee = await db.employee.findOne(query);
+  if (employee) {
+    convertPhotoToBase64(employee);
     res.status(200).json(employee);
+  } else {
+    res.send(null);
   }
 };
 
 exports.createRecord = async (req, res) => {
-  //checking for email already exists
-  const check = await db.employee.findOne({ where: { email: req.body.email } });
-  if (check) {
-    return res.send(message.alreadyExists);
-  }
   try {
-    const data = await db.employee.create(req.body, {
+    const inputs = req.body.inputs;
+    console.log(inputs);
+    const data = await db.employee.create(inputs, {
       include: ["socialProfiles"],
     });
-    res.status(201).json(data);
+    /**
+     * Create an appUser account for new employee added.
+     * But check if there exists appUser account for the used email.
+     * This is necessary because appUser account for system administrator
+     * was created via auth controller.
+     */
+    const email = data.toJSON().email.toLowerCase();
+    const empId = data.toJSON().empId;
+
+    let user = await db.appUser.findOne({
+      where: {
+        [db.Sequelize.Op.or]: [
+          {
+            email: email,
+          },
+          { empId: empId },
+        ],
+      },
+    });
+    // If user exists, update record. User is the system admin.
+    if (user) {
+      user.set({
+        empId,
+        email,
+        firstName: inputs.firstName,
+        lastName: inputs.lastName,
+      });
+      await user.save();
+      res.status(201).json(data);
+    } else {
+      req.body = {
+        empId,
+        email,
+        firstName: inputs.firstName,
+        lastName: inputs.lastName,
+        frontendUrl: req.body.frontendUrl,
+      };
+      appUser.createRecord(req, res);
+    }
   } catch (err) {
+    console.log(err);
     res.send(err);
   }
 };
 
 exports.updateRecord = async (req, res) => {
   const updatedData = req.body;
-  //checking for email already exists
-  const check = await db.employee.findOne({
-    where: {
-      email: req.body.email,
-      empId: {
-        [db.Sequelize.Op.not]: updatedData.empId,
-      },
-    },
-  });
-  if (check) {
-    return res.send(message.alreadyExists);
-  }
   try {
     const employee = await db.employee.findByPk(updatedData.empId);
     employee.set(updatedData);
     await employee.save();
-    res.status(200).json({ message: employee });
+
+    /**
+     * It is necessary to update appUser table as well to ensure both tables,
+     * employee & appUser, are in sync. It is assumed that each employee is a user as well.
+     * The columns to be updated in appUser table are: firstName, lastName, email & empId.
+     * The other columns can be updated through appUser controller
+     */
+    const email = req.body.email
+      ? req.body.email.toLowerCase()
+      : req.body.email;
+    const empId = req.body.empId;
+
+    const user = await db.appUser.findOne({
+      where: {
+        [db.Sequelize.Op.or]: [
+          {
+            email: email,
+          },
+          { empId: empId },
+        ],
+      },
+    });
+    // user is not expected to be null but there is no crime in checking.
+    if (user) {
+      user.set({
+        empId,
+        email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      });
+      await user.save();
+    }
+    res.status(200).json({ user: email });
   } catch (err) {
     console.log(err);
     res.status(400).send(err);
   }
 };
 
+//   Expected body format
+//   {
+//     "empId": 3,
+//     "date": "2024-08-21T12:11:28.950Z",
+//     "terminationReason":"Personal",
+//     "terminationNote": "Goodbye"
+// }
+ 
 exports.deleteRecord = async (req, res) => {
-  const empId = req.params.id;
-  try {
-    const count = await db.employee.destroy({
-      where: { empId: empId },
-    });
-    if (count == 1) {
-      res.send({
-        message: message.deleted,
-      });
-    } else {
-      res.send({
-        message: message.failed,
-      });
+  try {console.log(req.body);
+    const data = req.body;
+    const employee = await db.employee.findByPk(data.empId);
+    if (!employee) {
+      throw { message: "Termination failed." };
     }
+
+    const dateDiff = dayjs(data.date).diff(dayjs());
+
+    employee.set({
+      terminationReason: data.terminationReason,
+      terminationNote: data.terminationNote,
+      autoDeleteAt: dateDiff > 0 ? data.date : null, // Auto soft deletion later
+    });
+    await employee.save();
+    if (dateDiff <= 0) {
+      await employee.destroy();
+    }
+
+    const user = await db.appUser.findOne({
+      where: {
+        [db.Sequelize.Op.or]: [
+          {
+            email: employee.email,
+          },
+          { empId: employee.empId },
+        ],
+      },
+    });
+    if (user) {
+      user.set({
+        access: dateDiff > 0 ? user.access : "Revoked", // Set to revoked later
+        autoDeleteAt: dateDiff > 0 ? data.date : null, // Auto soft deletion later
+      });
+      await user.save();
+      if (dateDiff <= 0) {
+        await user.destroy();
+      }
+    }
+    res.send({
+      message: message.deleted,
+    });
   } catch (err) {
+    console.log(err);
     res.send({
       message: err.message || message.failed,
     });
   }
 };
+
 // Routes for data summaries
 exports.summarizeByDepartments = async (req, res) => {
   try {
@@ -276,7 +420,6 @@ exports.summarizeByHeadcounts = async (req, res) => {
     // const [results, metadata] = await db.sequelize.query(query, {
     // replacements: { departmentName: departmentName.trim().toLowerCase() },
     const date = new Date();
-    console.log(date.getFullYear());
     const year = parseInt(req.params.year);
     // Limit the months to the current month if the year is the current year
     const monthCount = year === date.getFullYear() ? date.getMonth() + 1 : 12;

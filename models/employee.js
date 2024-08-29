@@ -73,6 +73,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      compensation: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       effectiveDate: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -129,11 +133,24 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      terminationReason: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      terminationNote: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      autoDeleteAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
     },
     {
       sequelize,
       freezeTableName: true,
       timestamps: true,
+      paranoid: true,
     }
   );
 };

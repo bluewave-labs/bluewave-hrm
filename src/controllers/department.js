@@ -44,10 +44,9 @@ exports.createRecord = async (req, res) => {
 exports.createBulkRecord = async (req, res) => {
   try {
     const data = await db.department.bulkCreate(req.body.data);
-    console.log(req.body.data);
     res.status(201).json({ data });
   } catch (err) {
-    console.log("err");
+    console.log(err);
     res.send({ message: message.failed });
   }
 };

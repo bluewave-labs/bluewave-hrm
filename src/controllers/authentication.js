@@ -9,7 +9,6 @@ const mailService = require("../helper/email");
 const { handleError, validatePassword } = require("../helper/validation");
 const message = require("../../constants/messages.json");
 
-const checked = true;
 // create json web token
 const maxAge = 3 * 60 * 60; // 3 hours
 const createToken = (id) => {
@@ -21,6 +20,12 @@ const createToken = (id) => {
 const signup = async (req, res) => {
   try {
     const user = await db.appUser.create(req.body);
+    // Save password in the passwordHistory table
+    db.passwordHistory.create({
+      userId: user.id,
+      password: user.password,
+      passwordCreatedAt: new Date(),
+    });
     const token = createToken(user.email);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(201).json({ user: user.email });
@@ -44,7 +49,7 @@ const login = async (req, res) => {
       const auth = await bcrypt.compare(password, user.password); // Check if the password matched
       if (auth) {
         const token = createToken(user.email);
-        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000});
         return res.status(200).json({ user: user.email });
       }
     }
@@ -56,13 +61,12 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
-  res.send("<h2>You have successfully logged out.</h2>");
+  res.status(200).json({message: "You've successfully logged out."});
 };
 // This api sends a password resetToken to user
 const forgotPassword = async (req, res) => {
   // Get user based on the posted email
   const { email, frontendUrl } = req.body;
-  console.log(req.body);
   const user = await db.appUser.findOne({
     where: { email: email.toLowerCase() },
   });
@@ -115,13 +119,11 @@ const forgotPassword = async (req, res) => {
 
 //This api enables unverified user to reset password
 const resetPassword = async (req, res) => {
-  console.log(req.body);
   //Hash the plain token
   const token = crypto
     .createHash("sha256")
     .update(req.params.token)
     .digest("hex");
-
   //Find user based on the parameter token
   const user = await db.appUser.findOne({
     where: {
@@ -138,15 +140,6 @@ const resetPassword = async (req, res) => {
 
   const { password, confirmPassword } = req.body;
 
-  //***To be re-implemented */
-  // Check if the new password is valid
-  // const passwordCheck = validatePassword(password);
-  // if (!passwordCheck.isValid) {
-  //   return res.status(400).json({
-  //     passwordError: passwordCheck.message,
-  //   });
-  // }
-
   // Check if password and confirmPassword matched
   if (password !== confirmPassword) {
     return res.status(400).json({
@@ -154,19 +147,53 @@ const resetPassword = async (req, res) => {
     });
   }
 
+  //Check if password had been used before.
+  const passwordHistory = await db.passwordHistory.findAll({
+    where: { userId: user.id },
+  });
+  for (let history of passwordHistory) {
+    const used = await bcrypt.compare(password, history.password); // Check if password matched any password already used by the user.
+    if (used) {
+      return res.status(400).json({
+        error: message.usedPassword,
+      });
+    }
+  }
+  const now = new Date();
+
+  //Update current password passwordChangedAt date.
+  const currentPassword = await db.passwordHistory.findOne({
+    where: {
+      userId: user.id,
+      password: user.password,
+    },
+  });
+
+  if (currentPassword) {
+    currentPassword.set({ passwordChangedAt: now });
+    await currentPassword.save();
+  }
+
+  //Update user object
   user.set({
     password: password, //Reset password
-    passwordChangedAt: new Date(),
+    passwordChangedAt: now,
     passwordResetToken: null,
     passwordResetTokenExpiresAt: null,
   });
-
   await user.save();
 
-  res.json({ 
+  // Save new password in the passwordHistory table
+  db.passwordHistory.create({
+    userId: user.id,
+    password: user.password,
+    passwordCreatedAt: now,
+  });
+
+  res.json({
     message: message.passwordChanged,
-    user: user.email
-   });
+    user: user.email,
+  });
 };
 
 // This api enables verified user to change password

@@ -1,4 +1,4 @@
-const { password } = require("pg/lib/defaults");
+const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(

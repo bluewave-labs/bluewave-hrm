@@ -5,7 +5,7 @@ const { getComparator } = require("../helper/utils");
 
 exports.showAll = async (req, res) => {
   const data = await db.timeOff.findAll({
-    attributes: { exclude: ["createdAt", "updatedAt"] },
+    attributes: { exclude: ["createdAt", "updatedAt"] }
   });
   if (!data) {
     res.send("No results found");

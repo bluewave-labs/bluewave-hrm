@@ -10,5 +10,6 @@
     "invalidToken": "invalid or expired token",
     "passwordChanged": "password successfully changed",
     "sessionExpired": "your session has expired",
-    "updated": "entity updated"
+    "updated": "entity updated",
+    "usedPassword": "previously used password"
 }

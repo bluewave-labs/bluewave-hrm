@@ -3,15 +3,15 @@ const { requireAuth } = require("../../config/authJwt");
 
 module.exports = (router) => {
     //GET(all notifications)
-    router.route("/notifications").get(controller.showAll);
+    router.route("/notifications").get(requireAuth, controller.showAll);
     //GET(single notification)
-    router.route("/notifications/:id").get(controller.showOne);
+    router.route("/notifications/:id").get(requireAuth, controller.showOne);
     //GET(all notifications for a given employee)
-    router.route("/notifications/employee/:id").get(controller.showAllByEmployee);
+    router.route("/notifications/employee/:id").get(requireAuth, controller.showAllByEmployee);
     //POST
-    router.route("/notifications").post(controller.createRecord);
+    router.route("/notifications").post(requireAuth, controller.createRecord);
     //PUT
-    router.route("/notifications").put(controller.updateRecord);
+    router.route("/notifications").put(requireAuth, controller.updateRecord);
     //DELETE
-    router.route("/notifications/:id").delete(controller.deleteRecord);
+    router.route("/notifications/:id").delete(requireAuth, controller.deleteRecord);
 };
