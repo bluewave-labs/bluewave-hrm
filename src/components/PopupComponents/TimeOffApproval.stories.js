@@ -24,9 +24,8 @@ export const Primary = {
             timeOffBalance: '18 days',
             timeOffRequested: '1 Oct - 4 Oct',
             requestedDaysTotal: '2 days',
-            timeOffCategory: 'Vacation'
-        },
-        close: () => {},
-        refresh: () => {}
+            timeOffCategory: 'Vacation',
+            description: 'Talked with my manager.'
+        }
     }
 };

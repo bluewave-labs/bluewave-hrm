@@ -12,7 +12,5 @@ export default {
 
 //Stories for each SetupDepartmentsMenu type
 export const Primary = {
-    args: {
-        advancePage: () => {}
-    }
+    args: {}
 };
