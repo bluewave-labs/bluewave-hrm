@@ -4,12 +4,24 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { fonts } from "../../assets/Styles";
 import { Typography } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import Popover from "@mui/material/Popover";
+import StateContext from "../StateContext";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import HttpsOutlinedIcon from '@mui/icons-material/HttpsOutlined';
+import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import axios from "axios";
+import PageContext from "../PageContext";
+
+const url = "http://localhost:5000/api/logout";
 
 /**
  * Header component for displaying the current user's information.
@@ -24,8 +36,63 @@ import Popover from "@mui/material/Popover";
  * - actions<Object>: Array of objects in which each object contains a label and action.
  *     Syntax: [...{label: <string>, action: <function>]
  */
-export default function UserDropdown({ user, style, actions }) {
+export default function UserDropdown({ style }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const stateContext = useContext(StateContext);
+  const pageContext = useContext(PageContext);
+  const navigate = useNavigate(); // used to return to landing page
+
+  const user = {
+    avatar:
+      stateContext.state.employee && stateContext.state.employee.photo
+        ? "data:image/png;base64," +
+          atob(stateContext.state.employee.photo.toString("base64"))
+        : null,
+    name: stateContext.state.user
+      ? `${stateContext.state.user.firstName} ${stateContext.state.user.lastName}`
+      : "Unknown",
+    role:
+      stateContext.state.user && stateContext.state.user.permission
+        ? stateContext.state.user.permission.type
+        : "Guest",
+  };
+
+  const logout = async () => {
+    axios
+      .post(url)
+      .then((data) => {
+        console.log("Log out");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        pageContext.navigateTo("login");
+        navigate("/", {replace: true});
+        stateContext.updateStates({ user: null, employee: null });
+      });
+  };
+
+  const actions = [
+    {
+      label: "Profile",
+      action: () => {
+        console.log("Navigate to profile page");
+      },
+    },
+    {
+      label: "Password",
+      action: () =>{ console.log("Password")}
+    },
+    {
+      label: "Team",
+      action: () =>{ console.log("Team")}
+    },
+    {
+      label: "Log out",
+      action: logout,
+    },
+  ];
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -64,7 +131,7 @@ export default function UserDropdown({ user, style, actions }) {
         {open && <KeyboardArrowUpIcon />}
         {!open && <KeyboardArrowDownIcon />}
       </Typography>
-      {/*Popover will be only if exists at least an action*/}
+      {/*Popover will be only be visible if exists at least an action*/}
       {actions && actions.length > 0 && (
         <Popover
           id={id}
@@ -82,12 +149,22 @@ export default function UserDropdown({ user, style, actions }) {
               return (
                 <ListItem key={index} disablePadding>
                   <ListItemButton
-                    sx={{ paddingTop: "0.5px", paddingBottom: "0.5px" }}
+                    sx={{
+                      paddingTop: "0.5px",
+                      paddingBottom: "0.5px",
+                      paddingLeft: "0",
+                    }}
                     onClick={() => {
                       handleClose();
                       item.action();
                     }}
                   >
+                    <ListItemIcon sx={{ justifyContent: "center" }}>
+                      {index === 0 && <PersonOutlineIcon />}
+                      {index === 1 && <HttpsOutlinedIcon />}
+                      {index === 2 && <PeopleAltOutlinedIcon />}
+                      {index === 3 && <LogoutOutlinedIcon />}
+                    </ListItemIcon>
                     <ListItemText
                       primary={item.label}
                       sx={{ fontFamily: fonts.fontFamily }}

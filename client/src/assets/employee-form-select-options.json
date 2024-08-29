@@ -30,5 +30,17 @@
     "Registered Partnership",
     "Separated"
   ],
-  "gender": ["", "Male", "Female", "Other"]
+  "gender": [
+    "",
+    "Agender",
+    "Cisgender",
+    "Female",
+    "Gender neutral",
+    "Genderfluid",
+    "Male",
+    "Nonbinary",
+    "Pangender",
+    "Transgender",
+    "Other"
+  ]
 }

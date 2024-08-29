@@ -102,6 +102,7 @@ export default function EmployeesNationalityGraph() {
       });
 
       setData(top5Data);
+      console.log(top5Data)
     } catch (error) {
       console.error('Error fetching employee data:', error);
     }

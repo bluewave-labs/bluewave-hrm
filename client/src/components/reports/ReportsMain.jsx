@@ -1,15 +1,9 @@
 import Stack from '@mui/system/Stack';
-import Page from '../StaticComponents/Page';
 import React  from 'react';
 import ReportsMainCard from './ReportsMainCard';
 import { Box } from '@mui/material';
 
-
-
 export default function ReportsMain(style) {
-    
-    
-    
     return (
 
         <Box >

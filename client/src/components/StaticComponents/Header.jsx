@@ -1,6 +1,7 @@
 import Box from "@mui/system/Box";
 import UserDropdown from "./UserDropdown";
-import Logo from "../../assets/images/enthalpy_logo_text.svg";
+import { useContext } from "react";
+import StateContext from "../StateContext";
 
 
 /**
@@ -17,7 +18,9 @@ import Logo from "../../assets/images/enthalpy_logo_text.svg";
  *  - actions<Object>: Array of objects in which each object contains a label and action.
  *     Syntax: [...{label: <string>, action: <function>]
  */
-export default function Header({user, style, actions }) {
+export default function Header({ style }) {
+  const stateContext = useContext(StateContext);
+
   return (
     <Box
       sx={{
@@ -34,8 +37,8 @@ export default function Header({user, style, actions }) {
         ...style,
       }}
     >
-      <img src={Logo} alt="Company Logo" />
-      <UserDropdown user={user} actions={actions} />
+      <img src={stateContext.state.logo} alt="Company Logo" />
+      <UserDropdown />
     </Box>
   );
 }

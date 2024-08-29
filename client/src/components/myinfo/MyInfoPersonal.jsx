@@ -2,7 +2,6 @@ import { Divider, Box,  } from '@mui/material'
 import React from 'react'
 import { List, ListItem, Grid, Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-const x = require("../../assets/employee.json");
 
 const theme = createTheme({
   typography: {
@@ -35,8 +34,7 @@ const theme = createTheme({
   
 });
 
-function MyInfoPersonal({employeesss}) {
-  const employee = x;
+function MyInfoPersonal({employee}) {
   return (
     <Box>
       <ThemeProvider theme={theme}>

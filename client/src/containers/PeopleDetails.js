@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Stack,
@@ -9,9 +9,12 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
-import AppTable from "../components/AppTable";
-import AppTabs from "../components/AppTabs";
+import AppTable from "../components/PeopleComponents/AppTable";
+import AppTabs from "../components/PeopleComponents/AppTabs";
 import { formatPhoneNumber } from "../assets/utils";
+import StateContext from "../components/StateContext";
+
+const tableView = require("../assets/table-view.json");
 
 // Number of rows to display on the table at a time.
 const rowsPerPage = 10;
@@ -19,30 +22,28 @@ const rowsPerPage = 10;
 // Expected headCell format for the table. Each object represents a
 // column. Note, AppTable implementation depends on this format to make the
 // table generic. Modification to this format may result in unpredictable outcome.
-const headCells = [
-  { id: "empId", width: 50, label: "Emp No", visible: false },
-  { id: "name", width: 221, label: "Name", visible: true },
-  { id: "preferredName", width: 100, label: "Preferred Name", visible: false },
-  { id: "status", width: 100, label: "Status", visible: true },
-  { id: "role", width: 176, label: "Role", visible: true },
-  { id: "team", width: 210, label: "Team", visible: true },
-  { id: "manager", width: 150, label: "Manager", visible: true },
-  { id: "department", width: 100, label: "Department", visible: true },
-  { id: "phoneNumber", width: 100, label: "Phone", visible: true },
-  { id: "email", width: 200, label: "Email", visible: true },
-  { id: "gender", width: 50, label: "Gender", visible: true },
-  { id: "nationality", width: 100, label: "Nationality", visible: true },
-  { id: "dateOfBirth", width: 100, label: "Birthday", visible: true },
-  { id: "maritalStatus", width: 100, label: "Marital Status", visible: true },
-  { id: "hireDate", width: 182, label: "Hire Date", visible: true },
-  { id: "salary", width: 100, label: "Salary", visible: true },
-  { id: "employmentType", width: 100, label: "Emp Type", visible: true },
-  { id: "compensationType", width: 100, label: "Comp. Type", visible: true },
-  { id: "compensation", width: 100, label: "Compensation", visible: true },
-  { id: "weeklyHours", width: 50, label: "Hours", visible: true },
-];
+// const headCells = [
+//   { id: "empId", width: 50, label: "Emp No", visible: false },
+//   { id: "name", width: 221, label: "Name", visible: true },
+//   { id: "preferredName", width: 100, label: "Preferred Name", visible: false },
+//   { id: "role", width: 176, label: "Role", visible: true },
+//   { id: "team", width: 210, label: "Team", visible: true },
+//   { id: "manager", width: 150, label: "Manager", visible: true },
+//   { id: "department", width: 100, label: "Department", visible: true },
+//   { id: "phoneNumber", width: 100, label: "Phone", visible: true },
+//   { id: "email", width: 200, label: "Email", visible: true },
+//   { id: "gender", width: 50, label: "Gender", visible: true },
+//   { id: "nationality", width: 100, label: "Nationality", visible: true },
+//   { id: "dateOfBirth", width: 100, label: "Birthday", visible: true },
+//   { id: "maritalStatus", width: 100, label: "Marital Status", visible: true },
+//   { id: "hireDate", width: 182, label: "Hire Date", visible: true },
+//   { id: "salary", width: 100, label: "Salary", visible: true },
+//   { id: "employmentType", width: 100, label: "Emp Type", visible: true },
+//   { id: "compensationType", width: 100, label: "Comp. Type", visible: true },
+//   { id: "weeklyHours", width: 50, label: "Hours", visible: true },
+// ];
 
-function formatTableData(data) {
+function formatTableData(data, headCells) {
   //Inner function to create formatted TableCells
   const createTableCell = (item, key) => {
     return <TableCell key={key}> {item ? item : " "}</TableCell>;
@@ -50,12 +51,11 @@ function formatTableData(data) {
 
   data.forEach(async (emp) => {
     emp.name = `${emp.firstName} ${emp.lastName}`;
-    emp.role = emp.role.roleTitle;
-    emp.team = emp.team.teamName;
+    emp.role = emp.role && emp.role.roleTitle;
+    emp.team = emp.team && emp.team.teamName;
     emp.department = emp.department && emp.department.departmentName;
     emp.manager =
       emp.Manager && `${emp.Manager.firstName} ${emp.Manager.lastName}`;
-    emp.status = "active";
     emp.salary = Number(emp.salary).toLocaleString();
     emp.hireDate = emp.hireDate && dayjs(emp.hireDate).format("DD MMMM, YYYY");
     emp.dateOfBirth =
@@ -82,12 +82,7 @@ function formatTableData(data) {
           </Stack>,
           index
         );
-      } else if (key === "status") {
-        cell = createTableCell(
-          <img alt="status" src={require(`../assets/images/active.png`)} />,
-          index
-        );
-      } else {
+      }  else {
         cell = createTableCell(row[key], index);
       }
       newData.push(cell);
@@ -97,7 +92,7 @@ function formatTableData(data) {
     }
   });
 }
-const tabItems = (data, teamId, handleClick) => {
+const tabItems = (data, teamId, headCells, handleClick) => {
   const teamData = data.filter((emp) => emp.teamId === teamId);
 
   return [
@@ -134,9 +129,12 @@ const tabItems = (data, teamId, handleClick) => {
  * @returns A React component.
  */
 export default function People(props) {
-  const { user, onClick } = props;
+  const stateContext = useContext(StateContext);
+  const { onClick } = props;
   const [employees, setEmployees] = useState([]);
-  const isAdmin = user && user.permission.id === 1;
+  const isAdmin =
+    stateContext.state.user && stateContext.state.user.permission.id === 1;
+const headCells = isAdmin ? tableView.admin : tableView.others;
 
   //data will be null if add new button is pressed or selected employee.
   const handleClick = (data) => {
@@ -149,8 +147,9 @@ export default function People(props) {
     async function fetchData() {
       // You can await here
       try {
-        const res = await axios.get("http://localhost:5000/api/employees");
-        formatTableData(res.data);
+        const res = await axios.get("/api/employees", { withCredentials: true });
+       // const res = await axios.get("http://localhost:5000/api/employees", { withCredentials: true });
+        formatTableData(res.data, headCells);
         setEmployees(res.data);
       } catch (err) {
         console.log(err);
@@ -224,7 +223,10 @@ export default function People(props) {
           <AppTabs
             items={tabItems(
               employees,
-              user && user.employee.teamId ? user.employee.teamId : -1,
+              stateContext.state.employee && stateContext.state.employee.teamId
+                ? stateContext.state.employee.teamId
+                : -1,
+                headCells,
               handleClick
             )}
           />

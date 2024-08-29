@@ -6,6 +6,7 @@ import MyInfoPersonal from './MyInfoPersonal';
 import MyInfoJob from './MyInfoJob';
 import { styled } from '@mui/material/styles';
 import { colors } from '../../assets/Styles';
+import {formatPhoneNumber} from "../../assets/utils"
 
 
 const theme = createTheme({
@@ -49,18 +50,6 @@ const Item = styled(Paper)(({ theme }) => ({
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
   padding: '55px',
 }));
-
-function formatPhoneNumber(phoneNumber) {
-  
-  const cleaned = ('' + phoneNumber).replace(/\D/g, '');
- 
-  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-  
-  if (match) {
-    return `${match[1]}-${match[2]}${match[3]}`;
-  }
-  return phoneNumber;
-}
 
 function MyInfoPersonalCard({ employee }) {
   const tabItems = [

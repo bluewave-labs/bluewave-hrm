@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./login.css";
+import "./signup.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import StateContext from "../StateContext";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const validator = require("validator");
+const api = require("../../assets/FetchServices");
 
 function Input({ title, name, value, type, valid, placeholder, handleChange }) {
   return (
@@ -41,8 +43,9 @@ function Constraint({ text, passed }) {
   );
 }
 
-function SingupPage({ user }) {
+function SingupPage({ user, token, onSubmit }) {
   const stateContext = React.useContext(StateContext);
+  const navigate = useNavigate();
 
   const [validators, setvalidators] = useState({
     firstName: user ? true : false, // firstName is not empty
@@ -59,7 +62,7 @@ function SingupPage({ user }) {
     firstName: user && user.firstName,
     lastName: user && user.lastName,
     email: user && user.email,
-    permissionId: !user && 1 //First signup is for HRM admin
+    permissionId: !user && 1, //First signup is for HRM admin
   });
 
   const handleChange = (e) => {
@@ -102,6 +105,17 @@ function SingupPage({ user }) {
         ["confirmPassword"]: inputs.password === e.target.value,
       }));
     }
+    if (user) {
+      const data = {
+        firstName: true,
+        lastName: true,
+        email: true,
+      };
+      setvalidators((values) => ({
+        ...values,
+        ...data,
+      }));
+    }
   };
 
   const checkPassword = (password) => {
@@ -142,21 +156,42 @@ function SingupPage({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios({
-        method: "post",
-        url: "http://localhost:5000/api/signup",
-        data: inputs,
-      });
-      console.log(res.data);
+      if (user) {
+        //Change password
+        await api.authentication.resetPassword(
+          {
+            password: inputs.password,
+            confirmPassword: inputs.confirmPassword,
+          },
+          token
+        );
+        // Get associated employee record
+        const employee = await api.employee.fetchOneByEmail(inputs.email);
+        stateContext.updateStates({ user, employee });
+        navigate("/dashboard", { replace: true });
+      } else {
+        //Admin sign up
+        let res = await api.authentication.signup(inputs);
+        const authUserEmail = res.user;
+        //Get auth user data
+        res = await api.user.fetchOneByEmail(authUserEmail);
+        const authUser = res;
+        // Update stateContext with the auth user
+        stateContext.updateState("user", authUser);
+      }
+
+      if (onSubmit) {
+        onSubmit();
+      }
     } catch (err) {
       console.log(err);
     }
   };
   return (
-    <div className="login-body">
-      <div className="login-container">
+    <div className="sign-up-body">
+      <div className="sign-up-container">
         <div className="logo-container">
-          <img src={stateContext.state.logo} alt="logo" />{" "}
+          <img src={stateContext.state.logo} alt="logo" />
         </div>
         <h2 style={{ marginBottom: "0px" }}>
           {user ? "Create an account" : "Create HRM admin account"}

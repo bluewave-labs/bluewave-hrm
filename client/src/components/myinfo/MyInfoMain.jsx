@@ -2,21 +2,16 @@ import Stack from "@mui/system/Stack";
 import HRMButton from "../Button/HRMButton";
 import MyInfoPersonCard from "./MyInfoPersonalCard";
 import { useNavigate } from "react-router-dom";
-import Page from "../StaticComponents/Page";
 import React, { useContext } from "react";
-import EmployeeContext from "./EmployeeContext";
 import { Box } from "@mui/material";
+import StateContext from "../StateContext";
 
-export default function MyInfoMain(style) {
-  const navigate = useNavigate();
-  const { employee, loading } = useContext(EmployeeContext);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+export default function MyInfoMain({style, onClickEdit}) {
+  const {state} = useContext(StateContext);
+  const employee = state.employee;
 
   if (!employee) {
-    return <div>Error loading employee data.</div>;
+    return <div style={{paddingTop:"25px"}}>No record to display.</div>;
   }
   return (
     <Box>
@@ -40,8 +35,11 @@ export default function MyInfoMain(style) {
           {employee.firstName} {employee.lastName}
         </h2>
         <HRMButton
-          onClick={() => {
-            navigate("/myinfoedit");
+          onClick={()=>{
+            console.log("called");
+            if(onClickEdit){
+              onClickEdit(true);
+            }
           }}
           mode={"primary"}
           sx={{ borderRadius: "8px", width: "60px", height: "34px" }}

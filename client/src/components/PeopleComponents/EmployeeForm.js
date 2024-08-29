@@ -1,14 +1,36 @@
-import { useState, useEffect, userRef } from "react";
+import { useState, useEffect } from "react";
 import { Box, Divider, Stack, Typography, Button } from "@mui/material";
 import "./EmployeeForm.css";
 import countryData from "../../assets/countries+states+cities.json";
 import axios from "axios";
-import SelectPhoto from "../SelectPhoto";
-import HRMDatePicker from "../HRMDatePicker";
+import SelectPhoto from "./SelectPhoto";
+import HRMDatePicker from "./HRMDatePicker";
 import dayjs from "dayjs";
 import PopupModal from "./PopupModal";
+import { useLocation } from 'react-router-dom';
+//import {fetchAllDepartments} from "../../assets/FetchServices/APIService"
 const selectOptions = require("../../assets/employee-form-select-options.json");
 const validator = require("validator");
+
+
+  
+const getHomePath = (location) =>{
+  const fullUrl = window.location.href;
+  const relativeUrl = location.pathname;
+  if(fullUrl === relativeUrl){
+    return fullUrl;
+  }
+  return fullUrl.substring(0, fullUrl.indexOf(relativeUrl));
+}
+
+const deformatNumber = (phoneNumber) => {
+  try {
+    //Remove all non-digits.
+    return phoneNumber.replace(/\D/g, "");
+  } catch (error) {
+    return phoneNumber;
+  }
+};
 
 //Helper function to extract nationality from the country data
 const getNationality = () => {
@@ -225,7 +247,6 @@ function ImagePicker(props) {
 
 function CustomisedDatePicker(props) {
   const { label, name, value, handleChange, validator } = props;
-
   return (
     <Box sx={rootStyle}>
       <label>{label}</label>
@@ -336,9 +357,7 @@ function CustomisedSocialMediaInput(props) {
   );
 }
 
-function EmployeeForm(props) {
-  const { employee, restricted, onDiscard } = props;
-
+function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
   const [inputs, setInputs] = useState(employee || {});
 
   const [validator, setValidator] = useState({});
@@ -357,12 +376,14 @@ function EmployeeForm(props) {
 
   const [prompt, setPrompt] = useState(false);
 
+  let location = useLocation();
+  
   useEffect(() => {
     async function fetchData() {
       // You can await here
       try {
-        let res = await axios.get("http://localhost:5000/api/departments");
-        res = res.data;
+        let res = null;//await fetchAllDepartments();// feaxios.get("http://localhost:5000/api/departments");
+        console.log(res)
         res.sort((a, b) => sort(a, b, "departmentName"));
         setDepartments(res);
 
@@ -374,7 +395,20 @@ function EmployeeForm(props) {
         res = await axios.get("http://localhost:5000/api/managers");
         res = res.data;
         setManagers(res);
-        setInputs(employee ? employee : {});
+        setInputs(
+          employee
+            ? employee
+            : {
+                hireDate: dayjs().format("MMM D, YYYY"),
+                effectiveDate: dayjs().format("MMM D, YYYY"),
+              }
+        );
+        if (employee && employee.photo) {
+          setInputs((values) => ({
+            ...values,
+            ["photo"]: atob(employee.photo),
+          }));
+        }
       } catch (err) {
         console.log(err);
       }
@@ -393,10 +427,12 @@ function EmployeeForm(props) {
       emp["_city"] = emp.city;
       emp.city = "Others";
     }
-    emp["_department"] = emp.department.departmentName;
-    emp["_role"] = emp.role.roleTitle;
+    emp["_department"] = emp.department.departmentName || emp.department;
+    emp["_role"] = emp.role.roleTitle || emp.role;
     emp["reportTo"] =
       emp.Manager && `${emp.Manager.firstName} ${emp.Manager.lastName}`;
+    emp.phoneNumber = deformatNumber(emp.phoneNumber);
+    emp.salary = deformatNumber(emp.salary);
 
     const socialProfiles = emp.socialProfiles;
     if (socialProfiles) {
@@ -523,10 +559,9 @@ function EmployeeForm(props) {
     }
     console.log("Form validation passed.");
     const socialProfiles = filterInputs();
-
     try {
       if (employee) {
-        await axios({
+        const newData = await axios({
           method: "put",
           url: "http://localhost:5000/api/employees",
           data: inputs,
@@ -552,14 +587,24 @@ function EmployeeForm(props) {
             console.log(`Social profile - ${profile.mediumName} created.`);
           }
         }
+        if (onSave) {
+          onSave(newData.data.user);
+        }
         console.log("Record successfully updated.");
       } else {
+
         await axios({
           method: "post",
           url: "http://localhost:5000/api/employees",
-          data: inputs,
+          data: {
+            inputs:inputs,
+            frontendUrl: `${getHomePath(location)}/complete-signup/`,
+          }
         });
         console.log("Employee successfully added.");
+        if (onSave) {
+          onSave(null);
+        }
       }
     } catch (err) {
       console.log(err);
@@ -567,9 +612,9 @@ function EmployeeForm(props) {
   };
 
   const handleDiscard = (value) => {
-    console.log(change, prompt, value,onDiscard)
+    // console.log(change, prompt, value, onDiscard);
     //value is true when discard button is clicked and false when confirm discard button is pressed.
-    if(onDiscard && value && !change){
+    if (onDiscard && value && !change) {
       onDiscard();
       return;
     }
@@ -584,9 +629,9 @@ function EmployeeForm(props) {
 
   return (
     <Stack>
-      {(change && prompt) && (
+      {change && prompt && (
         <PopupModal
-          onAccept={() => console.log("Changes saved")}
+          onAccept={handleSubmit}
           onDiscard={() => handleDiscard(false)}
           onCancel={handleCancel}
         />
@@ -820,7 +865,6 @@ function EmployeeForm(props) {
               validator={validator}
               restricted={restricted}
             />
-
             <CustomisedSelectTag
               label={"Reporting to"}
               name={"reportTo"}

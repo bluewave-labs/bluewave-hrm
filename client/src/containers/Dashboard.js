@@ -1,87 +1,64 @@
 import { Box, Stack } from "@mui/material";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Header from "../components/StaticComponents/Header";
 import SideMenu from "../components/StaticComponents/SideMenu";
 import PeopleHome from "./PeopleHome";
 import Home from "./SampleComponent";
-import { Routes, Route } from "react-router-dom";
-import BasicModal from "../components/PeopleComponents/PopupModal";
 import MyInfoHome from "./MyInfoHome";
-import ReportsMain from "../components/reports/ReportsMain"
-import { EmployeeProvider } from '../components/myinfo/EmployeeContext';
+import ReportsMain from "../components/reports/ReportsMain";
+import { useContext, useEffect, useState } from "react";
+import StateContext from "../components/StateContext";
+import { produce } from "immer";
+import Placeholder from "../components/PeopleComponents/Placeholder";
 
-export default function Dashboard(props) {
-  const { email } = props;
-  const [user, setUser] = useState();
-  useEffect(() => {
-    async function fetchData() {
-      // You can await here
-      try {
-        let res = await axios({
-          method: "post",
-          url: "http://localhost:5000/api/appusers/find/email",
-          data: {
-            email: email,
-          },
-        });
-        res = res.data;
-        if (!res) {
-          return;
-        }
+const dashboardMenu = {
+  home: false,
+  myinfo: false,
+  people: false,
+  timeoff: false,
+  reporting: false,
+  settings: false,
+  support: false,
+};
 
-        const employee = await axios({
-          method: "post",
-          url: "http://localhost:5000/api/employees/find/email",
-          data: {
-            email: email,
-          },
-        });
-        res.employee = employee.data;
-        setUser(res);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchData();
-  }, []);
+export default function Dashboard() {
+  const stateContext = useContext(StateContext);
+  const [current, setCurrent] = useState({});
 
-  const userDetails = {
-    avatar:
-      user && user.employee
-        ? "data:image/png;base64," +
-          atob(user.employee.photo.toString("base64"))
-        : null,
-    name: user ? `${user.firstName} ${user.lastName}` : "Unknown",
-    role: user && user.permission ? user.permission.type : "Guest",
+  
+  const displayMenu = (menuItem) => {
+    const newCurrent = produce(dashboardMenu, (newDashboardMenu) => {
+      newDashboardMenu[menuItem] = true;
+    });
+    setCurrent(newCurrent);
   };
-  const actions = [
-    {
-      label: "Log out",
-      action: () => {
-        console.log("Log out");
-      },
-    },
-  ];
+  useEffect(() => {
+    const isAdmin = stateContext.state.user && stateContext.state.user.permission.id === 1;
+    const initialMenu = isAdmin ? "home" : "people";
+    displayMenu(initialMenu);
+  }, [stateContext.state.user]);
+if (!stateContext.state.user) {
+
+    return (<Placeholder content={"Loading, please wait..."}/>);
+  }
   return (
-    <EmployeeProvider>
     <Box>
-      <Header user={userDetails} actions={actions} />
+      <Header />
       <Stack spacing={15} direction={"row"}>
-        <SideMenu />
+        <SideMenu
+          onSelect={(menuItem) => {
+            displayMenu(menuItem);
+          }}
+        />
         <Box>
-          <Routes>
-            <Route path="/" element={<Home title={"Home page"}/>} />
-            <Route path="/myinfo" element={<MyInfoHome employee={user && user.employee} title={"My info page"}/>} />
-            <Route path="/people" element={<PeopleHome user={user} />} />
-            <Route path="/timeoff" element={<Home title={"Time off page"} />} />
-            <Route path="/reporting" element={<ReportsMain title={"Reporting page"} />} /> 
-            <Route path="/settings" element={<Home title={"Settings page"} />} />
-            <Route path="/support" element={<Home title={"Support page"} />} />
-          </Routes>
+          {current.home && <Home title={"Home page"} />}
+          {current.myinfo && <MyInfoHome />}
+          {current.people && <PeopleHome />}
+          {current.timeoff && <Home title={"Time off page"} />}
+          {current.reporting && <ReportsMain />}
+          {current.settings && <Home title={"Settings page"} />}
+          {current.support && <Home title={"Support page"} />}
         </Box>
       </Stack>
     </Box>
-    </EmployeeProvider>
   );
 }

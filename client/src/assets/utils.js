@@ -1,3 +1,5 @@
+const api = require("./FetchServices")
+
 /**
  * Formats a number phone into a format (123) 456 -7890.
  * @param {string} num string number to be formatted.
@@ -36,4 +38,37 @@ const formatPhoneNumber = (num) => {
   }
 };
 
-module.exports  = { formatPhoneNumber};
+/**
+ * Utility function to fetch user and employee data from the backend.
+ * @param {string} email user's email address
+ * @returns object containing user and employee data
+ */
+const getAuthUser = async (email) => {
+  if (!email) {
+    throw "email cannot be null";
+  }
+  const auth = {};
+  // Get user.
+  const user = await api.user.fetchOneByEmail(email);
+   auth.user = user;
+  if (user) {
+   const employee = await api.employee.fetchOneByEmail(user.email);
+    auth.employee = employee;
+  }
+  return auth;
+};
+
+const login = async ({stateContext, email, password}) => {
+    await api.authentication.login({email, password});
+    const { user, employee } = await getAuthUser(email);
+    stateContext.updateStates({user, employee});
+};
+
+const logout = async ({pageContext, navigate}) => {
+  await api.authentication.logout();
+  console.log("Logged out");
+  pageContext.navigateTo("login");
+  navigate("/", {replace: true});
+};
+
+module.exports = { formatPhoneNumber, getAuthUser, login, logout };
