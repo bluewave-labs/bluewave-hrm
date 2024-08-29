@@ -41,6 +41,9 @@ db.socialProfile = require("./socialProfile")(sequelize, Sequelize);
 db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
+
+db.offBoarding = require('./offBoarding')(sequelize, Sequelize);
+
 db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
 
 db.notification = require("./notification")(sequelize, Sequelize);
@@ -48,6 +51,7 @@ db.notificationRecipient = require("./notificationRecipient")(
   sequelize,
   Sequelize
 );
+
 
 db.reportTo = require("./reportTo")(sequelize, Sequelize);
 db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
@@ -188,6 +192,12 @@ db.appUser.belongsTo(db.permission, {
   foreignKey: "permissionId",
 });
 
+db.employee.hasMany(db.offBoarding, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+
 db.appUser.hasMany(db.passwordHistory, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
@@ -222,6 +232,26 @@ db.notification.belongsTo(db.timeOffHistory, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "timeOffHistoryId",
+});
+
+db.employeeAnnualTimeOff.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+
+
+db.offBoarding.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+
+db.employee.hasMany(db.employeeAnnualTimeOff, {
+
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
 });
 
 db.employee.belongsTo(db.employee, { foreignKey: "managerId", as: "Manager" });

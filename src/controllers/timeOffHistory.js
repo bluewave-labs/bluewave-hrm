@@ -16,7 +16,10 @@ exports.showAll = async (req, res) => {
 
 exports.showOne = async (req, res) => {
   const id = req.params.id;
-  const data = await db.timeOffHistory.findByPk(id); //Query using empId
+  //Query using empId
+  const data = await db.timeOffHistory.findByPk(id, {
+    include: "employee"
+  });
   if (data === null) {
     res.status(400).send("Not found!");
   } else {
@@ -26,7 +29,11 @@ exports.showOne = async (req, res) => {
 
 exports.showAllByEmployee = async (req, res) => {
   const empId = req.params.empid;
-  const data = await db.timeOffHistory.findAll({ where: { empId: empId } }); //Query using empId
+  //Query using empId
+  const data = await db.timeOffHistory.findAll({ 
+    where: { empId: empId },
+    include: ["employee", "timeOff"]
+  }); 
   if (data === null) {
     res.status(400).send("Not found!");
   } else {
@@ -79,3 +86,72 @@ exports.deleteRecord = async (req, res) => {
     });
   }
 };
+
+/***
+ * Create time off periods
+ * {
+        user: {
+            avatar: AvatarImage,
+            name:
+            role:
+        },
+        from:
+        to: 
+        type: 
+        amount: 
+        note:
+        status:
+    }
+ *
+ */
+    exports.timeOffPeriods = async (req, res) => {
+      const empId = req.params.empid;
+      if (!empId) {
+        console.log("Cannot find the employee ID in timeOff Periods history");
+        return res.status(400).send("Employee ID is required");
+      }
+    
+      try {
+        const timeOffData = await db.timeOffHistory.findAll({
+          where: {
+            empId: empId
+          },
+          include: [
+            {
+              model: db.employee
+            },
+          ]
+        });
+    
+        const userInformation = [];
+        for (const data of timeOffData) {
+          const roleData = await db.role.findOne({
+            where:{
+              roleId: data.employee.roleId
+            }
+          })
+          let roleProp = roleData.roleTitle
+          const user = {
+            name: `${data.employee.firstName} ${data.employee.lastName}`,
+            avatar: data.employee.photo.toString("base64"),
+            role: roleProp
+            }
+
+          const info = {
+            from: data.startDate,
+            to: data.endDate,
+            amount: data.hours,
+            note: data.note,
+            status: data.status
+          }
+          info.user = user;
+          userInformation.push(info);
+       }
+    
+        res.send(userInformation);
+      } catch (error) {
+        console.error("Error fetching time off periods:", error);
+        res.status(500).send("An error occurred while fetching time off periods");
+      }
+    };
+    

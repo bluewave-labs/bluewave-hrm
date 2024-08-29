@@ -6,14 +6,17 @@
 ![](https://img.shields.io/github/issues-pr/bluewave-labs/bluewave-hrm)
 ![](https://img.shields.io/github/issues/bluewave-labs/bluewave-hrm)
 
+<h1 align="center"><a href="https://bluewavelabs.ca" target="_blank">BlueWave HRM</a></h1>
 
-# BlueWave HR
+<p align="center"><strong>An open source human resource management application</strong></p>
 
-The BlueWave HR is a people and resource management application for your organization. It has the following features: 
+
+![Time off settings](https://github.com/bluewave-labs/hrm/blob/main/Time%20off.png?raw=true)
+
+The BlueWave HRM is a people and resource management application for your organization. It has the following features: 
 
 - Team management
 - Employee management
 - Time off & vacation management
 - Reporting
 
-![Time off settings](https://github.com/bluewave-labs/hrm/blob/main/Time%20off.png?raw=true)

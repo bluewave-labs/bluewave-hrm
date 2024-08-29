@@ -188,6 +188,34 @@ exports.showOne = async (req, res) => {
   }
 };
 
+exports.showAllByManager = async (req, res) => {
+  if (!req.params.id) {
+    return res.send(null);
+  }
+  const employee = await db.employee.findAll({
+    include: [
+      {
+        model: db.employee,
+        as: "Manager",
+      },
+    ],
+    where: { managerId: req.params.id }
+  });
+  if (!employee) {
+    return res.send("No results found");
+  }
+  for (let index = 0; index < employee.length; index++) {
+    employee[index].photo =
+      employee[index].photo && employee[index].photo.toString("base64");
+    if (employee[index].Manager) {
+      employee[index].Manager.photo =
+        employee[index].Manager.photo &&
+        employee[index].Manager.photo.toString("base64");
+    }
+  }
+  res.send(employee);
+};
+
 exports.findOneByEmail = async (req, res) => {
   if (!req.body.email) {
     return res.send(null);

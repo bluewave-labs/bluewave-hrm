@@ -4,6 +4,9 @@ const message = require("../../constants/messages.json");
 const { getComparator } = require("../helper/utils");
 const { where } = require("sequelize");
 
+const fs = require("fs");
+const base64 = require("base64topdf");
+
 exports.showAll = async (req, res) => {
   const data = await db.document.findAll({
     attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -26,6 +29,32 @@ exports.showOne = async (req, res) => {
   }
 };
 
+
+exports.fectchLeavingLetterDoc = async (req, res) => {
+  // Document entity depends on employee entity. Query of document entity will be better done using empId.
+  const empid = "1";
+  const data = await db.document.findOne({ where: { empId: empid } });
+  if (data === null) {
+    res.status(400).send("Not found!");
+  } else {
+    const base64file = data.documentFile;
+
+    res.status(200).send(base64file);
+  }
+};
+exports.fectchNDADoc = async (req, res) => {
+  // Document entity depends on employee entity. Query of document entity will be better done using empId.
+  const empid = "2";
+  const data = await db.document.findOne({ where: { empId: empid } });
+  if (data === null) {
+    res.status(400).send("Not found!");
+  } else {
+    const base64file = data.documentFile;
+
+    res.status(200).send(base64file);
+  }
+};
+
 exports.createBulkRecord = async (req, res) => {  
   try {
     const data = await db.document.bulkCreate(req.body.data);
@@ -34,6 +63,7 @@ exports.createBulkRecord = async (req, res) => {
   } catch (err) {
     console.log("err");
     res.send({ message: message.failed });
+
   }
 };
 
