@@ -1,11 +1,15 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+import { useState, useEffect } from 'react';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
 import PagesNavBar from './PagesNavBar';
-import NoContentComponent from './NoContentComponent';
-import { useState } from 'react';
+import NoContentComponent from '../StaticComponents/NoContentComponent';
 import { colors, fonts } from '../../Styles';
+import { currentUserID } from '../../testConfig';
+
+
+import axios from 'axios';
 
 /**
  * Menu component for the home menu page. Displays up to 10 updates at a time along with controls
@@ -16,129 +20,52 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function UpdatesMenu({style}) {
-    const [currentPage, setCurrentPage] = useState(1);
+    //Current page number
+    const [currentPage, setCurrentPage] = useState(1);  
+    //Flag determining whether to display all or unread notifications
     const [filter, setFilter] = useState("All");
+    //List of notifications to be displayed
+    const [allUpdates, setAllUpdates] = useState([]);
+    //Hook for refreshing the list of notifications
+    const [refresh, setRefresh] = useState(false);
+
+    //ID of the currently logged in employee
+    const currentUserId = currentUserID;
+
+    //Refresh the list of notifications whenever the refresh hook is changed
+    useEffect(() => {
+        getUpdates();
+    }, [refresh]);
+
+    //URL endpoints to be used for API calls
+    const notificationsURL = `http://localhost:5000/api/notifications/employee/${currentUserId}`;
+
+    //Retrieve the status of a notification for a given employee
+    function checkNotificationStatus(update, id) {
+        return update.recipients.filter((emp) => emp.empId === id)[0].notificationStatus;
+    };
 
     //Retrieve all the updates
-    const allUpdates = [
-        
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'Your time off request has been sent',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'Your time off request has been sent',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        
-    ];
+    function getUpdates() {
+        //Retrieve notification records from database
+        axios.get(notificationsURL)
+        .then((response) => {
+            const updates = [];
+            const data = response.data;
+            data.forEach((up) => {
+                updates.push(up);
+            });
+            setAllUpdates(updates);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    };
 
     //Either show all updates or only the unread ones
     const filteredUpdates = (filter === "All") ? 
         allUpdates : 
-        allUpdates.filter((update) => update.status !== "seen");
+        allUpdates.filter((update) => checkNotificationStatus(update, currentUserId) !== "seen");
 
     //Only show 10 updates at a time
     const updatesToDisplay = filteredUpdates.slice((currentPage - 1) * 10, currentPage * 10);
@@ -184,7 +111,11 @@ export default function UpdatesMenu({style}) {
                         <UpdatesFilter handleFilter={handleFilter} />
                     </Stack>
                     {/*Updates list*/}
-                    <UpdatesList updates={updatesToDisplay} style={{marginBottom: "20px"}} />
+                    <UpdatesList 
+                        updates={updatesToDisplay} 
+                        refresh={() => {setRefresh(!refresh)}} 
+                        style={{marginBottom: "20px"}} 
+                    />
                     {/*Updates nav bar*/}
                     {filteredUpdates.length > 10 &&
                         <PagesNavBar 

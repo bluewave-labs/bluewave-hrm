@@ -5,8 +5,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/system';
-import { colors, fonts } from '../../Styles';
 import PropTypes from 'prop-types';
+import { colors, fonts } from '../../Styles';
+
 
 /**
  * Menu component for listing the available time off policies and the time used and available 

@@ -1,6 +1,6 @@
 import Box from '@mui/system/Box';
+import { useScrollTrigger } from '@mui/material';
 import UserDropdown from './UserDropdown';
-import Logo from '../../Images/enthalpy_logo_text.svg';
 import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
 
 /**
@@ -10,7 +10,13 @@ import AvatarImage from '../../Images/a99b7c47182d3a04f5f3ed31db0dd8a6.jpg';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function Header({style}) {
+export default function Header({window, style}) {
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 0
+    });
+
     const user = {
         avatar: AvatarImage,
         name: "Gabriel Chan",
@@ -18,17 +24,25 @@ export default function Header({style}) {
     };
 
     return (
-        <Box sx={{...{
+        <Box 
+        className={trigger ? "scrolled" : ""}
+        sx={{...{
             boxSizing: "border-box",
             width: "100%",
             height: "87px",
-            padding: 2,
+            padding: "20px",
             display: "flex",
-            justifyContent: "space-between",
-            borderBottom: "1px solid #EBEBEB",
-            boxShadow: "0 10px 6px #10182808"
+            justifyContent: "flex-end",
+            alignItems: "center",
+            position: "fixed",
+            zIndex: 1,
+            "&.scrolled": {
+                backgroundColor: "#FFFFFF",
+                borderBottom: "1px solid #EBEBEB",
+                boxShadow: "0 10px 6px #10182808",
+            }
         }, ...style}}>
-            <img src={Logo} alt="Company Logo" />
+            
             <UserDropdown user={user} />
         </Box>
     );
@@ -38,4 +52,6 @@ export default function Header({style}) {
 Header.propTypes = {};
 
 //Default values for this component
-Header.defaultProps = {};
+Header.defaultProps = {
+    style: {}
+};

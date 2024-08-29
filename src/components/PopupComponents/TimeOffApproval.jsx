@@ -4,9 +4,12 @@ import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import { useState } from 'react';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import PropTypes from 'prop-types';
+
 
 /**
  * Popup component for displaying the information of a time off request and the options to reject
@@ -15,27 +18,59 @@ import PropTypes from 'prop-types';
  * Props:
  * - request_information<Object>: Contains the request information.
  *      Syntax: {
- *          avatar: <image source>
+ *          timeOffId: <Integer>
+ *          avatar: <Image Source>
  *          name: <String>
  *          role: <String>
  *          email: <String>
+ *          office: <String>
  *          effectiveDate: <String>
  *          timeOffBalance: <String>
  *          timeOffRequested: <String>
  *          requestedDaysTotal: <String>
  *          timeOffCategory: <String>
- *          description: <String>
+ *          status: <String>
  *      }
+ * 
+ * - close<Function>: Function for closing this popup component
+ *      Syntax: close()
+ * 
+ * - refresh<Function>: Function for closing this popup and refreshing the list of updates in the
+ *      parent component.
+ *      Syntax: refresh()
  * 
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function TimeOffApproval({request_information, style}) {
+export default function TimeOffApproval({request_information, close, refresh, style}) {
+    const [notes, setNotes] = useState("");
+
+    //URL endpoints to be used for API calls
+    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
+
+    //Custom style elements
     const StyledTD = styled('td')({
         textAlign: "start",
         paddingBottom: "15px",
         width: "50%"
     });
+
+    //Function for sending the PUT request to change the time off request status
+    function resolveRequest(newStatus) {
+        //Update the time off period status
+        axios.put(timeOffPeriodURL, {
+            id: request_information.timeOffId,
+            status: newStatus,
+            note: notes
+        })
+        .then((response) => {
+            console.log(response);
+            refresh();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
 
     return (
         <Box sx={{...{
@@ -48,8 +83,8 @@ export default function TimeOffApproval({request_information, style}) {
         }, ...style}}>
             {/*Title*/}
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <h2>Approve new time off</h2>
-                <CloseIcon sx={{
+                <h3>Approve new time off</h3>
+                <CloseIcon onClick={close} sx={{
                     backgroundColor: "#FFFFFFF",
                     "&:hover": {
                         cursor: "pointer",
@@ -65,10 +100,7 @@ export default function TimeOffApproval({request_information, style}) {
                         <Avatar 
                             alt={request_information.name} 
                             src={request_information.avatar} 
-                            sx={{
-                                width: "60px",
-                                height: "60px"
-                            }}
+                            sx={{width: "60px", height: "60px"}}
                         />
                     </StyledTD>
                 </tr>
@@ -110,10 +142,6 @@ export default function TimeOffApproval({request_information, style}) {
                     <StyledTD><b>Time-off category</b></StyledTD>
                     <StyledTD>{request_information.timeOffCategory}</StyledTD>
                 </tr>
-                <tr>
-                    <StyledTD><b>Description</b></StyledTD>
-                    <StyledTD>{request_information.description}</StyledTD>
-                </tr>
             </table>
             {/*Admin's notes*/}
             <Box sx={{display: "flex", flexDirection: "column"}}>
@@ -121,6 +149,8 @@ export default function TimeOffApproval({request_information, style}) {
                 <TextField 
                     rows={4} 
                     multiline 
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
                     sx={{
                         border: "1px solid #D0D5DD", 
                         borderRadius: "8px",
@@ -128,15 +158,24 @@ export default function TimeOffApproval({request_information, style}) {
                     }} 
                 />
             </Box>
-            {/*Reject or approve*/}
+            {/*Reject, approve or close*/}
+            {request_information.status === "Declined" && 
+                <b style={{color: "#D92D20", marginBottom: "15px"}}>Time off request has been rejected</b>}
+            {request_information.status === "Approved" &&
+                <b style={{color: "#079455", marginBottom: "15px"}}>Time off request has been approved</b>}
             <Stack 
                 direction="row" 
                 alignItems="center" 
                 justifyContent="flex-end"
                 spacing={2}
             >
-                <HRMButton mode="error">Reject</HRMButton>
-                <HRMButton mode="primary">Approve</HRMButton>
+                {(request_information.status === "Pending") ? 
+                    <>
+                        <HRMButton mode="tertiary" onClick={close}>Cancel</HRMButton>
+                        <HRMButton mode="error" onClick={() => resolveRequest("Declined")}>Reject</HRMButton>
+                        <HRMButton mode="primary" onClick={() => resolveRequest("Approved")}>Approve</HRMButton>
+                    </> :
+                    <HRMButton mode="tertiary" onClick={close}>Close</HRMButton>}
             </Stack>
         </Box>
     );
@@ -145,7 +184,13 @@ export default function TimeOffApproval({request_information, style}) {
 //Control panel settings for storybook
 TimeOffApproval.propTypes = {
     //Information included in the time off request
-    request_information: PropTypes.objectOf(PropTypes.string)
+    request_information: PropTypes.objectOf(PropTypes.string),
+
+    //Function for closing this popup component
+    close: PropTypes.func,
+
+    //Function for closing this popup and refreshing the list of updates in the parent component
+    refresh: PropTypes.func
 };
 
 //Default values for this component

@@ -1,9 +1,9 @@
+//import logo from './logo.svg';
 import './App.css';
-import OffBoardingPage from './components/OffBoardingComponents/OffBoardingPage';
-
+import TimeOffPage from './components/TimeOffPage/TimeOffPage';
 function App() {
   return (
-   <OffBoardingPage/> 
+    <TimeOffPage />
   );
 }
 

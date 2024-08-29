@@ -32,7 +32,9 @@ export default function MenuToggleButton({label, menuItems, icon, style}) {
     const [selected, setSelected] = useState(false);
     const [display, setDisplay] = useState("none");
 
-    useEffect(() => {setDisplay((selected) ? "block" : "none")});
+    useEffect(() => {
+        setDisplay((selected) ? "block" : "none")
+    }, [selected]);
 
     const StyledChip = styled(Chip)({
         backgroundColor: (selected) ? "#EAECF0" : "#FFFFFF",

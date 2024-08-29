@@ -1,14 +1,17 @@
-import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import Dialog from '@mui/material/Dialog';
-import Header from '../StaticComponents/Header';
-import SideMenu from '../StaticComponents/SideMenu';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import TimeOffMenu from './TimeOffMenu';
 import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import TimeOffRequestSent from '../PopupComponents/TimeOffRequestSent';
+import Page from '../StaticComponents/Page';
+import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import HRMButton from '../Button/HRMButton';
-import { colors, fonts } from '../../Styles';
-import { useState } from 'react';
+import { currentUserID } from '../../testConfig';
+
+
 
 /**
  * Time off page of the HRM application. Contains the time off menu as well as controls for 
@@ -17,64 +20,78 @@ import { useState } from 'react';
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
+ * 
+ * - innerStyle<Object>: Optional prop for adding further inline styling in the inner component.
+ *      Default: {}
  */
-export default function TimeOffPage({style}) {
+export default function TimeOffPage({style, innerStyle}) {
     //States determining whether the time off request menu and request successful notifications
     //should be displayed
     const [openRequest, setOpenRequest] = useState(false);
     const [requestSuccess, setRequestSuccess] = useState(false);
+    //Flag determining if the database servers can be reached
+    const [serverStatus, setServerStatus] = useState("Pending");
+
+    useEffect(() => {
+        testConnection();
+    }, []);
+
+    //ID of the currently logged in employee
+    const currentUser = currentUserID;
+
+    //URL endpoints to be used for API calls
+    const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+
+    //Function for testing connection to database
+    function testConnection() {
+        setServerStatus("Pending");
+        axios.post(timeOffPolicyPOSTURL)
+        .then((response) => {
+            console.log(response);
+            setServerStatus("Success");
+        })
+        .catch((error) => {
+            console.log(error);
+            if (!error.response) {
+                setServerStatus("Failure");
+            }
+        })
+    };
 
     //Function for sending a time off request
     function sendRequest() {
         setOpenRequest(false);
         setRequestSuccess(true);
+        setTimeout(() => setRequestSuccess(false), 5000);
     }
 
     return (
-        <Box sx={{...{
-            width: "100%", 
-            height: "100%", 
-            color: colors.darkGrey,
-            fontFamily: fonts.fontFamily
-        }, ...style}}>
-            {/*Header*/}
-            <Header />
-            <Box sx={{
-                display: "flex",
-                flexDirection: "row", 
-                width: "100%", 
-                height: "100%", 
-                backgroundColor: "#F9FAFB"
-            }}>
-                {/*Side menu*/}
-                <Box>
-                    <SideMenu />
-                </Box>
-                <Box sx={{
-                    paddingX: "75px", 
-                    paddingY: "40px", 
-                    width: "100%",
-                    height: "100%"
-                }}>
-                    {/*Main page content*/}
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        sx={{
-                            marginBottom: "40px"
-                        }}
+        <Page style={style} innerStyle={innerStyle}>
+            {serverStatus === "Pending" &&
+                //Show loading logo while connecting to database
+                <CircularProgress sx={{marginX: "50%", marginY: "40%"}} />
+            }
+            {serverStatus === "Success" &&
+            //Show page content if connection is successful
+            <>
+                {/*Main page content*/}
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{
+                        marginBottom: "40px"
+                    }}
+                >
+                    <h3>Time off</h3>
+                    <HRMButton 
+                        mode="primary" 
+                        onClick={() => setOpenRequest(true)}
                     >
-                        <h3>Time off</h3>
-                        <HRMButton 
-                            mode="primary" 
-                            onClick={() => setOpenRequest(true)}
-                        >
-                            Request new time off
-                        </HRMButton>
-                    </Stack>
-                    <TimeOffMenu />
-                </Box>
+                        Request new time off
+                    </HRMButton>
+                </Stack>
+                <TimeOffMenu />
                 {/*Time off request menu*/}
                 <Dialog open={openRequest} onClose={() => setOpenRequest(false)}>
                     <TimeOffRequest 
@@ -93,8 +110,23 @@ export default function TimeOffPage({style}) {
                         zIndex: 999
                     }} 
                 />
-            </Box>
-        </Box>
+            </>
+            }
+            {serverStatus === "Failure" && 
+                //Error message to be displayed if servers are unresponsive
+                <NoConnectionComponent>
+                    <h3 style={{color: "#D92D20"}}>Servers are unavailable</h3>
+                    <p style={{color: "#D92D20"}}>Cannot retrieve time off policies or periods.</p>
+                    <HRMButton 
+                        mode="error" 
+                        onClick={testConnection} 
+                        style={{marginLeft: "auto", marginRight: "auto"}}
+                    >
+                        Retry Connection
+                    </HRMButton>
+                </NoConnectionComponent>
+            }
+        </Page>
     );
 };
 
@@ -103,5 +135,6 @@ TimeOffPage.propTypes = {};
 
 //Default values for this component
 TimeOffPage.defaultProps = {
-    style: {}
+    style: {},
+    innerStyle: {}
 };
