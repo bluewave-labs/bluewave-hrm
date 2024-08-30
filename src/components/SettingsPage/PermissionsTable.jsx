@@ -101,52 +101,69 @@ export default function PermissionsTable({ contentList, style }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {contentList?.map((item) => (
-            <TableRow key={item.id}>
-              <TableBodyCell>
-                <Stack direction="row" alignItems="center" spacing={2}>
-                  <Avatar alt="Employee Photo" src={item.photo} />
-                  <Text>{`${item.firstName} ${item.lastName}`}</Text>
-                </Stack>
-              </TableBodyCell>
-              <TableBodyCell>
-                <Text>{item.role.roleTitle}</Text>
-              </TableBodyCell>
-              <TableBodyCell>
-                <Text>{item.team.teamName}</Text>
-              </TableBodyCell>
-              <TableBodyCell>
-                <Checkbox
-                  type="radio"
-                  id={`permission-admin-${item.id}`}
-                  name={`permission-${item.id}`}
-                  value="Administrator"
-                  checked={item.permission.type === "Administrator"}
-                  onChange={(e) => updatePermission(e.target.value, item)}
-                />
-              </TableBodyCell>
-              <TableBodyCell>
-                <Checkbox
-                  type="radio"
-                  id={`permission-manager-${item.id}`}
-                  name={`permission-${item.id}`}
-                  value="Manager"
-                  checked={item.permission.type === "Manager"}
-                  onChange={(e) => updatePermission(e.target.value, item)}
-                />
-              </TableBodyCell>
-              <TableBodyCell>
-                <Checkbox
-                  type="radio"
-                  id={`permission-employee-${item.id}`}
-                  name={`permission-${item.id}`}
-                  value="Employee"
-                  checked={item.permission.type === "Employee"}
-                  onChange={(e) => updatePermission(e.target.value, item)}
-                />
-              </TableBodyCell>
-            </TableRow>
-          ))}
+          {contentList?.map((item) => {
+            const selectedEmployeePermission = updatedPermissions.find(
+              (emp) => emp.employee.id === item.id
+            )?.newPermission;
+            return (
+              <TableRow key={item.id}>
+                <TableBodyCell>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Avatar alt="Employee Photo" src={item.photo} />
+                    <Text>{`${item.firstName} ${item.lastName}`}</Text>
+                  </Stack>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <Text>{item.role.roleTitle}</Text>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <Text>{item.team.teamName}</Text>
+                </TableBodyCell>
+                <TableBodyCell>
+                  <Checkbox
+                    type="radio"
+                    id={`permission-admin-${item.id}`}
+                    name={`permission-${item.id}`}
+                    value="Administrator"
+                    checked={
+                      // selectedEmployeePermission
+                      //   ? newPermission === "Administrator"
+                      //   : item.permission.type === "Administrator"
+                      (selectedEmployeePermission || item.permission.type) ===
+                      "Administrator"
+                    }
+                    onChange={(e) => updatePermission(e.target.value, item)}
+                  />
+                </TableBodyCell>
+                <TableBodyCell>
+                  <Checkbox
+                    type="radio"
+                    id={`permission-manager-${item.id}`}
+                    name={`permission-${item.id}`}
+                    value="Manager"
+                    checked={
+                      (selectedEmployeePermission || item.permission.type) ===
+                      "Manager"
+                    }
+                    onChange={(e) => updatePermission(e.target.value, item)}
+                  />
+                </TableBodyCell>
+                <TableBodyCell>
+                  <Checkbox
+                    type="radio"
+                    id={`permission-employee-${item.id}`}
+                    name={`permission-${item.id}`}
+                    value="Employee"
+                    checked={
+                      (selectedEmployeePermission || item.permission.type) ===
+                      "Employee"
+                    }
+                    onChange={(e) => updatePermission(e.target.value, item)}
+                  />
+                </TableBodyCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>

@@ -10,6 +10,7 @@ export default function PermissionsDialog({ open, onClose }) {
 
   const onSubmit = (data) => {
     console.log("data", data);
+    // remember to clear permissions value when save data to database
   };
 
   return (
