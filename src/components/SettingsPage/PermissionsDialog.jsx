@@ -3,11 +3,10 @@ import { DialogContent } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import HRMButton from "../Button/HRMButton";
 import { Dialog, DialogTitle } from "./SettingsDialog/styles";
+import { useSettingsContext } from "./context";
 
-export default function PermissionsDialog({
-  open,
-  onClose,
-}) {
+export default function PermissionsDialog({ open, onClose }) {
+  const { updatedPermissions } = useSettingsContext();
 
   const onSubmit = (data) => {
     console.log("data", data);
@@ -33,6 +32,16 @@ export default function PermissionsDialog({
         />
       </Stack>
       <DialogContent>
+        {updatedPermissions.map(({ employee, newPermission }) => (
+          <>
+            <p>
+              {employee.firstName} {employee.lastName}
+            </p>
+            <p>
+              {employee.permission.type} - {newPermission}
+            </p>
+          </>
+        ))}
         <Stack
           direction="row"
           alignItems="center"

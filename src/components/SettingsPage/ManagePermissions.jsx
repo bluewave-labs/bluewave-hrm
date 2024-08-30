@@ -14,6 +14,7 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Toast from "./Toast";
 import PermissionsDialog from "./PermissionsDialog";
 import HRMButton from "../Button/HRMButton";
+import { useSettingsContext } from "./context";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -33,11 +34,15 @@ export default function ManagePermissions({
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredContentList, setFilteredContentList] = useState(contentList);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { updatedPermissions } = useSettingsContext();
+
   const [toast, setToast] = useState({
     open: false,
     severity: "success",
     message: "",
   });
+
+  console.log("updatedPermissions", updatedPermissions);
 
   useEffect(() => {
     const filteredItems = contentList.filter((item) =>
@@ -129,7 +134,6 @@ export default function ManagePermissions({
         {contentList.length > 0 ? (
           <>
             <PermissionsTable
-              openDialog={openDialog}
               contentList={itemsToDisplay}
               sx={{ marginBottom: "40px" }}
             />
@@ -149,7 +153,11 @@ export default function ManagePermissions({
           justifyContent="flex-end"
           sx={{ marginTop: "20px", width: "100%" }}
         >
-          <HRMButton mode="primary" onClick={openDialog}>
+          <HRMButton
+            mode="primary"
+            enabled={updatedPermissions.length > 0}
+            onClick={openDialog}
+          >
             Save changes
           </HRMButton>
         </Stack>

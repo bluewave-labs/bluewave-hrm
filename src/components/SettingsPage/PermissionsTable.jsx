@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
 import Checkbox from "../Checkbox/Checkbox";
+import { useSettingsContext } from "./context";
 
 const TextHeader = styled(Typography)({
   fontFamily: "Inter",
@@ -38,7 +38,36 @@ const TableBodyCell = styled(TableCell)({
   paddingBottom: "25px",
 });
 
-export default function PermissionsTable({ openDialog, contentList, style }) {
+export default function PermissionsTable({ contentList, style }) {
+  const { updatedPermissions, setUpdatedPermissions } = useSettingsContext();
+
+  const updatePermission = (newPermission, employee) => {
+    setUpdatedPermissions((updatedPermissions) => {
+      const updatedPermissionEmployee = {
+        employee,
+        newPermission,
+      };
+
+      const isEmployeeAlreadySelected = updatedPermissions.some(
+        (emp) => emp.employee.id === updatedPermissionEmployee.employee.id
+      );
+      if (!isEmployeeAlreadySelected) {
+        return [...updatedPermissions, updatedPermissionEmployee];
+      }
+
+      const filteredEmployees = updatedPermissions.filter(
+        (emp) => emp.employee.id !== employee.id
+      );
+
+      if (newPermission === employee.permission.type) {
+        return filteredEmployees;
+      }
+
+      return [...filteredEmployees, updatedPermissionEmployee];
+    });
+  };
+
+  console.log("updatedPermissions", updatedPermissions);
   return (
     <TableContainer
       sx={{
@@ -93,7 +122,7 @@ export default function PermissionsTable({ openDialog, contentList, style }) {
                   name={`permission-${item.id}`}
                   value="Administrator"
                   checked={item.permission.type === "Administrator"}
-                  onChange={() => openDialog("edit", item)}
+                  onChange={(e) => updatePermission(e.target.value, item)}
                 />
               </TableBodyCell>
               <TableBodyCell>
@@ -103,7 +132,7 @@ export default function PermissionsTable({ openDialog, contentList, style }) {
                   name={`permission-${item.id}`}
                   value="Manager"
                   checked={item.permission.type === "Manager"}
-                  onChange={() => openDialog("edit", item)}
+                  onChange={(e) => updatePermission(e.target.value, item)}
                 />
               </TableBodyCell>
               <TableBodyCell>
@@ -113,7 +142,7 @@ export default function PermissionsTable({ openDialog, contentList, style }) {
                   name={`permission-${item.id}`}
                   value="Employee"
                   checked={item.permission.type === "Employee"}
-                  onChange={() => openDialog("edit", item)}
+                  onChange={(e) => updatePermission(e.target.value, item)}
                 />
               </TableBodyCell>
             </TableRow>

@@ -20,6 +20,7 @@ export const SettingsProvider = ({ children }) => {
   const [jobTitlesPeople, setJobTitlesPeople] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [users, setUsers] = useState([]);
+  const [updatedPermissions, setUpdatedPermissions] = useState([]);
 
   const fetchCompany = async () => {
     const companyData = await companyApi.fetch();
@@ -81,6 +82,8 @@ export const SettingsProvider = ({ children }) => {
       jobTitlesPeople,
       employees,
       users,
+      updatedPermissions,
+      setUpdatedPermissions,
       fetchCompany,
       fetchDepartments,
       fetchDepartmentsPeople,
@@ -97,6 +100,7 @@ export const SettingsProvider = ({ children }) => {
       jobTitlesPeople,
       employees,
       users,
+      updatedPermissions,
     ]
   );
 
