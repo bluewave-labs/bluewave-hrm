@@ -45,7 +45,7 @@ export default function UpdatesMenu({style}) {
     //Retrieve all the updates
     function getUpdates() {
         //Retrieve notification records from database
-        axios.get(notificationsURL)
+        axios.get(notificationsURL, {withCredentials: true})
         .then((response) => {
             const updates = [];
             const data = response.data;

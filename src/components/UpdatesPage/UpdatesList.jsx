@@ -58,7 +58,7 @@ export default function UpdatesList({updates, refresh, style}) {
                 status: (checkNotificationStatus(up, currentUserId) === "new" 
                     || checkNotificationStatus(up, currentUserId) === "waiting") ? "seen" : "new" 
             }, 
-            { params: { id: up.id } }
+            { params: { id: up.id }, withCredentials: true }
         )
         .then((response) => {
             console.log(response);
