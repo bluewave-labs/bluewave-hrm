@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-require("dotenv").config();
+// require("dotenv").config();
 const mjml2html = require("mjml");
 
 /**
