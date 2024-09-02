@@ -5,7 +5,13 @@ module.exports = (router) => {
   router.route("/documents").get(requireAuth, controller.showAll);
   router.route("/documents/:empid").post(requireAuth, controller.showOne);
   router.route("/documents").post(requireAuth, controller.createRecord);
-  router.route("/documents/create/bulk").post(requireAuth, controller.createBulkRecord);
+  router
+    .route("/documents/create/bulk")
+    .post(requireAuth, controller.createBulkRecord);
   router.route("/documents").put(requireAuth, controller.updateRecord);
   router.route("/documents/:id").delete(requireAuth, controller.deleteRecord);
+  router
+    .route("/documents/lldoc")
+    .get(requireAuth, controller.fectchLeavingLetterDoc);
+  router.route("/documents/nda").get(requireAuth, controller.fectchNDADoc);
 };
