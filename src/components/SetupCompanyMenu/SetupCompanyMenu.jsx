@@ -1,6 +1,6 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
-import Grid from "@mui/system/Unstable_Grid";
+import { Grid } from "@mui/system";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
@@ -9,8 +9,7 @@ import { colors, fonts } from "../../assets/Styles";
 import UploadFile from "./UploadFile";
 import HRMButton from "../Button/HRMButton";
 import StateContext from "../../context/StateContext";
-const api = require("../../assets/FetchServices")
-
+const api = require("../../assets/FetchServices");
 
 /**
  * Setup menu component for onboarding purposes. Contains a text field for a company's name
@@ -31,13 +30,13 @@ export default function SetupCompanyMenu({ advancePage, style }) {
 
   const stateContext = useContext(StateContext);
 
-    const getBinary = (data) =>{
-        if(data){
-        let startIndex = data.indexOf(",") + 1;
-            return data.substring(startIndex);
-        }
-        return null;
+  const getBinary = (data) => {
+    if (data) {
+      let startIndex = data.indexOf(",") + 1;
+      return data.substring(startIndex);
     }
+    return null;
+  };
 
   //Function for creating the POST request and setting the new menu component
   async function handleSubmit() {
@@ -46,22 +45,21 @@ export default function SetupCompanyMenu({ advancePage, style }) {
       companyName: companyName,
       companyWebsite: companyWebsite,
       companyLogo: getBinary(companyLogo),
-      administratorEmail: stateContext.state.user && stateContext.state.user.email,
+      administratorEmail:
+        stateContext.state.user && stateContext.state.user.email,
     };
     //Send the PUT request
-      try {
-       const response = await api.company.createOne(data);
-       console.log(response);
-       if(companyLogo){
+    try {
+      const response = await api.company.createOne(data);
+      console.log(response);
+      if (companyLogo) {
         stateContext.updateState("logo", companyLogo);
-       }
-        
-      } catch (error) {
-        console.log(error);
       }
-      finally{
-         advancePage();
-      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      advancePage();
+    }
   }
 
   return (

@@ -15,5 +15,6 @@ service.team = require("./Team");
 service.timeOff = require("./TimeOff");
 service.timeOffHistory = require("./TimeOffHistory");
 service.user = require("./AppUser");
+service.offboarding = require("./Offboarding");
 
-module.exports =  service;
+module.exports = service;
