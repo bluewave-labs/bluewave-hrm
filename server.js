@@ -7,14 +7,9 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const router = express.Router();
 app.use(cookieParser());
-app.use(cors());
 
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+
+
 app.use(bodyParser.json({ limit: "20mb" }));
 app.use(express.json());
 app.use(cookieParser());
