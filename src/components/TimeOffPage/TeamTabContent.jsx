@@ -1,16 +1,20 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { useState, useEffect } from 'react';
-import UpcomingTimeOffTable from './UpcomingTimeOffTable';
-import PagesNavBar from '../UpdatesPage/PagesNavBar';
-import NoContentComponent from '../UpdatesPage/NoContentComponent';
-import MenuToggleButton from '../BasicMenus/MenuToggleButton';
-import Label from '../Label/Label';
-import { colors, fonts } from '../../Styles';
+import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import UpcomingTimeOffTable from './UpcomingTimeOffTable';
+import PagesNavBar from '../UpdatesPage/PagesNavBar';
+import NoContentComponent from '../StaticComponents/NoContentComponent';
+import MenuToggleButton from '../BasicMenus/MenuToggleButton';
+import Label from '../Label/Label';
+import { colors, fonts } from '../../Styles';
+//import { currentUserID } from '../../testConfig';
+import StateContext from '../../context/StateContext';
+import { fetchAllByEmployee } from '../../assets/FetchServices/TimeOffHistory';
+
 
 //Function for parsing a JavaScript date into a string format.
 function formatDate(date) {
@@ -41,14 +45,15 @@ export default function TeamTabContent({style}) {
     //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Hook for refreshing the list of time off periods
-    const [refresh, setRefresh] = useState(false);
+    //const [refresh, setRefresh] = useState(false);
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used in API calls
     const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
-    const timeOffURL = `http://localhost:5000/api/timeoffhistories/employee`;
+    //const timeOffURL = `http://localhost:5000/api/timeoffhistories/employee`;
 
     //Set the current page back to 1 each time the filters are changed
     useEffect(() => {
@@ -58,11 +63,11 @@ export default function TeamTabContent({style}) {
     //Refresh the list of time off periods
     useEffect(() => {
         getTimeOffPeriods();
-    }, [refresh]);
+    }, []);
 
     //Function for retrieving all the time off periods for the current manager's team
     function getTimeOffPeriods() {
-        axios.get(empUrl)
+        axios.get(empUrl, {withCredentials: true})
         .then((response) => {
             //Retrieve all employee IDs in current team
             let data = response.data;
@@ -70,6 +75,28 @@ export default function TeamTabContent({style}) {
             const periods = [];
             //Retrieve the time off periods for each employee
             team.forEach((id) => {
+                fetchAllByEmployee(id)
+                .then((data) => {
+                    if (data) {
+                        data.forEach((p) => {
+                            periods.push({
+                                id: p.id,
+                                user: {
+                                    name: `${p.employee.firstName} ${p.employee.lastName}`,
+                                    avatar: p.employee.photo
+                                },
+                                from: formatDate(dayjs(p.startDate).toDate()),
+                                to: formatDate(dayjs(p.endDate).toDate()),
+                                type: p.timeOff.category,
+                                hours: p.hours,
+                                note: p.note,
+                                status: p.status
+                            });
+                        })
+                        setTimeOffPeriods([...timeOffPeriods, ...periods]);
+                    }
+                })
+                /*
                 axios.post(`${timeOffURL}/${id}`)
                 .then((response) => {
                     data = response.data;
@@ -91,9 +118,12 @@ export default function TeamTabContent({style}) {
                     setTimeOffPeriods([...timeOffPeriods, ...periods]);
                 })
                 .catch((error) => console.log(error));
+                */
             });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+            console.log(error);
+        });
     };
 
     //Filter out time off periods depending on which filters are active
@@ -117,6 +147,7 @@ export default function TeamTabContent({style}) {
 
     return (
         <Box sx={{...{
+            marginTop: "40px",
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
@@ -184,7 +215,6 @@ export default function TeamTabContent({style}) {
                         <p>Any updates about your time off history will be shown here.</p>
                     </NoContentComponent>
                 </>
-
             }
         </Box>
     );

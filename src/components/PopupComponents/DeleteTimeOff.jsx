@@ -1,10 +1,14 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+import PropTypes from 'prop-types';
+//import axios from 'axios';
+import dayjs from "dayjs";
+import { useContext } from 'react';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import PropTypes from 'prop-types';
-import axios from 'axios';
-import dayjs from "dayjs";
+import StateContext from '../../context/StateContext';
+import { remove } from '../../assets/FetchServices/TimeOffHistory';
+import { fetchOne, update } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
 
 /**
  * Popup component for confirming a request to delete an upcoming period of time off
@@ -32,16 +36,44 @@ import dayjs from "dayjs";
  */
 export default function DeleteTimeOff({period, close, refresh, style}) {
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used for API calls
-    const deleteURL = `http://localhost:5000/api/timeoffhistories/${period.id}`;
-    const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
-    const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
+    //const deleteURL = `http://localhost:5000/api/timeoffhistories/${period.id}`;
+    //const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    //const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
 
     //Function for deleting a time off request
     function handleDelete() {
         //Delete the given time off request
+        remove(period.id)
+        .then((data) => {
+            if (data) {
+                console.log(data);
+                //Retrieve the related employeeAnnualTimeOff record
+                fetchOne(currentUser)
+                .then((data) => {
+                    if (data) {
+                        console.log(data);
+                        const policy = data.filter((p) => (p.year === dayjs().year() && p.timeOffId === period.timeOffId))[0];
+                        //Refund the hours used in the time off request
+                        const refundBalance = {
+                            id: policy.id,
+                            cumulativeHoursTaken: policy.hoursUsed - period.hours
+                        };
+                        update(refundBalance)
+                        .then((data) => {
+                            if (data) {
+                                console.log(data);
+                                refresh();
+                            }
+                        })
+                    }
+                });
+            }
+        })
+        /*
         axios.delete(deleteURL)
         .then((response) => {
             console.log(response);
@@ -65,6 +97,7 @@ export default function DeleteTimeOff({period, close, refresh, style}) {
             .catch((error) => console.log(error));
         })
         .catch((error) => console.log(error));
+        */
     }
 
     return (

@@ -11,12 +11,12 @@ import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import dayjs from "dayjs";
 import HRMButton from '../Button/HRMButton';
 import Label from '../Label/Label';
 import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import DeleteTimeOff from '../PopupComponents/DeleteTimeOff';
 import { colors, fonts } from '../../Styles';
-import dayjs from "dayjs";
 
 /**
  * Menu component for listing upcoming scheduled periods of time off
@@ -75,7 +75,8 @@ export default function UpcomingTimeOffTable({
             from: dayjs(period.from).toDate(),
             to: dayjs(period.to).toDate(),
             hours: period.hours,
-            type: period.type
+            type: period.type,
+            status: period.status
         }
         setTimeOffDetails(details);
     };
@@ -107,7 +108,7 @@ export default function UpcomingTimeOffTable({
                                     <b>Note</b>
                                 </TableHeaderCell>
                             }
-                            {tableColumns.includes("Status") && <TableHeaderCell><b>Status</b></TableHeaderCell>}
+                            {tableColumns.includes("Status") && <TableHeaderCell colSpan={2}><b>Status</b></TableHeaderCell>}
                             
                         </TableRow>
                     </TableHead>
@@ -170,15 +171,9 @@ export default function UpcomingTimeOffTable({
                                                     setEditTimeOff(true);
                                                 }}
                                             >
-                                                <a 
-                                                    style={{
-                                                        color: "#7F56D9", 
-                                                        textDecoration: "none", 
-                                                        fontWeight: "bold"
-                                                    }}
-                                                >
+                                                <b style={{color: "#7F56D9"}}>
                                                     Edit
-                                                </a>
+                                                </b>
                                             </HRMButton>
                                         </Stack>
                                     </TableBodyCell>

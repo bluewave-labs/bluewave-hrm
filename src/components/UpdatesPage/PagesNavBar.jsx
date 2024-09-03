@@ -5,7 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import HRMButton from '../Button/HRMButton';
 import PropTypes from 'prop-types';
-import { fonts } from '../../assets/Styles';
+import { fonts } from '../../Styles';
 
 /**
  * Navbar component for displaying the page numbers for displaying pages of various menus.

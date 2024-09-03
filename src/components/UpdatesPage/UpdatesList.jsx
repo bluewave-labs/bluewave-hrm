@@ -4,14 +4,19 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Dialog from '@mui/material/Dialog';
+import { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+//import axios from 'axios';
+import dayjs from 'dayjs';
 import Label from '../Label/Label';
 import HRMButton from '../Button/HRMButton';
 import NewTeamMember from '../PopupComponents/NewTeamMember';
 import TimeOffRequestSentWindow from '../PopupComponents/TimeOffRequestSentWindow';
 import TimeOffApproval from '../PopupComponents/TimeOffApproval';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
+import TimeOffRequestResolved from '../PopupComponents/TimeOffRequestResolved';
+//import { currentUserID } from '../../testConfig';
+import { update } from '../../assets/FetchServices/Notification';
+import StateContext from '../../context/StateContext';
 
 /**
  * Menu component for listing update notifications in the home page.
@@ -31,16 +36,19 @@ export default function UpdatesList({updates, refresh, style}) {
     const [newMember, setNewMember] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
     const [approval, setApproval] = useState(false);
+    const [requestResolved, setRequestResolved] = useState(false);
     //Details for each notification popup component
     const [newMemberDetails, setNewMemberDetails] = useState({});
     const [requestSentDetails, setRequestSentDetails] = useState({});
     const [approvalDetails, setApprovalDetails] = useState({});
+    const [requestResolvedDetails, setRequestResolvedDetails] = useState({});
 
     //ID of the currently logged in employee
-    const currentUserId = 1;
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used for API calls
-    const notificationURL = `http://localhost:5000/api/notifications/`;
+    //const notificationURL = `http://localhost:5000/api/notifications/`;
 
     //Retrieve the status of a notification for a given employee
     function checkNotificationStatus(update, id) {
@@ -50,15 +58,28 @@ export default function UpdatesList({updates, refresh, style}) {
     //Function for updating the status of an update 
     function handleSwitch(up) {
         //Update the given notification record in the database
+        update({ 
+            notificationId: up.id, 
+            employeeEmpId: currentUser,
+            status: (checkNotificationStatus(up, currentUser) === "new" 
+                || checkNotificationStatus(up, currentUser) === "waiting") ? "seen" : "new" 
+        })
+        .then((data) => {
+            if (data) {
+                console.log(data);
+                refresh();
+            }
+        });
+        /*
         axios.put(
             notificationURL, 
             { 
                 notificationId: up.id, 
-                employeeEmpId: currentUserId,
-                status: (checkNotificationStatus(up, currentUserId) === "new" 
-                    || checkNotificationStatus(up, currentUserId) === "waiting") ? "seen" : "new" 
+                employeeEmpId: currentUser,
+                status: (checkNotificationStatus(up, currentUser) === "new" 
+                    || checkNotificationStatus(up, currentUser) === "waiting") ? "seen" : "new" 
             }, 
-            { params: { id: up.id }, withCredentials: true }
+            { params: { id: up.id } }
         )
         .then((response) => {
             console.log(response);
@@ -67,11 +88,13 @@ export default function UpdatesList({updates, refresh, style}) {
         .catch((error) => {
             console.log(error);
         })
+        */
+
     };
 
     //Function for retrieving update details for popup component
     function retrieveDetails(up) {
-        console.log("Running retrieveDetails()")
+        //console.log("Running retrieveDetails()")
         //Retrieve details for "New team member added" update
         if (up.subject === "New team member added") {
             const details = {
@@ -94,12 +117,12 @@ export default function UpdatesList({updates, refresh, style}) {
                 role: up.employee.role.roleTitle,
                 email: up.employee.email,
                 office: up.employee.officeLocation,
-                effectiveDate: up.employee.effectiveDate,
+                effectiveDate: dayjs(up.employee.effectiveDate).format("DD/MM/YYYY"),
                 timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed - 
                     up.employeeAnnualTimeOff.cumulativeHoursTaken),
-                timeOffRequested: `${up.timeOffHistory.startDate} - 
-                    ${up.timeOffHistory.endDate}`,
-                requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
+                timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} - 
+                    ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
+                requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
                 timeOffCategory: up.timeOff.category,
                 status: up.timeOffHistory.status
             };
@@ -110,13 +133,24 @@ export default function UpdatesList({updates, refresh, style}) {
             const details = {
                 timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed -
                     up.employeeAnnualTimeOff.cumulativeHoursTaken),
-                timeOffRequested: `${up.timeOffHistory.startDate} -
-                    ${up.timeOffHistory.endDate}`,
-                requestedDaysTotal: Math.ceil(up.timeOffHistory.hours / 24),
+                timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} -
+                    ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
+                requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
                 timeOffCategory: up.timeOff.category,
                 notes: up.timeOffHistory.note
             };
             setRequestSentDetails(details);
+        }
+        //Retrieve details for "Time off request approved/rejected" update
+        else if (up.subject === "Your time off request has been approved" || 
+        up.subject === "Your time off request has been rejected") {
+            const details = {
+                startDate: dayjs(up.timeOffHistory.startDate).format("MMM D, YYYY"),
+                endDate: dayjs(up.timeOffHistory.endDate).format("MMM D, YYYY"),
+                status: up.timeOffHistory.status,
+                notes: up.timeOffHistory.note
+            };
+            setRequestResolvedDetails(details);
         }
     };
 
@@ -129,14 +163,14 @@ export default function UpdatesList({updates, refresh, style}) {
                     <TableBody>
                         {updates.map((update) => (
                             <TableRow sx={{
-                                backgroundColor: (checkNotificationStatus(update, currentUserId) != "seen") ? "#F9FAFB" : "#FFFFFF",
+                                backgroundColor: (checkNotificationStatus(update, currentUser) != "seen") ? "#F9FAFB" : "#FFFFFF",
                                 border: "1px solid #EAECF0",
                             }}>
                                 {/*Update status*/}
                                 <TableCell>
-                                    {checkNotificationStatus(update, currentUserId) === "new" && <Label mode="status" dot="orange" label="New"/>}
-                                    {checkNotificationStatus(update, currentUserId) === "waiting" && <Label mode="status" dot="red" label="Waiting"/>}
-                                    {checkNotificationStatus(update, currentUserId) === "seen" && <Label mode="status" dot="grey" label="Seen"/>}
+                                    {checkNotificationStatus(update, currentUser) === "new" && <Label mode="status" dot="orange" label="New"/>}
+                                    {checkNotificationStatus(update, currentUser) === "waiting" && <Label mode="status" dot="red" label="Waiting"/>}
+                                    {checkNotificationStatus(update, currentUser) === "seen" && <Label mode="status" dot="grey" label="Seen"/>}
                                 </TableCell>
                                 {/*Update name and description*/}
                                 <TableCell><b>{update.subject}</b></TableCell>
@@ -144,7 +178,7 @@ export default function UpdatesList({updates, refresh, style}) {
                                 {/*Mark as read/unread button*/}
                                 <TableCell align="right" sx={{paddingRight: 0, width: "16%"}}>
                                     <HRMButton mode="tertiary" onClick={() => handleSwitch(update)}>
-                                        <b>Mark as {checkNotificationStatus(update, currentUserId) === "seen" && 'un'}read</b>
+                                        <b>Mark as {checkNotificationStatus(update, currentUser) === "seen" && 'un'}read</b>
                                     </HRMButton>
                                 </TableCell>
                                 {/*View button*/}
@@ -156,11 +190,15 @@ export default function UpdatesList({updates, refresh, style}) {
                                             if (update.subject === "New team member added") {
                                                 setNewMember(true);
                                             }
-                                            if (update.subject === "New time off request") {
+                                            else if (update.subject === "New time off request") {
                                                 setApproval(true);
                                             }
-                                            if (update.subject === "Your time off request has been sent") {
+                                            else if (update.subject === "Your time off request has been sent") {
                                                 setRequestSent(true);
+                                            }
+                                            else if (update.subject === "Your time off request has been approved" || 
+                                            update.subject === "Your time off request has been rejected") {
+                                                setRequestResolved(true);
                                             }
                                         }} 
                                     >
@@ -182,11 +220,17 @@ export default function UpdatesList({updates, refresh, style}) {
             </TableContainer>
             {/*New team member added update popup component*/}
             <Dialog open={newMember} onClose={() => setNewMember(false)}>
-                <NewTeamMember employee_details={newMemberDetails} close={() => setNewMember(false)} />
+                <NewTeamMember 
+                    employee_details={newMemberDetails} 
+                    close={() => setNewMember(false)} 
+                />
             </Dialog>
             {/*Time off request sent update popup component*/}
             <Dialog open={requestSent} onClose={() => setRequestSent(false)}>
-                <TimeOffRequestSentWindow request_information={requestSentDetails} close={() => setRequestSent(false)} />
+                <TimeOffRequestSentWindow 
+                    request_information={requestSentDetails} 
+                    close={() => setRequestSent(false)} 
+                />
             </Dialog>
             {/*New time off request update popup component*/}
             <Dialog open={approval} onClose={() => setApproval(false)}>
@@ -197,6 +241,12 @@ export default function UpdatesList({updates, refresh, style}) {
                         setApproval(false);
                         handleSwitch(approvalDetails.notification);
                     }}
+                />
+            </Dialog>
+            <Dialog open={requestResolved} onClose={() => setRequestResolved(false)}>
+                <TimeOffRequestResolved 
+                    time_off_information={requestResolvedDetails}
+                    close={() => setRequestResolved(false)}
                 />
             </Dialog>
         </>

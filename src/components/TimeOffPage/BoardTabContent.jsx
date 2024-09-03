@@ -1,15 +1,19 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+import { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+//import axios from 'axios';
 import AvailableTimeOffTable from './AvailableTimeOffTable';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-import axios from 'axios';
+//import { currentUserID } from '../../testConfig';
+import { fetchOne } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
+import { fetchAllByEmployee } from '../../assets/FetchServices/TimeOffHistory';
+import StateContext from '../../context/StateContext';
 
 //Function for parsing a JavaScript date into a string format.
 function formatDate(date) {
@@ -38,11 +42,12 @@ export default function BoardTabContent({style}) {
     const [refresh, setRefresh] = useState(false);
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used for API calls
-    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
-    const timeOffPolicyURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    //const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
+    //const timeOffPolicyURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
     
     dayjs.extend(isSameOrAfter);
 
@@ -54,10 +59,29 @@ export default function BoardTabContent({style}) {
 
     //Function for retrieving the time off policies and their respective hours used and available
     function getTimeOffPolicies() {
-        //console.log("Running getTimeOffPolicies()");
+        //Send Request to database for time off policies
+        fetchOne(currentUser)
+        .then((data) => {
+            if (data) {
+                const policies = {};
+                //Only display the information for the current year
+                const filteredData = data.filter((p) => p.year === dayjs().year());
+                filteredData.forEach((p) => {
+                    policies[p.category] = {
+                        id: p.timeOffId,
+                        type: p.category,
+                        availableHours: p.hoursLeft,
+                        hoursUsed: p.hoursUsed
+                    }
+                });
+                setTimeOffPolicies(policies);
+            }
+        });
+        /*
         axios.post(timeOffPolicyURL)
         .then((response) => {
             const policies = {};
+            //Only display the information for the current year
             const data = response.data.filter((p) => p.year === dayjs().year());
             data.forEach((p) => {
                 policies[p.category] = {
@@ -69,13 +93,39 @@ export default function BoardTabContent({style}) {
             });
             setTimeOffPolicies(policies);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+            console.log(error);
+        });
+        */
     }
 
     //Function for retrieving any upcoming time off periods
     function getUpcomingTimeOffPeriods() {
-        //console.log("Running getUpcomingTimeOffPeriods()");
         //Send request to database for time off periods
+        fetchAllByEmployee(currentUser)
+        .then((data) => {
+            if (data) {
+                const periods = [];
+                //const data = response.data;
+                data.forEach((p) => {
+                    //Only retrieve and display periods that are upcoming
+                    if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && (p.status === "Approved" || p.status === "Pending")) {
+                        periods.push({
+                            id: p.id,
+                            timeOffId: p.timeOffId,
+                            from: formatDate(dayjs(p.startDate).toDate()),
+                            to: formatDate(dayjs(p.endDate).toDate()),
+                            type: p.timeOff.category,
+                            hours: p.hours,
+                            note: p.note,
+                            status: p.status
+                        });
+                    }
+                });
+                setTimeOffPeriods(periods);
+            }
+        });
+        /*
         axios.post(timeOffPeriodURL)
         .then((response) => {
             const periods = [];
@@ -90,7 +140,8 @@ export default function BoardTabContent({style}) {
                         to: formatDate(dayjs(p.endDate).toDate()),
                         type: p.timeOff.category,
                         hours: p.hours,
-                        note: p.note
+                        note: p.note,
+                        status: p.status
                     });
                 }
             });
@@ -99,6 +150,7 @@ export default function BoardTabContent({style}) {
         .catch((error) => {
             console.log(error);
         })
+        */
     };
 
     //Only shows 10 periods at a time
@@ -134,12 +186,12 @@ export default function BoardTabContent({style}) {
                     style={{borderRadius: "50%"}} 
                 />
             </Stack>
-            {(timeOffPeriods.length > 0) ?
+            {timeOffPeriods.length > 0 ?
                 <>
                     {/*Upcoming time off table*/}
                     <UpcomingTimeOffTable 
                         timeOffPeriods={periodsToDisplay} 
-                        tableColumns={['Type', 'Amount', 'Note']}
+                        tableColumns={['Type', 'Amount', 'Note', 'Status']}
                         editFlag={true} 
                         refresh={() => setRefresh(!refresh)}
                         style={{marginBottom: "30px"}}

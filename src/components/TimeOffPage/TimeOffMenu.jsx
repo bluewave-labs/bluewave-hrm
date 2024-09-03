@@ -37,25 +37,6 @@ export default function TimeOffMenu({style}) {
         padding: 0
     });
 
-    //List of time off policies
-    const policies = [
-        {
-            type: 'Vacation',
-            availableDays: '15 days (180 hours)',
-            hoursUsed: '23 hours used'
-        },
-        {
-            type: 'Sick',
-            availableDays: '180 hours left',
-            hoursUsed: '23 hours used'
-        },
-        {
-            type: 'Bereavement',
-            availableDays: '-',
-            hoursUsed: '23 hours used'
-        }
-    ];
-
     return (
         <Box sx={{...{
             boxSizing: "border-box",
@@ -82,7 +63,7 @@ export default function TimeOffMenu({style}) {
                 </Box>
                 {/*Board tab*/}
                 <StyledTabPanel value="Board">
-                    <BoardTabContent policies={policies}/>
+                    <BoardTabContent />
                 </StyledTabPanel>
                 {/*History tab*/}
                 <StyledTabPanel value="History">

@@ -3,7 +3,7 @@ import Stack from '@mui/system/Stack';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/system';
 import HRMButton from '../Button/HRMButton';
-import { fonts, colors } from '../../assets/Styles';
+import { fonts, colors } from '../../Styles';
 import PropTypes from 'prop-types';
 
 /**
@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
  * sent.
  * 
  * Props:
- * - request_information<Object>: Contains the request information
+ * - request_information<Object>: Contains the request information.
  *      Syntax: {
  *          timeOffBalance: <String>
  *          timeOffRequested: <String>
@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
  *          notes: <String>
  *      }
  * 
- * - close<Function>: Function for closing this popup component
+ * - close<Function>: Function for closing this popup component.
  *      Syntax: close()
  * 
  * - style<Object>: Optional prop for adding further inline styling.
@@ -96,9 +96,9 @@ TimeOffRequestSentWindow.propTypes = {
 
     //Function for closing this popup
     close: PropTypes.func,
-}
+};
 
 //Default values for this component
 TimeOffRequestSentWindow.defaultProps = {
     style: {}
-}
+};

@@ -1,12 +1,16 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+import { useState, useEffect, useContext } from 'react';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
 import PagesNavBar from './PagesNavBar';
-import NoContentComponent from './NoContentComponent';
-import { useState, useEffect } from 'react';
-import { colors, fonts } from '../../assets/Styles';
-import axios from 'axios';
+import NoContentComponent from '../StaticComponents/NoContentComponent';
+import { colors, fonts } from '../../Styles';
+//import { currentUserID } from '../../testConfig';
+import { fetchAllByEmployee } from '../../assets/FetchServices/Notification';
+import StateContext from '../../context/StateContext';
+
+//import axios from 'axios';
 
 /**
  * Menu component for the home menu page. Displays up to 10 updates at a time along with controls
@@ -27,7 +31,8 @@ export default function UpdatesMenu({style}) {
     const [refresh, setRefresh] = useState(false);
 
     //ID of the currently logged in employee
-    const currentUserId = 1;
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //Refresh the list of notifications whenever the refresh hook is changed
     useEffect(() => {
@@ -35,7 +40,7 @@ export default function UpdatesMenu({style}) {
     }, [refresh]);
 
     //URL endpoints to be used for API calls
-    const notificationsURL = `http://localhost:5000/api/notifications/employee/${currentUserId}`;
+    //const notificationsURL = `http://localhost:5000/api/notifications/employee/${currentUserId}`;
 
     //Retrieve the status of a notification for a given employee
     function checkNotificationStatus(update, id) {
@@ -45,7 +50,19 @@ export default function UpdatesMenu({style}) {
     //Retrieve all the updates
     function getUpdates() {
         //Retrieve notification records from database
-        axios.get(notificationsURL, {withCredentials: true})
+        fetchAllByEmployee(currentUser)
+        .then((data) => {
+            if (data) {
+                const updates = [];
+                //const data = response.data;
+                data.forEach((up) => {
+                    updates.push(up);
+                });
+                setAllUpdates(updates);
+            }
+        });
+        /*
+        axios.get(notificationsURL)
         .then((response) => {
             const updates = [];
             const data = response.data;
@@ -57,12 +74,13 @@ export default function UpdatesMenu({style}) {
         .catch((error) => {
             console.log(error);
         });
+        */
     };
 
     //Either show all updates or only the unread ones
     const filteredUpdates = (filter === "All") ? 
         allUpdates : 
-        allUpdates.filter((update) => checkNotificationStatus(update, currentUserId) !== "seen");
+        allUpdates.filter((update) => checkNotificationStatus(update, currentUser) !== "seen");
 
     //Only show 10 updates at a time
     const updatesToDisplay = filteredUpdates.slice((currentPage - 1) * 10, currentPage * 10);
