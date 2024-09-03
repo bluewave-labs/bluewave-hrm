@@ -8,14 +8,18 @@ const requireAuth = (req, res, next) => {
 
   // check json web token exists & is verified
   if (token) {
-    jwt.verify(token, "77299a0fabaab401b4a2f162a9165fd32919d045db8ddf5ee7e90f23b26187638f080f2a44fe5d03f4188fa269d8feac3e716434b9959be18de146c4041e6282", (err, decodedToken) => {
-      if (err) {
-       next();
-       // res.status(404).json({ message: message.sessionExpired });
-      } else {
-        next();
+    jwt.verify(
+      token,
+      "77299a0fabaab401b4a2f162a9165fd32919d045db8ddf5ee7e90f23b26187638f080f2a44fe5d03f4188fa269d8feac3e716434b9959be18de146c4041e6282",
+      (err, decodedToken) => {
+        if (err) {
+          next();
+          // res.status(404).json({ message: message.sessionExpired });
+        } else {
+          next();
+        }
       }
-    });
+    );
   } else {
     next();
     //res.status(404).json({ message: message.sessionExpired });
