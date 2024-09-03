@@ -131,22 +131,16 @@ export default function ManagePermissions({
 
         <PermissionsDialog open={isDialogOpen} onClose={closeDialog} />
 
-        {contentList.length > 0 ? (
-          <>
-            <PermissionsTable
-              contentList={itemsToDisplay}
-              sx={{ marginBottom: "40px" }}
-            />
-            {contentList.length > PAGE_SIZE && (
-              <PagesNavBar
-                numOfEntries={contentList.length}
-                currentPage={currentPage}
-                handlePage={handlePage}
-              />
-            )}
-          </>
-        ) : (
-          <p>There is no {titleTabPage} right now.</p>
+        <PermissionsTable
+          contentList={itemsToDisplay}
+          sx={{ marginBottom: "40px" }}
+        />
+        {contentList?.length > PAGE_SIZE && (
+          <PagesNavBar
+            numOfEntries={contentList.length}
+            currentPage={currentPage}
+            handlePage={handlePage}
+          />
         )}
         <Stack
           direction="row"

@@ -3,7 +3,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { Typography, Stack, Avatar } from "@mui/material";
+import { Typography, Stack, Avatar, CircularProgress } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
@@ -39,7 +39,8 @@ const TableBodyCell = styled(TableCell)({
 });
 
 export default function PermissionsTable({ contentList, style }) {
-  const { updatedPermissions, setUpdatedPermissions } = useSettingsContext();
+  const { updatedPermissions, setUpdatedPermissions, isLoading } =
+    useSettingsContext();
 
   const updatePermission = (newPermission, employee) => {
     setUpdatedPermissions((updatedPermissions) => {
@@ -67,7 +68,16 @@ export default function PermissionsTable({ contentList, style }) {
     });
   };
 
-  console.log("updatedPermissions", updatedPermissions);
+  console.log("updatedPermissions", updatedPermissions, isLoading);
+
+  if (isLoading.employees || isLoading.users)
+    return (
+      <Stack direction="row" justifyContent="center" alignItems="center" sx={{width: "100%", padding: "10px"}}>
+        <CircularProgress />
+      </Stack>
+    );
+  if (contentList.length === 0) return <p>There are no records right now.</p>;
+
   return (
     <TableContainer
       sx={{
@@ -110,26 +120,23 @@ export default function PermissionsTable({ contentList, style }) {
                 <TableBodyCell>
                   <Stack direction="row" alignItems="center" spacing={2}>
                     <Avatar alt="Employee Photo" src={item.photo} />
-                    <Text>{`${item.firstName} ${item.lastName}`}</Text>
+                    <Text>{`${item?.firstName} ${item?.lastName}`}</Text>
                   </Stack>
                 </TableBodyCell>
                 <TableBodyCell>
-                  <Text>{item.role.roleTitle}</Text>
+                  <Text>{item?.role.roleTitle}</Text>
                 </TableBodyCell>
                 <TableBodyCell>
-                  <Text>{item.team.teamName}</Text>
+                  <Text>{item?.team.teamName}</Text>
                 </TableBodyCell>
                 <TableBodyCell>
                   <Checkbox
                     type="radio"
-                    id={`permission-admin-${item.id}`}
-                    name={`permission-${item.id}`}
+                    id={`permission-admin-${item?.id}`}
+                    name={`permission-${item?.id}`}
                     value="Administrator"
                     checked={
-                      // selectedEmployeePermission
-                      //   ? newPermission === "Administrator"
-                      //   : item.permission.type === "Administrator"
-                      (selectedEmployeePermission || item.permission.type) ===
+                      (selectedEmployeePermission || item?.permission.type) ===
                       "Administrator"
                     }
                     onChange={(e) => updatePermission(e.target.value, item)}
@@ -138,11 +145,11 @@ export default function PermissionsTable({ contentList, style }) {
                 <TableBodyCell>
                   <Checkbox
                     type="radio"
-                    id={`permission-manager-${item.id}`}
-                    name={`permission-${item.id}`}
+                    id={`permission-manager-${item?.id}`}
+                    name={`permission-${item?.id}`}
                     value="Manager"
                     checked={
-                      (selectedEmployeePermission || item.permission.type) ===
+                      (selectedEmployeePermission || item?.permission.type) ===
                       "Manager"
                     }
                     onChange={(e) => updatePermission(e.target.value, item)}
@@ -151,11 +158,11 @@ export default function PermissionsTable({ contentList, style }) {
                 <TableBodyCell>
                   <Checkbox
                     type="radio"
-                    id={`permission-employee-${item.id}`}
-                    name={`permission-${item.id}`}
+                    id={`permission-employee-${item?.id}`}
+                    name={`permission-${item?.id}`}
                     value="Employee"
                     checked={
-                      (selectedEmployeePermission || item.permission.type) ===
+                      (selectedEmployeePermission || item?.permission.type) ===
                       "Employee"
                     }
                     onChange={(e) => updatePermission(e.target.value, item)}

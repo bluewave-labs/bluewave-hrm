@@ -1,16 +1,17 @@
+import { useMemo } from "react";
 import { useSettingsContext } from "../context";
 
 export const usePermissions = () => {
-  const { users, employees } =
-    useSettingsContext();
+  const { users, employees } = useSettingsContext();
 
-  const mergedUsers = users.map((user) => {
-    const employee = employees.find((emp) => emp.empId === user.empId);
-    if (employee) {
+  const mergedUsers = useMemo(() => {
+    if (employees.length === 0 || users.length === 0) return [];
+
+    return users.map((user) => {
+      const employee = employees.find((emp) => emp.empId === user.empId);
       return { ...user, ...employee };
-    }
-    return user;
-  });
+    });
+  }, [users, employees]);
 
   return {
     data: mergedUsers,
