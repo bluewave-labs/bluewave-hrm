@@ -13,7 +13,6 @@ import AppTable from "../components/AppTable";
 import AppTabs from "../components/AppTabs";
 import { formatPhoneNumber } from "../assets/utils";
 
-
 // Number of rows to display on the table at a time.
 const rowsPerPage = 10;
 
@@ -28,19 +27,19 @@ const headCells = [
   { id: "role", width: 176, label: "Role", visible: true },
   { id: "team", width: 210, label: "Team", visible: true },
   { id: "manager", width: 150, label: "Manager", visible: true },
-  { id: "department", width: 100, label: "Department" , visible: true},
-  { id: "phoneNumber", width: 100, label: "Phone" , visible: true},
-  { id: "email", width: 200, label: "Email" , visible: true},
+  { id: "department", width: 100, label: "Department", visible: true },
+  { id: "phoneNumber", width: 100, label: "Phone", visible: true },
+  { id: "email", width: 200, label: "Email", visible: true },
   { id: "gender", width: 50, label: "Gender", visible: true },
-  { id: "nationality", width: 100, label: "Nationality" , visible: true},
+  { id: "nationality", width: 100, label: "Nationality", visible: true },
   { id: "dateOfBirth", width: 100, label: "Birthday", visible: true },
-  { id: "maritalStatus", width: 100, label: "Marital Status" , visible: true},
+  { id: "maritalStatus", width: 100, label: "Marital Status", visible: true },
   { id: "hireDate", width: 182, label: "Hire Date", visible: true },
-  { id: "salary", width: 100, label: "Salary" , visible: true},
+  { id: "salary", width: 100, label: "Salary", visible: true },
   { id: "employmentType", width: 100, label: "Emp Type", visible: true },
   { id: "compensationType", width: 100, label: "Comp. Type", visible: true },
-  { id: "compensation", width: 100, label: "Compensation" , visible: true},
-  { id: "weeklyHours", width: 50, label: "Hours" , visible: true},
+  { id: "compensation", width: 100, label: "Compensation", visible: true },
+  { id: "weeklyHours", width: 50, label: "Hours", visible: true },
 ];
 
 function formatTableData(data) {
@@ -99,7 +98,7 @@ function formatTableData(data) {
   });
 }
 const tabItems = (data, teamId) => {
-const teamData = data.filter((emp)=> emp.teamId === teamId);
+  const teamData = data.filter((emp) => emp.teamId === teamId);
 
   return [
     {
@@ -135,23 +134,25 @@ const teamData = data.filter((emp)=> emp.teamId === teamId);
  * @returns A React component.
  */
 export default function People(props) {
-  const {user} = props;
-    const [employees, setEmployees] = useState([]);
-    
-    useEffect(() => {
-        async function fetchData() {
-            // You can await here
-            try {
-                const res = await axios.get("http://localhost:5000/api/employees");
-                formatTableData(res.data);
-                setEmployees(res.data);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        fetchData();
-    }, []);
-    
+  const { user } = props;
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      // You can await here
+      try {
+        const res = await axios.get(
+          "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/employees"
+        );
+        formatTableData(res.data);
+        setEmployees(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <Stack>
       <Box
@@ -174,27 +175,27 @@ export default function People(props) {
         >
           People
         </Typography>
-        {(user && user.permission.id === 1) &&
-        <Button
-          variant="contained"
-          disableElevation
-          sx={{
-            width: "166px",
-            height: "34px",
-            border: "1px solid #7F56D9",
-            backgroundColor: "#7F56D9",
-            fontSize: 13,
-            fontWeight: 400,
-            textTransform: "none",
-            "&:hover": {
-              backgroundColor: "#602ece",
-              border: "1px solid #602ece",
-            },
-          }}
-        >
-          Add new employee
-        </Button>}
-
+        {user && user.permission.id === 1 && (
+          <Button
+            variant="contained"
+            disableElevation
+            sx={{
+              width: "166px",
+              height: "34px",
+              border: "1px solid #7F56D9",
+              backgroundColor: "#7F56D9",
+              fontSize: 13,
+              fontWeight: 400,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#602ece",
+                border: "1px solid #602ece",
+              },
+            }}
+          >
+            Add new employee
+          </Button>
+        )}
       </Box>
 
       <Stack
@@ -202,7 +203,7 @@ export default function People(props) {
           boxSizing: "border-box",
           display: "flex",
           width: "100%",
-          minHeight:"1345px",
+          minHeight: "1345px",
           backgroundColor: "#FFFFFF",
           border: "1px solid #EBEBEB",
           pt: 7.5,
@@ -212,7 +213,14 @@ export default function People(props) {
           mt: 0,
         }}
       >
-        {<AppTabs items={tabItems(employees, (user && user.employee.teamId) ? user.employee.teamId: -1)} />}
+        {
+          <AppTabs
+            items={tabItems(
+              employees,
+              user && user.employee.teamId ? user.employee.teamId : -1
+            )}
+          />
+        }
       </Stack>
     </Stack>
   );

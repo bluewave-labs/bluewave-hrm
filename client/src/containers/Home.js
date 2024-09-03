@@ -5,7 +5,6 @@ import Header from "../components/StaticComponents/Header";
 import SideMenu from "../components/StaticComponents/SideMenu";
 import People from "./People";
 
-
 import EmployeeForm from "./EmployeeForm";
 
 export default function Home(props) {
@@ -17,26 +16,25 @@ export default function Home(props) {
       try {
         let res = await axios({
           method: "post",
-          url: "http://localhost:5000/api/appusers/find/email",
+          url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/appusers/find/email",
           data: {
             email: email,
           },
         });
         res = res.data;
-        if(!res){
+        if (!res) {
           return;
         }
-        
-    const employee = await axios({
+
+        const employee = await axios({
           method: "post",
-          url: "http://localhost:5000/api/employees/find/email",
+          url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/employees/find/email",
           data: {
             email: email,
           },
         });
         res.employee = employee.data;
-                    setUser(res);
-                    
+        setUser(res);
       } catch (err) {
         console.log(err);
       }
@@ -50,10 +48,8 @@ export default function Home(props) {
         ? "data:image/png;base64," +
           atob(user.employee.photo.toString("base64"))
         : null,
-    name:
-      user ? `${user.firstName} ${user.lastName}`
-        : "Unknown",
-    role: user  && user.permission ? user.permission.type : "Guest",
+    name: user ? `${user.firstName} ${user.lastName}` : "Unknown",
+    role: user && user.permission ? user.permission.type : "Guest",
   };
   const actions = [
     {
@@ -68,8 +64,11 @@ export default function Home(props) {
       <Header user={userDetails} actions={actions} />
       <Stack spacing={15} direction={"row"}>
         <SideMenu />
-        <EmployeeForm employee={user && user.employee ? user.employee : null} restricted={user && user.permission.id !== 1} />
-        <People user={user}/> 
+        <EmployeeForm
+          employee={user && user.employee ? user.employee : null}
+          restricted={user && user.permission.id !== 1}
+        />
+        <People user={user} />
       </Stack>
     </Box>
   );
