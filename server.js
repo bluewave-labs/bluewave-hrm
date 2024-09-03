@@ -11,7 +11,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://54.173.233.239",
     credentials: true,
   })
 );
