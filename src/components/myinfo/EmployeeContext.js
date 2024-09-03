@@ -6,11 +6,10 @@ const EmployeeContext = createContext();
 export const EmployeeProvider = ({ children }) => {
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const fetchEmployee = async () => {
+  const fetchEmployee = async () => { 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/employees/4");
+      const response = await axios.post("http://localhost:5000/api/employees/1");
       const emp = response.data;
       setEmployee(emp);
       setLoading(false);

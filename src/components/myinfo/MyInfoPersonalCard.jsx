@@ -6,6 +6,8 @@ import MyInfoPersonal from './MyInfoPersonal';
 import MyInfoJob from './MyInfoJob';
 import { styled } from '@mui/material/styles';
 import { colors } from '../../Styles';
+import DocumentMyinfo from '../DocumentMyinfo/DocumentMyinfo';
+import JourneyMyinfo from '../JourenyMyinfo/JourneyMyinfo';
 
 
 const theme = createTheme({
@@ -32,6 +34,13 @@ const theme = createTheme({
       fontFamily:'Inter',
       fontSize: '13px',
       color: '#344054',
+    },
+
+    body3: {
+      fontWeight: 400,
+      fontFamily:'Inter',
+      fontSize: '11px',
+      color: '#909090',
     },
    
   },
@@ -82,11 +91,11 @@ function MyInfoPersonalCard({ employee }) {
     },
     {
       label: 'Documents',
-      child: <div>Content for Document Tab</div>,
+      child: <div><DocumentMyinfo/></div>,
     },
     {
       label: 'Journey',
-      child: <div>Content for Journey Tab</div>,
+      child: <div><JourneyMyinfo/></div>,
     },
   ];
 
@@ -137,7 +146,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               Role
             </Typography>
             <Typography variant="body2" className="data">
@@ -149,7 +158,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               E-mail
             </Typography>
             <Typography variant="body2" className="data">
@@ -161,7 +170,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               Phone
             </Typography>
             <Typography variant="body2" className="data">
@@ -173,7 +182,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               Reporting to
             </Typography>
             <Typography variant="body2" className="data">
