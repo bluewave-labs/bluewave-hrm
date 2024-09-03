@@ -5,7 +5,8 @@ import SetNewPasswordPage from "./components/LoginComponents/SetNewPassword.jsx"
 import Dashboard from "./containers/Dashboard.js";
 import Placeholder from "./components/PeopleComponents/Placeholder.js";
 import CompleteSignup from "./components/LoginComponents/CompleteSignupPage.js";
-
+import OffBoardingPage from "./components/OffBoardingComponents/OffBoardingPage.jsx";
+import { StepContent } from "@mui/material";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route path="/resetpassword/:id" element={<SetNewPasswordPage />} />
         <Route path="/complete-signup/:token" element={<CompleteSignup />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="off-boarding/:token" element={<Placeholder content={"Off-boarding component"}/>} />
+        <Route path="off-boarding/:token" element={<OffBoardingPage />} />
         <Route
           path="*"
           element={

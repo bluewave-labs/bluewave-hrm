@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = require("./BaseUrl.json").value; 
+const BASE_URL = require("./BaseUrl.json").value;
 
 const addCred = {
   withCredentials: true,
@@ -38,10 +38,10 @@ export const createOne = async (data) => {
   }
 };
 // Expected data format
-//{ 
+//{
 //   "id": 5,
 //  "permissionId": 1,
-//   "access": "Revoked"  
+//   "access": "Revoked"
 // }
 export const update = async (data) => {
   try {
@@ -59,13 +59,13 @@ export const update = async (data) => {
 //     "id": 5,
 //     "empId": 20,
 //     "permissionId": 1,
-//     "access": "Revoked"  
+//     "access": "Revoked"
 // },
 // {
 //   "id": 5,
 //   "empId": 20,
 //   "permissionId": 1,
-//   "access": "Revoked"  
+//   "access": "Revoked"
 // }
 // ]
 export const updateMany = async (data) => {
@@ -126,10 +126,10 @@ export const refresh = async () => {
   try {
     const url = `${BASE_URL}/api/appusers/refresh`;
     const res = await axios.get(url, addCred);
+    // console.log("refresh data:", res.data);
     return res.data;
   } catch (err) {
-   // console.log(err);
+    console.log(err);
     return null;
   }
-}
-
+};

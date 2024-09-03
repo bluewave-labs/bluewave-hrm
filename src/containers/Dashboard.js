@@ -19,7 +19,7 @@ const dashboardMenu = {
   timeoff: false,
   reporting: false,
   settings: false,
- };
+};
 
 export default function Dashboard() {
   const stateContext = useContext(StateContext);
@@ -32,10 +32,13 @@ export default function Dashboard() {
     setCurrent(newCurrent);
   };
   useEffect(() => {
+    console.log(stateContext);
     async function fetchData() {
       try {
+        console.log(stateContext.state.user, "state1");
         if (!stateContext.state.user) {
           const currentUser = await api.user.refresh();
+          console.log("state2", { currentUser });
           if (currentUser) {
             // Get associated employee record
             const currentEmployee = await api.employee.fetchOneByEmail(
