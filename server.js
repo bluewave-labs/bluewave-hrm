@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const router = express.Router();
 app.use(cookieParser());
+
 app.use(cors());
 
 app.use(
@@ -31,7 +32,7 @@ const HTTP_PORT = process.env.HTTP_PORT || 5000;
 routes(router);
 app.use("/api", router);
 
-app.listen(HTTP_PORT, () => {
+app.listen(HTTP_PORT, "0.0.0.0", () => {
   console.log(`Server ready at http://localhost:${HTTP_PORT}.`);
 });
 /*

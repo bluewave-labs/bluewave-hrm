@@ -2,42 +2,42 @@ const controller = require("../controllers/employee");
 const { requireAuth } = require("../../config/authJwt");
 
 module.exports = (router) => {
-  router.route("/employees").get(requireAuth, controller.showAll);
-  router.route("/terminated").get(requireAuth, controller.showAllTerminated);
-  router.route("/managers").get(requireAuth, controller.showManagers);
-  router.route("/employees/:id").post(requireAuth, controller.showOne);
-  router.route("/employees/find/myteam/").post(requireAuth, controller.showMyTeam);
-  router.route("/employees/find/email").post(requireAuth, controller.findOneByEmail);
-  router.route("/employees").post(requireAuth, controller.createRecord);
-  router.route("/employees").put(requireAuth, controller.updateRecord);
-  router.route("/employees/").delete(requireAuth, controller.deleteRecord);
+  router.route("/employees").get(controller.showAll);
+  router.route("/terminated").get(controller.showAllTerminated);
+  router.route("/managers").get(controller.showManagers);
+  router.route("/employees/:id").post(controller.showOne);
+  router.route("/employees/find/myteam/").post(controller.showMyTeam);
+  router.route("/employees/find/email").post(controller.findOneByEmail);
+  router.route("/employees").post(controller.createRecord);
+  router.route("/employees").put(controller.updateRecord);
+  router.route("/employees/").delete(controller.deleteRecord);
   // Statistics/summary routes
   router
     .route("/employees/summaries/departments")
-    .get(requireAuth, controller.summarizeByDepartments);
+    .get(controller.summarizeByDepartments);
   router
     .route("/employees/summaries/jobtitles")
-    .get(requireAuth, controller.summarizeByJobTitles);
+    .get(controller.summarizeByJobTitles);
 
   router
     .route("/employees/summaries/nationalities")
-    .get(requireAuth, controller.summarizeByNationalities);
+    .get(controller.summarizeByNationalities);
 
   router
     .route("/employees/summaries/locations")
-    .get(requireAuth, controller.summarizeByLocations);
+    .get(controller.summarizeByLocations);
   // endpoint for chart
   router
     .route("/employees/summaries/departments/chartdata")
-    .get(requireAuth, controller.summarizeByDepartmentsChartData);
+    .get(controller.summarizeByDepartmentsChartData);
 
   router
     .route("/employees/summaries/headcounts/:year")
-    .get(requireAuth, controller.summarizeByHeadcounts);
+    .get(controller.summarizeByHeadcounts);
 
   // Bulk change routes
   router
     .route("/employees/change/department")
-    .post(requireAuth, controller.changeDepartment);
-  router.route("/employees/change/job").post(requireAuth, controller.changeJob);
+    .post(controller.changeDepartment);
+  router.route("/employees/change/job").post(controller.changeJob);
 };
