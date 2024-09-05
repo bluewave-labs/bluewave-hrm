@@ -4,6 +4,7 @@ import {
   companyApi,
   departmentsApi,
   jobTitlesApi,
+  timeOffPoliciesApi,
   employeesApi,
   usersApi,
   getEmployeesByDepartment,
@@ -18,6 +19,7 @@ export const SettingsProvider = ({ children }) => {
   const [departmentsPeople, setDepartmentsPeople] = useState([]);
   const [jobTitles, setJobTitles] = useState([]);
   const [jobTitlesPeople, setJobTitlesPeople] = useState([]);
+  const [timeOffPolicies, setTimeOffPolicies] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [users, setUsers] = useState([]);
   const [updatedPermissions, setUpdatedPermissions] = useState([]);
@@ -29,6 +31,7 @@ export const SettingsProvider = ({ children }) => {
     jobTitles: false,
     jobTitlesPeople: false,
     employees: false,
+    timeoffPolicies: false,
     users: false,
     permissions: false,
   });
@@ -52,6 +55,13 @@ export const SettingsProvider = ({ children }) => {
     const employees = await employeesApi.fetch();
     setEmployees(employees);
     setIsLoading((isLoading) => ({ ...isLoading, employees: false }));
+  };
+
+  const fetchTimeOffPolicies = async () => {
+    setIsLoading((isLoading) => ({ ...isLoading, timeoffPolicies: true }));
+    const timeOffPolicies = await timeOffPoliciesApi.fetch();
+    setTimeOffPolicies(timeOffPolicies);
+    setIsLoading((isLoading) => ({ ...isLoading, timeoffPolicies: false }));
   };
 
   const fetchDepartments = async () => {
@@ -94,6 +104,7 @@ export const SettingsProvider = ({ children }) => {
     fetchDepartmentsPeople();
     fetchJobTitles();
     fetchJobTitlesPeople();
+    fetchTimeOffPolicies();
     fetchEmployees();
     fetchUsers();
   }, []);
@@ -106,6 +117,7 @@ export const SettingsProvider = ({ children }) => {
       departmentsPeople,
       jobTitles,
       jobTitlesPeople,
+      timeOffPolicies,
       employees,
       users,
       updatedPermissions,
@@ -116,6 +128,7 @@ export const SettingsProvider = ({ children }) => {
       fetchJobTitles,
       fetchJobTitlesPeople,
       fetchEmployees,
+      fetchTimeOffPolicies,
       fetchUsers,
     }),
     [
@@ -125,6 +138,7 @@ export const SettingsProvider = ({ children }) => {
       departmentsPeople,
       jobTitles,
       jobTitlesPeople,
+      timeOffPolicies,
       employees,
       users,
       updatedPermissions,

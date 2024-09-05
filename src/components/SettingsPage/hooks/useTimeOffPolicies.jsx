@@ -1,16 +1,16 @@
 import { useSettingsContext } from "../context";
 
 const policiesColumns = [
-  { header: "Policy type", contentKey: "departmentName" },
-  { header: "Default Balance", contentKey: "count" },
-  { header: "Times used", contentKey: "count" },
+  { header: "Policy type", contentKey: "type" },
+  { header: "Default Balance", contentKey: "availableDays" },
+  { header: "Times used", contentKey: "hoursUsed" },
 ];
 
 export const useTimeOffPolicies = () => {
-  const { departmentsPeople } = useSettingsContext();
+  const { timeOffPolicies } = useSettingsContext();
 
   return {
-    data: departmentsPeople,
+    data: timeOffPolicies,
     columns: policiesColumns,
   };
 };
