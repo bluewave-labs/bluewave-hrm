@@ -1,11 +1,51 @@
 import { Stack } from "@mui/system";
-import { DialogContent } from "@mui/material";
+import {
+  Typography,
+  DialogContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import { styled } from "@mui/system";
+import { colors, fonts } from "../../Styles";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HRMButton from "../Button/HRMButton";
 import { Dialog, DialogTitle } from "./SettingsDialog/styles";
 import { useSettingsContext } from "./context";
 
-export default function PermissionsDialog({ open, onClose }) {
+const TextHeader = styled(Typography)({
+  fontFamily: "Inter",
+  fontSize: "12px",
+  fontWeight: "500",
+  lineHeight: "18px",
+  color: "#475467",
+});
+
+const Text = styled(Typography)({
+  fontFamily: "Inter",
+  lineHeight: "20px",
+  fontWeight: "400",
+  color: "#475467",
+  fontSize: "13px",
+});
+
+const TableHeaderCell = styled(TableCell)({
+  color: colors.darkGrey,
+  paddingTop: "10px",
+  paddingBottom: "10px",
+});
+
+const TableBodyCell = styled(TableCell)({
+  color: colors.darkGrey,
+  paddingTop: "25px",
+  paddingBottom: "25px",
+});
+
+export default function PermissionsDialog({ style, open, onClose }) {
   const { updatedPermissions } = useSettingsContext();
 
   const onSubmit = (data) => {
@@ -33,16 +73,51 @@ export default function PermissionsDialog({ open, onClose }) {
         />
       </Stack>
       <DialogContent>
-        {updatedPermissions.map(({ employee, newPermission }) => (
-          <>
-            <p>
-              {employee.firstName} {employee.lastName}
-            </p>
-            <p>
-              {employee.permission.type} - {newPermission}
-            </p>
-          </>
-        ))}
+        <TableContainer
+          sx={{
+            fontFamily: fonts.fontFamily,
+            ...style,
+          }}
+        >
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
+                <TableHeaderCell key="Name">
+                  <TextHeader>Name</TextHeader>
+                </TableHeaderCell>
+                <TableHeaderCell key="Role">
+                  <TextHeader>Changes</TextHeader>
+                </TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {updatedPermissions.map(({ employee, newPermission }) => {
+                return (
+                  <TableRow key={`${employee.firstName}${employee.lastName}`}>
+                    <TableBodyCell>
+                      <Text>
+                        {employee.firstName} {employee.lastName}
+                      </Text>
+                    </TableBodyCell>
+                    <TableBodyCell>
+                      <Text sx={{ display: "flex", alignItems: "center" }}>
+                        {employee.permission.type}
+                        <ArrowForwardIcon
+                          sx={{
+                            margin: "0 5px",
+                            fontSize: "small",
+                            textAlign: "center",
+                          }}
+                        />
+                        {newPermission}
+                      </Text>
+                    </TableBodyCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
         <Stack
           direction="row"
           alignItems="center"
