@@ -1,17 +1,19 @@
+import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import Dialog from '@mui/material/Dialog';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
-//import axios from 'axios';
+import axios from 'axios';
 import TimeOffMenu from './TimeOffMenu';
 import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import TimeOffRequestSent from '../PopupComponents/TimeOffRequestSent';
-import Page from '../StaticComponents/Page';
+//import Page from '../StaticComponents/Page';
 import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import HRMButton from '../Button/HRMButton';
 //import { currentUserID } from '../../testConfig';
 //import { fetchOne } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
 import StateContext from '../../context/StateContext';
+const BASE_URL = require("../../assets/FetchServices/BaseUrl.json").value; 
 
 
 /**
@@ -25,7 +27,7 @@ import StateContext from '../../context/StateContext';
  * - innerStyle<Object>: Optional prop for adding further inline styling in the inner component.
  *      Default: {}
  */
-export default function TimeOffPage({style, innerStyle}) {
+export default function TimeOffPage({style}) {
     //States determining whether the time off request menu and request successful notifications
     //should be displayed
     const [openRequest, setOpenRequest] = useState(false);
@@ -42,7 +44,7 @@ export default function TimeOffPage({style, innerStyle}) {
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used for API calls
-    const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    const timeOffPolicyPOSTURL = `${BASE_URL}/api/employeeannualtimeoffs/${currentUser}`;
 
     //Function for testing connection to database
     function testConnection() {
@@ -68,7 +70,7 @@ export default function TimeOffPage({style, innerStyle}) {
     }
 
     return (
-        <Page style={style} innerStyle={innerStyle}>
+        <Box sx={style}>
             {serverStatus === "Pending" &&
                 //Show loading logo while connecting to database
                 <CircularProgress sx={{marginX: "50%", marginY: "40%"}} />
@@ -128,7 +130,7 @@ export default function TimeOffPage({style, innerStyle}) {
                     </HRMButton>
                 </NoConnectionComponent>
             }
-        </Page>
+        </Box>
     );
 };
 
@@ -138,5 +140,5 @@ TimeOffPage.propTypes = {};
 //Default values for this component
 TimeOffPage.defaultProps = {
     style: {},
-    innerStyle: {}
+    //innerStyle: {}
 };

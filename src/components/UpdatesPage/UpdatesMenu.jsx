@@ -1,5 +1,6 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+//import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
@@ -111,6 +112,7 @@ export default function UpdatesMenu({style}) {
             backgroundColor: "#FFFFFF"
         }, ...style}}>
             {/*If there are updates, display the updates list and navbar */}
+            { }
             {(allUpdates.length > 0) ?
                 <>
                     <Stack 

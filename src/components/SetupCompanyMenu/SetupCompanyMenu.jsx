@@ -1,6 +1,6 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
-import Grid from "@mui/system/Unstable_Grid";
+import Grid from "@mui/system/Grid";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";

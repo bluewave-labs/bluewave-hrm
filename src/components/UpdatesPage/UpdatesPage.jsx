@@ -1,14 +1,15 @@
+import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import Page from '../StaticComponents/Page';
+//import Page from '../StaticComponents/Page';
 import HRMButton from '../Button/HRMButton';
 import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
 import UpdatesMenu from './UpdatesMenu';
 //import { currentUserID } from '../../testConfig';
 import StateContext from '../../context/StateContext';
-
+const BASE_URL = require("../../assets/FetchServices/BaseUrl.json").value; 
 
 /**
  * Home page of the HRM application. Contains the updates menu.
@@ -20,7 +21,7 @@ import StateContext from '../../context/StateContext';
  * - innerStyle<Object>: Optional prop for adding further inline styling in the inner component.
  *      Default: {}
  */
-export default function UpdatesPage({style, innerStyle}) {
+export default function UpdatesPage({style}) {
     //Flag determining if the database servers can be reached
     const [serverStatus, setServerStatus] = useState("Pending");
 
@@ -33,12 +34,12 @@ export default function UpdatesPage({style, innerStyle}) {
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used for API calls
-    const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    const notificationsURL = `${BASE_URL}/api/notifications/employee/${currentUser}`;
 
     //Function for testing connection to database
     function testConnection() {
         setServerStatus("Pending");
-        axios.post(timeOffPolicyPOSTURL)
+        axios.get(notificationsURL, {withCredentials: true})
         .then((response) => {
             console.log(response);
             setServerStatus("Success");
@@ -52,10 +53,10 @@ export default function UpdatesPage({style, innerStyle}) {
     };
 
     return (
-        <Page style={style} innerStyle={innerStyle}>
+        <Box sx={style}>
             {serverStatus === "Pending" &&
                 //Show loading logo while connecting to database
-                <CircularProgress sx={{marginX: "50%", marginY: "40%"}} />
+                <CircularProgress sx={{marginLeft: "auto", marginRight: "auto", display: "block"}} />
             }
             {serverStatus === "Success" && 
             //Show page content if connection is successful
@@ -89,7 +90,7 @@ export default function UpdatesPage({style, innerStyle}) {
                     </HRMButton>
                 </NoConnectionComponent>
             }
-        </Page>
+        </Box>
     );
 };
 

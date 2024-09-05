@@ -10,6 +10,7 @@ import StateContext from "../context/StateContext";
 import { produce } from "immer";
 import Placeholder from "../components/PeopleComponents/Placeholder";
 import UpdatesPage from "../components/UpdatesPage/UpdatesPage";
+import TimeOffPage from "../components/TimeOffPage/TimeOffPage";
 const api = require("../assets/FetchServices");
 
 const dashboardMenu = {
@@ -86,15 +87,15 @@ export default function Dashboard() {
             displayMenu(menuItem);
           }}
         />
-        <Box>
+        <Box sx={{
+          width: "100%",
+          paddingRight: "120px",
+          paddingTop: "50px",
+        }}>
           {current.home && <UpdatesPage />}
           {current.myinfo && <MyInfoHome />}
           {current.people && <PeopleHome />}
-          {current.timeoff && (
-            <Placeholder>
-              <h1>Time off page</h1>
-            </Placeholder>
-          )}
+          {current.timeoff && <TimeOffPage />}
           {current.reporting && <ReportsMain />}
           {current.settings && (
             <Placeholder>
