@@ -77,6 +77,7 @@ const items = [
  *      Default: {}
  */
 export default function SideMenu({ style, onSelect }) {
+  const stateContext = useContext(StateContext);
   const user = useContext(StateContext).state.user;
   const isAdmin = user && user.permission.id === 1;
     
@@ -106,28 +107,38 @@ export default function SideMenu({ style, onSelect }) {
         ...style,
       }}
     >
-      <List>
-        {items.map((item, index) => {
-          return (
+      <Box>
+        <img
+          src={stateContext.state.logo}
+          alt="Company Logo"
+          style={{
+            maxWidth: "150px",
+            maxHeight: "75px",
+          }}
+        />
+        <List>
+          {items.map((item, index) => {
+            return (
+              <CustomizedListItem
+                primary={item.name}
+                index={index}
+                menuItem={item.menuItem}
+                selected={index === selectedIndex}
+                handleListItemClick={handleListItemClick}
+              />
+            );
+          })}
+          {isAdmin && (
             <CustomizedListItem
-              primary={item.name}
-              index={index}
-              menuItem={item.menuItem}
-              selected={index === selectedIndex}
+              primary={"Settings"}
+              index={5}
+              menuItem={"settings"}
+              selected={selectedIndex === 5}
               handleListItemClick={handleListItemClick}
             />
-          );
-        })}
-        {isAdmin && (
-          <CustomizedListItem
-            primary={"Settings"}
-            index={5}
-            menuItem={"settings"}
-            selected={selectedIndex === 5}
-            handleListItemClick={handleListItemClick}
-          />
-        )}
-      </List>
+          )}
+        </List>
+      </Box>
       <Box>
         <Divider sx={{ marginTop: "1080px" }} />
         <CustomizedListItem

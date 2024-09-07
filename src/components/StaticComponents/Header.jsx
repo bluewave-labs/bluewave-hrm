@@ -1,7 +1,8 @@
 import Box from "@mui/system/Box";
+import { useScrollTrigger } from '@mui/material';
 import UserDropdown from "./UserDropdown";
-import { useContext } from "react";
-import StateContext from "../../context/StateContext";
+//import { useContext } from "react";
+//import StateContext from "../../context/StateContext";
 
 /**
  * Header component for most pages. Contains the company logo and the current user's information.
@@ -17,33 +18,33 @@ import StateContext from "../../context/StateContext";
  *  - actions<Object>: Array of objects in which each object contains a label and action.
  *     Syntax: [...{label: <string>, action: <function>]
  */
-export default function Header({ style }) {
-  const stateContext = useContext(StateContext);
+export default function Header({window, style }) {
+  //const stateContext = useContext(StateContext);
+
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+    disableHysteresis: true,
+    threshold: 0
+});
 
   return (
-    <Box
-      sx={{
-        ...{
-          boxSizing: "border-box",
-          width: "100%",
-          height: "87px",
-          padding: 2,
-          display: "flex",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #EBEBEB",
-          boxShadow: "0 10px 6px #10182808",
-        },
-        ...style,
-      }}
+    <Box className={trigger ? "scrolled" : ""} sx={{...{
+        boxSizing: "border-box",
+        width: "100%",
+        height: "87px",
+        padding: "20px",
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        position: "fixed",
+        zIndex: 1,
+        "&.scrolled": {
+            backgroundColor: "#FFFFFF",
+            borderBottom: "1px solid #EBEBEB",
+            boxShadow: "0 10px 6px #10182808",
+        }
+      }, ...style}}
     >
-      <img
-        src={stateContext.state.logo}
-        alt="Company Logo"
-        style={{
-          maxWidth: "150px",
-          maxHeight: "75px",
-        }}
-      />
       <UserDropdown />
     </Box>
   );
