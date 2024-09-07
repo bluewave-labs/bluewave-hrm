@@ -103,6 +103,7 @@ export default function SideMenu({ style, onSelect }) {
           borderRight: "1px solid #EBEBEB",
           borderBottom: "1px solid #EBEBEB",
           backgroundColor: "#FFFFFF",
+          zIndex: 1,
         },
         ...style,
       }}
@@ -112,8 +113,8 @@ export default function SideMenu({ style, onSelect }) {
           src={stateContext.state.logo}
           alt="Company Logo"
           style={{
-            maxWidth: "150px",
-            maxHeight: "75px",
+            maxWidth: "300px",
+            maxHeight: "150px",
           }}
         />
         <List>

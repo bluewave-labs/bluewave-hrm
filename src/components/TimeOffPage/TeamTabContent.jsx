@@ -4,7 +4,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import axios from 'axios';
+//import axios from 'axios';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
@@ -14,6 +14,7 @@ import { colors, fonts } from '../../Styles';
 //import { currentUserID } from '../../testConfig';
 import StateContext from '../../context/StateContext';
 import { fetchAllByEmployee } from '../../assets/FetchServices/TimeOffHistory';
+import { fetchMyTeam, fetchAll } from '../../assets/FetchServices/Employee';
 
 
 //Function for parsing a JavaScript date into a string format.
@@ -49,10 +50,12 @@ export default function TeamTabContent({style}) {
 
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
+    const isAdmin = stateContext.state.user && stateContext.state.user.permission.id === 1;
+    const isManager = stateContext.state.user && stateContext.state.user.permission.id === 2;
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used in API calls
-    const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
+    //const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
     //const timeOffURL = `http://localhost:5000/api/timeoffhistories/employee`;
 
     //Set the current page back to 1 each time the filters are changed
@@ -67,63 +70,76 @@ export default function TeamTabContent({style}) {
 
     //Function for retrieving all the time off periods for the current manager's team
     function getTimeOffPeriods() {
-        axios.get(empUrl, {withCredentials: true})
-        .then((response) => {
-            //Retrieve all employee IDs in current team
-            let data = response.data;
-            const team = data.map((emp) => emp.empId);
-            const periods = [];
-            //Retrieve the time off periods for each employee
-            team.forEach((id) => {
-                fetchAllByEmployee(id)
-                .then((data) => {
-                    if (data) {
-                        data.forEach((p) => {
-                            periods.push({
-                                id: p.id,
-                                user: {
-                                    name: `${p.employee.firstName} ${p.employee.lastName}`,
-                                    avatar: p.employee.photo
-                                },
-                                from: formatDate(dayjs(p.startDate).toDate()),
-                                to: formatDate(dayjs(p.endDate).toDate()),
-                                type: p.timeOff.category,
-                                hours: p.hours,
-                                note: p.note,
-                                status: p.status
-                            });
-                        })
-                        setTimeOffPeriods([...timeOffPeriods, ...periods]);
-                    }
-                })
-                /*
-                axios.post(`${timeOffURL}/${id}`)
-                .then((response) => {
-                    data = response.data;
-                    data.forEach((p) => {
-                        periods.push({
-                            id: p.id,
-                            user: {
-                                name: `${p.employee.firstName} ${p.employee.lastName}`,
-                                avatar: p.employee.photo
-                            },
-                            from: formatDate(dayjs(p.startDate).toDate()),
-                            to: formatDate(dayjs(p.endDate).toDate()),
-                            type: p.timeOff.category,
-                            hours: p.hours,
-                            note: p.note,
-                            status: p.status
-                        });
+        if (isAdmin) {
+            fetchAll()
+            .then((data) => {
+                //Retrieve all employee IDs in current team
+                const team = data.map((emp) => emp.empId);
+                const periods = [];
+                //Retrieve the time off periods for each employee
+                team.forEach((id) => {
+                    fetchAllByEmployee(id)
+                    .then((data) => {
+                        if (data) {
+                            data.forEach((p) => {
+                                periods.push({
+                                    id: p.id,
+                                    user: {
+                                        name: `${p.employee.firstName} ${p.employee.lastName}`,
+                                        avatar: p.employee.photo
+                                    },
+                                    from: formatDate(dayjs(p.startDate).toDate()),
+                                    to: formatDate(dayjs(p.endDate).toDate()),
+                                    type: p.timeOff.category,
+                                    hours: p.hours,
+                                    note: p.note,
+                                    status: p.status
+                                });
+                            })
+                            setTimeOffPeriods([...timeOffPeriods, ...periods]);
+                        }
                     })
-                    setTimeOffPeriods([...timeOffPeriods, ...periods]);
-                })
-                .catch((error) => console.log(error));
-                */
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        }
+        else if (isManager) {
+            fetchMyTeam(currentUser)
+            .then((data) => {
+                //Retrieve all employee IDs in current team
+                const team = data.map((emp) => emp.empId);
+                const periods = [];
+                //Retrieve the time off periods for each employee
+                team.forEach((id) => {
+                    fetchAllByEmployee(id)
+                    .then((data) => {
+                        if (data) {
+                            data.forEach((p) => {
+                                periods.push({
+                                    id: p.id,
+                                    user: {
+                                        name: `${p.employee.firstName} ${p.employee.lastName}`,
+                                        avatar: p.employee.photo
+                                    },
+                                    from: formatDate(dayjs(p.startDate).toDate()),
+                                    to: formatDate(dayjs(p.endDate).toDate()),
+                                    type: p.timeOff.category,
+                                    hours: p.hours,
+                                    note: p.note,
+                                    status: p.status
+                                });
+                            })
+                            setTimeOffPeriods([...timeOffPeriods, ...periods]);
+                        }
+                    })
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
     };
 
     //Filter out time off periods depending on which filters are active

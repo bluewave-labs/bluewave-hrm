@@ -3,6 +3,7 @@ import Stack from '@mui/system/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import dayjs from 'dayjs';
 //import Page from '../StaticComponents/Page';
 import HRMButton from '../Button/HRMButton';
 import NoConnectionComponent from '../StaticComponents/NoConnectionComponent';
@@ -70,8 +71,8 @@ export default function UpdatesPage({style}) {
                         minWidth: "1042px"
                     }}
                 >
-                    <h3>Hello, Gabriel</h3>
-                    <p>Today is Monday, June 6, 2024</p>
+                    <h3>Hello, {stateContext.state.employee.firstName}</h3>
+                    <p>Today is {dayjs().format("dddd, MMMM D, YYYY")}</p>
                 </Stack>
                 <UpdatesMenu />
             </>

@@ -93,7 +93,7 @@ export default function Dashboard() {
         <Box sx={{
           width: "100%",
           paddingRight: "120px",
-          paddingTop: "50px",
+          paddingTop: "137px",
         }}>
           {current.home && <UpdatesPage />}
           {current.myinfo && <MyInfoHome />}

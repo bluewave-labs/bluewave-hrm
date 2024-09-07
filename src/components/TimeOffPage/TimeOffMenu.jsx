@@ -4,11 +4,12 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { styled } from '@mui/system';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import BoardTabContent from './BoardTabContent';
 import HistoryTabContent from './HistoryTabContent';
 import TeamTabContent from './TeamTabContent';
 import { colors, fonts } from '../../Styles';
+import StateContext from "../../context/StateContext";
 
 /**
  * Menu component for the time off page. Contains the Board, History and Team tabs for controlling
@@ -22,6 +23,10 @@ import { colors, fonts } from '../../Styles';
  */
 export default function TimeOffMenu({style}) {
     const [tab, setTab] = useState('Board');    //State determining which flag is selected
+
+    const stateContext = useContext(StateContext);
+    const isAdmin = stateContext.state.user && stateContext.state.user.permission.id === 1;
+    const isManager = stateContext.state.user && stateContext.state.user.permission.id === 2;
 
     //Function for selecting a new tab
     function handleChange(e, newValue) {
@@ -58,7 +63,7 @@ export default function TimeOffMenu({style}) {
                     >
                         <StyledTab label="Board" value="Board" />
                         <StyledTab label="History" value="History" />
-                        <StyledTab label="My team" value="My team" />
+                        {(isAdmin || isManager) && <StyledTab label="My team" value="My team" />}
                     </TabList>
                 </Box>
                 {/*Board tab*/}

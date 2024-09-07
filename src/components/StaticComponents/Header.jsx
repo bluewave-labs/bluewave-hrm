@@ -37,7 +37,6 @@ export default function Header({window, style }) {
         justifyContent: "flex-end",
         alignItems: "center",
         position: "fixed",
-        zIndex: 1,
         "&.scrolled": {
             backgroundColor: "#FFFFFF",
             borderBottom: "1px solid #EBEBEB",
