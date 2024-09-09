@@ -1,4 +1,5 @@
 import axios from "axios";
+import policies from "./policies.json";
 
 function aggregateLeaveData(data) {
   const policies = {};
@@ -21,11 +22,13 @@ function aggregateLeaveData(data) {
 
 const getTimeOffs = async () => {
   try {
-    const response = await axios.post(
-      `http://localhost:3000/api/allTimeOffPolicies`
-    );
-    console.log("DATA", aggregateLeaveData(response.data));
-    return aggregateLeaveData(response.data);
+    // const response = await axios.post(
+    //   `http://localhost:3000/api/allTimeOffPolicies`
+    // );
+    // console.log("DATA", aggregateLeaveData(response.data));
+    // return aggregateLeaveData(response.data);
+    console.log("DATA", aggregateLeaveData(policies));
+    return aggregateLeaveData(policies);
   } catch (error) {
     console.error("Error fetching timeoffs:", error);
     throw error;

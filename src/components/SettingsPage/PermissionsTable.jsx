@@ -72,7 +72,12 @@ export default function PermissionsTable({ contentList, style }) {
 
   if (isLoading.employees || isLoading.users)
     return (
-      <Stack direction="row" justifyContent="center" alignItems="center" sx={{width: "100%", padding: "10px"}}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ width: "100%", padding: "10px" }}
+      >
         <CircularProgress />
       </Stack>
     );
@@ -119,7 +124,7 @@ export default function PermissionsTable({ contentList, style }) {
               <TableRow key={item.id}>
                 <TableBodyCell>
                   <Stack direction="row" alignItems="center" spacing={2}>
-                    <Avatar alt="Employee Photo" src={item.photo} />
+                    <Avatar alt="Employee Photo" src={"data:image/png;base64," + atob(item.photo)} />
                     <Text>{`${item?.firstName} ${item?.lastName}`}</Text>
                   </Stack>
                 </TableBodyCell>
