@@ -71,7 +71,7 @@ export default function ListTable({ openDialog, content, contentList, style }) {
               <TextHeader>Default Balance</TextHeader>
             </TableHeaderCell>
             <TableHeaderCell>
-              <TextHeader>Times used</TextHeader>
+              <TextHeader>Hours used</TextHeader>
             </TableHeaderCell>
             <TableHeaderCell></TableHeaderCell>
           </TableRow>

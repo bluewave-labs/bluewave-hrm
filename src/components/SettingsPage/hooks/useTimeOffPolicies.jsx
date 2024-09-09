@@ -3,7 +3,7 @@ import { useSettingsContext } from "../context";
 const policiesColumns = [
   { header: "Policy type", contentKey: "type" },
   { header: "Default Balance", contentKey: "availableDays" },
-  { header: "Times used", contentKey: "hoursUsed" },
+  { header: "Hours used", contentKey: "hoursUsed" },
 ];
 
 export const useTimeOffPolicies = () => {

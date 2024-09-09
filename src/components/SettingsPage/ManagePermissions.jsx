@@ -13,6 +13,7 @@ import PermissionsTable from "./PermissionsTable";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Toast from "./Toast";
 import PermissionsDialog from "./PermissionsDialog";
+import EmployeesPermissionDialog from "./EmployeesPermissionDialog";
 import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
 
@@ -34,6 +35,8 @@ export default function ManagePermissions({
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredContentList, setFilteredContentList] = useState(contentList);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEmployeesPermissionDialogOpen, setIsEmployeesPermissionDialogOpen] =
+    useState(false);
   const { updatedPermissions } = useSettingsContext();
 
   const [toast, setToast] = useState({
@@ -71,6 +74,11 @@ export default function ManagePermissions({
 
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
+
+  const openEmployeesPermissionDialog = () =>
+    setIsEmployeesPermissionDialogOpen(true);
+  const closeEmployeesPermissionDialog = () =>
+    setIsEmployeesPermissionDialogOpen(false);
 
   const handleCloseToast = () => {
     setToast({ ...toast, open: false });
@@ -129,7 +137,16 @@ export default function ManagePermissions({
           </Stack>
         </Grid>
 
-        <PermissionsDialog open={isDialogOpen} onClose={closeDialog} />
+        <PermissionsDialog
+          open={isDialogOpen}
+          onClose={closeDialog}
+          openEmployeesPermissionDialog={openEmployeesPermissionDialog}
+        />
+
+        <EmployeesPermissionDialog
+          open={isEmployeesPermissionDialogOpen}
+          onClose={closeEmployeesPermissionDialog}
+        />
 
         <PermissionsTable
           contentList={itemsToDisplay}

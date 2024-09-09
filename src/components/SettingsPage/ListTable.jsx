@@ -79,8 +79,8 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                   >
                     {header === "Default Balance"
                       ? `${item[contentKey]} days`
-                      : header === "Times used"
-                        ? `${item[contentKey]} times`
+                      : header === "Hours used"
+                        ? `${item[contentKey]} hours`
                         : item[contentKey]}
                   </Typography>
                 </TableBodyCell>

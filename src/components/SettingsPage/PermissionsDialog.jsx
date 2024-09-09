@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HRMButton from "../Button/HRMButton";
 import { Dialog, DialogTitle } from "./SettingsDialog/styles";
+import EmployeesPermissionDialog from "./EmployeesPermissionDialog";
 import { useSettingsContext } from "./context";
 
 const TextHeader = styled(Typography)({
@@ -45,13 +46,13 @@ const TableBodyCell = styled(TableCell)({
   paddingBottom: "25px",
 });
 
-export default function PermissionsDialog({ style, open, onClose }) {
+export default function PermissionsDialog({
+  style,
+  open,
+  onClose,
+  openEmployeesPermissionDialog,
+}) {
   const { updatedPermissions } = useSettingsContext();
-
-  const onSubmit = (data) => {
-    console.log("data", data);
-    // remember to clear permissions value when save data to database
-  };
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -128,7 +129,7 @@ export default function PermissionsDialog({ style, open, onClose }) {
           <HRMButton mode="secondaryB" onClick={onClose} color="primary">
             Cancel
           </HRMButton>
-          <HRMButton mode="primary" onClick={onSubmit}>
+          <HRMButton mode="primary" onClick={openEmployeesPermissionDialog}>
             Save
           </HRMButton>
         </Stack>
