@@ -24,6 +24,9 @@ const FormattedButton = styled(Button)(() => ({
 
 
 function customisedListItem(columns, index, handleListItemClick) {
+  if(columns[index].id === "action"){
+  return null;
+  }
   if (columns[index].visible) {
     return (
       <ListItem

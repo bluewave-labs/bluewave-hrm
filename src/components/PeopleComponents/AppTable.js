@@ -14,6 +14,20 @@ import TablePagination from "./AppTablePagination";
 import FilterButton from "./FilterButton";
 import NoContentComponent from "./NoContentComponent";
 
+const customStyle = (id, width) => {
+  if (id === "action") {
+    return {
+      minWidth: width,
+      padding: 1,
+      position: "sticky",
+      right: 0,
+      backgroundColor: "#F9FAFB",
+      boxShadow: "5px 2px 5px grey",
+    };
+  } else {
+    return { minWidth: width, padding: 1 };
+  }
+};
 
 // This is a utility function to create a custom React element.
 function TableToolbar(props) {
@@ -79,13 +93,7 @@ const getColumnName = (data) => {
 function CreateTableRow(headCell, headCellIds, row, rowIndex, handleSelection) {
   if (row.cells) {
     return (
-      <TableRow
-        hover
-        tabIndex={-1}
-        key={rowIndex}
-        sx={{ cursor: "pointer" }}
-        onClick={() => handleSelection(row)}
-      >
+      <TableRow tabIndex={-1} key={rowIndex}>
         {row.cells.map((cell, index) => {
           if (headCell[index].visible) {
             return cell;
@@ -95,13 +103,7 @@ function CreateTableRow(headCell, headCellIds, row, rowIndex, handleSelection) {
     );
   }
   return (
-    <TableRow
-      hover
-      tabIndex={-1}
-      key={rowIndex}
-      sx={{ cursor: "pointer" }}
-      onClick={() => handleSelection(row)}
-    >
+    <TableRow tabIndex={-1} key={rowIndex}>
       {headCellIds.map((key, index) => {
         if (row[key]) {
           return (
@@ -139,7 +141,7 @@ Utility function to format the tableHead.
 @param props custom properties of the tableHead.
 */
 function CustomisedTableHead(props) {
-  const { headCells, order, orderBy, onRequestSort } = props;
+  const { headCells, order, orderBy, onRequestSort, showActionHeader } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -147,7 +149,7 @@ function CustomisedTableHead(props) {
     <TableHead sx={{ backgroundColor: "#F9FAFB" }}>
       <TableRow>
         {headCells.map((cell) => {
-          if (cell.visible) {
+          if (cell.visible && cell.id !== "action") {
             return (
               <TableCell
                 key={cell.id}
@@ -155,7 +157,7 @@ function CustomisedTableHead(props) {
                 padding="none"
                 sortDirection={orderBy === cell.id ? order : false}
                 component="th"
-                sx={{ minWidth: cell.width, padding: 1 }}
+                sx={customStyle(cell.id, cell.width)}
               >
                 <TableSortLabel
                   active={orderBy === cell.id}
@@ -174,7 +176,18 @@ function CustomisedTableHead(props) {
               </TableCell>
             );
           }
-        })}
+           })}
+         {showActionHeader && (
+          <TableCell
+            key={"action"}
+            align="left"
+            padding="none"
+            component="th"
+            sx={customStyle("action", 30)}
+          >
+            Action
+          </TableCell>
+        )} 
       </TableRow>
     </TableHead>
   );
@@ -208,13 +221,13 @@ the headCells.
  * @returns  {ReactNode} A Stack React element.
  */
 export default function AppTable(props) {
-  const { caption, headCells, data, rowsPerPage, handleSelection } = props;
+  const { caption, headCells, data, rowsPerPage, handleSelection, loading, showActionHeader} =
+    props;
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(1);
   const [column, setColumn] = useState(headCells);
   const [dataSize, setDataSize] = useState(data.length);
-  const [loading, setLoading] = useState(true);
 
   const columnNames = getColumnName(headCells);
 
@@ -226,8 +239,7 @@ export default function AppTable(props) {
 
   useEffect(() => {
     setDataSize(data.length);
-    setLoading(false);
-  },[data.length]);
+  }, [data.length, loading]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -243,7 +255,7 @@ export default function AppTable(props) {
         (page - 1) * rowsPerPage,
         (page - 1) * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, column, dataSize]
+    [order, orderBy, page, column, dataSize, loading]
   );
   if (loading) {
     return (
@@ -252,7 +264,7 @@ export default function AppTable(props) {
       </NoContentComponent>
     );
   }
- if (data.length === 0) {
+  if (data.length === 0) {
     return (
       <NoContentComponent>
         <p>No data to display</p>
@@ -282,6 +294,7 @@ export default function AppTable(props) {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
+              showActionHeader={showActionHeader}
             />
             <TableBody>
               {visibleRows.map((row, index) => {
