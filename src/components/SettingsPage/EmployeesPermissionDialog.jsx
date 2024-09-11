@@ -5,9 +5,9 @@ import {
   DialogContent,
   Grid,
   MenuList,
-  MenuItem,
   Autocomplete,
   Button,
+  Chip,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
@@ -34,10 +34,23 @@ const Text = styled(Typography)({
 export default function EmployeesPermissionDialog({ style, open, onClose }) {
   const { employees, updatedPermissions } = useSettingsContext();
   const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [managedEmployees, setManagedEmployees] = useState("");
+
+  // const selectEmployee = (employee) => {
+  //   setSelectedEmployee(employee);
+  //   const getManagedEmployees = employees.filter(
+  //     (emp) => emp.Manager && emp.Manager.empId === employee.empId
+  //   );
+  //   setManagedEmployees(getManagedEmployees);
+  // };
 
   const onSubmit = (data) => {
     console.log("data", data);
     // remember to clear permissions value when save data to database
+  };
+
+  const handleDelete = () => {
+    console.log("hello");
   };
 
   return (
@@ -118,6 +131,20 @@ export default function EmployeesPermissionDialog({ style, open, onClose }) {
                 marginBottom: "40px",
               }}
             />
+            {/* <Stack>
+              {managedEmployees.length > 0 ? (
+                managedEmployees.map((employee) => (
+                  <Chip
+                    key={employee.empId}
+                    label={employee.firstName}
+                    variant="outlined"
+                    onDelete={handleDelete}
+                  />
+                ))
+              ) : (
+                <p>No employees found.</p>
+              )}
+            </Stack> */}
           </Grid>
         </Grid>
         <Stack

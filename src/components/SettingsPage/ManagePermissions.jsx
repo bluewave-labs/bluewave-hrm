@@ -144,6 +144,7 @@ export default function ManagePermissions({
         />
 
         <EmployeesPermissionDialog
+          onClosePermissionDialog={closeDialog}
           open={isEmployeesPermissionDialogOpen}
           onClose={closeEmployeesPermissionDialog}
         />

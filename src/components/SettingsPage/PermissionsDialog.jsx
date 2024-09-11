@@ -54,6 +54,11 @@ export default function PermissionsDialog({
 }) {
   const { updatedPermissions } = useSettingsContext();
 
+  const onSave = () => {
+    openEmployeesPermissionDialog(true);
+    onClose();
+  }
+
   return (
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
@@ -129,7 +134,7 @@ export default function PermissionsDialog({
           <HRMButton mode="secondaryB" onClick={onClose} color="primary">
             Cancel
           </HRMButton>
-          <HRMButton mode="primary" onClick={openEmployeesPermissionDialog}>
+          <HRMButton mode="primary" onClick={onSave}>
             Save
           </HRMButton>
         </Stack>
