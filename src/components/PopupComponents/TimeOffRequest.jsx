@@ -392,6 +392,7 @@ export default function TimeOffRequest({
                 updatePolicy(newBalance)
                 .then((data) => {
                     console.log(data);
+                    sendRequest();
                 });
             }
             else {

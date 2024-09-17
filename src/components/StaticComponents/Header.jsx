@@ -41,6 +41,7 @@ export default function Header({window, style }) {
             backgroundColor: "#FFFFFF",
             borderBottom: "1px solid #EBEBEB",
             boxShadow: "0 10px 6px #10182808",
+            zIndex: 1
         }
       }, ...style}}
     >
