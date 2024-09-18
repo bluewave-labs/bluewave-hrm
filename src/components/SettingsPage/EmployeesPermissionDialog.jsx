@@ -31,7 +31,7 @@ const Text = styled(Typography)({
   fontSize: "13px",
 });
 
-export default function EmployeesPermissionDialog({ style, open, onClose }) {
+export default function EmployeesPermissionDialog({ open, onClose }) {
   const { employees, updatedPermissions } = useSettingsContext();
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [managedEmployees, setManagedEmployees] = useState("");
@@ -49,8 +49,27 @@ export default function EmployeesPermissionDialog({ style, open, onClose }) {
     // remember to clear permissions value when save data to database
   };
 
-  const handleDelete = () => {
+  const selectEmployee = (employee) => {
     console.log("hello");
+    setSelectedEmployee(employee);
+    const getManagedEmployees = employees.filter(
+      (emp) => emp.Manager && emp.Manager.empId === employee.empId
+    );
+    setManagedEmployees(getManagedEmployees);
+    console.log("getManagedEmployees", getManagedEmployees);
+  };
+
+  const addNewManagedEmployee = (employee) => {
+    const newManagedEmployees = [...managedEmployees, employee];
+    setManagedEmployees(newManagedEmployees);
+  };
+
+  const deleteManagedEmployee = (employeeToDelete) => {
+    console.log("hey hey");
+    const updatedManagedEmployees = managedEmployees.filter(
+      (employee) => employee.empId !== employeeToDelete.empId
+    );
+    setManagedEmployees(updatedManagedEmployees);
   };
 
   return (
@@ -80,7 +99,7 @@ export default function EmployeesPermissionDialog({ style, open, onClose }) {
                 return (
                   <Button
                     variant="text"
-                    onClick={() => setSelectedEmployee(employee)}
+                    onClick={() => selectEmployee(employee)}
                     sx={{
                       fontFamily: "Inter",
                       fontSize: "13px",
@@ -116,7 +135,6 @@ export default function EmployeesPermissionDialog({ style, open, onClose }) {
             )}
             <Autocomplete
               fullWidth
-              // disablePortal
               color="secondary"
               size="small"
               options={employees}
@@ -128,23 +146,43 @@ export default function EmployeesPermissionDialog({ style, open, onClose }) {
               )}
               sx={{
                 width: "100%",
-                marginBottom: "40px",
+                marginBottom: "16px",
               }}
+              onChange={(event, value) => addNewManagedEmployee(value)}
             />
-            {/* <Stack>
-              {managedEmployees.length > 0 ? (
-                managedEmployees.map((employee) => (
-                  <Chip
-                    key={employee.empId}
-                    label={employee.firstName}
-                    variant="outlined"
-                    onDelete={handleDelete}
-                  />
-                ))
-              ) : (
-                <p>No employees found.</p>
-              )}
-            </Stack> */}
+            {managedEmployees.length > 0 && (
+              <Grid container spacing={2}>
+                {managedEmployees.map((employee) => (
+                  <Grid item xs={6} key={employee.empId}>
+                    <Chip
+                      sx={{
+                        corlor: "#344054",
+                        borderRadius: "5px",
+                        borderColor: "#D0D5DD",
+                        fontSize: "13px",
+                        padding: "2px",
+                        height: "auto",
+                        "& span": {
+                          paddingLeft: "4px",
+                        },
+                      }}
+                      label={employee.firstName + " " + employee.lastName}
+                      variant="outlined"
+                      onDelete={() => deleteManagedEmployee(employee)}
+                      deleteIcon={
+                        <CloseIcon
+                          sx={{
+                            width: "16px",
+                            height: "16px",
+                            marginRight: "4px",
+                          }}
+                        />
+                      }
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
           </Grid>
         </Grid>
         <Stack
