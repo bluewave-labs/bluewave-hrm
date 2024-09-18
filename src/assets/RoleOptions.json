@@ -1,0 +1,14 @@
+[
+  { "name": "Account Manager", "selected": false },
+  { "name": "Business Developer", "selected": false },
+  { "name": "Chief Executive Officer", "selected": false },
+  { "name": "Customer Success Manager", "selected": false },
+  { "name": "Customer Success Specialist", "selected": false },
+  { "name": "Finance Manager", "selected": false },
+  { "name": "Human Resources Manager", "selected": false },
+  { "name": "Marketing Manager", "selected": false },
+  { "name": "Marketing Specialist", "selected": false },
+  { "name": "Product Manager", "selected": false },
+  { "name": "Sales Manager", "selected": false },
+  { "name": "Sales Representative", "selected": false }
+]
