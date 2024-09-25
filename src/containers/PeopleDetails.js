@@ -91,7 +91,15 @@ function formatTableData(data, headCells) {
     }
   });
 }
-const tabItems = ({isAdmin, employees, headCells, handleClick, hasTeam, team, terminated }) => {
+const tabItems = ({
+  isAdmin,
+  employees,
+  headCells,
+  handleClick,
+  hasTeam,
+  team,
+  terminated,
+}) => {
   const tabs = [
     {
       label: "Directory",
@@ -187,7 +195,7 @@ export default function People(props) {
           formatTableData(team, headCells);
           setMyTeam(team);
         }
-        if(isAdmin){
+        if (isAdmin) {
           const terms = await api.employee.fetchTerminated();
           formatTableData(terms, headCells);
           setTerminated(terms);
@@ -269,7 +277,7 @@ export default function People(props) {
               team: myTeam,
               headCells,
               handleClick,
-              terminated
+              terminated,
             })}
           />
         }

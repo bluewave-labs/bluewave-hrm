@@ -12,7 +12,7 @@ import EmployeeSnackbar from "../components/PeopleComponents/Snackbar";
 function PeopleHome() {
   const [viewOnly, setViewOnly] = useState(true); // view by default
   const [selectedEmployee, setSelectedEmployee] = useState();
-  const [alert, setAlert] = useState({show: false});
+  const [alert, setAlert] = useState({ show: false });
   const handleClick = (data) => {
     // Add new button or a row on the table has been clicked.
     // Update component accordingly
@@ -34,16 +34,18 @@ function PeopleHome() {
           onDiscard={() => {
             setViewOnly(true);
             setAlert({
-              show:false,
-              message:""
-            })
+              show: false,
+              message: "",
+            });
           }}
           onSave={() => {
             setViewOnly(true);
             setAlert({
               show: true,
-              message: selectedEmployee ? `Record successfully updated.` :`Employee successfully added.`
-            })
+              message: selectedEmployee
+                ? `Record successfully updated.`
+                : `Employee successfully added.`,
+            });
           }}
         />
       )}
