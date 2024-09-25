@@ -13,6 +13,25 @@ function PeopleHome() {
   const [viewOnly, setViewOnly] = useState(true); // view by default
   const [selectedEmployee, setSelectedEmployee] = useState();
   const [alert, setAlert] = useState({ show: false });
+  const handleEdit = (data) => {
+    setViewOnly(false);
+    setSelectedEmployee(data);
+  };
+
+  const handleTermination = (data) => {
+    const empId = data ? data.empId : -1;
+    console.log("handleTermination clicked - empId", empId);
+  };
+  const handleSurvey = (data) => {
+    const empId = data ? data.empId : -1;
+    console.log("handleSurvey clicked - empId", empId);
+  };
+
+  const handleAddNewEmployee = () => {
+    setViewOnly(false);
+    setSelectedEmployee(null);
+  };
+
   const handleClick = (data) => {
     // Add new button or a row on the table has been clicked.
     // Update component accordingly
@@ -25,7 +44,12 @@ function PeopleHome() {
       {viewOnly && (
         <Box>
           <EmployeeSnackbar isOpen={alert.show} message={alert.message} />
-          <PeopleDetails onClick={handleClick} />
+          <PeopleDetails
+            handleSurvey={handleSurvey}
+            handleTermination={handleTermination}
+            handleEdit={handleEdit}
+            handleAddNewEmployee={handleAddNewEmployee}
+          />
         </Box>
       )}
       {!viewOnly && (
