@@ -4,7 +4,7 @@
     { "id": "name", "width": 180, "label": "Name", "visible": true },
     {
       "id": "preferredName",
-      "width": 1000,
+      "width": 100,
       "label": "Preferred Name",
       "visible": false
     },
@@ -53,7 +53,13 @@
       "visible": false
     },
     { "id": "weeklyHours", "width": 50, "label": "Hours", "visible": false },
-    { "id": "officeLocation", "width": 100, "label": "Office", "visible": true }
+    {
+      "id": "officeLocation",
+      "width": 100,
+      "label": "Office",
+      "visible": true
+    },
+    { "id": "action", "width": 30, "label": "Action", "visible": true }
   ],
 
   "others": [
@@ -63,6 +69,12 @@
     { "id": "manager", "width": 150, "label": "Manager", "visible": true },
     { "id": "phoneNumber", "width": 150, "label": "Phone", "visible": true },
     { "id": "email", "width": 200, "label": "Email", "visible": true },
-    { "id": "officeLocation", "width": 120, "label": "Office", "visible": true }
+    {
+      "id": "officeLocation",
+      "width": 120,
+      "label": "Office",
+      "visible": true
+    },
+    { "id": "action", "width": 30, "label": "Action", "visible": true }
   ]
 }

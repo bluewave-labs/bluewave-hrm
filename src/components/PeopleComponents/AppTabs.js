@@ -17,7 +17,13 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ pt: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -51,7 +57,7 @@ export default function AppTabs(props) {
   };
 
   return (
-    <Box sx={{ minWidth: 1200 }}>
+    <Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
