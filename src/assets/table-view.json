@@ -4,7 +4,7 @@
     { "id": "name", "width": 180, "label": "Name", "visible": true },
     {
       "id": "preferredName",
-      "width": 100,
+      "width": 1000,
       "label": "Preferred Name",
       "visible": false
     },
@@ -26,7 +26,12 @@
       "label": "Nationality",
       "visible": false
     },
-    { "id": "dateOfBirth", "width": 150, "label": "Birthday", "visible": false },
+    {
+      "id": "dateOfBirth",
+      "width": 150,
+      "label": "Birthday",
+      "visible": false
+    },
     {
       "id": "maritalStatus",
       "width": 100,
@@ -49,7 +54,6 @@
     },
     { "id": "weeklyHours", "width": 50, "label": "Hours", "visible": false },
     { "id": "officeLocation", "width": 100, "label": "Office", "visible": true }
-
   ],
 
   "others": [

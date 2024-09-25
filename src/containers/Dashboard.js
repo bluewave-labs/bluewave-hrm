@@ -83,7 +83,7 @@ export default function Dashboard() {
   return (
     <Box>
       <Header />
-      <Stack spacing={15} direction={"row"}>
+      <Stack spacing={10} direction={"row"}>
         <SideMenu
           onSelect={(menuItem) => {
             displayMenu(menuItem);

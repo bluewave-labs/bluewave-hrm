@@ -51,7 +51,7 @@ export default function AppTabs(props) {
   };
 
   return (
-    <Box sx={{ width: "100%", minWidth: 900 }}>
+    <Box sx={{ minWidth: 1200 }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}

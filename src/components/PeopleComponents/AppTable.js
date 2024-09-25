@@ -14,7 +14,6 @@ import TablePagination from "./AppTablePagination";
 import FilterButton from "./FilterButton";
 import NoContentComponent from "./NoContentComponent";
 
-
 // This is a utility function to create a custom React element.
 function TableToolbar(props) {
   const { caption, count, column, setColumnData } = props;
@@ -227,7 +226,7 @@ export default function AppTable(props) {
   useEffect(() => {
     setDataSize(data.length);
     setLoading(false);
-  },[data.length]);
+  }, [data.length]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -252,7 +251,7 @@ export default function AppTable(props) {
       </NoContentComponent>
     );
   }
- if (data.length === 0) {
+  if (data.length === 0) {
     return (
       <NoContentComponent>
         <p>No data to display</p>
@@ -273,7 +272,7 @@ export default function AppTable(props) {
           component={Paper}
           sx={{
             border: "1px solid #EBEBEB",
-            width: 889,
+            width: 1150,
           }}
         >
           <Table sx={{ minWidth: 800 }} aria-label="app table">
