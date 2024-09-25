@@ -1,6 +1,7 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -45,8 +46,11 @@ export default function TeamTabContent({style}) {
     const [rejectedFilter, setRejectedFilter] = useState(true);
     //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    //Flag for determining if records are being retrieved from the database
+    const [loadingPeriods, setLoadingPeriods] = useState(false);
     //Hook for refreshing the list of time off periods
     //const [refresh, setRefresh] = useState(false);
+    
 
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
@@ -71,6 +75,7 @@ export default function TeamTabContent({style}) {
     //Function for retrieving all the time off periods for the current manager's team
     function getTimeOffPeriods() {
         if (isAdmin) {
+            setLoadingPeriods(true);
             fetchAll()
             .then((data) => {
                 //Retrieve all employee IDs in current team
@@ -103,9 +108,11 @@ export default function TeamTabContent({style}) {
             })
             .catch((error) => {
                 console.log(error);
-            });
+            })
+            .finallY(() => setLoadingPeriods(false));
         }
         else if (isManager) {
+            setLoadingPeriods(true);
             fetchMyTeam(currentUser)
             .then((data) => {
                 //Retrieve all employee IDs in current team
@@ -138,7 +145,8 @@ export default function TeamTabContent({style}) {
             })
             .catch((error) => {
                 console.log(error);
-            });
+            })
+            .finally(() => setLoadingPeriods(false));
         }
     };
 
@@ -208,29 +216,31 @@ export default function TeamTabContent({style}) {
                 }
             </Stack>
             {/*If there are periods of time off, display the time off period list and navbar */}
-            {timeOffPeriods.length > 0 ?
-                <>
-                    <UpcomingTimeOffTable 
-                        timeOffPeriods={periodsToDisplay}
-                        tableColumns={['Person', 'Type', 'Amount', 'Note', 'Status']}
-                        editFlag={false}  
-                        style={{marginBottom: "30px"}}
-                    />
-                    {filteredPeriods.length > 10 && 
-                        <PagesNavBar 
-                            numOfEntries={filteredPeriods.length} 
-                            currentPage={currentPage}
-                            handlePage={handlePage}
+            {loadingPeriods ? 
+                <CircularProgress sx={{marginX: "50%", marginY: "20%"}} /> :
+                timeOffPeriods.length > 0 ?
+                    <>
+                        <UpcomingTimeOffTable 
+                            timeOffPeriods={periodsToDisplay}
+                            tableColumns={['Person', 'Type', 'Amount', 'Note', 'Status']}
+                            editFlag={false}  
+                            style={{marginBottom: "30px"}}
                         />
-                    }
-                </> :
-                <>
-                    {/*Otherwise, display a message that there is no history*/}
-                    <NoContentComponent>
-                        <h3>There is no time off history</h3>
-                        <p>Any updates about your time off history will be shown here.</p>
-                    </NoContentComponent>
-                </>
+                        {filteredPeriods.length > 10 && 
+                            <PagesNavBar 
+                                numOfEntries={filteredPeriods.length} 
+                                currentPage={currentPage}
+                                handlePage={handlePage}
+                            />
+                        }
+                    </> :
+                    <>
+                        {/*Otherwise, display a message that there is no history*/}
+                        <NoContentComponent>
+                            <h3>There is no time off history</h3>
+                            <p>Any updates about your time off history will be shown here.</p>
+                        </NoContentComponent>
+                    </>
             }
         </Box>
     );

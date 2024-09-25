@@ -1,6 +1,7 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import TuneIcon from '@mui/icons-material/Tune';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -43,8 +44,11 @@ export default function HistoryTabContent({style}) {
     const [noteFilter, setNoteFilter] = useState(true);
     //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    //Flag for determining if records are being retrieved from the database
+    const [loadingPeriods, setLoadingPeriods] = useState(false);
     //Hook for refreshing the list of time off periods
     //const [refresh, setRefresh] = useState(false);
+    
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active
@@ -68,6 +72,7 @@ export default function HistoryTabContent({style}) {
     //Function for retrieving any past time off periods
     function getTimeOffPeriods() {
         //Send request to database for time off periods
+        setLoadingPeriods(true);
         fetchAllByEmployee(currentUser)
         .then((data) => {
             if (data) {
@@ -88,7 +93,8 @@ export default function HistoryTabContent({style}) {
                 });
                 setTimeOffPeriods(periods);
             }
-        });
+        })
+        .finally(() => setLoadingPeriods(false));
         /*
         axios.post(timeOffPeriodURL)
         .then((response) => {
@@ -168,32 +174,34 @@ export default function HistoryTabContent({style}) {
                 }
             </Stack>
             {/*If there are periods of time off, display the time off period list and navbar */}
-            {(timeOffPeriods.length > 0) ?
-                <>
-                    {/*Upcoming time off table*/}
-                    <UpcomingTimeOffTable 
-                        timeOffPeriods={periodsToDisplay} 
-                        tableColumns={activeFilters}
-                        editFlag={false} 
-                        //refresh={() => setRefresh(!refresh)}
-                        style={{marginBottom: "30px"}}
-                    />
-                    {/*Upcoming time off navbar*/}
-                    {timeOffPeriods.length > 10 &&
-                        <PagesNavBar 
-                            numOfEntries={timeOffPeriods.length} 
-                            currentPage={currentPage} 
-                            handlePage={handlePage}
-                        /> 
-                    }  
-                </> :
-                <>
-                    {/*Otherwise, display a message that there is no history*/}
-                    <NoContentComponent>
-                        <h3>There is no time off history</h3>
-                        <p>Any updates about your time off history will be shown here.</p>
-                    </NoContentComponent>
-                </>
+            {loadingPeriods ? 
+                <CircularProgress sx={{marginX: "50%", marginY: "20%"}} /> :
+                (timeOffPeriods.length > 0) ?
+                    <>
+                        {/*Upcoming time off table*/}
+                        <UpcomingTimeOffTable 
+                            timeOffPeriods={periodsToDisplay} 
+                            tableColumns={activeFilters}
+                            editFlag={false} 
+                            //refresh={() => setRefresh(!refresh)}
+                            style={{marginBottom: "30px"}}
+                        />
+                        {/*Upcoming time off navbar*/}
+                        {timeOffPeriods.length > 10 &&
+                            <PagesNavBar 
+                                numOfEntries={timeOffPeriods.length} 
+                                currentPage={currentPage} 
+                                handlePage={handlePage}
+                            /> 
+                        }  
+                    </> :
+                    <>
+                        {/*Otherwise, display a message that there is no history*/}
+                        <NoContentComponent>
+                            <h3>There is no time off history</h3>
+                            <p>Any updates about your time off history will be shown here.</p>
+                        </NoContentComponent>
+                    </>
             }
         </Box>
     );

@@ -43,9 +43,9 @@ function nextButton() {
 /**
  * This component renders a pagination.
  * @param {Pagination properties} props The properties include count (size of the data),
- * rowsPerPage (the number of rows displays at a time), and handleChangePage 
+ * rowsPerPage (the number of rows displays at a time), and handleChangePage
  * (function to call when the page number changes)
- * @returns {ReactNode} A Pagination React element. 
+ * @returns {ReactNode} A Pagination React element.
  */
 export default function AppPagination(props) {
   const { count, rowsPerPage, handleChangePage } = props;
@@ -55,7 +55,7 @@ export default function AppPagination(props) {
       sx={{
         border: "1px solid #EAECF0",
         backgroundColor: "#FFFFFF",
-        width: 860,
+        width: "100%",
         padding: 2,
         alignItems: "center",
       }}

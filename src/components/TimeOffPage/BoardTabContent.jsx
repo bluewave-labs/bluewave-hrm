@@ -1,5 +1,6 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -40,6 +41,9 @@ export default function BoardTabContent({style}) {
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Hook for refreshing the list of time off periods
     const [refresh, setRefresh] = useState(false);
+    //Flag for determining if records are being retrieved from the database
+    const [loadingPolicies, setLoadingPolicies] = useState(false);
+    const [loadingPeriods, setLoadingPeriods] = useState(false);
 
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
@@ -60,6 +64,7 @@ export default function BoardTabContent({style}) {
     //Function for retrieving the time off policies and their respective hours used and available
     function getTimeOffPolicies() {
         //Send Request to database for time off policies
+        setLoadingPolicies(true);
         fetchOne(currentUser)
         .then((data) => {
             if (data) {
@@ -76,7 +81,8 @@ export default function BoardTabContent({style}) {
                 });
                 setTimeOffPolicies(policies);
             }
-        });
+        })
+        .finally(() => setLoadingPolicies(false));
         /*
         axios.post(timeOffPolicyURL)
         .then((response) => {
@@ -102,6 +108,7 @@ export default function BoardTabContent({style}) {
     //Function for retrieving any upcoming time off periods
     function getUpcomingTimeOffPeriods() {
         //Send request to database for time off periods
+        setLoadingPeriods(true);
         fetchAllByEmployee(currentUser)
         .then((data) => {
             if (data) {
@@ -124,7 +131,8 @@ export default function BoardTabContent({style}) {
                 });
                 setTimeOffPeriods(periods);
             }
-        });
+        })
+        .finally(() => setLoadingPeriods(false));
         /*
         axios.post(timeOffPeriodURL)
         .then((response) => {
@@ -171,41 +179,48 @@ export default function BoardTabContent({style}) {
         }, ...style}}>
             {/*Available time off header and table*/}
             <h3 style={{marginBottom: "40px"}}>Available time offs</h3>
+
             <AvailableTimeOffTable policies={timeOffPolicies} />
             {/*Upcoming time off header*/}
-            <Stack 
-                direction="row" 
-                alignItems="center" 
-                spacing={2} 
-                sx={{marginTop: "50px", marginBottom: "25px"}}
-            >
-                <h3>Upcoming time offs</h3>
-                <Label 
-                    mode="brand" 
-                    label={timeOffPeriods.length} 
-                    style={{borderRadius: "50%"}} 
-                />
-            </Stack>
-            {timeOffPeriods.length > 0 ?
-                <>
-                    {/*Upcoming time off table*/}
-                    <UpcomingTimeOffTable 
-                        timeOffPeriods={periodsToDisplay} 
-                        tableColumns={['Type', 'Amount', 'Note', 'Status']}
-                        editFlag={true} 
-                        refresh={() => setRefresh(!refresh)}
-                        style={{marginBottom: "30px"}}
+            {loadingPolicies ? 
+                <CircularProgress sx={{marginX: "50%", marginY: "40%"}} /> :
+                <Stack 
+                    direction="row" 
+                    alignItems="center" 
+                    spacing={2} 
+                    sx={{marginTop: "50px", marginBottom: "25px"}}
+                >
+                    <h3>Upcoming time offs</h3>
+                    <Label 
+                        mode="brand" 
+                        label={timeOffPeriods.length} 
+                        style={{borderRadius: "50%"}} 
                     />
-                    {/*Upcoming time off navbar*/}
-                    {timeOffPeriods.length > 10 &&
-                        <PagesNavBar 
-                            numOfEntries={timeOffPeriods.length} 
-                            currentPage={currentPage} 
-                            handlePage={handlePage}
-                        /> 
-                    }  
-                </> :
-                <p>There is no upcoming time off right now.</p>
+                </Stack>
+            }
+            {loadingPeriods ?
+                <CircularProgress sx={{marginX: "50%", marginY: "40%"}} /> :
+                timeOffPeriods.length > 0 ?
+                    <>
+                        {/*Upcoming time off table*/}
+                        <UpcomingTimeOffTable 
+                            timeOffPeriods={periodsToDisplay} 
+                            tableColumns={['Type', 'Amount', 'Note', 'Status']}
+                            editFlag={true} 
+                            refresh={() => setRefresh(!refresh)}
+                            style={{marginBottom: "30px"}}
+                        />
+                        {/*Upcoming time off navbar*/}
+                        {timeOffPeriods.length > 10 &&
+                            <PagesNavBar 
+                                numOfEntries={timeOffPeriods.length} 
+                                currentPage={currentPage} 
+                                handlePage={handlePage}
+                            /> 
+                        }  
+                    </> :
+                    <p>There is no upcoming time off right now.</p>
+                
             }
         </Box>
     );

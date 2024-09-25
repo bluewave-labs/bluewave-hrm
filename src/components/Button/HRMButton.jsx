@@ -134,6 +134,7 @@ export default function HRMButton({mode, children, startIcon, endIcon, onClick, 
                 endIcon={endIcon} 
                 variant="text" 
                 disabled={!enabled}
+                onClick={onClick}
             >
                 {children}
             </StyledButton>

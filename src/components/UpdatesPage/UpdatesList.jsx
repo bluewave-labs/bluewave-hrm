@@ -47,9 +47,6 @@ export default function UpdatesList({updates, refresh, style}) {
     const stateContext = useContext(StateContext);
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
-    //URL endpoints to be used for API calls
-    //const notificationURL = `http://localhost:5000/api/notifications/`;
-
     //Retrieve the status of a notification for a given employee
     function checkNotificationStatus(update, id) {
         return update.recipients.filter((emp) => emp.empId === id)[0].notificationStatus;
@@ -70,31 +67,10 @@ export default function UpdatesList({updates, refresh, style}) {
                 refresh();
             }
         });
-        /*
-        axios.put(
-            notificationURL, 
-            { 
-                notificationId: up.id, 
-                employeeEmpId: currentUser,
-                status: (checkNotificationStatus(up, currentUser) === "new" 
-                    || checkNotificationStatus(up, currentUser) === "waiting") ? "seen" : "new" 
-            }, 
-            { params: { id: up.id } }
-        )
-        .then((response) => {
-            console.log(response);
-            refresh();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-        */
-
     };
 
     //Function for retrieving update details for popup component
     function retrieveDetails(up) {
-        //console.log("Running retrieveDetails()")
         //Retrieve details for "New team member added" update
         if (up.subject === "New team member added") {
             const details = {
@@ -186,6 +162,7 @@ export default function UpdatesList({updates, refresh, style}) {
                                     <HRMButton 
                                         mode="tertiary" 
                                         onClick={() => {
+                                            console.log("View button clicked");
                                             retrieveDetails(update);
                                             if (update.subject === "New team member added") {
                                                 setNewMember(true);

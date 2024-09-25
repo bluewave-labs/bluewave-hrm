@@ -94,16 +94,18 @@ export default function SideMenu({ style, onSelect }) {
     <Stack
       sx={{
         ...{
-          width: "15%",
+          width: "10%",
           minWidth: "280px",
           height: "100%",
+          minHeight: "100vh",
           paddingRight: "15px",
           direction: "column",
           justifyContent: "space-between",
           borderRight: "1px solid #EBEBEB",
           borderBottom: "1px solid #EBEBEB",
           backgroundColor: "#FFFFFF",
-          zIndex: 1,
+          position: "fixed",
+          zIndex: 2,
         },
         ...style,
       }}
@@ -115,6 +117,7 @@ export default function SideMenu({ style, onSelect }) {
           style={{
             maxWidth: "300px",
             maxHeight: "150px",
+            width: "100%"
           }}
         />
         <List>
@@ -141,7 +144,7 @@ export default function SideMenu({ style, onSelect }) {
         </List>
       </Box>
       <Box>
-        <Divider sx={{ marginTop: "1080px" }} />
+        <Divider />
         <CustomizedListItem
           primary={"Support"}
           menuItem={"support"}
