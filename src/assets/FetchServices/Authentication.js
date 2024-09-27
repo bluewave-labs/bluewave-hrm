@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = require("./BaseUrl.json").value; 
+const BASE_URL = require("./BaseUrl.json").value;
 
 const addCred = {
   withCredentials: true,
@@ -61,12 +61,11 @@ export const resetPassword = async (data, id) => {
 };
 
 export const resetPasswordAuth = async (data) => {
-    const url = `${BASE_URL}/api/resetPasswordauth`;
-    try {
-      let res = await axios.patch(url, data,addCred);
-      return res.data;
-    } catch (err) {
-      throw err;
-    }
-  };
-
+  const url = `${BASE_URL}/api/resetPasswordauth`;
+  try {
+    let res = await axios.patch(url, data, addCred);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
