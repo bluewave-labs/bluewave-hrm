@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "http://54.173.233.239",
+    origin: "http://localhost:5433",
     credentials: true,
   })
 );

@@ -2,6 +2,8 @@ const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
 const { getComparator } = require("../helper/utils");
+const dayjs = require('dayjs');
+const { createNotification } = require("../helper/notificationCRUD");
 
 exports.showAll = async (req, res) => {
   const data = await db.timeOffHistory.findAll({
@@ -45,7 +47,30 @@ exports.createRecord = async (req, res) => {
   //checking for timeOffHistory name already exists
   try {
     const data = await db.timeOffHistory.create(req.body);
-    res.status(201).json({ data });
+    console.log(data);
+    const emp = await db.employee.findByPk(data.empId);
+    console.log(emp);
+    const empNotification = await createNotification({
+      subject: "Your time off request has been sent",
+      message: `Your time off request from ${dayjs(data.startDate).format("MMMM D")} to 
+        ${dayjs(data.endDate).format("MMMM D")} has been sent.`,
+      empId: data.empId,
+      timeOffHistoryId: data.id,
+      recipientId: [data.empId]
+    });
+    const manNotification = await createNotification({
+      subject: "New time off request",
+      message: `${emp.firstName} ${emp.lastName} has requested time off from 
+        ${dayjs(data.startDate).format("MMMM D")} to ${dayjs(data.endDate).format("MMMM D")}.`,
+      empId: data.empId,
+      timeOffHistoryId: data.id,
+      recipientId: [emp.managerId]
+    });
+    res.status(201).json({
+      data: data,
+      empNotification: empNotification,
+      manNotification: manNotification
+    });
   } catch (err) {
     console.log(err);
     res.send({ message: message.failed });
@@ -56,9 +81,104 @@ exports.updateRecord = async (req, res) => {
   const updatedData = req.body;
   try {
     const data = await db.timeOffHistory.findByPk(updatedData.id);
-    data.set(updatedData);
-    await data.save();
-    res.status(200).json({ message: data });
+    let notification;
+    //Case 1: Employee is modifying an upcoming time off request (Pending/Approved -> Pending)
+    if (["Pending", "Approved"].includes(data.status) && updatedData.status === "Pending") {
+      const emp = await db.employee.findByPk(data.empId);
+      const empNotification = await createNotification({
+        subject: "Your time off request has been sent",
+        message: `Your time off request from ${dayjs(updatedData.startDate).format("MMMM D")} to
+          ${dayjs(updatedData.endDate).format("MMMM D")} has been sent.`,
+        empId: data.empId,
+        timeOffHistoryId: data.id,
+        recipientId: [data.empId]
+      });
+      const manNotification = await createNotification({
+        subject: "New time off request",
+        message: `${emp.firstName} ${emp.lastName} has requested time off from 
+          ${dayjs(updatedData.startDate).format("MMMM D")} to ${dayjs(updatedData.endDate).format("MMMM D")}.`,
+        empId: data.empId,
+        timeOffHistoryId: data.id,
+        recipientId: [emp.managerId]
+      });
+      data.set(updatedData);
+      await data.save();
+      res.status(200).json({ 
+        data: data,
+        empNotification: empNotification,
+        manNotification: manNotification
+      });
+    }
+    //Case 2: Manager is approving or rejecting a time off request (Pending -> Approved/Declined)
+    else if (data.status === "Pending" && ["Approved", "Declined"].includes(updatedData.status)) {
+      notification = await createNotification({
+        subject: `Your time off request has been ${updatedData.status === "Approved" ? "approved" : "rejected"}`,
+        message: `Your time off request from ${dayjs(data.startDate).format("MMMM D")} to 
+          ${dayjs(data.endDate).format("MMMM D")} has been 
+          ${updatedData.status === "Approved" ? "approved" : "rejected"}.`,
+        empId: data.empId,
+        timeOffHistoryId: updatedData.id,
+        recipientId: [data.empId]
+      });
+      data.set(updatedData);
+      await data.save();
+      res.status(200).json({
+        data: data,
+        notification: notification
+      });
+    }
+    //Case 3: Employee is requesting to delete an upcoming time off request (Pending -> Deleting)
+    else if (data.status === "Pending" && updatedData.status === "Deleting") {
+      const emp = await db.employee.findByPk(data.empId);
+      notification = await createNotification({
+        subject: "Employee would like to delete time off request",
+        message: `${emp.firstName} ${emp.lastName} would like to cancel the time off request from
+          ${dayjs(data.startDate).format("MMMM D")} to ${dayjs(data.endDate).format("MMMM D")}.`,
+        empId: data.empId,
+        timeOffHistoryId: updatedData.id,
+        recipientId: [emp.managerId]
+      });
+      data.set(updatedData);
+      await data.save();
+      res.status(200).json({
+        data: data,
+        notification: notification
+      });
+    }
+    //Case 4: Manager deletes time off request  (Deleting -> Cancelled)
+    else if (data.status === "Deleting" && updatedData.status === "Cancelled") {
+      notification = await createNotification({
+        subject: "Your time off request has been deleted",
+        message: `Your time off request from ${dayjs(data.startDate).format("MMMM D")} to 
+          ${dayjs(data.endDate).format("MMMM D")} has been deleted.`,
+        empId: data.empId,
+        timeOffHistoryId: updatedData.id,
+        recipientId: [data.empId]
+      });
+      data.set(updatedData);
+      await data.save();
+      res.status(200).json({
+        data: data,
+        notification: notification
+      });
+    }
+    //Case 5: Manager refuses to delete time off request (Deleting -> Pending)
+    else if (data.status === "Deleting" && updatedData.status === "Pending") {
+      notification = await createNotification({
+        subject: "Your time off request was not deleted",
+        message: `Your manager did not confirm your attempt to delete your time off request from 
+          ${dayjs(data.startDate).format("MMMM D")} to ${dayjs(data.endDate).format("MMMM D")}.`,
+        empId: data.empId,
+        timeOffHistoryId: updatedData.id,
+        recipientId: [data.empId]
+      });
+      data.set(updatedData);
+      await data.save();
+      res.status(200).json({
+        data: data,
+        notification: notification
+      });
+    }
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: message.failed });
