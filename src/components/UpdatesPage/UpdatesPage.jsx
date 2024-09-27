@@ -11,9 +11,6 @@ import StateContext from '../../context/StateContext';
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
- * 
- * - innerStyle<Object>: Optional prop for adding further inline styling in the inner component.
- *      Default: {}
  */
 export default function UpdatesPage({style}) {
     //ID of the currently logged in employee
@@ -26,7 +23,7 @@ export default function UpdatesPage({style}) {
                 alignItems="center"
                 justifyContent="space-between"
                 sx={{
-                    marginBottom: "40px",
+                    marginBottom: "16px",
                     minWidth: "1042px"
                 }}
             >
@@ -43,6 +40,5 @@ UpdatesPage.propTypes = {};
 
 //Default values for this component
 UpdatesPage.defaultProps = {
-    style: {},
-    innerStyle: {}
+    style: {}
 };

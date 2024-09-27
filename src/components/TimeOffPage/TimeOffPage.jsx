@@ -40,7 +40,7 @@ export default function TimeOffPage({style}) {
                 alignItems="center"
                 justifyContent="space-between"
                 sx={{
-                    marginBottom: "40px"
+                    marginBottom: "16px"
                 }}
             >
                 <h3>Time off</h3>

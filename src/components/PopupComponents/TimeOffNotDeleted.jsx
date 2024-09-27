@@ -7,8 +7,7 @@ import { fonts, colors } from '../../Styles';
 import PropTypes from 'prop-types';
 
 /**
- * More detailed popup component for notifying the user that a time off request was succcessfully
- * sent.
+ * More detailed popup component for notifying the user that their time off request was not deleted
  * 
  * Props:
  * - request_information<Object>: Contains the request information.
@@ -25,9 +24,9 @@ import PropTypes from 'prop-types';
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function TimeOffRequestSentWindow({request_information, close, style}) {
+export default function TimeOffNotDeleted({request_information, close, style}) {
     //Custom style elements
-    const StyledTD = styled("td")({
+    const StyledTD = styled("td") ({
         textAlign: "start",
         width: "50%",
         paddingBottom: "20px"
@@ -44,13 +43,13 @@ export default function TimeOffRequestSentWindow({request_information, close, st
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Title*/}
-            <Stack 
-                direction="row" 
-                alignItems="center" 
+            <Stack
+                direction="row"
+                alignItems="center"
                 justifyContent="space-between"
                 sx={{marginBottom: "40px"}}
             >
-                <h3>Your time off request has been sent</h3>
+                <h3>Your time off request was not deleted</h3>
                 <CloseIcon onClick={close} sx={{
                     backgroundColor: "#FFFFFF",
                     "&:hover": {
@@ -59,6 +58,7 @@ export default function TimeOffRequestSentWindow({request_information, close, st
                     }
                 }}/>
             </Stack>
+            <h4 style={{marginBottom: "40px"}}>The following time off request is pending:</h4>
             {/*Time off request details*/}
             <table style={{width: "100%", marginBottom: "40px"}}>
                 <tr>
@@ -87,15 +87,15 @@ export default function TimeOffRequestSentWindow({request_information, close, st
 };
 
 //Control panel settings for storybook
-TimeOffRequestSentWindow.propTypes = {
+TimeOffNotDeleted.propTypes = {
     //Information included in the time off request
     request_information: PropTypes.objectOf(PropTypes.string),
 
     //Function for closing this popup
-    close: PropTypes.func,
+    close: PropTypes.func
 };
 
 //Default values for this component
-TimeOffRequestSentWindow.defaultProps = {
+TimeOffNotDeleted.defaultProps = {
     style: {}
 };

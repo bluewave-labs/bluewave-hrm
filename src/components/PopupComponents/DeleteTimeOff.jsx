@@ -1,14 +1,9 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import PropTypes from 'prop-types';
-//import axios from 'axios';
-import dayjs from "dayjs";
-import { useContext } from 'react';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import StateContext from '../../context/StateContext';
-import { remove } from '../../assets/FetchServices/TimeOffHistory';
-import { fetchOne, update } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
+import { update } from '../../assets/FetchServices/TimeOffHistory';
 
 /**
  * Popup component for confirming a request to delete an upcoming period of time off
@@ -35,70 +30,18 @@ import { fetchOne, update } from '../../assets/FetchServices/EmployeeAnnualTimeO
  *      Default: {}
  */
 export default function DeleteTimeOff({period, close, refresh, style}) {
-    //ID of the currently logged in employee
-    const stateContext = useContext(StateContext);
-    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
-
-    //URL endpoints to be used for API calls
-    //const deleteURL = `http://localhost:5000/api/timeoffhistories/${period.id}`;
-    //const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
-    //const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
 
     //Function for deleting a time off request
     function handleDelete() {
-        //Delete the given time off request
-        remove(period.id)
-        .then((data) => {
-            if (data) {
-                console.log(data);
-                //Retrieve the related employeeAnnualTimeOff record
-                fetchOne(currentUser)
-                .then((data) => {
-                    if (data) {
-                        console.log(data);
-                        const policy = data.filter((p) => (p.year === dayjs().year() && p.timeOffId === period.timeOffId))[0];
-                        //Refund the hours used in the time off request
-                        const refundBalance = {
-                            id: policy.id,
-                            cumulativeHoursTaken: policy.hoursUsed - period.hours
-                        };
-                        update(refundBalance)
-                        .then((data) => {
-                            if (data) {
-                                console.log(data);
-                                refresh();
-                            }
-                        })
-                    }
-                });
-            }
-        })
-        /*
-        axios.delete(deleteURL)
-        .then((response) => {
-            console.log(response);
-            //Retrieve the related employeeAnnualTimeOff record
-            axios.post(timeOffPolicyPOSTURL)
-            .then((response) => {
-                console.log(response);
-                const policy = response.data.filter((p) => (p.year === dayjs().year() && p.timeOffId === period.timeOffId))[0];
-                const refundBalance = {
-                    id: policy.id,
-                    cumulativeHoursTaken: policy.hoursUsed - period.hours
-                }
-                //Refund the hours used in the time off request
-                axios.put(timeOffPolicyPUTURL, refundBalance)
-                .then((response) => {
-                    console.log(response);
-                    refresh();
-                })
-                .catch((error) => console.log(error));
-            })
-            .catch((error) => console.log(error));
-        })
-        .catch((error) => console.log(error));
-        */
-    }
+        const updatedPeriod = {
+            id: period.id,
+            status: "Deleting"
+        }
+        update(updatedPeriod).then((data) => {
+            console.log(data);
+            refresh();
+        });
+    };
 
     return (
         <Box sx={{...{
@@ -127,8 +70,8 @@ export default function DeleteTimeOff({period, close, refresh, style}) {
 
 //Control panel settings for storybook
 DeleteTimeOff.propTypes = {
-    //Primary key of the corresponding time off period to be deleted.
-    timeOffId: PropTypes.number,
+    //Information on the time off period to be deleted.
+    period: PropTypes.object,
 
     //The function to close this component
     close: PropTypes.func,

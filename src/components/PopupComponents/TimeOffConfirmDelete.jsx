@@ -2,19 +2,16 @@ import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
-import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
 import dayjs from "dayjs";
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import { update as updatePeriod } from '../../assets/FetchServices/TimeOffHistory';
+import { update } from '../../assets/FetchServices/TimeOffHistory';
 import { fetchOne, update as updatePolicy } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
 
 /**
- * Popup component for displaying the information of a time off request and the options to reject
- * or approve it to a manager or administrator.
+ * Popup component for displaying the information of a time off request to be deleted by a manager or administrator.
  * 
  * Props:
  * - request_information<Object>: Contains the request information.
@@ -33,19 +30,17 @@ import { fetchOne, update as updatePolicy } from '../../assets/FetchServices/Emp
  *          status: <String>
  *      }
  * 
- * - close<Function>: Function for closing this popup component.
+ * - close<Function>: Function for closing this popup component
  *      Syntax: close()
  * 
- * - refresh<Function>: Function for closing this popup and refreshing the list of updates in the
+ * - refresh<Function>: Function for closing this popup and freshing the list of updates in the
  *      parent component.
  *      Syntax: refresh()
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function TimeOffApproval({request_information, close, refresh, style}) {
-    const [notes, setNotes] = useState("");
-
+export default function TimeOffConfirmDelete({request_information, close, refresh, style}) {
     //Custom style elements
     const StyledTD = styled('td')({
         textAlign: "start",
@@ -53,17 +48,16 @@ export default function TimeOffApproval({request_information, close, refresh, st
         width: "50%"
     });
 
-    //Function for sending the PUT request to change the time off request status
+    //Function for confirming or refusing a request to delete a time off period
     function resolveRequest(newStatus) {
         //Update the time off period status
-        updatePeriod({
+        const updatedPeriod = {
             id: request_information.timeOffId,
-            status: newStatus,
-            note: notes
-        })
-        .then((data) => {
+            status: newStatus
+        };
+        update(updatedPeriod).then((data) => {
             console.log(data);
-            if (newStatus === "Declined") {
+            if (newStatus === "Cancelled") {
                 const period = data.data;
                 //Retrieve the related employeeAnnualTimeOff record
                 fetchOne(period.empId)
@@ -88,7 +82,7 @@ export default function TimeOffApproval({request_information, close, refresh, st
             }
             refresh();
         });
-    }
+    };
 
     return (
         <Box sx={{...{
@@ -98,12 +92,13 @@ export default function TimeOffApproval({request_information, close, refresh, st
             padding: "40px",
             fontFamily: fonts.fontFamily,
             color: colors.darkGrey
-        }, ...style}}>
+        }, ...style}}
+        >
             {/*Title*/}
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <h3>Approve new time off</h3>
-                <CloseIcon onClick={close} sx={{
-                    backgroundColor: "#FFFFFFF",
+                <h3>Confirm delete time off request</h3>
+                <CloseIcon onclick={close} sx={{
+                    backgroundColor: "#FFFFFF",
                     "&:hover": {
                         cursor: "pointer",
                         backgroundColor: "#D0D5DD"
@@ -115,10 +110,10 @@ export default function TimeOffApproval({request_information, close, refresh, st
                 <tr>
                     <StyledTD><b>Photo</b></StyledTD>
                     <StyledTD>
-                        <Avatar 
-                            alt={request_information.name} 
-                            src={request_information.avatar} 
-                            sx={{width: "60px", height: "60px"}}
+                        <Avatar
+                            alt={request_information.name}
+                            src={request_information.avatar}
+                            sx={{width: "60px", height: "60px"}} 
                         />
                     </StyledTD>
                 </tr>
@@ -147,10 +142,10 @@ export default function TimeOffApproval({request_information, close, refresh, st
                     <StyledTD>{request_information.timeOffBalance}</StyledTD>
                 </tr>
             </table>
-            <table style={{width: "100%"}}>
+            <table styled={{width: "100%"}}>
                 <tr>
                     <StyledTD><b>Time off requested</b></StyledTD>
-                    <StyledTD>{request_information.timeOffRequested}</StyledTD>
+                    <StyledTD>{request_information.timeOFfRequested}</StyledTD>
                 </tr>
                 <tr>
                     <StyledTD><b>Requested days total</b></StyledTD>
@@ -161,41 +156,22 @@ export default function TimeOffApproval({request_information, close, refresh, st
                     <StyledTD>{request_information.timeOffCategory}</StyledTD>
                 </tr>
             </table>
-            {/*Admin's notes*/}
-            <Box sx={{display: "flex", flexDirection: "column"}}>
-                <b style={{marginTop: "40px", marginBottom: "15px"}}>Your Notes</b>
-                <TextField 
-                    rows={4} 
-                    multiline 
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    sx={{
-                        border: "1px solid #D0D5DD", 
-                        borderRadius: "8px",
-                        marginBottom: "40px"
-                    }} 
-                />
-            </Box>
-            {/*Reject, approve or close*/}
-            {request_information.status === "Declined" && 
-                <b style={{color: "#D92D20", marginBottom: "30px"}}>Time off request has been rejected</b>}
-            {request_information.status === "Approved" &&
-                <b style={{color: "#079455", marginBottom: "30px"}}>Time off request has been approved</b>}
-            {request_information.status === "Deleting" && 
-                <b style={{color: "#5D6B98", marginBottom: "30px"}}>Employee is requesting to delete this time off request</b>}
+            {/*Options*/}
             {request_information.status === "Cancelled" && 
                 <b style={{color: "#5D6B98", marginBottom: "30px"}}>Time off request has been deleted</b>}
-            <Stack 
-                direction="row" 
-                alignItems="center" 
+            {(request_information.status !== "Deleting" && request_information.status !== "Cancelled") &&
+                <b style={{color: "#5D6B98", marginBottom: "30px"}}>Time off request is not being deleted</b>}
+            <Stack
+                direction="row"
+                alignItems="center"
                 justifyContent="flex-end"
                 spacing={2}
             >
-                {(request_information.status === "Pending") ? 
+                {(request_information.status === "Deleting") ?
                     <>
                         <HRMButton mode="tertiary" onClick={close}>Cancel</HRMButton>
-                        <HRMButton mode="error" onClick={() => resolveRequest("Declined")}>Reject</HRMButton>
-                        <HRMButton mode="primary" onClick={() => resolveRequest("Approved")}>Approve</HRMButton>
+                        <HRMButton mode="secondaryA" onClick={() => resolveRequest("Pending")}>Reject</HRMButton>
+                        <HRMButton mode="error" onClick={() => resolveRequest("Cancelled")}>Delete</HRMButton>
                     </> :
                     <HRMButton mode="tertiary" onClick={close}>Close</HRMButton>}
             </Stack>
@@ -204,7 +180,7 @@ export default function TimeOffApproval({request_information, close, refresh, st
 };
 
 //Control panel settings for storybook
-TimeOffApproval.propTypes = {
+TimeOffConfirmDelete.propTypes = {
     //Information included in the time off request
     request_information: PropTypes.objectOf(PropTypes.string),
 
@@ -216,6 +192,6 @@ TimeOffApproval.propTypes = {
 };
 
 //Default values for this component
-TimeOffApproval.defaultProps = {
+TimeOffConfirmDelete.defaultProps = {
     style: {}
 };

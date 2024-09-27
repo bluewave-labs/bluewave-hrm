@@ -3,15 +3,12 @@ import Stack from '@mui/system/Stack';
 import TuneIcon from '@mui/icons-material/Tune';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-//import axios from 'axios';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
 import Label from '../Label/Label';
-//import { currentUserID } from '../../testConfig';
 import { colors, fonts } from '../../Styles';
 import { fetchAllByEmployee } from '../../assets/FetchServices/TimeOffHistory';
 import StateContext from '../../context/StateContext';
@@ -30,9 +27,6 @@ function formatDate(date) {
  * a customization menu and controls for navigating between pages of components.
  * 
  * Props:
- * - timeOffPeriods<Array<Object>>: List of objects containing information of upcoming periods
- *      of time off.
- * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
@@ -46,8 +40,6 @@ export default function HistoryTabContent({style}) {
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Flag for determining if records are being retrieved from the database
     const [loadingPeriods, setLoadingPeriods] = useState(false);
-    //Hook for refreshing the list of time off periods
-    //const [refresh, setRefresh] = useState(false);
     
 
     //Filter table columns depending on which filters are active
@@ -60,9 +52,6 @@ export default function HistoryTabContent({style}) {
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
-
-    //URL endpoints to be used for API calls
-    //const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
 
     //Refresh the list of time off periods
     useEffect(() => {
@@ -95,30 +84,6 @@ export default function HistoryTabContent({style}) {
             }
         })
         .finally(() => setLoadingPeriods(false));
-        /*
-        axios.post(timeOffPeriodURL)
-        .then((response) => {
-            const periods = [];
-            const data = response.data;
-            data.forEach((p) => {
-                //Only retrieve and display past periods
-                if (dayjs(p.startDate).isBefore(dayjs())) {
-                    periods.push({
-                        id: p.id,
-                        from: formatDate(dayjs(p.startDate).toDate()),
-                        to: formatDate(dayjs(p.endDate).toDate()),
-                        type: p.timeOff.category,
-                        hours: p.hours,
-                        note: p.note
-                    });
-                }
-            });
-            setTimeOffPeriods(periods);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-        */
     };
  
     //Only shows 10 periods at a time
@@ -133,7 +98,7 @@ export default function HistoryTabContent({style}) {
 
     return (
         <Box sx={{...{
-            marginTop: "40px",
+            //marginTop: "40px",
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
@@ -142,9 +107,7 @@ export default function HistoryTabContent({style}) {
                 direction="row" 
                 alignItems="center" 
                 justifyContent="space-between"
-                sx={{
-                    marginY: "40px"
-                }}
+                sx={{ marginY: "16px" }}
             >
                 <Stack direction="row" alignItems="center" spacing={3}>
                     <h3>Time off history</h3>
@@ -208,10 +171,7 @@ export default function HistoryTabContent({style}) {
 };
 
 //Control panel settings for storybook
-HistoryTabContent.propTypes = {
-    //Periods of time off to be displayed
-    timeOffPeriods: PropTypes.arrayOf(PropTypes.object)
-};
+HistoryTabContent.propTypes = {};
 
 //Default values for this component
 HistoryTabContent.defaultProps = {

@@ -46,8 +46,7 @@ export default function TimeOffMenu({style}) {
         <Box sx={{...{
             boxSizing: "border-box",
             minWidth: "980px",
-            paddingX: "45px",
-            paddingY: "42px",
+            padding: "48px",
             border: "1px solid #EBEBEB",
             borderRadius: "5px",
             backgroundColor: "#FFFFFF",
@@ -60,6 +59,7 @@ export default function TimeOffMenu({style}) {
                         textColor="secondary" 
                         indicatorColor="secondary" 
                         onChange={handleChange}
+                        sx={{ marginBottom: "32px" }}
                     >
                         <StyledTab label="Board" value="Board" />
                         <StyledTab label="History" value="History" />
