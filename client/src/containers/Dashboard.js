@@ -10,6 +10,7 @@ import BasicModal from "../components/PeopleComponents/PopupModal";
 import MyInfoHome from "./MyInfoHome";
 import ReportsMain from "../components/reports/ReportsMain"
 import { EmployeeProvider } from '../components/myinfo/EmployeeContext';
+import ErrorPage from "../../../src/components/Error/ErrorPage";
 
 export default function Dashboard(props) {
   const { email } = props;
@@ -78,6 +79,7 @@ export default function Dashboard(props) {
             <Route path="/reporting" element={<ReportsMain title={"Reporting page"} />} /> 
             <Route path="/settings" element={<Home title={"Settings page"} />} />
             <Route path="/support" element={<Home title={"Support page"} />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </Box>
       </Stack>
