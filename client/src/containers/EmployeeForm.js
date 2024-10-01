@@ -241,7 +241,16 @@ function CustomisedDatePicker(props) {
 }
 
 function CustomisedSelectTag(props) {
-  const { label, name, value, options, width, handleChange, validator, restricted } = props;
+  const {
+    label,
+    name,
+    value,
+    options,
+    width,
+    handleChange,
+    validator,
+    restricted,
+  } = props;
   return (
     <Box sx={rootStyle}>
       <label>{label}</label>
@@ -267,7 +276,15 @@ function CustomisedSelectTag(props) {
   );
 }
 function CustomisedInput(props) {
-  const { label, name, value, handleChange, placeholder, validator, restricted } = props;
+  const {
+    label,
+    name,
+    value,
+    handleChange,
+    placeholder,
+    validator,
+    restricted,
+  } = props;
   return (
     <Box sx={rootStyle}>
       <Typography>{label}</Typography>
@@ -336,17 +353,23 @@ function EmployeeForm(props) {
     async function fetchData() {
       // You can await here
       try {
-        let res = await axios.get("http://localhost:5000/api/departments");
+        let res = await axios.get(
+          "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/departments"
+        );
         res = res.data;
         res.sort((a, b) => sort(a, b, "departmentName"));
         setDepartments(res);
 
-        res = await axios.get("http://localhost:5000/api/roles");
+        res = await axios.get(
+          "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/roles"
+        );
         res = res.data;
         res.sort((a, b) => sort(a, b, "roleTitle"));
         setPositions(res);
 
-        res = await axios.get("http://localhost:5000/api/managers");
+        res = await axios.get(
+          "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/managers"
+        );
         res = res.data;
         setManagers(res);
         setInputs(employee ? employee : {});
@@ -502,7 +525,7 @@ function EmployeeForm(props) {
       if (employee) {
         await axios({
           method: "put",
-          url: "http://localhost:5000/api/employees",
+          url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/employees",
           data: inputs,
         });
 
@@ -512,7 +535,7 @@ function EmployeeForm(props) {
             // Existing profile, update it
             await axios({
               method: "put",
-              url: "http://localhost:5000/api/socialprofiles",
+              url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/socialprofiles",
               data: profile,
             });
             console.log(`Social profile - ${profile.mediumName} updated.`);
@@ -520,7 +543,7 @@ function EmployeeForm(props) {
             // New profile, create it.
             await axios({
               method: "post",
-              url: "http://localhost:5000/api/socialprofiles",
+              url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/socialprofiles",
               data: profile,
             });
             console.log(`Social profile - ${profile.mediumName} created.`);
@@ -530,7 +553,7 @@ function EmployeeForm(props) {
       } else {
         await axios({
           method: "post",
-          url: "http://localhost:5000/api/employees",
+          url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/employees",
           data: inputs,
         });
         console.log("Employee successfully added.");
@@ -1030,7 +1053,7 @@ const validateSocialProfile = async (empId, mediumName, profileUrl) => {
   profileUrl = profileUrl.toLocaleLowerCase();
   const res = await axios({
     method: "post",
-    url: "http://localhost:5000/api/socialProfiles/find/url",
+    url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/socialProfiles/find/url",
     data: {
       empId,
       profileUrl,
@@ -1092,7 +1115,7 @@ const validateForm = async (employee) => {
   } else {
     const res = await axios({
       method: "post",
-      url: "http://localhost:5000/api/employees/find/email",
+      url: "http://ec2-54-173-233-239.compute-1.amazonaws.com:5000/api/employees/find/email",
       data: {
         email: employee.email,
       },
