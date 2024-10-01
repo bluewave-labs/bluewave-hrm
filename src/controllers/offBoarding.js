@@ -293,3 +293,76 @@ exports.deleteResponse = async (req, res) => {
     });
   }
 };
+// Offboarding Documents Controllers
+exports.showAllDoc = async (req, res) => {
+  try {
+    const data = await db.offBoardingDocument.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    if (!data) {
+      res.send("No results found");
+    }
+    res.send(data);
+  } catch (error) {
+    res.send(error);
+  }
+};
+exports.showOnedoc = async (req, res) => {
+  const id = req.params.id;
+  const data = await db.offBoardingDocument.findOne({ where: { id } });
+  if (data === null) {
+    res.status(400).send("Not found!");
+  } else {
+    res.status(200).send(data);
+  }
+};
+exports.createdoc = async (req, res) => {
+  try {
+    const data = await db.offBoardingDocument.create(req.body);
+    console.log(data);
+    res.status(201).json({ data });
+  } catch (err) {
+    console.log(err);
+    res.send({ message: message.failed });
+  }
+};
+exports.updateDoc = async (req, res) => {
+  const data = req.body;
+  try {
+    const id = data.id;
+    const updatedData = await db.offBoardingDocument.findByPk(id);
+    if (updatedData === null) {
+      console.log("No record found for the id ", id);
+    } else {
+      updatedData.set(data);
+      await updatedData.save();
+    }
+
+    res.status(200).json({ message: data });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: message.failed });
+  }
+};
+exports.deleteDoc = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const count = await db.offBoardingDocument.destroy({
+      where: { id: id },
+    });
+    if (count == 1) {
+      res.send({
+        message: message.deleted,
+      });
+    } else {
+      res.send({
+        message: message.failed,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.send({
+      message: err.message || message.failed,
+    });
+  }
+};

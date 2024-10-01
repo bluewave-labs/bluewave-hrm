@@ -122,6 +122,14 @@ module.exports = {
     });
     displayInfo(results.length, "document");
   },
+  populateOffBoardingDocumentTable: async function (db) {
+    const data = require("./offBoardingDocument.json");
+    removeKey(data, "id");
+    const results = await db.offBoardingDocument.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "offBoardingDocument");
+  },
   populateSocialProfileTable: async function (db) {
     const data = require("./socialProfile.json");
     removeKey(data, "id");
@@ -189,6 +197,7 @@ module.exports = {
     await this.populateEmployeeTable(db);
     await this.populateSocialProfileTable(db);
     await this.populateDocumentTable(db);
+    await this.populateOffBoardingDocumentTable(db);
     await this.populateUserTable(db);
     await this.populateTimeOffHistoryTable(db);
     await this.populateChangeHistoryTable(db);

@@ -56,6 +56,7 @@ db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
 db.offBoarding = require("./offBoarding")(sequelize, Sequelize);
 db.offBoardingQuestion = require("./offBoardingQuestion")(sequelize, Sequelize);
 db.offBoardingResponse = require("./offBoardingResponse")(sequelize, Sequelize);
+db.offBoardingDocument = require("./offBoardingDocument")(sequelize, Sequelize);
 
 db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
 
