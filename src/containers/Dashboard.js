@@ -82,26 +82,30 @@ export default function Dashboard() {
     // return <Placeholder content={"Loading, please wait..."} />;
   }
   return (
-    <Box sx={{
-      width: "100%",
-      height: "100%"
-    }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <Header />
-      <Stack spacing={10} direction={"row"}>
+      <Stack spacing={15} direction={"row"}>
         <SideMenu
           onSelect={(menuItem) => {
             displayMenu(menuItem);
           }}
         />
-        <Box sx={{
-          width: "100%",
-          height: "100%",
-          minHeight: "100vh",
-          paddingLeft: "176px",
-          paddingRight: "32px",
-          paddingTop: "96px",
-          backgroundColor: "#FCFCFD"
-        }}>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            minHeight: "100vh",
+            paddingLeft: "176px",
+            paddingRight: "32px",
+            paddingTop: "96px",
+            backgroundColor: "#FCFCFD",
+          }}
+        >
           {current.home && <UpdatesPage />}
           {current.myinfo && <MyInfoHome />}
           {current.people && <PeopleHome />}
