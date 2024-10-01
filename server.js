@@ -11,7 +11,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
@@ -47,7 +47,7 @@ Table(s) that must be prepopulated in production
 
 //   await data.populateTables(db);
 
-//   //await data.populatePermissionTable(db);
+//   // await data.populatePermissionTable(db);
 
 //   console.log("Sync operation successful.");
 // });

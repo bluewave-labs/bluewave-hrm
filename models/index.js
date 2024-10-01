@@ -42,7 +42,8 @@ db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
 
-db.offBoarding = require('./offBoarding')(sequelize, Sequelize);
+db.offBoarding = require("./offBoarding")(sequelize, Sequelize);
+db.offBoardingQuestion = require("./offBoardingQuestion")(sequelize, Sequelize);
 
 db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
 
@@ -51,7 +52,6 @@ db.notificationRecipient = require("./notificationRecipient")(
   sequelize,
   Sequelize
 );
-
 
 db.reportTo = require("./reportTo")(sequelize, Sequelize);
 db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
@@ -240,7 +240,6 @@ db.employeeAnnualTimeOff.belongsTo(db.employee, {
   foreignKey: "empId",
 });
 
-
 db.offBoarding.belongsTo(db.employee, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
@@ -248,7 +247,6 @@ db.offBoarding.belongsTo(db.employee, {
 });
 
 db.employee.hasMany(db.employeeAnnualTimeOff, {
-
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",

@@ -77,6 +77,7 @@ exports.deleteRecord = async (req, res) => {
   }
 };
 
+// email generation controllers
 exports.submitSurvey = async (req, res) => {
   const id = req.params.id;
   const employee = await db.employee.findByPk(id);
@@ -135,6 +136,82 @@ exports.generateLink = async (req, res) => {
     console.log(err);
     res.status(500).json({
       error: err.message,
+    });
+  }
+};
+
+// Offboarding Survey Questions Controllers
+exports.showAllQuestion = async (req, res) => {
+  try {
+    const data = await db.offBoardingQuestion.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    if (!data) {
+      res.send("No results found");
+    }
+    res.send(data);
+  } catch (error) {
+    res.send(error);
+  }
+};
+exports.showOneQuestion = async (req, res) => {
+  const id = req.params.id;
+  const data = await db.offBoardingQuestion.findOne({ where: { id } });
+  if (data === null) {
+    res.status(400).send("Not found!");
+  } else {
+    res.status(200).send(data);
+  }
+};
+exports.createQuestion = async (req, res) => {
+  try {
+    const data = await db.offBoardingQuestion.create(req.body);
+    console.log(data);
+    res.status(201).json({ data });
+  } catch (err) {
+    console.log(err);
+    res.send({ message: message.failed });
+  }
+};
+exports.updateQuestion = async (req, res) => {
+  const data = req.body;
+  try {
+    data.forEach(async (record) => {
+      const id = record.id;
+      const updatedData = await db.offBoardingQuestion.findByPk(id);
+      if (updatedData === null) {
+        console.log("No record found for the id ", id);
+      } else {
+        updatedData.set(record);
+        await updatedData.save();
+      }
+    });
+
+    res.status(200).json({ message: data });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: message.failed });
+  }
+};
+exports.deleteQuestion = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const count = await db.offBoardingQuestion.destroy({
+      where: { id: id },
+    });
+    if (count == 1) {
+      res.send({
+        message: message.deleted,
+      });
+    } else {
+      res.send({
+        message: message.failed,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.send({
+      message: err.message || message.failed,
     });
   }
 };
