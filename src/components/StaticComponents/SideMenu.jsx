@@ -31,17 +31,17 @@ const Link = forwardRef(function Link(itemProps, ref) {
 });
 
 function CustomizedListItem(props) {
-  const { primary, index, to, menuItem, selected, handleListItemClick } = props;
+  const { primary, index, to, menuItem, selected, handleListItemClick, style } = props;
   return (
     <ListItem
-      sx={{ minWidth: "280px" }}
+      sx={{...{ width: "200px" }, ...style}}
       component={Link}
       to={to}
       key={index}
       disablePadding
     >
       <ListItemButton
-        sx={{ paddingLeft: 0 }}
+        sx={{ paddingLeft: 0, borderRadius: "4px" }}
         disableRipple
         selected={selected}
         onClick={(evt) => handleListItemClick(evt, index, menuItem)}
@@ -94,11 +94,11 @@ export default function SideMenu({ style, onSelect }) {
     <Stack
       sx={{
         ...{
-          width: "10%",
-          minWidth: "280px",
+          //width: "10%",
+          minWidth: "264px",
           height: "100%",
           minHeight: "100vh",
-          paddingRight: "15px",
+          //paddingRight: "15px",
           direction: "column",
           justifyContent: "space-between",
           borderRight: "1px solid #EBEBEB",
@@ -110,14 +110,18 @@ export default function SideMenu({ style, onSelect }) {
         ...style,
       }}
     >
-      <Box>
+      <Box sx={{
+        paddingLeft: "32px",
+        paddingRight: "32px"
+      }}>
         <img
           src={stateContext.state.logo}
           alt="Company Logo"
           style={{
-            maxWidth: "300px",
-            maxHeight: "150px",
-            width: "100%"
+            width: "200px",
+            height: "40px",
+            marginTop: "40px",
+            marginBottom: "24px"
           }}
         />
         <List>
@@ -153,6 +157,7 @@ export default function SideMenu({ style, onSelect }) {
           handleListItemClick={() => {
             window.open('https://github.com/bluewave-labs/bluewave-hrm', '_blank');
           }}
+          style = {{height: "64px", marginLeft: "32px"}}
         />
       </Box>
     </Stack>

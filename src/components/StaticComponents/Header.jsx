@@ -1,24 +1,17 @@
 import Box from "@mui/system/Box";
 import { useScrollTrigger } from '@mui/material';
 import UserDropdown from "./UserDropdown";
-//import { useContext } from "react";
-//import StateContext from "../../context/StateContext";
 
 /**
  * Header component for most pages. Contains the company logo and the current user's information.
  *
  * Props:
- *
- * - user<Object>: Object containing the user's information including avatar, name and role.
- *      Syntax: {avatar: <image source>, name: <string>, role: <string>}
+ * - window: Used to handle changes to the header when scrolling
  *
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
- *
- *  - actions<Object>: Array of objects in which each object contains a label and action.
- *     Syntax: [...{label: <string>, action: <function>]
  */
-export default function Header({window, style }) {
+export default function Header({window, style}) {
   //const stateContext = useContext(StateContext);
 
   const trigger = useScrollTrigger({
@@ -31,7 +24,7 @@ export default function Header({window, style }) {
     <Box className={trigger ? "scrolled" : ""} sx={{...{
         boxSizing: "border-box",
         width: "100%",
-        height: "87px",
+        height: "64px",
         padding: "20px",
         display: "flex",
         justifyContent: "flex-end",
