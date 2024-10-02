@@ -46,9 +46,11 @@ const TableBodyCell = styled(TableCell)({
 
 export default function ListTable({ openDialog, columns, contentList, style }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const [selectedItem, setSelectedItem] = useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setSelectedItem(item);
   };
   const handleCloseMenu = () => {
     setAnchorEl(null);
@@ -104,44 +106,16 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                   justifyContent="flex-start"
                 >
                   <Stack direction="row" spacing={2}>
-                    <div>
-                      <Button
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                        sx={{ margin: "0px", padding: "0px", minWidth: "0px" }}
-                      >
-                        <MoreVertIcon sx={{ color: "#98A2B3" }} />
-                      </Button>
-                      <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleCloseMenu}
-                        MenuListProps={{
-                          "aria-labelledby": "basic-button",
-                        }}
-                      >
-                        <MenuItem
-                          onClick={() => {
-                            openDialog("edit", item);
-                            handleCloseMenu();
-                          }}
-                        >
-                          Edit
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => {
-                            openDialog("delete", item);
-                            handleCloseMenu();
-                          }}
-                        >
-                          Delete
-                        </MenuItem>
-                      </Menu>
-                    </div>
+                    <Button
+                      id="basic-button"
+                      aria-controls={openMenu ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={openMenu ? "true" : undefined}
+                      onClick={(event) => handleClick(event, item)}
+                      sx={{ margin: "0px", padding: "0px", minWidth: "0px" }}
+                    >
+                      <MoreVertIcon sx={{ color: "#98A2B3" }} />
+                    </Button>
                   </Stack>
                   {/* <EditButton onClick={() => openDialog("edit", item)}>
                     Edit
@@ -150,6 +124,32 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
               </TableBodyCell>
             </TableRow>
           ))}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleCloseMenu}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                openDialog("edit", selectedItem);
+                handleCloseMenu();
+              }}
+            >
+              Edit
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                openDialog("delete", selectedItem);
+                handleCloseMenu();
+              }}
+            >
+              Delete
+            </MenuItem>
+          </Menu>
         </TableBody>
       </Table>
     </TableContainer>
