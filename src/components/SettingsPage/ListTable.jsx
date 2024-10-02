@@ -1,13 +1,14 @@
+import { useEffect, useState, useRef } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Menu, MenuItem, Stack } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
-import Stack from "@mui/system/Stack";
 
 const TextHeader = styled(Typography)({
   fontFamily: "Inter",
@@ -44,6 +45,15 @@ const TableBodyCell = styled(TableCell)({
 });
 
 export default function ListTable({ openDialog, columns, contentList, style }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <TableContainer
       sx={{
@@ -60,7 +70,9 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                 <TextHeader>{header}</TextHeader>
               </TableHeaderCell>
             ))}
-            <TableHeaderCell />
+            <TableHeaderCell>
+              <TextHeader>Actions</TextHeader>
+            </TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -77,7 +89,7 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                       fontSize: index === 0 ? "14px" : "13px",
                     }}
                   >
-                    {header === "Default Balance"
+                    {header === "Default balance"
                       ? `${item[contentKey]} days`
                       : header === "Hours used"
                         ? `${item[contentKey]} hours`
@@ -91,12 +103,49 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  <DeleteButton onClick={() => openDialog("delete", item)}>
-                    <b>Delete</b>
-                  </DeleteButton>
-                  <EditButton onClick={() => openDialog("edit", item)}>
+                  <Stack direction="row" spacing={2}>
+                    <div>
+                      <Button
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                        sx={{ margin: "0px", padding: "0px", minWidth: "0px" }}
+                      >
+                        <MoreVertIcon sx={{ color: "#98A2B3" }} />
+                      </Button>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleCloseMenu}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            openDialog("edit", item);
+                            handleCloseMenu();
+                          }}
+                        >
+                          Edit
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            openDialog("delete", item);
+                            handleCloseMenu();
+                          }}
+                        >
+                          Delete
+                        </MenuItem>
+                      </Menu>
+                    </div>
+                  </Stack>
+                  {/* <EditButton onClick={() => openDialog("edit", item)}>
                     Edit
-                  </EditButton>
+                  </EditButton> */}
                 </Stack>
               </TableBodyCell>
             </TableRow>

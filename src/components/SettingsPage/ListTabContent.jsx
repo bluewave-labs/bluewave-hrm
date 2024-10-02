@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/system";
-import { styled, Typography } from "@mui/material";
+import { styled, Typography, Select, MenuItem, Divider } from "@mui/material";
 import PagesNavBar from "../UpdatesPage/PagesNavBar";
 import { useMemo, useState } from "react";
 import HRMButton from "../Button/HRMButton";
@@ -28,6 +28,7 @@ export default function ListTabContent({
   const [selectedItem, setSelectedItem] = useState({});
   const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [fiscalYearMonth, setFiscalYearMonth] = useState("january");
 
   const itemsToDisplay = useMemo(
     () =>
@@ -77,18 +78,59 @@ export default function ListTabContent({
       }}
     >
       <Grid container columns={10} rowSpacing={4} columnSpacing={1}>
-        <Grid item xs={10} textAlign="center">
+        {tabName === "timeoffs" && (
+          <Grid item xs={10}>
+            <Stack direction="column">
+              <HeadText component="h3">Fiscal year start</HeadText>
+              <Typography
+                sx={{
+                  fontSize: "13px",
+                  color: "#344054",
+                  lineHeight: "20px",
+                  marginBottom: "16px",
+                }}
+              >
+                Define your fiscal year start month. This affects the time off
+                policies, where each time off is reset to default balance on the
+                first day of each fiscal year’s month.
+              </Typography>
+
+              <Box>
+                <Select
+                  sx={{ width: "153px", height: "34px" }}
+                  labelId="fiscalYearMonth"
+                  id="fiscalYearMonth"
+                  value={fiscalYearMonth}
+                  label="Fiscal Year Month"
+                  onChange={(e) => setFiscalYearMonth(e.target.value)}
+                >
+                  <MenuItem value="january">January</MenuItem>
+                  <MenuItem value="february">February</MenuItem>
+                  <MenuItem value="march">March</MenuItem>
+                  <MenuItem value="april">April</MenuItem>
+                  <MenuItem value="may">May</MenuItem>
+                  <MenuItem value="june">June</MenuItem>
+                  <MenuItem value="july">July</MenuItem>
+                  <MenuItem value="august">August</MenuItem>
+                  <MenuItem value="september">September</MenuItem>
+                  <MenuItem value="october">October</MenuItem>
+                  <MenuItem value="november">November</MenuItem>
+                  <MenuItem value="december">December</MenuItem>
+                </Select>
+                <Divider sx={{ padding: "16px" }} />
+              </Box>
+            </Stack>
+          </Grid>
+        )}
+        <Grid item xs={10} textAlign="center" sx={{ padding: 0 }}>
           <Stack
             direction="row"
             alignContent="center"
             justifyContent="space-between"
-            style={{ marginBottom: "20px" }}
+            sx={{ marginBottom: "24px" }}
           >
             <HeadText component="h3">{titleTabPage}</HeadText>
-            <HRMButton
-              mode="primary"
-              onClick={() => openDialog("add")}
-            >
+            <HRMButton mode="primary" onClick={() => openDialog("add")}>
               Add new
             </HRMButton>
           </Stack>

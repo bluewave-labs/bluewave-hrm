@@ -111,7 +111,7 @@ export default function SettingsPage({ style, innerStyle }) {
           <StyledTabPanel value="Time off">
             <ListTabContent
               contentList={timeoffPoliciesData}
-              titleTabPage="Edit time off policies"
+              titleTabPage="Time off policies"
               columns={timeOffPoliciesColumns}
               tabName={tabNames.timeoffs}
             />
@@ -119,7 +119,7 @@ export default function SettingsPage({ style, innerStyle }) {
           <StyledTabPanel value="Permissions">
             <ManagePermissions
               contentList={permissionsData}
-              titleTabPage="Manage permissions"
+              titleTabPage="Permissions"
               tabName={tabNames.permissions}
             />
           </StyledTabPanel>
