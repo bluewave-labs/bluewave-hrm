@@ -402,7 +402,7 @@ exports.summarizeByDepartments = async (req, res) => {
 
 exports.summarizeByJobTitles = async (req, res) => {
   try {
-    const query = `select r."roleid", r."roletitle", count(e."empid") from role r left join employee e on e."roleid" = r."roleid" group by r."roleid", r."roletitle" order by r."roleid";`;
+    const query = `select r."roleId", r."roleTitle", count(e."empId") from role r left join employee e on e."roleId" = r."roleId" group by r."roleId", r."roleTitle" order by r."roleId";`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).send(results);
   } catch (error) {
