@@ -205,12 +205,46 @@ db.appUser.belongsTo(db.permission, {
   foreignKey: "permissionId",
 });
 
-db.employee.hasMany(db.offBoarding, {
+db.employee.hasOne(db.offBoarding, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
-
+db.offBoarding.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+db.offBoarding.hasMany(db.offBoardingResponse, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+db.offBoardingResponse.belongsTo(db.offBoarding, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+// db.offBoarding.hasMany(db.offBoardingDocument, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
+// db.offBoardingDocument.belongsTo(db.offBoarding, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
+// db.offBoarding.hasMany(db.document, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
+// db.document.belongsTo(db.offBoarding, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
 db.appUser.hasMany(db.passwordHistory, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
@@ -248,12 +282,6 @@ db.notification.belongsTo(db.timeOffHistory, {
 });
 
 db.employeeAnnualTimeOff.belongsTo(db.employee, {
-  onDelete: "CASCADE",
-  OnUpdate: "CASCADE",
-  foreignKey: "empId",
-});
-
-db.offBoarding.belongsTo(db.employee, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
