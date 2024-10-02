@@ -392,7 +392,7 @@ exports.deleteRecord = async (req, res) => {
 // Routes for data summaries
 exports.summarizeByDepartments = async (req, res) => {
   try {
-    const query = `select d."id", d."departmentName", count(e."empId") as "count" from employee e JOIN department d ON e."departmentId" = d."id" GROUP BY d."id", e."departmentId", d."departmentName" ORDER BY d."id";`;
+    const query = `select d."id", d."departmentName", count(e."empId") as "count" from department d left join employee e ON e."departmentId" = d."id" group by d."id", d."departmentName" order by d."id";`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).send(results);
   } catch (error) {
@@ -402,7 +402,7 @@ exports.summarizeByDepartments = async (req, res) => {
 
 exports.summarizeByJobTitles = async (req, res) => {
   try {
-    const query = `select r."roleId", r."roleTitle", count(e."empId") from employee e JOIN role r ON e."roleId" = r."roleId" GROUP BY r."roleId", r."roleTitle" ORDER BY 1;`;
+    const query = `select r."roleid", r."roletitle", count(e."empid") from role r left join employee e on e."roleid" = r."roleid" group by r."roleid", r."roletitle" order by r."roleid";`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).send(results);
   } catch (error) {
