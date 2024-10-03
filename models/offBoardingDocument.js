@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
-    "offBoarding",
+    "offBoardingDocument",
     {
       id: {
         type: Sequelize.INTEGER,
@@ -8,18 +8,20 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
-      empId: {
-        type: Sequelize.INTEGER,
+      documentName: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      SignedDocumentAck: {
-        type: Sequelize.BOOLEAN,
-        allowNull: true,
-      },
-      isCompleted: {
-        type: Sequelize.BOOLEAN,
+
+      documentFile: {
+        type: Sequelize.BLOB,
         allowNull: false,
-        defaultValue: false,
+      },
+      documentCategory: {
+        type: Sequelize.STRING,
+      },
+      documentExtension: {
+        type: Sequelize.STRING,
       },
     },
     {

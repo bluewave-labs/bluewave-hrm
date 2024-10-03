@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   return sequelize.define(
-    "offBoarding",
+    "offBoardingResponse",
     {
       id: {
         type: Sequelize.INTEGER,
@@ -8,18 +8,22 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
+      orderNumber: {
+        type: Sequelize.INTEGER,
+      },
+      offBoardingId: {
+        type: Sequelize.INTEGER,
+      },
       empId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
       },
-      SignedDocumentAck: {
-        type: Sequelize.BOOLEAN,
+      question: {
+        type: Sequelize.STRING,
         allowNull: true,
       },
-      isCompleted: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+      answer: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
     },
     {

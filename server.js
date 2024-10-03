@@ -8,11 +8,11 @@ const app = express();
 const router = express.Router();
 app.use(cookieParser());
 
-app.use(cors());
+// app.use(cors());
 
 app.use(
   cors({
-    origin: "http://54.173.233.239",
+    origin: "*",
     credentials: true,
   })
 );
@@ -48,6 +48,7 @@ Table(s) that must be prepopulated in production
 
 //   await data.populateTables(db);
 
+//   // await data.populatePermissionTable(db);
 //   await data.populatePermissionTable(db);
 
 //   console.log("Sync operation successful.");
