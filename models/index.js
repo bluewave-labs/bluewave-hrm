@@ -1,13 +1,16 @@
 const Sequelize = require("sequelize");
 require("dotenv").config();
 
-const sequelize = new Sequelize("hrm", "admin", "hrm", {
-  host: "54.173.233.239",
+const sequelize = new Sequelize(process.env.DB, process.env.USER, process.env.PASSWORD, {
+  host: process.env.HOST,
   port: "5432",
-  dialect: "postgres",
+  dialect: process.env.dialect,
   define: {
     //freezeTableName: true,
   },
+  dialectOptions: {
+    connectTimeout: 60000
+  }
 });
 sequelize
   .authenticate()
