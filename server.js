@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "http://54.173.233.239",
+    origin: "http://localhost:3000", //"http://54.173.233.239",
     credentials: true,
   })
 );
@@ -46,7 +46,7 @@ Table(s) that must be prepopulated in production
 // db.sequelize.sync({ force: true }).then(async () => {
 //   let data = require("./constants/data");
 
-//   await data.populateTables(db);
+//  await data.populateTables(db);
 
 //   //await data.populatePermissionTable(db);
 

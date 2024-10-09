@@ -12,7 +12,7 @@ const message = require("../../constants/messages.json");
 // create json web token
 const maxAge = 3 * 60 * 60; // 3 hours
 const createToken = (id) => {
-  return jwt.sign({ id }, "77299a0fabaab401b4a2f162a9165fd32919d045db8ddf5ee7e90f23b26187638f080f2a44fe5d03f4188fa269d8feac3e716434b9959be18de146c4041e6282", {
+  return jwt.sign({ id }, process.env.secret, {
     expiresIn: maxAge,
   });
 };
@@ -200,7 +200,7 @@ const resetPassword = async (req, res) => {
 const resetPasswordAuth = async (req, res) => {
   const token = req.cookies.jwt;
   try {
-    const result = jwt.verify(token, "77299a0fabaab401b4a2f162a9165fd32919d045db8ddf5ee7e90f23b26187638f080f2a44fe5d03f4188fa269d8feac3e716434b9959be18de146c4041e6282");
+    const result = jwt.verify(token, process.env.secret);
     const { password, newPassword, confirmNewPassword } = req.body;
     const user = await db.appUser.findOne({
       where: { email: result.id },

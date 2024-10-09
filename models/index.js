@@ -1,14 +1,19 @@
 const Sequelize = require("sequelize");
 require("dotenv").config();
 
-const sequelize = new Sequelize("hrm", "admin", "hrm", {
-  host: "54.173.233.239",
-  port: "5432",
-  dialect: "postgres",
-  define: {
-    //freezeTableName: true,
-  },
-});
+const sequelize = new Sequelize(
+  process.env.DB,
+  process.env.USER,
+  process.env.PASSWORD,
+  {
+    host: process.env.HOST,
+    port: process.env.PORT,
+    dialect: process.env.dialect,
+    define: {
+      //freezeTableName: true,
+    },
+  }
+);
 sequelize
   .authenticate()
   .then(() => {
@@ -37,7 +42,7 @@ db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
 
-db.offBoarding = require('./offBoarding')(sequelize, Sequelize);
+db.offBoarding = require("./offBoarding")(sequelize, Sequelize);
 
 db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
 
@@ -47,12 +52,12 @@ db.notificationRecipient = require("./notificationRecipient")(
   Sequelize
 );
 
-
 db.reportTo = require("./reportTo")(sequelize, Sequelize);
 db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
   sequelize,
   Sequelize
 );
+db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
 
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
@@ -235,7 +240,6 @@ db.employeeAnnualTimeOff.belongsTo(db.employee, {
   foreignKey: "empId",
 });
 
-
 db.offBoarding.belongsTo(db.employee, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
@@ -243,7 +247,6 @@ db.offBoarding.belongsTo(db.employee, {
 });
 
 db.employee.hasMany(db.employeeAnnualTimeOff, {
-
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",

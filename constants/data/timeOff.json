@@ -2,16 +2,19 @@
   {
     "id": 1,
     "category": "Vacation",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tem"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tem",
+    "hours": 120
   },
   {
     "id": 2,
     "category": "Sick Leave",
-    "description": "por incididunt ut labore et dolore magna aliqua. Viverra suspendisse potent"
+    "description": "por incididunt ut labore et dolore magna aliqua. Viverra suspendisse potent",
+    "hours": 80
   },
   {
     "id": 3,
     "category": "Bereavement",
-    "description": "i nullam ac tortor vitae purus faucibus ornare. Elementum pulvinar etiam no"
+    "description": "i nullam ac tortor vitae purus faucibus ornare. Elementum pulvinar etiam no",
+    "hours": null
   }
 ]

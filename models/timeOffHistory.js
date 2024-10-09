@@ -56,7 +56,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         defaultValue: "Pending",
         validate: {
-          isIn: [["Approved", "Declined", "Pending"]],
+          isIn: [["Approved", "Declined", "Pending", "Cancelled"]],
         },
         set(value) {
           // Capitalize the first character
