@@ -13,9 +13,11 @@ const team = require("./team");
 const timeOff = require("./timeOff");
 const timeOffHistory = require("./timeOffHistory");
 const appUser = require("./appUser");
-const offBoarding = require('./offBoarding');
+const offBoarding = require("./offBoarding");
+const offBoardingQuestion = require("./offBoardingQuestion");
+const offBoardingResponse = require("./offBoardingResponse");
+const offBoardingDocument = require("./offBoardingDocument");
 const notification = require("./notification");
-
 
 module.exports = (router) => {
   authentication(router);
@@ -33,8 +35,11 @@ module.exports = (router) => {
   timeOff(router);
   timeOffHistory(router);
   appUser(router);
-  offBoarding(router)
+  offBoarding(router);
+  offBoardingQuestion(router);
+  offBoardingResponse(router);
+  offBoardingDocument(router);
   notification(router);
-  
+
   return router;
 };

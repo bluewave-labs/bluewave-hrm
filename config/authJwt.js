@@ -18,7 +18,8 @@ const requireAuth = (req, res, next) => {
     });
   } else {
     next();
-    //res.status(404).json({ message: message.sessionExpired });
+
+    // res.status(404).json({ message: message.sessionExpired });
   }
 };
 
