@@ -78,6 +78,8 @@ db.offBoardingDocumentation = require("./offBoardingDocumentation")(
   Sequelize
 );
 
+db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
+
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
   onDelete: "CASCADE",
