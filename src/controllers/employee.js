@@ -259,7 +259,7 @@ exports.finalizeOnboarding = async (req, res) => {
       data.message = "empId cannot be null";
       return res.status(200).json(data);
     }
-    const employee = await db.employee.f1indByPk(empId);
+    const employee = await db.employee.findByPk(empId);
     if (!employee) {
       // No results
       data.message = `No result found for empId ${empId}`;
@@ -390,7 +390,6 @@ exports.updateRecord = async (req, res) => {
 
 exports.deleteRecord = async (req, res) => {
   try {
-    console.log(req.body);
     const data = req.body;
     const employee = await db.employee.findByPk(data.empId);
     if (!employee) {

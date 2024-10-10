@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 require("dotenv").config();
 
+/*
 const sequelize = new Sequelize("hrm", "admin", "hrm", {
   host: "54.173.233.239",
   port: "5432",
@@ -9,6 +10,21 @@ const sequelize = new Sequelize("hrm", "admin", "hrm", {
     //freezeTableName: true,
   },
 });
+*/
+const sequelize = new Sequelize(
+  process.env.DB,
+  process.env.USER,
+  process.env.PASSWORD,
+  {
+    host: process.env.HOST,
+    port: process.env.PORT,
+    dialect: process.env.dialect,
+    define: {
+      //freezeTableName: true,
+    },
+  }
+);
+
 sequelize
   .authenticate()
   .then(() => {
@@ -37,7 +53,10 @@ db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
 
-db.offBoarding = require('./offBoarding')(sequelize, Sequelize);
+db.offBoarding = require("./offBoarding")(sequelize, Sequelize);
+db.offBoardingQuestion = require("./offBoardingQuestion")(sequelize, Sequelize);
+db.offBoardingResponse = require("./offBoardingResponse")(sequelize, Sequelize);
+db.offBoardingDocument = require("./offBoardingDocument")(sequelize, Sequelize);
 
 db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
 
@@ -52,7 +71,12 @@ db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
   sequelize,
   Sequelize
 );
-db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
+
+db.offBoardingSurvey = require("./offBoardingSurvey")(sequelize, Sequelize);
+db.offBoardingDocumentation = require("./offBoardingDocumentation")(
+  sequelize,
+  Sequelize
+);
 
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
@@ -197,6 +221,30 @@ db.offBoarding.belongsTo(db.employee, {
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
+
+db.offBoarding.belongsToMany(db.offBoardingResponse, {
+  through: { model: db.offBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+db.offBoardingResponse.belongsToMany(db.offBoarding, {
+  through: { model: db.offBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+db.offBoarding.belongsToMany(db.offBoardingDocument, {
+  through: { model: db.offBoardingDocumentation, unique: false },
+  constraints: false,
+});
+
+db.offBoardingDocument.belongsToMany(db.offBoarding, {
+  through: { model: db.offBoardingDocumentation, unique: false },
+  constraints: false,
+});
+
+
+/*
+Remove the following commented codes
 db.offBoarding.hasMany(db.offBoardingResponse, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
@@ -207,6 +255,8 @@ db.offBoardingResponse.belongsTo(db.offBoarding, {
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
+*/
+
 // db.offBoarding.hasMany(db.offBoardingDocument, {
 //   onDelete: "CASCADE",
 //   OnUpdate: "CASCADE",
@@ -264,13 +314,6 @@ db.notification.belongsTo(db.timeOffHistory, {
 });
 
 db.employeeAnnualTimeOff.belongsTo(db.employee, {
-  onDelete: "CASCADE",
-  OnUpdate: "CASCADE",
-  foreignKey: "empId",
-});
-
-
-db.offBoarding.belongsTo(db.employee, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
