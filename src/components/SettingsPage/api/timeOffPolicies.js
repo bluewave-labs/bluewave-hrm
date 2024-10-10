@@ -1,34 +1,10 @@
 import axios from "axios";
-import policies from "./policies.json";
-
-function aggregateLeaveData(data) {
-  const policies = {};
-
-  Object.keys(data).forEach(employeeId => {
-      data[employeeId].forEach(leave => {
-          const { type, availableDays, hoursUsed } = leave;
-
-          if (!policies[type]) {
-              policies[type] = { type, availableDays: 0, hoursUsed: 0 };
-          }
-
-          policies[type].availableDays += availableDays;
-          policies[type].hoursUsed += hoursUsed;
-      });
-  });
-
-  return Object.values(policies);
-}
 
 const getTimeOffs = async () => {
   try {
-    // const response = await axios.post(
-    //   `http://localhost:3000/api/allTimeOffPolicies`
-    // );
-    // console.log("DATA", aggregateLeaveData(response.data));
-    // return aggregateLeaveData(response.data);
-    console.log("DATA", aggregateLeaveData(policies));
-    return aggregateLeaveData(policies);
+    const response = await axios.get(`http://localhost:3000/api/timeoffs`);
+    console.log(response.data);
+    return response.data;
   } catch (error) {
     console.error("Error fetching timeoffs:", error);
     throw error;

@@ -4,6 +4,9 @@ import Stack from "@mui/system/Stack";
 import { styled, Typography } from "@mui/material";
 import HRMCheckbox from "../../../Checkbox/Checkbox";
 
+const fieldName = "category";
+const fieldBalance = "hours";
+
 const validationRules = {
   required: "Policy name is required.",
   minLength: {
@@ -30,7 +33,7 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
   const isUnlimitedChecked = watch("unlimitedBalance", unlimited);
 
   useEffect(() => {
-    setValue("balance", unlimited ? "Unlimited" : "");
+    setValue(fieldBalance, unlimited ? "Unlimited" : "");
   }, [unlimited]);
 
   const onSubmit = (data) => {
@@ -39,16 +42,16 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
 
   return (
     <>
-      <TextLabel>Name</TextLabel>
+      <TextLabel>{action === "add" ? "Name" : "New name"}</TextLabel>
       <TextField
         size="small"
         fullWidth
         color="secondary"
-        {...register("policyName", validationRules)}
-        error={!!errors["policyName"]}
-        helperText={errors["policyName"]?.message || ""}
+        {...register(fieldName, validationRules)}
+        error={!!errors[fieldName]}
+        helperText={errors[fieldName]?.message || ""}
         FormHelperTextProps={{
-          className: errors["policyName"] ? "error" : "",
+          className: errors[fieldName] ? "error" : "",
         }}
       />
       <TextLabel sx={{ marginTop: "24px" }}>Default balance</TextLabel>
@@ -64,7 +67,7 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
           color="secondary"
           sx={{ width: "100px", color: unlimited && "#667085" }}
           disabled={unlimited}
-          {...register("balance", {
+          {...register(fieldBalance, {
             validate: (value) => {
               if (unlimited) return true;
               if (!unlimited && value.trim() === "")
@@ -72,9 +75,9 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
               return true;
             },
           })}
-          error={!unlimited && !!errors["balance"]}
+          error={!unlimited && !!errors[fieldBalance]}
           FormHelperTextProps={{
-            className: errors["balance"] ? "error" : "",
+            className: errors[fieldBalance] ? "error" : "",
           }}
         />
         <Typography
@@ -85,7 +88,7 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
             lineHeight: "24px",
           }}
         >
-          days
+          hours
         </Typography>
       </Stack>
       {!!errors["balance"] && !unlimited && (

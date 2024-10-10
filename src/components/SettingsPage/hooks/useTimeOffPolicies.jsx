@@ -1,9 +1,9 @@
 import { useSettingsContext } from "../context";
 
 const policiesColumns = [
-  { header: "Policy type", contentKey: "type" },
-  { header: "Default balance", contentKey: "availableDays" },
-  { header: "Hours used", contentKey: "hoursUsed" },
+  { header: "Policy type", contentKey: "category" },
+  { header: "Default balance", contentKey: "hours" },
+  { header: "Hours used", contentKey: "usageCount" },
 ];
 
 export const useTimeOffPolicies = () => {
@@ -13,4 +13,4 @@ export const useTimeOffPolicies = () => {
     data: timeOffPolicies,
     columns: policiesColumns,
   };
-};
+}; 
