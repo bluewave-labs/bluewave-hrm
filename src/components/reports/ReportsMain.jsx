@@ -28,9 +28,7 @@ export default function ReportsMain(style) {
                 direction="row"
                 alignItems="center"
                 justifyContent="space-between"
-                sx={{
-                    marginTop: "40px"
-                }}
+                
             >
                 <h2 style={{
                     fontSize:'24px', 
@@ -38,6 +36,7 @@ export default function ReportsMain(style) {
                     fontWeight:'600',
                     color:'#101828',
                     marginTop:"0px",
+                    marginBottom: "16px",
                     }}
                 >
                     Reports

@@ -57,7 +57,8 @@ const renderLabelList = (data) => {
             height: 10, 
             backgroundColor: entry.color, 
             borderRadius: '50%', 
-            marginRight: '8px' 
+            marginRight: '8px',
+            flexShrink: 0,
           }} 
       />
       {/* Label text for the pie chart segment */}
@@ -85,7 +86,7 @@ function EmployeesRoleGraph() {
       let pieData = employeesRole.map((role, index) =>({
         id: index,
         label: role.roleTitle,
-        value: (parseInt(role.count, 10) / totalEmployees) * 100,
+        value: Math.round((parseInt(role.count, 10) / totalEmployees) * 100),
       }));
 
       // Sort the data by value (descending) and by label (alphabetically)
@@ -117,12 +118,13 @@ function EmployeesRoleGraph() {
   }, []);
 
   return (
+    <ThemeProvider theme={theme}>
     <Card
       sx={{
         border: '1px solid #EAECF0',
         borderRadius: '12px',
         boxShadow: 'none',
-        width: '360px',
+        width: '532px',
         height: '296px',
         backgroundColor: '#FFFFFF',
         display: 'flex',
@@ -130,11 +132,11 @@ function EmployeesRoleGraph() {
         padding: '24px',
       }}
     >
-      <ThemeProvider theme={theme}>
+      
         <Typography variant="h2" className="header">
-          Employees by roles
+          Employees by role
         </Typography>
-      </ThemeProvider>
+     
       <Box
         sx={{
           display: 'flex',
@@ -155,17 +157,17 @@ function EmployeesRoleGraph() {
             series={[
               {
                 data: data,
-                innerRadius: 44,
-                outerRadius: 88,
+                innerRadius: 35,
+                outerRadius: 80,
                 cornerRadius: 0,
                 startAngle: 0,
                 endAngle: 360,
-                cx: 85,
+                cx: 75,
                 cy: 120,
               },
             ]}
-            width={180}
-            height={240}
+            width={250}
+            height={250}
             slotProps={{
               legend: { hidden: true },
             }}
@@ -175,7 +177,8 @@ function EmployeesRoleGraph() {
 
         <Box
           sx={{
-            marginLeft: '24px',
+            marginLeft: '0px',
+            width:'207px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -186,6 +189,7 @@ function EmployeesRoleGraph() {
       </Box>
 
     </Card>
+    </ThemeProvider>
   )
 }
 

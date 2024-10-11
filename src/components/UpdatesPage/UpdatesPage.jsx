@@ -1,69 +1,44 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
-import Header from '../StaticComponents/Header';
-import SideMenu from '../StaticComponents/SideMenu';
+import { useContext } from 'react';
+import dayjs from 'dayjs';
 import UpdatesMenu from './UpdatesMenu';
-import { colors, fonts } from '../../Styles';
+import StateContext from '../../context/StateContext';
 
 /**
- * Home page of the HRM application.
+ * Home page of the HRM application. Contains the updates menu.
  * 
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
 export default function UpdatesPage({style}) {
+    //ID of the currently logged in employee
+    const stateContext = useContext(StateContext);
+
     return (
-        <Box sx={{...{
-            width: "100%", 
-            height: "100%", 
-            fontFamily: fonts.fontFamily
-        }, ...style}}>
-            {/*Header*/}
-            <Header />
-            <Box sx={{
-                display: "flex",
-                flexDirection: "row", 
-                width: "100%", 
-                height: "100%", 
-                backgroundColor: "#F9FAFB"
-            }}>
-                {/*Side menu*/}
-                <Box>
-                    <SideMenu />
-                </Box>
-                <Box sx={{
-                    paddingX: "75px", 
-                    paddingY: "40px", 
-                    width: "100%",
-                    height: "100%"
-                }}>
-                    {/*Main page content*/}
-                    <Stack 
-                        direction="row" 
-                        sx={{
-                            width: "100%", 
-                            justifyContent: "space-between",
-                            marginBottom: "40px",
-                            color: colors.darkGrey
-                        }}
-                    >
-                        <h3>Hello, Gabriel</h3>
-                        <p>Today is Monday, June 6, 2024</p>
-                    </Stack>
-                    <UpdatesMenu />
-                </Box>
-            </Box>
+        <Box sx={style}>
+            <Stack 
+                direction="row" 
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{
+                    marginBottom: "16px",
+                    minWidth: "1042px"
+                }}
+            >
+                <h3>Hello, {stateContext.state.employee.firstName}</h3>
+                <p>Today is {dayjs().format("dddd, MMMM D, YYYY")}</p>
+            </Stack>
+            <UpdatesMenu />
         </Box>
     );
 };
 
-//Control panel settings for storybook
+//Control panel settings for storybooks
 UpdatesPage.propTypes = {};
 
 //Default values for this component
 UpdatesPage.defaultProps = {
-    args: {
-        style: {}
-    }
+    style: {}
 };

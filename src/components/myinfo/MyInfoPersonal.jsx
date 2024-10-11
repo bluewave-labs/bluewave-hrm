@@ -3,7 +3,6 @@ import React from 'react'
 import { List, ListItem, Grid, Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
 const theme = createTheme({
   typography: {
 
@@ -27,7 +26,7 @@ const theme = createTheme({
       fontWeight: 400,
       fontFamily:'Inter',
       fontSize: '13px',
-      color: '<#344054',
+      color: '#344054',
     },
    
   },
@@ -36,7 +35,6 @@ const theme = createTheme({
 });
 
 function MyInfoPersonal({employee}) {
-  
   return (
     <Box>
       <ThemeProvider theme={theme}>

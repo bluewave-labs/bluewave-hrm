@@ -57,7 +57,7 @@ function CreateAccountPage() {
         <label>Name*:</label>  
         </div>
         <input
-          type="name"
+          type="text"
           value={name}
           onChange={handleNameChange}
           placeholder="Enter your name"

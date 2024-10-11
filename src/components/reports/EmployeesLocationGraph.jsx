@@ -132,7 +132,7 @@ export default function EmployeesLocationGraph() {
     >
       <ThemeProvider theme={theme}>
         <Typography variant="h2" className="header">
-          Employees by locations
+          Employees by location
         </Typography>
       </ThemeProvider>
 

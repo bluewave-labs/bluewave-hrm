@@ -59,6 +59,7 @@ const renderLabelList = (data) => {
             backgroundColor: entry.color,
             borderRadius: '50%',
             marginRight: '8px',
+            flexShrink: 0,
         }}
         />
         {/* Label text for the pie chart segment */}
@@ -88,7 +89,7 @@ export default function EmployeesDepartmentGraph() {
       let pieData = departments.map((department, index) =>({
         id: index,
         label: department.departmentName,
-        value: (parseInt(department.count, 10) / totalEmployees) * 100,
+        value: Math.round((parseInt(department.count, 10) / totalEmployees) * 100),
       }));
 
       // Sort the data by value (descending) and by label (alphabetically)
@@ -120,12 +121,13 @@ export default function EmployeesDepartmentGraph() {
   }, []);
 
   return (
+    <ThemeProvider theme={theme}>
     <Card
       sx={{
         border: '1px solid #EAECF0',
         borderRadius: '12px',
         boxShadow: 'none',
-        width: '360px',
+        width: '532px',
         height: '296px',
         backgroundColor: '#FFFFFF',
         display: 'flex',
@@ -133,11 +135,11 @@ export default function EmployeesDepartmentGraph() {
         padding: '24px',
       }}
     >
-      <ThemeProvider theme={theme}>
+      
         <Typography variant="h2" className="header">
           Employees by department
         </Typography>
-      </ThemeProvider>
+      
 
       <Box
         sx={{
@@ -157,17 +159,17 @@ export default function EmployeesDepartmentGraph() {
             series={[
               {
                 data: data,
-                innerRadius: 44,
-                outerRadius: 88,
+                innerRadius: 35,
+                outerRadius: 80,
                 cornerRadius: 0,
                 startAngle: 0,
                 endAngle: 360,
-                cx: 85,
+                cx: 75,
                 cy: 120,
               },
             ]}
-            width={180}
-            height={240}
+            width={250}
+            height={250}
             slotProps={{
               legend: { hidden: true },
             }}
@@ -176,7 +178,8 @@ export default function EmployeesDepartmentGraph() {
 
         <Box
           sx={{
-            marginLeft: '24px',
+            marginLeft: '0px',
+            width:'207px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -186,5 +189,6 @@ export default function EmployeesDepartmentGraph() {
         </Box>
       </Box>
     </Card>
+    </ThemeProvider>
   );
 }

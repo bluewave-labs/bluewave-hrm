@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import HRMButtonGroup from '../ButtonGroup/HRMButtonGroup';
 import { useEffect, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
+//mport { GridOverlay } from '@mui/x-data-grid';
 
 const api = require("../../assets/FetchServices");
 
@@ -55,7 +56,7 @@ const columns = (employeeMap) => [
   {
     field: 'empId',
     headerName: 'Employee',
-    width: 163,
+    width: 130,
     editable: false,
     renderCell: (params) => {
       const employee = employeeMap[params.value];
@@ -69,7 +70,7 @@ const columns = (employeeMap) => [
   {
     field: 'change',
     headerName: 'Change',
-    width: 220,
+    width: 215,
     editable: false,
     renderCell: (params) => {
         const [changeFrom, changeTo] = params.value.split('\n').map(line => line.split(': ')[1]);
@@ -98,7 +99,7 @@ const columns = (employeeMap) => [
   {
     field: 'date',
     headerName: 'Date',
-    width: 131,
+    width: 111,
     editable: false,
     renderCell: (params) => (
         <Box sx={{ border: '1px solid #EAECF0', backgroundColor:'#F9FAFB', borderRadius:'9999px', width:'87px', height:'22px', display: 'flex', alignItems: 'center',justifyContent: 'center' }}>
@@ -109,6 +110,7 @@ const columns = (employeeMap) => [
       ),
   },
 ];
+
 
 function RecentPromotions(props) {
     const [data, setData] = useState([]);
@@ -124,10 +126,10 @@ function RecentPromotions(props) {
       if (period === 'Last 6 months') {
         const sixMonthsAgo = now.subtract(6, 'month');
         filtered = data.filter(item => dayjs(item.date).isAfter(sixMonthsAgo));
-        console.log(filtered);
       } else if (period === 'Last year') {
         const lastYear = now.subtract(1, 'year');
         filtered = data.filter(item => dayjs(item.date).isAfter(lastYear));
+
       }
   
       setFilteredData(
@@ -137,8 +139,11 @@ function RecentPromotions(props) {
           change: `From: ${item.changeFrom} \n To: ${item.changeTo}`,
           date: dayjs(item.date).format('YYYY-MM-DD'),
         }))
+     
       );
+      
     }, []);
+  
   
     // Function to fetch employee data and changeHistory data from different APIs.
     const fetchHistory = useCallback(async () => {
@@ -154,6 +159,7 @@ function RecentPromotions(props) {
           return map;
         }, {});
         console.log({employeeMap});
+      
 
         setEmployeeMap(employeeMap);
         setData(historyResponse);
@@ -169,10 +175,11 @@ function RecentPromotions(props) {
     }, [fetchHistory]);
   
     useEffect(() => {
+      console.log('Selected period changed:', selectedPeriod);
       filterData(data, selectedPeriod);
     }, [selectedPeriod, data, filterData]);
     const handlePeriodChange = (period) => {
-        console.log('Button clicked');
+        console.log('Button clicked', period);
         setSelectedPeriod(period);
       };
   return (
@@ -206,17 +213,18 @@ function RecentPromotions(props) {
           }}
         >
           <Typography variant="h2" className="header">
-            Recent Promotions
+            Recent promotions
           </Typography>
           <HRMButtonGroup
             buttonLabels={['Last 6 months', 'Last year']}
-            onClick={(e) => handlePeriodChange(e.target.innerText)}
+            onClick={(label) => handlePeriodChange(label)}
             key={"filter-button"}
           />
           
         </Box>
-        <Box sx={{ position: 'relative', width: '100%', height: '300px' }}>
+        <Box sx={{ position: 'relative', width: '100%', height: '230px'  }}>
           <DataGrid
+            
             componentsProps={{
               columnHeaders: {
                 style: {
@@ -230,6 +238,7 @@ function RecentPromotions(props) {
               },
             }}
             sx={{
+              
               border: 'none',
               '& .MuiDataGrid-columnHeaders': {
                 typography: 'body3',
@@ -244,6 +253,10 @@ function RecentPromotions(props) {
               '& .MuiDataGrid-scrollbarFiller': {
                 backgroundColor: '#F9FAFB',
               },
+              // '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              //   width: '10px',  // Kaydırma çubuğunun genişliği
+              //   height: '8px',  // Kaydırma çubuğunun yüksekliği
+              // },
               '& .MuiDataGrid-row': {
                 backgroundColor: '#FFFFFF',
                 typography: 'body2',
@@ -257,6 +270,16 @@ function RecentPromotions(props) {
                 alignItems: 'center',
                 whiteSpace: 'pre-line',
               },
+              '& .MuiDataGrid-overlay': {
+                backgroundColor: '#F9FAFB',  
+                color: '#475467', 
+                fontWeight: 550,          
+                fontSize: '13px',            
+                fontFamily: 'Inter',       
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              },
             }}
             columnHeaderHeight={44}
             rowHeight={72}
@@ -265,12 +288,15 @@ function RecentPromotions(props) {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 9,
+                  pageSize: 50,
                 },
               },
             }}
-            pageSizeOptions={[9]}
+            pageSizeOptions={[50]}
             disableRowSelectionOnClick
+            localeText={{
+              noRowsLabel: "No data to display",
+            }}
           />
         </Box>
       </ThemeProvider>

@@ -5,10 +5,10 @@ import MyInfoTab from './MyInfoTab';
 import MyInfoPersonal from './MyInfoPersonal';
 import MyInfoJob from './MyInfoJob';
 import { styled } from '@mui/material/styles';
-import { colors } from '../../Styles';
-import DocumentMyinfo from '../DocumentMyinfo/DocumentMyinfo';
-import JourneyMyinfo from '../JourenyMyinfo/JourneyMyinfo';
-
+import { colors } from '../../assets/Styles';
+import {formatPhoneNumber} from "../../assets/utils"
+import MyinfoDocument from './MyinfoDocument';
+import MyinfoJourney from './MyinfoJourney';
 
 const theme = createTheme({
   typography: {
@@ -56,20 +56,10 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  padding: '55px',
+  padding: '32px 48px 48px 48px',
+  
+  
 }));
-
-function formatPhoneNumber(phoneNumber) {
-  
-  const cleaned = ('' + phoneNumber).replace(/\D/g, '');
- 
-  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-  
-  if (match) {
-    return `${match[1]}-${match[2]}${match[3]}`;
-  }
-  return phoneNumber;
-}
 
 function MyInfoPersonalCard({ employee }) {
   const tabItems = [
@@ -91,11 +81,11 @@ function MyInfoPersonalCard({ employee }) {
     },
     {
       label: 'Documents',
-      child: <div><DocumentMyinfo/></div>,
+      child: <div><MyinfoDocument/></div>,
     },
     {
       label: 'Journey',
-      child: <div><JourneyMyinfo/></div>,
+      child: <div><MyinfoJourney/></div>,
     },
   ];
 
@@ -113,7 +103,7 @@ function MyInfoPersonalCard({ employee }) {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          minWidth: '980px', 
+          minWidth: '952px', 
           overflowX: 'auto', 
         }}
       >
@@ -123,8 +113,8 @@ function MyInfoPersonalCard({ employee }) {
             height: '153px',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingLeft: '55px',
-            paddingRight: '55px',
+            paddingLeft: '48px',
+            paddingRight: '48px',
             background: colors.darkGrey2,
             borderBottom: 1,
             borderColor: '#D0D5DD',

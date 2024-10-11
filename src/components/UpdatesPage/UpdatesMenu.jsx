@@ -1,11 +1,14 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useState, useEffect, useContext } from 'react';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
-import UpdatesNavBar from './UpdatesNavBar';
-import NoContentComponent from './NoContentComponent';
-import { useState } from 'react';
+import PagesNavBar from './PagesNavBar';
+import NoContentComponent from '../StaticComponents/NoContentComponent';
 import { colors, fonts } from '../../Styles';
+import { fetchAllByEmployee } from '../../assets/FetchServices/Notification';
+import StateContext from '../../context/StateContext';
 
 /**
  * Menu component for the home menu page. Displays up to 10 updates at a time along with controls
@@ -16,129 +19,52 @@ import { colors, fonts } from '../../Styles';
  *      Default: {}
  */
 export default function UpdatesMenu({style}) {
-    const [currentPage, setCurrentPage] = useState(1);
+    //Current page number
+    const [currentPage, setCurrentPage] = useState(1);  
+    //Flag determining whether to display all or unread notifications
     const [filter, setFilter] = useState("All");
+    //List of notifications to be displayed
+    const [allUpdates, setAllUpdates] = useState([]);
+    //Hook for refreshing the list of notifications
+    const [refresh, setRefresh] = useState(false);
+    //Flag for determining if records are being retrieved from the database
+    const [loadingUpdates, setLoadingUpdates] = useState(false);
+
+    //ID of the currently logged in employee
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
+
+    //Refresh the list of notifications whenever the refresh hook is changed
+    useEffect(() => {
+        getUpdates();
+    }, [refresh]);
+
+    //Retrieve the status of a notification for a given employee
+    function checkNotificationStatus(update, id) {
+        return update.recipients.filter((emp) => emp.empId === id)[0].notificationStatus;
+    };
 
     //Retrieve all the updates
-    const allUpdates = [
-        
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'Your time off request has been sent',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'Your time off request has been sent',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'waiting',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'seen',
-            name: 'New team member added',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        {
-            status: 'new',
-            name: 'New time off request',
-            desc: 'Olivia Kylle from Marketing has requested 4 day (32 hours) time off between 1 July and 4 day'
-        },
-        
-    ];
+    function getUpdates() {
+        //Retrieve notification records from database
+        setLoadingUpdates(true);
+        fetchAllByEmployee(currentUser)
+        .then((data) => {
+            if (data) {
+                const updates = [];
+                data.forEach((up) => {
+                    updates.push(up);
+                });
+                setAllUpdates(updates);
+            }
+        })
+        .finally(() => setLoadingUpdates(false));
+    };
 
     //Either show all updates or only the unread ones
     const filteredUpdates = (filter === "All") ? 
         allUpdates : 
-        allUpdates.filter((update) => update.status !== "seen");
+        allUpdates.filter((update) => checkNotificationStatus(update, currentUser) !== "seen");
 
     //Only show 10 updates at a time
     const updatesToDisplay = filteredUpdates.slice((currentPage - 1) * 10, currentPage * 10);
@@ -161,46 +87,52 @@ export default function UpdatesMenu({style}) {
     return (
         <Box sx={{...{
             boxSizing: "border-box",
-            minWidth: "1042px",
-            paddingX: "59px",
-            paddingY: "31px",
+            minWidth: "952px",
+            padding: "48px",
             border: "1px solid #EBEBEB",
             borderRadius: "10px",
             backgroundColor: "#FFFFFF"
         }, ...style}}>
             {/*If there are updates, display the updates list and navbar */}
-            {(allUpdates.length > 0) ?
-                <>
-                    <Stack 
-                        direction="row" 
-                        justifyContent="space-between" 
-                        alignItems="center" 
-                        sx={{
-                            fontFamily: fonts.fontFamily,
-                            marginBottom: "10px"
-                        }}
-                    >
-                        <h3 style={{color: colors.darkGrey}}>Latest updates</h3>
-                        <UpdatesFilter handleFilter={handleFilter} />
-                    </Stack>
-                    {/*Updates list*/}
-                    <UpdatesList updates={updatesToDisplay} style={{marginBottom: "20px"}} />
-                    {/*Updates nav bar*/}
-                    {filteredUpdates.length > 10 &&
-                        <UpdatesNavBar 
-                            numOfUpdates={filteredUpdates.length} 
-                            currentPage={currentPage} 
-                            handlePage={handlePage}
-                        /> 
-                    }       
-                </> :
-                <>
-                    {/*Otherwise, display a message that there are no updates*/}
-                    <NoContentComponent>
-                        <h3 style={{color:colors.darkGrey}}>You don't have any updates yet</h3>
-                        <p style={{color:colors.darkGrey}}>Any updates about your company will be shown here.</p>
-                    </NoContentComponent>
-                </>
+            {loadingUpdates ?
+                <CircularProgress sx={{marginX: "50%", marginY: "20%"}} /> :
+                (allUpdates.length > 0) ?
+                    <>
+                        <Stack 
+                            direction="row" 
+                            justifyContent="space-between" 
+                            alignItems="center" 
+                            sx={{
+                                fontFamily: fonts.fontFamily,
+                                marginBottom: "16px"
+                            }}
+                        >
+                            <h3 style={{color: colors.darkGrey}}>Latest updates</h3>
+                            <UpdatesFilter handleFilter={handleFilter} />
+                        </Stack>
+                        {/*Updates list*/}
+                        <UpdatesList 
+                            updates={updatesToDisplay} 
+                            refresh={() => {setRefresh(!refresh)}} 
+                            style={{marginBottom: "20px"}} 
+                        />
+                        {/*Updates nav bar*/}
+                        {filteredUpdates.length > 10 &&
+                            <PagesNavBar 
+                                numOfEntries={filteredUpdates.length} 
+                                currentPage={currentPage} 
+                                handlePage={handlePage}
+                            /> 
+                        }       
+                    </> :
+                    <>
+                        {/*Otherwise, display a message that there are no updates*/}
+                        <NoContentComponent>
+                            <h3 style={{color:colors.darkGrey}}>You don't have any updates yet</h3>
+                            <p style={{color:colors.darkGrey}}>Any updates about your company will be shown here.</p>
+                        </NoContentComponent>
+                    </>
+            
             }
         </Box>
     );
