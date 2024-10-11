@@ -1,7 +1,7 @@
 import { useSettingsContext } from "../context";
-import { departmentsApi, transferEmployeesDepartment } from "../api";
+import { timeOffPoliciesApi } from "../api";
 
-const successMessage = (action) => `Department ${action}ed successfully`;
+const successMessage = (action) => `Time off policy ${action}ed successfully`;
 
 const errorMessage = (action) => `Failed to ${action}`;
 
@@ -12,8 +12,7 @@ export const useTimeOffPoliciesData = ({
   setToast,
   action,
 }) => {
-  const { departments, fetchDepartmentsPeople, fetchDepartments, employees } =
-    useSettingsContext();
+  const { fetchTimeOffPolicies } = useSettingsContext();
 
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);
@@ -22,8 +21,7 @@ export const useTimeOffPoliciesData = ({
         message: response,
       });
     } else {
-      fetchDepartmentsPeople();
-      fetchDepartments();
+      fetchTimeOffPolicies();
       onClose();
       setToast({
         open: true,
@@ -45,63 +43,28 @@ export const useTimeOffPoliciesData = ({
 
   const addPolicy = (data) => {
     console.log("addPolicy");
-    // departmentsApi.create(data).then(handleSuccess).catch(handleError);
+    timeOffPoliciesApi.create(data).then(handleSuccess).catch(handleError);
   };
 
-  const editPolicy = (data) => {
+  const editPolicy = () => {
     console.log("editPolicy");
-    // const departmentById = departments.find(
-    //   (item) => item.id === selectedItem.id
-    // );
-
-    // if (!departmentById) {
-    //   console.error("Department not found!");
-    //   return;
-    // }
-
-    // const formattedData = {
-    //   ...departmentById,
-    //   departmentName: data.departmentName,
-    // };
-
-    // departmentsApi.update(formattedData).then(handleSuccess).catch(handleError);
+    timeOffPoliciesApi
+      .update(selectedItem.id)
+      .then(handleSuccess)
+      .catch(handleError);
   };
 
   const deletePolicy = () => {
-    console.log("editPolicy");
-    // departmentsApi
-    //   .delete(selectedItem.id)
-    //   .then(handleSuccess)
-    //   .catch(handleError);
-  };
-
-  const transferEmployees = (data) => {
-    console.log("transfer");
-    deletePolicy();
-    // const { departmentDestination } = data;
-
-    // const employeeEmpIds = employees
-    //   .filter((employee) => employee.departmentId === selectedItem.id)
-    //   .map((employee) => employee.empId);
-
-    // const transferData = {
-    //   employeeEmpIds,
-    //   destinationDepartmentId: departmentDestination.id,
-    // };
-
-    // transferEmployeesDepartment(transferData)
-    //   .then((response) => {
-    //     console.log("Transfer employess successfully:", response.data);
-    //     deleteDepartment();
-    //   })
-    //   .catch((error) => {
-    //     console.error("Transfer employess error:", error);
-    //   });
+    console.log("deletePolicy");
+    timeOffPoliciesApi
+      .delete(selectedItem.id)
+      .then(handleSuccess)
+      .catch(handleError);
   };
 
   return {
     add: addPolicy,
     edit: editPolicy,
-    delete: transferEmployees,
+    delete: deletePolicy,
   };
 };

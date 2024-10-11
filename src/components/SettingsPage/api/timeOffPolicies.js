@@ -49,9 +49,35 @@ const deleteTimeOff = async (timeOffId) => {
   }
 };
 
+const getRenewDateMonth = async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/timeoffs/renewaldate/get`);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching timeoff renew date:", error);
+    throw error;
+  }
+};
+
+const setRenewDateMonth = async (data) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/timeoffs/renewaldate/set`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error create new timeoff:", error);
+    throw error;
+  }
+};
+
 export const timeOffPoliciesApi = {
   create: createTimeOff,
   fetch: getTimeOffs,
   update: editTimeOff,
   delete: deleteTimeOff,
+  getRenewDateMonth,
+  setRenewDateMonth
 };

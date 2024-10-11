@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Box, Stack } from "@mui/system";
 import { styled, Typography, Select, MenuItem, Divider } from "@mui/material";
 import PagesNavBar from "../UpdatesPage/PagesNavBar";
@@ -7,6 +8,7 @@ import Toast from "./Toast";
 import SettingsDialog from "./SettingsDialog";
 import Grid from "@mui/system/Unstable_Grid";
 import ListTable from "./ListTable";
+import { timeOffPoliciesApi } from "./api";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -28,7 +30,22 @@ export default function ListTabContent({
   const [selectedItem, setSelectedItem] = useState({});
   const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const [fiscalYearMonth, setFiscalYearMonth] = useState("january");
+  const [currentRenewalMonth, setCurrentRenewalMonth] = useState(null);
+  const [selectedRenewalMonth, setSelectedRenewalMonth] = useState(null);
+
+  useEffect(() => {
+    const getRenewDateMonthTimeOff = async () => {
+      try {
+        const renewalMonth = await timeOffPoliciesApi.getRenewDateMonth();
+        setCurrentRenewalMonth(renewalMonth.fullMonthName);
+        setSelectedRenewalMonth(renewalMonth.fullMonthName);
+      } catch (error) {
+        console.error("Error fetching time off renewal month:", error);
+      }
+    };
+
+    getRenewDateMonthTimeOff();
+  }, []);
 
   const itemsToDisplay = useMemo(
     () =>
@@ -66,6 +83,28 @@ export default function ListTabContent({
     setToast({ ...toast, open: false });
   };
 
+  const saveNewRenewalMonth = async () => {
+    try {
+      console.log("selectedRenewalMonth", selectedRenewalMonth);
+
+      const response = await timeOffPoliciesApi.setRenewDateMonth({
+        month: selectedRenewalMonth,
+      });
+
+      setToast({
+        open: true,
+        severity: "success",
+        message: "Fiscal year start month has been updated.",
+      });
+    } catch (error) {
+      setToast({
+        open: true,
+        severity: "error",
+        message: "Something went wrong. Please try again.",
+      });
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -95,30 +134,39 @@ export default function ListTabContent({
                 first day of each fiscal year’s month.
               </Typography>
 
-              <Box>
+              <Stack direction="row" spacing={2}>
                 <Select
-                  sx={{ width: "153px", height: "34px" }}
+                  sx={{ width: "150px", height: "34px", outline: "none" }}
                   labelId="fiscalYearMonth"
                   id="fiscalYearMonth"
-                  value={fiscalYearMonth}
-                  label="Fiscal Year Month"
-                  onChange={(e) => setFiscalYearMonth(e.target.value)}
+                  value={selectedRenewalMonth}
+                  onChange={(e) => {
+                    const selectedMonth = e.target.value;
+                    setSelectedRenewalMonth(selectedMonth);
+                  }}
                 >
-                  <MenuItem value="january">January</MenuItem>
-                  <MenuItem value="february">February</MenuItem>
-                  <MenuItem value="march">March</MenuItem>
-                  <MenuItem value="april">April</MenuItem>
-                  <MenuItem value="may">May</MenuItem>
-                  <MenuItem value="june">June</MenuItem>
-                  <MenuItem value="july">July</MenuItem>
-                  <MenuItem value="august">August</MenuItem>
-                  <MenuItem value="september">September</MenuItem>
-                  <MenuItem value="october">October</MenuItem>
-                  <MenuItem value="november">November</MenuItem>
-                  <MenuItem value="december">December</MenuItem>
+                  <MenuItem value="January">January</MenuItem>
+                  <MenuItem value="February">February</MenuItem>
+                  <MenuItem value="March">March</MenuItem>
+                  <MenuItem value="April">April</MenuItem>
+                  <MenuItem value="May">May</MenuItem>
+                  <MenuItem value="June">June</MenuItem>
+                  <MenuItem value="July">July</MenuItem>
+                  <MenuItem value="August">August</MenuItem>
+                  <MenuItem value="September">September</MenuItem>
+                  <MenuItem value="October">October</MenuItem>
+                  <MenuItem value="November">November</MenuItem>
+                  <MenuItem value="December">December</MenuItem>
                 </Select>
-                <Divider sx={{ padding: "16px" }} />
-              </Box>
+                <HRMButton
+                  mode="primary"
+                  onClick={saveNewRenewalMonth}
+                  enabled={currentRenewalMonth !== selectedRenewalMonth}
+                >
+                  Save changes
+                </HRMButton>
+              </Stack>
+              <Divider sx={{ padding: "16px" }} />
             </Stack>
           </Grid>
         )}
