@@ -21,24 +21,24 @@ export const Checkbox = styled(HRMCheckbox)({
   border: "2px solid #344054",
 });
 
-export const AddEditTimeOffPolicy = ({ form, action }) => {
-  const [unlimited, setUnlimited] = useState(false);
+export const AddEditTimeOffPolicy = ({ form, action, selectedItem }) => {
+  const [isUnlimitedBalance, setIsUnlimitedBalance] = useState(
+    selectedItem?.hours === null
+  );
+
   const {
     register,
     setValue,
-    watch,
     formState: { errors },
   } = form;
 
-  const isUnlimitedChecked = watch("unlimitedBalance", unlimited);
-
   useEffect(() => {
-    setValue(fieldBalance, unlimited ? "Unlimited" : "");
-  }, [unlimited]);
-
-  const onSubmit = (data) => {
-    console.log("data", data);
-  };
+    form.reset({
+      category: selectedItem?.category ?? "",
+      hours: selectedItem?.hours,
+    });
+    setIsUnlimitedBalance(selectedItem?.hours === null);
+  }, [selectedItem]);
 
   return (
     <>
@@ -62,20 +62,19 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
         sx={{ marginTop: "12px" }}
       >
         <TextField
-          size="small"
+          id="balanceInput"
+          disabled={isUnlimitedBalance}
           fullWidth
-          color="secondary"
-          sx={{ width: "100px", color: unlimited && "#667085" }}
-          disabled={unlimited}
           {...register(fieldBalance, {
             validate: (value) => {
-              if (unlimited) return true;
-              if (!unlimited && value.trim() === "")
+              if (!isUnlimitedBalance && value.trim() === "")
                 return "Balance is required.";
               return true;
             },
           })}
-          error={!unlimited && !!errors[fieldBalance]}
+          value={isUnlimitedBalance ? "" : register(fieldBalance).value}
+          placeholder={isUnlimitedBalance ? "Unlimited" : ""}
+          error={!!errors[fieldBalance]}
           FormHelperTextProps={{
             className: errors[fieldBalance] ? "error" : "",
           }}
@@ -91,7 +90,7 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
           hours
         </Typography>
       </Stack>
-      {!!errors["balance"] && !unlimited && (
+      {!!errors[fieldBalance] && (
         <Typography
           sx={{
             color: "#D92D20",
@@ -101,7 +100,7 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
             marginTop: "10px",
           }}
         >
-          {errors["balance"]?.message}
+          {errors[fieldBalance]?.message}
         </Typography>
       )}
       <Stack
@@ -111,14 +110,12 @@ export const AddEditTimeOffPolicy = ({ form, action }) => {
         sx={{ marginTop: "12px" }}
       >
         <Checkbox
-          type="checkbox"
-          id="unlimitedBalance"
-          name="unlimitedBalance"
-          {...register("unlimitedBalance")}
-          checked={isUnlimitedChecked}
+          id="isUnlimitedBalance"
+          checked={isUnlimitedBalance}
           onChange={(e) => {
-            setUnlimited(e.target.checked);
-            setValue("unlimitedBalance", e.target.checked);
+            const isChecked = e.target.checked;
+            setIsUnlimitedBalance(isChecked);
+            setValue(fieldBalance, isChecked ? null : "");
           }}
           size="large"
           sx={{ marginRight: "100px", borderColor: "red" }}

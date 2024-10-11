@@ -1,3 +1,4 @@
+import {  useEffect } from "react";
 import { TextLabel, TextField } from "../styles";
 
 const fieldName = "roleTitle";
@@ -10,11 +11,17 @@ const validationRules = {
   },
 };
 
-export const AddEditJobTitle = ({ form, action }) => {
+export const AddEditJobTitle = ({ form, action, selectedItem }) => {
   const {
     register,
     formState: { errors },
   } = form;
+
+  useEffect(() => {
+    form.reset({
+      roleTitle: selectedItem?.roleTitle ?? "",
+    });
+  }, [selectedItem]);
 
   return (
     <>

@@ -1,3 +1,4 @@
+import {  useEffect } from "react";
 import { TextLabel, TextField } from "../styles";
 
 const fieldName = "departmentName";
@@ -10,11 +11,17 @@ const validationRules = {
   },
 };
 
-export const AddEditDepartment = ({ form, action }) => {
+export const AddEditDepartment = ({ form, action, selectedItem }) => {
   const {
     register,
     formState: { errors },
   } = form;
+
+  useEffect(() => {
+    form.reset({
+      departmentName: selectedItem?.departmentName ?? "",
+    });
+  }, [selectedItem]);
 
   return (
     <>

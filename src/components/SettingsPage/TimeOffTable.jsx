@@ -68,7 +68,7 @@ export default function ListTable({ openDialog, content, contentList, style }) {
               <TextHeader>Policy type</TextHeader>
             </TableHeaderCell>
             <TableHeaderCell>
-              <TextHeader>Default balance</TextHeader>
+              <TextHeader>Default balance (h)</TextHeader>
             </TableHeaderCell>
             <TableHeaderCell>
               <TextHeader>Times used</TextHeader>

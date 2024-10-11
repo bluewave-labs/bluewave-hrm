@@ -5,27 +5,27 @@ import { Autocomplete } from "@mui/material";
 import { TextField } from "../styles";
 
 export const DeleteTimeOffPolicy = ({ form, selectedItem }) => {
-  const { departments } = useSettingsContext();
+  const { timeOffPolicies } = useSettingsContext();
 
-  const transferDepartmentOptions = useMemo(() => {
+  const transferTimeOffPoliciesOptions = useMemo(() => {
     if (!selectedItem) return [];
-    return departments
-      .filter((department) => department.id !== selectedItem.id)
-      .sort((a, b) => a.departmentName.localeCompare(b.departmentName));
+    return timeOffPolicies
+      .filter((policy) => policy.id !== selectedItem.id)
+      .sort((a, b) => a.category.localeCompare(b.category));
   }, [selectedItem]);
 
   return (
     <Controller
       name="departmentDestination"
       control={form.control}
-      defaultValue={transferDepartmentOptions[0] || {}}
+      defaultValue={transferTimeOffPoliciesOptions[0] || {}}
       render={({ field: { onChange, ...props } }) => (
         <Autocomplete
           color="secondary"
           fullWidth
-          getOptionLabel={(option) => option.departmentName}
+          getOptionLabel={(option) => option.category}
           onChange={(_, value) => onChange(value)}
-          options={transferDepartmentOptions}
+          options={transferTimeOffPoliciesOptions}
           renderInput={(params) => <TextField {...params} />}
           size="small"
           {...props}

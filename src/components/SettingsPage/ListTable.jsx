@@ -91,8 +91,8 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                       fontSize: index === 0 ? "14px" : "13px",
                     }}
                   >
-                    {header === "Default balance"
-                      ? `${item[contentKey] === null ? 0 : item[contentKey]} hours`
+                    {header === "Default balance (hours)"
+                      ? `${item[contentKey] === null ? "Unlimited" : item[contentKey]}`
                       : item[contentKey]}
                   </Typography>
                 </TableBodyCell>
@@ -115,9 +115,6 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
                       <MoreVertIcon sx={{ color: "#98A2B3" }} />
                     </Button>
                   </Stack>
-                  {/* <EditButton onClick={() => openDialog("edit", item)}>
-                    Edit
-                  </EditButton> */}
                 </Stack>
               </TableBodyCell>
             </TableRow>

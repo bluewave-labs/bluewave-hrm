@@ -46,10 +46,14 @@ export const useTimeOffPoliciesData = ({
     timeOffPoliciesApi.create(data).then(handleSuccess).catch(handleError);
   };
 
-  const editPolicy = () => {
-    console.log("editPolicy");
+  const editPolicy = (data, selectedItem) => {
+    const formatedData = {
+      ...selectedItem,
+      ...data,
+      hours: data.hours === "Unlimited" ? null : data.hours,
+    };
     timeOffPoliciesApi
-      .update(selectedItem.id)
+      .update(formatedData)
       .then(handleSuccess)
       .catch(handleError);
   };

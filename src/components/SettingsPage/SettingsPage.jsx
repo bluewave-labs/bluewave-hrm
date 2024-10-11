@@ -85,7 +85,6 @@ export default function SettingsPage({ style, innerStyle }) {
               <StyledTab label="Job titles" value="Job titles" />
               <StyledTab label="Time off" value="Time off" />
               <StyledTab label="Permissions" value="Permissions" />
-              <StyledTab label="Employee fields" value="Employee fields" />
               <StyledTab label="Offboarding" value="Offboarding" />
             </TabList>
           </Box>

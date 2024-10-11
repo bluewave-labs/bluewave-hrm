@@ -50,18 +50,11 @@ export default function CustomDialog({
     return dialogContent[action][tabName];
   }, [action, tabName]);
 
-  useEffect(() => {
-    form.reset({
-      departmentName: selectedItem?.departmentName ?? "",
-      roleTitle: selectedItem?.roleTitle ?? "",
-    });
-  }, [open, selectedItem]);
-
   const onSubmit = (data) => {
     console.log("data", data);
     if (tabName === tabNames.departments) return departmentData[action](data);
     if (tabName === tabNames.jobtitles) return jobTitleData[action](data);
-    if (tabName === tabNames.timeoffs) return timeOffPoliciesData[action](data);
+    if (tabName === tabNames.timeoffs) return timeOffPoliciesData[action](data, selectedItem);
   };
 
   return (

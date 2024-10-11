@@ -2,7 +2,7 @@ import { useSettingsContext } from "../context";
 
 const policiesColumns = [
   { header: "Policy type", contentKey: "category" },
-  { header: "Default balance", contentKey: "hours" },
+  { header: "Default balance (hours)", contentKey: "hours" },
   { header: "Times used", contentKey: "usageCount" },
 ];
 

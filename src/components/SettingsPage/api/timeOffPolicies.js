@@ -51,7 +51,9 @@ const deleteTimeOff = async (timeOffId) => {
 
 const getRenewDateMonth = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/timeoffs/renewaldate/get`);
+    const response = await axios.get(
+      `http://localhost:3000/api/timeoffs/renewaldate/get`
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -79,5 +81,5 @@ export const timeOffPoliciesApi = {
   update: editTimeOff,
   delete: deleteTimeOff,
   getRenewDateMonth,
-  setRenewDateMonth
+  setRenewDateMonth,
 };
