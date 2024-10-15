@@ -272,25 +272,43 @@ export default function People({
     async function fetchData() {
       // You can await here
       try {
-        const res = await api.employee.fetchAll();
-        setLoading(false);
-        params.data = res;
-        formatTableData(params);
-        setEmployees(params.data);
-        if (stateContext.state.employee) {
-          const managerId = stateContext.state.employee.empId;
-          const team = await api.employee.fetchMyTeam(managerId);
-          params.data = team;
-          params.addActionMenu = true;
+        if (stateContext.state.pdEmployees) {
+          //pd stands for people details
+          setEmployees(stateContext.state.pdEmployees);
+          setLoading(false);
+        } else {
+          const res = await api.employee.fetchAll();
+          setLoading(false);
+          params.data = res;
           formatTableData(params);
-          setMyTeam(params.data);
+          setEmployees(params.data);
+          stateContext.updateState("pdEmployees", params.data);
+        }
+
+        if (stateContext.state.employee) {
+          if (stateContext.state.pdMyTeam) {
+            setMyTeam(stateContext.state.pdMyTeam);
+          } else {
+            const managerId = stateContext.state.employee.empId;
+            const team = await api.employee.fetchMyTeam(managerId);
+            params.data = team;
+            params.addActionMenu = true;
+            formatTableData(params);
+            setMyTeam(params.data);
+            stateContext.updateState("pdMyTeam", params.data);
+          }
         }
         if (isAdmin) {
-          const terms = await api.employee.fetchTerminated();
-          params.data = terms;
-          params.addActionMenu = false;
-          formatTableData(params);
-          setTerminated(params.data);
+          if (stateContext.state.pdTerminated) {
+            setTerminated(stateContext.state.pdTerminated);
+          } else {
+            const terms = await api.employee.fetchTerminated();
+            params.data = terms;
+            params.addActionMenu = false;
+            formatTableData(params);
+            setTerminated(params.data);
+            stateContext.updateState("pdTerminated", params.data);
+          }
         }
       } catch (err) {
         console.log(err);

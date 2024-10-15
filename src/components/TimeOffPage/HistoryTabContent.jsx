@@ -1,16 +1,20 @@
 import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import TuneIcon from '@mui/icons-material/Tune';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+//import axios from 'axios';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
-import NoContentComponent from '../UpdatesPage/NoContentComponent';
+import NoContentComponent from '../StaticComponents/NoContentComponent';
 import Label from '../Label/Label';
-import { useState, useEffect } from 'react';
+//import { currentUserID } from '../../testConfig';
 import { colors, fonts } from '../../Styles';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import axios from 'axios';
+import { fetchAllByEmployee } from '../../assets/FetchServices/TimeOffHistory';
+import StateContext from '../../context/StateContext';
 
 //Function for parsing a JavaScript date into a string format.
 function formatDate(date) {
@@ -40,8 +44,11 @@ export default function HistoryTabContent({style}) {
     const [noteFilter, setNoteFilter] = useState(true);
     //Time off periods to be displayed
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
+    //Flag for determining if records are being retrieved from the database
+    const [loadingPeriods, setLoadingPeriods] = useState(false);
     //Hook for refreshing the list of time off periods
-    const [refresh, setRefresh] = useState(false);
+    //const [refresh, setRefresh] = useState(false);
+    
 
     //Filter table columns depending on which filters are active
     //"From", "To" and at least one other column will always be active
@@ -51,20 +58,44 @@ export default function HistoryTabContent({style}) {
     if (noteFilter) { activeFilters.push("Note"); }
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used for API calls
-    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
+    //const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
 
     //Refresh the list of time off periods
     useEffect(() => {
         getTimeOffPeriods();
-    }, [refresh]);
+    }, []);
 
     //Function for retrieving any past time off periods
     function getTimeOffPeriods() {
-        //console.log("Running getTimeOffPeriods()");
         //Send request to database for time off periods
+        setLoadingPeriods(true);
+        fetchAllByEmployee(currentUser)
+        .then((data) => {
+            if (data) {
+                const periods = [];
+                //const data = response.data;
+                data.forEach((p) => {
+                    //Only retrieve and display past periods
+                    if (dayjs(p.startDate).isBefore(dayjs())) {
+                        periods.push({
+                            id: p.id,
+                            from: formatDate(dayjs(p.startDate).toDate()),
+                            to: formatDate(dayjs(p.endDate).toDate()),
+                            type: p.timeOff.category,
+                            hours: p.hours,
+                            note: p.note
+                        });
+                    }
+                });
+                setTimeOffPeriods(periods);
+            }
+        })
+        .finally(() => setLoadingPeriods(false));
+        /*
         axios.post(timeOffPeriodURL)
         .then((response) => {
             const periods = [];
@@ -87,6 +118,7 @@ export default function HistoryTabContent({style}) {
         .catch((error) => {
             console.log(error);
         })
+        */
     };
  
     //Only shows 10 periods at a time
@@ -101,6 +133,7 @@ export default function HistoryTabContent({style}) {
 
     return (
         <Box sx={{...{
+            marginTop: "40px",
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
@@ -141,32 +174,34 @@ export default function HistoryTabContent({style}) {
                 }
             </Stack>
             {/*If there are periods of time off, display the time off period list and navbar */}
-            {(timeOffPeriods.length > 0) ?
-                <>
-                    {/*Upcoming time off table*/}
-                    <UpcomingTimeOffTable 
-                        timeOffPeriods={periodsToDisplay} 
-                        tableColumns={activeFilters}
-                        editFlag={false} 
-                        //refresh={() => setRefresh(!refresh)}
-                        style={{marginBottom: "30px"}}
-                    />
-                    {/*Upcoming time off navbar*/}
-                    {timeOffPeriods.length > 10 &&
-                        <PagesNavBar 
-                            numOfEntries={timeOffPeriods.length} 
-                            currentPage={currentPage} 
-                            handlePage={handlePage}
-                        /> 
-                    }  
-                </> :
-                <>
-                    {/*Otherwise, display a message that there is no history*/}
-                    <NoContentComponent>
-                        <h3>There is no time off history</h3>
-                        <p>Any updates about your time off history will be shown here.</p>
-                    </NoContentComponent>
-                </>
+            {loadingPeriods ? 
+                <CircularProgress sx={{marginX: "50%", marginY: "20%"}} /> :
+                (timeOffPeriods.length > 0) ?
+                    <>
+                        {/*Upcoming time off table*/}
+                        <UpcomingTimeOffTable 
+                            timeOffPeriods={periodsToDisplay} 
+                            tableColumns={activeFilters}
+                            editFlag={false} 
+                            //refresh={() => setRefresh(!refresh)}
+                            style={{marginBottom: "30px"}}
+                        />
+                        {/*Upcoming time off navbar*/}
+                        {timeOffPeriods.length > 10 &&
+                            <PagesNavBar 
+                                numOfEntries={timeOffPeriods.length} 
+                                currentPage={currentPage} 
+                                handlePage={handlePage}
+                            /> 
+                        }  
+                    </> :
+                    <>
+                        {/*Otherwise, display a message that there is no history*/}
+                        <NoContentComponent>
+                            <h3>There is no time off history</h3>
+                            <p>Any updates about your time off history will be shown here.</p>
+                        </NoContentComponent>
+                    </>
             }
         </Box>
     );

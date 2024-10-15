@@ -77,6 +77,7 @@ const items = [
  *      Default: {}
  */
 export default function SideMenu({ style, onSelect }) {
+  const stateContext = useContext(StateContext);
   const user = useContext(StateContext).state.user;
   const isAdmin = user && user.permission.id === 1;
     
@@ -93,43 +94,57 @@ export default function SideMenu({ style, onSelect }) {
     <Stack
       sx={{
         ...{
-          width: "15%",
+          width: "10%",
           minWidth: "280px",
           height: "100%",
+          minHeight: "100vh",
           paddingRight: "15px",
           direction: "column",
           justifyContent: "space-between",
           borderRight: "1px solid #EBEBEB",
           borderBottom: "1px solid #EBEBEB",
           backgroundColor: "#FFFFFF",
+          position: "fixed",
+          zIndex: 2,
         },
         ...style,
       }}
     >
-      <List>
-        {items.map((item, index) => {
-          return (
+      <Box>
+        <img
+          src={stateContext.state.logo}
+          alt="Company Logo"
+          style={{
+            maxWidth: "300px",
+            maxHeight: "150px",
+            width: "100%"
+          }}
+        />
+        <List>
+          {items.map((item, index) => {
+            return (
+              <CustomizedListItem
+                primary={item.name}
+                index={index}
+                menuItem={item.menuItem}
+                selected={index === selectedIndex}
+                handleListItemClick={handleListItemClick}
+              />
+            );
+          })}
+          {isAdmin && (
             <CustomizedListItem
-              primary={item.name}
-              index={index}
-              menuItem={item.menuItem}
-              selected={index === selectedIndex}
+              primary={"Settings"}
+              index={5}
+              menuItem={"settings"}
+              selected={selectedIndex === 5}
               handleListItemClick={handleListItemClick}
             />
-          );
-        })}
-        {isAdmin && (
-          <CustomizedListItem
-            primary={"Settings"}
-            index={5}
-            menuItem={"settings"}
-            selected={selectedIndex === 5}
-            handleListItemClick={handleListItemClick}
-          />
-        )}
-      </List>
+          )}
+        </List>
+      </Box>
       <Box>
-        <Divider sx={{ marginTop: "1080px" }} />
+        <Divider />
         <CustomizedListItem
           primary={"Support"}
           menuItem={"support"}

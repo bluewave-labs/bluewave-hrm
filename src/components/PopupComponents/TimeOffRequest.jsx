@@ -1,20 +1,26 @@
-import Box from "@mui/system/Box";
-import Stack from "@mui/system/Stack";
-import CloseIcon from "@mui/icons-material/Close";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import Chip from "@mui/material/Chip";
-import Dialog from "@mui/material/Dialog";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import dayjs from "dayjs";
-import DateSelect from "./DateSelect";
-import Checkbox from "../Checkbox/Checkbox";
-import HRMButton from "../Button/HRMButton";
-import TimeOffTable from "./TimeOffTable";
-import { colors, fonts } from "../../Styles";
-import { useState, useEffect, memo } from "react";
-import PropTypes from "prop-types";
-import axios from 'axios';
+import Box from '@mui/system/Box';
+import Stack from '@mui/system/Stack';
+import CloseIcon from '@mui/icons-material/Close';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import { styled } from '@mui/system';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { useState, useEffect, useContext, memo } from 'react';
+import PropTypes from 'prop-types';
+//import axios from 'axios';
+import dayjs from 'dayjs';
+import DateSelect from './DateSelect';
+import Checkbox from '../Checkbox/Checkbox';
+import HRMButton from '../Button/HRMButton';
+import TimeOffTable from './TimeOffTable';
+import { colors, fonts } from '../../Styles';
+//import { currentUserID } from '../../testConfig';
+import StateContext from '../../context/StateContext';
+import { fetchAllByEmployee, createOne as createOnePeriod, update as updatePeriod } from '../../assets/FetchServices/TimeOffHistory';
+import { fetchOne, update as updatePolicy } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
+
 
 //Function for determining if a time period is valid. A time period is only valid if the
 //starting date is before or on the same day as the ending date.
@@ -112,6 +118,7 @@ export default function TimeOffRequest({
         getUpcomingTimeOffDates();
     }, []);
 
+    //Ensure there is no overlap between existing time off periods
     useEffect(() => {
         setValidDates(validateDates());
     }, [timeOffDates]);
@@ -132,7 +139,7 @@ export default function TimeOffRequest({
         }
     }, [category]);
 
-    //Automatically adjust dates to ensure a valid period is set
+    //Automatically adjust or validate dates to ensure a valid period is set
     useEffect(() => {
         if (!isValidPeriod(from, to)) {
             setTo(from);
@@ -151,19 +158,45 @@ export default function TimeOffRequest({
         setValidDates(validateDates());
     }, [to]);
 
+    //Custom style elements
+    const Header4 = styled("h4")({
+        marginBottom: "10px"
+    });
+
     const MemoTimeOffTable = memo(TimeOffTable);
 
     //ID of the currently logged in employee
-    const currentUser = 1;
+    const stateContext = useContext(StateContext);
+    const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //URL endpoints to be used for API calls
-    const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
-    const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
-    const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
+    //const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
+    //const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
+    //const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
 
     //Function for retrieving the time off category options
     function getTimeOffPolicies() {
         //Retrieve employeeAnnualTimeOff records from database
+        fetchOne(currentUser)
+        .then((data) => {
+            if (data) {
+                const policies = {};
+                //We are only interested in the records for the current year
+                const filteredData = data.filter((p) => p.year === dayjs().year());
+                filteredData.forEach((p) => {
+                    policies[p.category] = {
+                        id: p.id,
+                        timeOffId: p.timeOffId,
+                        type: p.category,
+                        availableHours: p.hoursLeft + ((initialRequest && initialRequest.timeOffId === p.timeOffId) ? initialRequest.hours : 0),
+                        hoursUsed: p.hoursUsed
+                    }
+                });
+                //Set each policy as a selectable item in the dropdown
+                setCategoryMenu(Object.values(policies));
+            }
+        });
+        /*
         axios.post(timeOffPolicyPOSTURL)
         .then((response) => {
             const policies = {};
@@ -181,13 +214,41 @@ export default function TimeOffRequest({
             //Set each policy as a selectable item in the dropdown
             setCategoryMenu(Object.values(policies));
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+            console.log(error);
+        });
+        */
     };
 
     //Function for retrieving the dates of the upcoming time off periods for ensuring there are
     //no conflicts between time off periods
     function getUpcomingTimeOffDates() {
         //Send request to database for time off periods
+        fetchAllByEmployee(currentUser)
+        .then((data) => {
+            if (data) {
+                let periods = [];
+                //const data = response.data;
+                data.forEach((p) => {
+                    //Only retrieve periods that are upcoming
+                    if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && 
+                        (p.status === "Approved" || p.status === "Pending")) 
+                    {
+                        periods.push({
+                            id: p.id,
+                            from: dayjs(p.startDate).toDate(),
+                            to: dayjs(p.endDate).toDate(),
+                        });
+                    }
+                });
+                //If we are editing an existing period, then this period should not be included
+                if (initialRequest) {
+                    periods = periods.filter((p) => p.id !== initialRequest.id);
+                }
+                setTimeOffDates(periods);
+            }
+        })
+        /*
         axios.post(`http://localhost:5000/api/timeoffhistories/employee/${currentUser}`)
         .then((response) => {
             let periods = [];
@@ -213,6 +274,7 @@ export default function TimeOffRequest({
         .catch((error) => {
             console.log(error);
         });
+        */
     };
 
     //Date range for setting full and half days off
@@ -244,7 +306,8 @@ export default function TimeOffRequest({
                 if (d.day === "half") {
                     totalHours += 4;
                     halfDays++;
-                } else {
+                } 
+                else {
                     totalHours += 8;
                     fullDays++;
                 }
@@ -316,7 +379,27 @@ export default function TimeOffRequest({
             requestDate: dayjs().toString(),
             decisionDate: dayjs().add(1, "day").toString()
         };
-        console.log(newPeriod);
+        //console.log(newPeriod);
+        createOnePeriod(newPeriod)
+        .then((data) => {
+            if (data) {
+                console.log(data);
+                //Update the time off balance
+                const newBalance = {
+                    id: category.id,
+                    cumulativeHoursTaken: category.hoursUsed + totalHoursOff
+                };
+                updatePolicy(newBalance)
+                .then((data) => {
+                    console.log(data);
+                    sendRequest();
+                });
+            }
+            else {
+                setErrorOccurred(true);
+            }
+        });
+        /*
         axios.post(timeOffPeriodURL, newPeriod)
         .then((response) => {
             console.log(response);
@@ -336,6 +419,7 @@ export default function TimeOffRequest({
             console.log(error);
             setErrorOccurred(true);
         });
+        */
     };
 
     //Function for modifying an existing time off request
@@ -346,8 +430,58 @@ export default function TimeOffRequest({
             startDate: dayjs(from).toString(),
             endDate: dayjs(to).toString(),
             hours: totalHoursOff,
-            timeOffId: category.timeOffId
+            timeOffId: category.timeOffId,
+            status: "Pending"
         };
+        updatePeriod(updatedPeriod)
+        .then((data) => {
+            if (data) {
+                console.log(data);
+                //If the time off policy has changed
+                if (initialRequest.timeOffId !== category.timeOffId) {
+                    //Refund the hours used in the original policy
+                    const refundBalance = {
+                        //Need to get employeeAnnualTimeOff id
+                        id: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].id,
+                        cumulativeHoursTaken: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].hoursUsed - initialRequest.hours
+                    };
+                    updatePolicy(refundBalance)
+                    .then((data) => {
+                        console.log(data);
+                        //Subtract the hours used in the new policy
+                        const newBalance = {
+                            id: category.id,
+                            cumulativeHoursTaken: category.hoursUsed + totalHoursOff
+                        };
+                        updatePolicy(newBalance)
+                        .then((data) => {
+                            console.log(data);
+                            sendRequest();
+                        });
+                    });
+                }
+                //If the time off policy is the same but the amount of time off has changed
+                else if (initialRequest.hours !== totalHoursOff) {
+                    //Update the new balance for the current policy
+                    const newBalance = {
+                        id: category.id,
+                        cumulativeHoursTaken: category.hoursUsed + totalHoursOff - initialRequest.hours
+                    };
+                    updatePolicy(newBalance)
+                    .then((data) => {
+                        console.log(data);
+                        sendRequest();
+                    });
+                }
+                else {
+                    sendRequest();
+                }
+            }
+            else {
+                setErrorOccurred(true);
+            }
+        });
+        /*
         axios.put(timeOffPeriodURL, updatedPeriod)
         .then((response) => {
             console.log(response);
@@ -398,6 +532,7 @@ export default function TimeOffRequest({
             console.log(error);
             setErrorOccurred(true);
         });
+        */
     };
 
     return (
@@ -408,6 +543,8 @@ export default function TimeOffRequest({
             boxShadow: "0 15px 6px #10182808",
             paddingX: "36px",
             paddingY: "30px",
+            minWidth: "532px",
+            minHeight: "500px",
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily,
             },
@@ -435,114 +572,122 @@ export default function TimeOffRequest({
             }}
             />
         </Stack>
-        {/*Set time off category*/}
-        <h4>Time off category</h4>
-        <Autocomplete
-            disablePortal
-            options={categoryMenu}
-            getOptionLabel={(option) => `${option.type} - left: ${Math.floor(option.availableHours / 8)} days (${option.availableHours} hours)`}
-            renderInput={(params) => (
-            <TextField {...params} placeholder="Time off category" />
-            )}
-            value={category}
-            onChange={(e, newCategory) => setCategory(newCategory)}
-            sx={{
-            width: "100%",
-            marginBottom: "40px",
-            }}
-        />
-        {/*Set starting and ending dates of time off period*/}
-        <Stack
-            direction="row"
-            alignItems="center"
-            spacing={4}
-            sx={{ marginBottom: "40px" }}
-        >
-            <Box>
-            <h4>From</h4>
-            <Chip
-                icon={<CalendarMonthIcon />}
-                label={formatDate(from)}
-                variant="outlined"
-                onClick={() => setOpenFrom(true)}
-                sx={{ borderRadius: "4px" }}
+            {/*Set time off category*/}
+            <Header4>Time off category</Header4>
+            <Select 
+                value={category} 
+                onChange={(e) => setCategory(e.target.value)}
+                sx={{
+                    width: "100%",
+                    marginBottom: "30px",
+                }}
+            >
+                {categoryMenu.map((option) => (
+                    <MenuItem value={option}>
+                        {option.type} - left: {Math.floor(option.availableHours / 8)} days ({option.availableHours} hours)
+                    </MenuItem>
+                ))}
+            </Select>
+            {/*Set starting and ending dates of time off period*/}
+            <Stack
+                direction="row"
+                alignItems="center"
+                spacing={4}
+                sx={{ marginBottom: "40px" }}
+            >
+                <Box>
+                <Header4>From</Header4>
+                <Chip
+                    icon={<CalendarMonthIcon />}
+                    label={formatDate(from)}
+                    variant="outlined"
+                    onClick={() => setOpenFrom(true)}
+                    sx={{ borderRadius: "4px" }}
+                />
+                </Box>
+                <Box>
+                <Header4>To</Header4>
+                <Chip
+                    icon={<CalendarMonthIcon />}
+                    label={formatDate(to)}
+                    variant="outlined"
+                    onClick={() => setOpenTo(true)}
+                    sx={{ borderRadius: "4px" }}
+                />
+                </Box>
+            </Stack>
+            {/*Set amount of time off per day*/}
+            <Header4>Amount</Header4>
+            <Stack direction="row" alignItems="center" spacing={1}>
+                <Checkbox
+                type="checkbox"
+                id="setHours"
+                name="setHours"
+                value="setHours"
+                size="large"
+                onChange={() => setEachDay(!eachDay)}
+                style={{ marginRight: "10px" }}
+                />
+                <p>Set hours for each day during the time off period</p>
+            </Stack>
+            {/*Time off per day table*/}
+            <MemoTimeOffTable
+                dateRange={dateRange}
+                eachDay={eachDay}
+                onChange={calculateTimeOffHours}
             />
-            </Box>
-            <Box>
-            <h4>To</h4>
-            <Chip
-                icon={<CalendarMonthIcon />}
-                label={formatDate(to)}
-                variant="outlined"
-                onClick={() => setOpenTo(true)}
-                sx={{ borderRadius: "4px" }}
-            />
-            </Box>
-        </Stack>
-        {/*Set amount of time off per day*/}
-        <h4>Amount</h4>
-        <Stack direction="row" alignItems="center" spacing={1}>
-            <Checkbox
-            type="checkbox"
-            id="setHours"
-            name="setHours"
-            value="setHours"
-            size="large"
-            onChange={() => setEachDay(!eachDay)}
-            style={{ marginRight: "10px" }}
-            />
-            <p>Set hours for each day during the time off period</p>
-        </Stack>
-        {/*Time off per day table*/}
-        <MemoTimeOffTable
-            dateRange={dateRange}
-            eachDay={eachDay}
-            onChange={calculateTimeOffHours}
-        />
-        {/*Time off summary*/}
-        <p style={{ marginBottom: "30px" }}>
-            {fullDaysOff} full days ({fullDaysOff * 8} hrs) and {halfDaysOff} half
-            day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in
-            total).
-        </p>
-        {!validDates && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
-            Your time off request dates overlap with existing upcoming time off periods.
-        </h4>}
-        {!sufficientTime && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
-            You are requesting {totalHoursOff} hours off. The selected time off policy only 
-            has {category.availableHours} hours available.
-        </h4>}
-        {/*Error message to be displayed if an error occurs*/}
-        {errorOccurred && <h3 style={{color: "#D92D20", marginBottom: "15px"}}>
-            An error occurred. Could not send time off request.
-        </h3>}
-        {/*Send or cancel*/}
-        <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="flex-end"
-            spacing={3}
-        >
-            <HRMButton mode="secondaryB" onClick={close}>
-            Cancel
-            </HRMButton>
-            {initialRequest ? (
-            <HRMButton mode="primary" onClick={handleEdit} enabled={sufficientTime && validDates}>
-                Update
-            </HRMButton>
-            ) : (
-            <HRMButton mode="primary" onClick={handleSubmit} enabled={sufficientTime && validDates}>
-                Send
-            </HRMButton>
-            )}
-        </Stack>
-        {/*Popup components for setting starting and ending dates*/}
-        <Dialog open={openFrom} onClose={() => setOpenFrom(false)}>
-            <DateSelect close={() => setOpenFrom(false)} setDate={setFrom} initialValue={from} />
-        </Dialog>
-        <Dialog open={openTo} onClose={() => setOpenTo(false)}>
-            <DateSelect close={() => setOpenTo(false)} setDate={setTo} initialValue={to} />
-        </Dialog>
+            {/*Time off summary*/}
+            <p style={{ marginBottom: "30px" }}>
+                {fullDaysOff} full days ({fullDaysOff * 8} hrs) and {halfDaysOff} half
+                day ({halfDaysOff * 4} hrs) will be requested ({totalHoursOff} hrs in
+                total).
+            </p>
+            {/*Warning message when editing an already approved request*/}
+            {(initialRequest && initialRequest.status === "Approved") && 
+                <h4 style={{color: "#F79009", marginBottom: "15px"}}>
+                    This time off request has already been approved. If you make any changes to 
+                    this request, it will need to be approved again.
+                </h4>
+            }
+            {/*Validation messages to be displayed if the request being submitted is invalid */}
+            {!validDates && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+                Your time off request dates overlap with existing upcoming time off periods.
+            </h4>}
+            {!sufficientTime && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+                You are requesting {totalHoursOff} hours off. The selected time off policy only 
+                has {category.availableHours} hours available.
+            </h4>}
+            {/*Error message to be displayed if an error occurs*/}
+            {errorOccurred && <h4 style={{color: "#D92D20", marginBottom: "15px"}}>
+                An error occurred. Could not send time off request.
+            </h4>}
+            {/*Send or cancel*/}
+            <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-end"
+                spacing={3}
+            >
+                <HRMButton mode="secondaryB" onClick={close}>
+                Cancel
+                </HRMButton>
+                {initialRequest ? (
+                <HRMButton mode="primary" onClick={handleEdit} enabled={sufficientTime && validDates}>
+                    Update
+                </HRMButton>
+                ) : (
+                <HRMButton mode="primary" onClick={handleSubmit} enabled={sufficientTime && validDates}>
+                    Send
+                </HRMButton>
+                )}
+            </Stack>
+            {/*Popup components for setting starting and ending dates*/}
+            <Dialog open={openFrom} onClose={() => setOpenFrom(false)}>
+                <DateSelect close={() => setOpenFrom(false)} setDate={setFrom} initialValue={from} />
+            </Dialog>
+            <Dialog open={openTo} onClose={() => setOpenTo(false)}>
+                <DateSelect close={() => setOpenTo(false)} setDate={setTo} initialValue={to} />
+            </Dialog>
         </Box>
     );
 }

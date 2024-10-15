@@ -10,6 +10,7 @@ import StateContext from "../context/StateContext";
 import { produce } from "immer";
 import Placeholder from "../components/PeopleComponents/Placeholder";
 import UpdatesPage from "../components/UpdatesPage/UpdatesPage";
+import TimeOffPage from "../components/TimeOffPage/TimeOffPage";
 const api = require("../assets/FetchServices");
 
 const dashboardMenu = {
@@ -19,7 +20,7 @@ const dashboardMenu = {
   timeoff: false,
   reporting: false,
   settings: false,
- };
+};
 
 export default function Dashboard() {
   const stateContext = useContext(StateContext);
@@ -32,10 +33,13 @@ export default function Dashboard() {
     setCurrent(newCurrent);
   };
   useEffect(() => {
+    console.log(stateContext);
     async function fetchData() {
       try {
+        console.log(stateContext.state.user, "state1");
         if (!stateContext.state.user) {
           const currentUser = await api.user.refresh();
+          console.log("state2", { currentUser });
           if (currentUser) {
             // Get associated employee record
             const currentEmployee = await api.employee.fetchOneByEmail(
@@ -78,7 +82,10 @@ export default function Dashboard() {
     // return <Placeholder content={"Loading, please wait..."} />;
   }
   return (
-    <Box>
+    <Box sx={{
+      width: "100%",
+      height: "100%"
+    }}>
       <Header />
       <Stack spacing={15} direction={"row"}>
         <SideMenu
@@ -86,15 +93,16 @@ export default function Dashboard() {
             displayMenu(menuItem);
           }}
         />
-        <Box>
+        <Box sx={{
+          width: "100%",
+          paddingLeft: "280px",
+          paddingRight: "120px",
+          paddingTop: "137px",
+        }}>
           {current.home && <UpdatesPage />}
           {current.myinfo && <MyInfoHome />}
           {current.people && <PeopleHome />}
-          {current.timeoff && (
-            <Placeholder>
-              <h1>Time off page</h1>
-            </Placeholder>
-          )}
+          {current.timeoff && <TimeOffPage />}
           {current.reporting && <ReportsMain />}
           {current.settings && (
             <Placeholder>

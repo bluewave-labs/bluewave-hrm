@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/system';
 import HRMButton from '../Button/HRMButton';
-import { fonts, colors } from '../../assets/Styles';
+import { fonts, colors } from '../../Styles';
 import PropTypes from 'prop-types';
 
 /**
