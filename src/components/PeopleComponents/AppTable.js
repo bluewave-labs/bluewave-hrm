@@ -33,7 +33,7 @@ const customStyle = (id, width) => {
 function TableToolbar(props) {
   const { caption, count, column, setColumnData } = props;
   return (
-    <Toolbar sx={{ pl: { sm: 2 }, pr: { xs: 1, sm: 1 } }}>
+    <Toolbar sx={{ ml: -2, mr: -2, my: 2 }}>
       <Typography
         variant="h6"
         id="tableTitle"
@@ -176,8 +176,8 @@ function CustomisedTableHead(props) {
               </TableCell>
             );
           }
-           })}
-         {showActionHeader && (
+        })}
+        {showActionHeader && (
           <TableCell
             key={"action"}
             align="left"
@@ -187,7 +187,7 @@ function CustomisedTableHead(props) {
           >
             Action
           </TableCell>
-        )} 
+        )}
       </TableRow>
     </TableHead>
   );
@@ -221,8 +221,15 @@ the headCells.
  * @returns  {ReactNode} A Stack React element.
  */
 export default function AppTable(props) {
-  const { caption, headCells, data, rowsPerPage, handleSelection, loading, showActionHeader} =
-    props;
+  const {
+    caption,
+    headCells,
+    data,
+    rowsPerPage,
+    handleSelection,
+    loading,
+    showActionHeader,
+  } = props;
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(1);
@@ -266,13 +273,15 @@ export default function AppTable(props) {
   }
   if (data.length === 0) {
     return (
+      <Box sx={{ padding: 16 }}>
       <NoContentComponent>
         <p>No data to display</p>
       </NoContentComponent>
+      </Box>
     );
   }
   return (
-    <Stack spacing={5} sx={{ width: 900 }}>
+    <Stack>
       <Stack>
         <TableToolbar
           caption={caption ? caption : "Table"}
@@ -285,10 +294,10 @@ export default function AppTable(props) {
           component={Paper}
           sx={{
             border: "1px solid #EBEBEB",
-            width: 889,
+            maxWidth: window.innerWidth < 1550 ? 1000 : 1250,
           }}
         >
-          <Table sx={{ minWidth: 800 }} aria-label="app table">
+          <Table aria-label="app table">
             <CustomisedTableHead
               headCells={headCells}
               order={order}

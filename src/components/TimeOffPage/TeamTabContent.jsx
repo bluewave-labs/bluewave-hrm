@@ -109,7 +109,7 @@ export default function TeamTabContent({style}) {
             .catch((error) => {
                 console.log(error);
             })
-            .finallY(() => setLoadingPeriods(false));
+            .finally(() => setLoadingPeriods(false));
         }
         else if (isManager) {
             setLoadingPeriods(true);

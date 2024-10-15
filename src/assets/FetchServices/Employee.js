@@ -1,9 +1,6 @@
 import axios from "axios";
 const BASE_URL = require("./BaseUrl.json").value;
-
-const addCred = {
-  withCredentials: true,
-};
+const addCred = require("./withCredentials.json");
 
 export const fetchAll = async () => {
   try {
@@ -211,3 +208,15 @@ export const changeJobs = async (data) => {
     throw err;
   }
 };
+
+
+export const finalizeOnboarding = async (empId) => {
+  try {
+    const url = `${BASE_URL}/api/employees/onboarding/done`;
+    const res = await axios.post(url, {empId: empId}, addCred);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+
+}

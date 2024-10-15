@@ -1,9 +1,6 @@
 import axios from "axios";
 const BASE_URL = require("./BaseUrl.json").value; 
-
-const addCred = {
-  withCredentials: true,
-};
+const addCred = require("./withCredentials.json");
 
 /**
  * logs in a potential user.

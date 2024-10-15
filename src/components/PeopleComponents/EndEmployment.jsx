@@ -79,7 +79,6 @@ const customTheme = createTheme({
 });
 
 export default function ActionButtonEmployee({ empId, open, onClose }) {
-  //const [empId, setEmpId] = useState(null); // Add empId state
   const [openEndEmployeeDialog, setOpenEndEmployeeDialog] = useState(open);
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
   const [openSuccessPopup, setOpenSuccessPopup] = useState(false);
@@ -120,21 +119,20 @@ export default function ActionButtonEmployee({ empId, open, onClose }) {
     onClose(false);
   };
 
-  // Close dialogs and open successpopu for 5 seconds.
+  // Close dialogs and open success popup for 5 seconds.
   const handleConfirm = async () => {
     console.log("data from firstdialog", dialogData);
     //Close dialogs and open success popup for 5 seconds
     setOpenConfirmationDialog(false);
     setOpenEndEmployeeDialog(false);
-
     setOpenSuccessPopup(true);
-  
+
     await api.employee.remove(dialogData);
 
     setTimeout(() => {
       setOpenSuccessPopup(false);
       onClose(false);
-     window.location.reload();
+      window.location.reload();
     }, 5000); // 5 seconds
   };
 

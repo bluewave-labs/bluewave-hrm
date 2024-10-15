@@ -55,7 +55,7 @@ export default function AppPagination(props) {
       sx={{
         border: "1px solid #EAECF0",
         backgroundColor: "#FFFFFF",
-        width: 860,
+        width: "100%",
         padding: 2,
         alignItems: "center",
       }}
