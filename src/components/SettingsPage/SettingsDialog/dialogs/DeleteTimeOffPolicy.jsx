@@ -16,7 +16,7 @@ export const DeleteTimeOffPolicy = ({ form, selectedItem }) => {
 
   return (
     <Controller
-      name="departmentDestination"
+      name="newTimeOffPolicy"
       control={form.control}
       defaultValue={transferTimeOffPoliciesOptions[0] || {}}
       render={({ field: { onChange, ...props } }) => (

@@ -37,10 +37,39 @@ const editTimeOff = async (data) => {
   }
 };
 
-const deleteTimeOff = async (timeOffId) => {
+const deleteTimeOffInitiate = async (data) => {
+  console.log("deleteTimeOffInitiate");
+  const { timeOffId, newTimeOffId } = data;
+  console.log({ timeOffId: data.timeOffId });
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/timeoffs/deletion/initiate`,
+      { timeOffId: timeOffId }
+    );
+    const { message } = response.data;
+    const { timeOffId: oldTimeOffId, ...changedMessage } = message;
+
+    console.log("return API response");
+    const deleteData = {
+      ...changedMessage,
+      oldTimeOffId,
+      newTimeOffId,
+    };
+    console.log(deleteData);
+    deleteTimeOffConfirm(deleteData);
+  } catch (error) {
+    console.error("Error delete timeoff:", error);
+    throw error;
+  }
+};
+
+const deleteTimeOffConfirm = async (data) => {
+  console.log("data deleteTimeOffConfirm");
+  console.log(data);
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/timeoffs/${timeOffId}`
+      `http://localhost:3000/api/timeoffs/deletion/confirm/ `,
+      data
     );
     return response.data;
   } catch (error) {
@@ -79,7 +108,7 @@ export const timeOffPoliciesApi = {
   create: createTimeOff,
   fetch: getTimeOffs,
   update: editTimeOff,
-  delete: deleteTimeOff,
+  delete: deleteTimeOffInitiate,
   getRenewDateMonth,
   setRenewDateMonth,
 };

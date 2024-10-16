@@ -8,7 +8,6 @@ const errorMessage = (action) => `Failed to ${action}`;
 export const useTimeOffPoliciesData = ({
   onClose,
   setError,
-  selectedItem,
   setToast,
   action,
 }) => {
@@ -17,7 +16,7 @@ export const useTimeOffPoliciesData = ({
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);
     if (typeof response === "string" && response?.includes("already exists")) {
-      setError("departmentName", {
+      setError("category", {
         message: response,
       });
     } else {
@@ -58,10 +57,18 @@ export const useTimeOffPoliciesData = ({
       .catch(handleError);
   };
 
-  const deletePolicy = () => {
+  const deletePolicy = (data, selectedItem) => {
     console.log("deletePolicy");
+    const formattedData = {
+      timeOffId: selectedItem.id,
+      newTimeOffId: data.newTimeOffPolicy.id,
+    };
+    console.log({
+      timeOffId: selectedItem.id,
+      newTimeOffId: data.newTimeOffPolicy.id,
+    });
     timeOffPoliciesApi
-      .delete(selectedItem.id)
+      .delete(formattedData)
       .then(handleSuccess)
       .catch(handleError);
   };
