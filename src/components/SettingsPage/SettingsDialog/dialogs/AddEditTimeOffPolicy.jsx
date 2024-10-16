@@ -22,6 +22,7 @@ export const Checkbox = styled(HRMCheckbox)({
 });
 
 export const AddEditTimeOffPolicy = ({ form, action, selectedItem }) => {
+  console.log(action);
   const [isUnlimitedBalance, setIsUnlimitedBalance] = useState(
     selectedItem?.hours === null
   );
@@ -33,12 +34,19 @@ export const AddEditTimeOffPolicy = ({ form, action, selectedItem }) => {
   } = form;
 
   useEffect(() => {
-    form.reset({
-      category: selectedItem?.category ?? "",
-      hours: selectedItem?.hours,
-    });
-    setIsUnlimitedBalance(selectedItem?.hours === null);
-  }, [selectedItem]);
+    if (action === "add") {
+      form.reset({
+        category: "",
+        hours: "",
+      });
+    } else {
+      form.reset({
+        category: selectedItem?.category ?? "",
+        hours: selectedItem?.hours,
+      });
+      setIsUnlimitedBalance(selectedItem?.hours === null);
+    }
+  }, [action, selectedItem]);
 
   return (
     <>

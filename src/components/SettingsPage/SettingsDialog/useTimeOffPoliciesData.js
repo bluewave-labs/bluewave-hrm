@@ -14,7 +14,6 @@ export const useTimeOffPoliciesData = ({
   const { fetchTimeOffPolicies } = useSettingsContext();
 
   const handleSuccess = (response) => {
-    console.log("Data submitted successfully:", response.data);
     if (typeof response === "string" && response?.includes("already exists")) {
       setError("category", {
         message: response,

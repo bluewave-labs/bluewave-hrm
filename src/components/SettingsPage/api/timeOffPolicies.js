@@ -69,7 +69,7 @@ const deleteTimeOffConfirm = async (data) => {
   try {
     const response = await axios.delete(
       `http://localhost:3000/api/timeoffs/deletion/confirm/ `,
-      data
+      { data }
     );
     return response.data;
   } catch (error) {
