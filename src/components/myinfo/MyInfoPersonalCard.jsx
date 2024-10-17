@@ -81,11 +81,11 @@ function MyInfoPersonalCard({ employee }) {
     },
     {
       label: 'Documents',
-      child: <div><MyinfoDocument/></div>,
+      child: <div><MyinfoDocument key={employee.empId} employee={employee}/></div>,
     },
     {
       label: 'Journey',
-      child: <div><MyinfoJourney/></div>,
+      child: <div><MyinfoJourney key={employee.empId} employee={employee}/></div>,
     },
   ];
 

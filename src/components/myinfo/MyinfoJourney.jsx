@@ -4,21 +4,23 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
+//import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Link from '@mui/material/Link';
+//import Link from '@mui/material/Link';
 
-const rows = [
-  {title:"Department change",from:"Marketing",to:"Management",date:"Mar 29, 2024"},
-  {title:"Employment type change",from:"Contractor",to:"Permanent",date:"Mar 29, 2024"},
-  {title:"Position change",from:"CEO",to:"CTO",date:"Mar 29, 2024"}
+// //const rows = [
+//   {title:"Department change",from:"Marketing",to:"Management",date:"Mar 29, 2024"},
+//   {title:"Employment type change",from:"Contractor",to:"Permanent",date:"Mar 29, 2024"},
+//   {title:"Position change",from:"CEO",to:"CTO",date:"Mar 29, 2024"}
   
-]
+// ]
+
+const api = require("../../assets/FetchServices");
 
 
 
 
-const MyinfoJourney = () => {
+const MyinfoJourney = ({employee}) => {
 
   function formatDate(isoDate) {
     const date = new Date(isoDate);
@@ -30,28 +32,25 @@ const MyinfoJourney = () => {
 
   const [journeyLists,setJourneyLists] = useState([])
 
-  useEffect(()=>{
-    const getJourneyAPI = async () => {
+  useEffect(() => {
+    const fetchChnageHistories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/changehistories",{
-          method:'GET',
-          headers: {
-            'Content-Type' : 'application/json'
-          }
-        });
-        const result = await res.json();
-        setJourneyLists(result)
-       
+        // const response = await axios.get('http://localhost:5000/api/employees'); // Adjust the endpoint as needed
+    
+        // const employeeData = await api.employee.fetchAll()
+        const changeHistory = await api.changeHistory.fetchOne(employee.empId)
+   
 
+        setJourneyLists(changeHistory);
+      
 
+      } catch (error) {
+        console.error('Error fetching change history:', error);
       }
-      catch(error) {
-        console.log("Error fetching Myinfo:Journey",error)
-      }
-    }
-    getJourneyAPI()
-  
-  },[])
+    };
+
+    fetchChnageHistories();
+  }, []);
 
   return (
    <>
@@ -88,4 +87,3 @@ const MyinfoJourney = () => {
 }
 
 export default MyinfoJourney
-
