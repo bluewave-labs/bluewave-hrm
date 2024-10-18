@@ -1,5 +1,7 @@
 import Box from "@mui/system/Box";
-import { useScrollTrigger } from '@mui/material';
+import { useScrollTrigger } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import HRMButton from "../Button/HRMButton";
 import UserDropdown from "./UserDropdown";
 
 /**
@@ -12,7 +14,7 @@ import UserDropdown from "./UserDropdown";
  *      Default: {}
  */
 export default function Header({window, style}) {
-  //const stateContext = useContext(StateContext);
+  const navigate = useNavigate();
 
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
@@ -38,6 +40,13 @@ export default function Header({window, style}) {
         }
       }, ...style}}
     >
+      <HRMButton 
+        mode="primary" 
+        onClick={() => navigate("/onboarding", { replace: true })}
+        style={{marginRight: "40px"}}
+      >
+        Complete onboarding
+      </HRMButton>
       <UserDropdown />
     </Box>
   );

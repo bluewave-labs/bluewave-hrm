@@ -168,7 +168,7 @@ function SingupPage({ user, token, onSubmit }) {
         // Get associated employee record
         const employee = await api.employee.fetchOneByEmail(inputs.email);
         stateContext.updateStates({ user, employee });
-        navigate("/dashboard", { replace: true });
+        navigate("/onboarding", { replace: true });
       } else {
         //Admin sign up
         let res = await api.authentication.signup(inputs);
