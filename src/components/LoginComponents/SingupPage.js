@@ -169,7 +169,7 @@ function SingupPage({ user, token, onSubmit }) {
         const employee = await api.employee.fetchOneByEmail(user.email);
         stateContext.updateStates({ user, employee });
         if(employee){
-          navigate("/employee-on-boarding", { replace: true });
+          navigate("/onboarding", { replace: true });
         }
         else{ 
            navigate("/dashboard", { replace: true });

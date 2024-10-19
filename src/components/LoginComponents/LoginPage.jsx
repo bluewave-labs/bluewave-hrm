@@ -27,7 +27,8 @@ function LoginPage() {
       const res = await api.authentication.login({email, password});
       const { user, employee } = await getAuthUser(email);
       stateContext.updateStates({ user, employee });
-      navigate("/onboarding", { replace: true });
+
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       if (error.response && error.response.data) {
         setMessage(error.response.data.error);
