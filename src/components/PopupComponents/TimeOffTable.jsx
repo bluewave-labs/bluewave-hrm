@@ -15,13 +15,20 @@ import { useEffect } from 'react';
  * Table component for displaying time off options for each day in the TimeOffRequest component.
  * 
  * Props:
- * - dateRange<Array<String>>: Array of dates in the range of the time off period.
+ * - dateRange<Array<Object>>: Array of dates in the range of the time off period.
+ *      Syntax of date object: {
+ *          date: <String>
+ *          day: <String>
+ *      }
  * 
  * - eachDay<Boolean>: Flag determining if every day in the date range should be displayed in the
  *      table.
  * 
  * - onChange<Function>: Function to handle changes made by the user to the radio buttons.
  *      Syntax: onChange()
+ * 
+ * - style<Object>: Optional prop for adding further inline styling.
+ *      Default: {}
  */
 export default function TimeOffTable({
     dateRange, 
@@ -37,7 +44,7 @@ export default function TimeOffTable({
     }
 
     //Sync the user input with the parent component 
-    useEffect(()=>{
+    useEffect(() => {
         onChange();
     }, []);
     

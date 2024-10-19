@@ -15,6 +15,7 @@ import StateContext from '../../context/StateContext';
 export default function UpdatesPage({style}) {
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
+    console.log(stateContext.state);
 
     return (
         <Box sx={style}>
