@@ -13,24 +13,8 @@ import { useNavigate } from "react-router-dom";
 import ErrorPage from "./components/Error/ErrorPage.jsx";
 
 function App() {
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/employee-on-boarding"); // Change to dashboard
-    console.log("Clicked");
-    const api = require("./assets/FetchServices");
-    api.employee
-      .finalizeOnboarding(25)
-      .then((data) => {
-        console.log("Testing******************", data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <StateProvider>
-      <h1>Hello</h1>
-      <Button onClick={handleClick}>Click me</Button>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/resetpassword/:id" element={<SetNewPasswordPage />} />

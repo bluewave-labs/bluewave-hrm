@@ -79,12 +79,6 @@ function PeopleHome() {
             handleEdit={handleEdit}
             handleAddNewEmployee={handleAddNewEmployee}
           />
-          <PeopleDetails
-            handleSurvey={handleSurvey}
-            handleTermination={handleTermination}
-            handleEdit={handleEdit}
-            handleAddNewEmployee={handleAddNewEmployee}
-          />
         </Box>
       )}
       {!viewOnly && (
@@ -93,9 +87,6 @@ function PeopleHome() {
           onDiscard={() => {
             setViewOnly(true);
             setAlert({
-              show: false,
-              message: "",
-            });
               show: false,
               message: "",
             });

@@ -27,15 +27,10 @@
       "visible": false
     },
     {
-     
       "id": "dateOfBirth",
-     
       "width": 150,
-     
       "label": "Birthday",
-     
       "visible": false
-   
     },
     {
       "id": "maritalStatus",
@@ -58,13 +53,6 @@
       "visible": false
     },
     { "id": "weeklyHours", "width": 50, "label": "Hours", "visible": false },
-    {
-      "id": "officeLocation",
-      "width": 100,
-      "label": "Office",
-      "visible": true
-    },
-    { "id": "action", "width": 30, "label": "Action", "visible": true }
     {
       "id": "officeLocation",
       "width": 100,

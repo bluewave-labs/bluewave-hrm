@@ -28,26 +28,11 @@ const customStyle = (id, width) => {
     return { minWidth: width, padding: 1 };
   }
 };
-const customStyle = (id, width) => {
-  if (id === "action") {
-    return {
-      minWidth: width,
-      padding: 1,
-      position: "sticky",
-      right: 0,
-      backgroundColor: "#F9FAFB",
-      boxShadow: "5px 2px 5px grey",
-    };
-  } else {
-    return { minWidth: width, padding: 1 };
-  }
-};
 
 // This is a utility function to create a custom React element.
 function TableToolbar(props) {
   const { caption, count, column, setColumnData } = props;
   return (
-    <Toolbar sx={{ ml: -2, mr: -2, my: 2 }}>
     <Toolbar sx={{ ml: -2, mr: -2, my: 2 }}>
       <Typography
         variant="h6"
@@ -109,7 +94,6 @@ function CreateTableRow(headCell, headCellIds, row, rowIndex, handleSelection) {
   if (row.cells) {
     return (
       <TableRow tabIndex={-1} key={rowIndex}>
-      <TableRow tabIndex={-1} key={rowIndex}>
         {row.cells.map((cell, index) => {
           if (headCell[index].visible) {
             return cell;
@@ -119,7 +103,6 @@ function CreateTableRow(headCell, headCellIds, row, rowIndex, handleSelection) {
     );
   }
   return (
-    <TableRow tabIndex={-1} key={rowIndex}>
     <TableRow tabIndex={-1} key={rowIndex}>
       {headCellIds.map((key, index) => {
         if (row[key]) {
@@ -159,7 +142,6 @@ Utility function to format the tableHead.
 */
 function CustomisedTableHead(props) {
   const { headCells, order, orderBy, onRequestSort, showActionHeader } = props;
-  const { headCells, order, orderBy, onRequestSort, showActionHeader } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -168,7 +150,6 @@ function CustomisedTableHead(props) {
       <TableRow>
         {headCells.map((cell) => {
           if (cell.visible && cell.id !== "action") {
-          if (cell.visible && cell.id !== "action") {
             return (
               <TableCell
                 key={cell.id}
@@ -176,7 +157,6 @@ function CustomisedTableHead(props) {
                 padding="none"
                 sortDirection={orderBy === cell.id ? order : false}
                 component="th"
-                sx={customStyle(cell.id, cell.width)}
                 sx={customStyle(cell.id, cell.width)}
               >
                 <TableSortLabel
@@ -197,17 +177,6 @@ function CustomisedTableHead(props) {
             );
           }
         })}
-        {showActionHeader && (
-          <TableCell
-            key={"action"}
-            align="left"
-            padding="none"
-            component="th"
-            sx={customStyle("action", 30)}
-          >
-            Action
-          </TableCell>
-        )}
         {showActionHeader && (
           <TableCell
             key={"action"}
@@ -261,15 +230,6 @@ export default function AppTable(props) {
     loading,
     showActionHeader,
   } = props;
-  const {
-    caption,
-    headCells,
-    data,
-    rowsPerPage,
-    handleSelection,
-    loading,
-    showActionHeader,
-  } = props;
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(1);
@@ -303,18 +263,14 @@ export default function AppTable(props) {
         (page - 1) * rowsPerPage + rowsPerPage
       ),
     [order, orderBy, page, column, dataSize, loading]
-    [order, orderBy, page, column, dataSize, loading]
   );
   if (loading) {
     return (
-      <Box sx={{ padding: 16 }}>
-        <NoContentComponent>
-          <p>Loading. Please wait...</p>
-        </NoContentComponent>
-      </Box>
+      <NoContentComponent>
+        <p>Loading. Please wait...</p>
+      </NoContentComponent>
     );
   }
-  if (data.length === 0) {
   if (data.length === 0) {
     return (
       <Box sx={{ padding: 16 }}>
@@ -325,7 +281,6 @@ export default function AppTable(props) {
     );
   }
   return (
-    <Stack>
     <Stack>
       <Stack>
         <TableToolbar
@@ -340,17 +295,14 @@ export default function AppTable(props) {
           sx={{
             border: "1px solid #EBEBEB",
             maxWidth: window.innerWidth < 1550 ? 1000 : 1250,
-            maxWidth: window.innerWidth < 1550 ? 1000 : 1250,
           }}
         >
-          <Table aria-label="app table">
           <Table aria-label="app table">
             <CustomisedTableHead
               headCells={headCells}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              showActionHeader={showActionHeader}
               showActionHeader={showActionHeader}
             />
             <TableBody>
