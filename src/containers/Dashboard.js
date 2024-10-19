@@ -82,10 +82,12 @@ export default function Dashboard() {
     // return <Placeholder content={"Loading, please wait..."} />;
   }
   return (
-    <Box sx={{
-      width: "100%",
-      height: "100%"
-    }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <Header />
       <Stack spacing={"32px"} direction={"row"}>
         <SideMenu

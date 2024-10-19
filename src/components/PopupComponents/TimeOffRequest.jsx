@@ -9,14 +9,12 @@ import { styled } from '@mui/system';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useState, useEffect, useContext, memo } from 'react';
 import PropTypes from 'prop-types';
-//import axios from 'axios';
 import dayjs from 'dayjs';
 import DateSelect from './DateSelect';
 import Checkbox from '../Checkbox/Checkbox';
 import HRMButton from '../Button/HRMButton';
 import TimeOffTable from './TimeOffTable';
 import { colors, fonts } from '../../Styles';
-//import { currentUserID } from '../../testConfig';
 import StateContext from '../../context/StateContext';
 import { fetchAllByEmployee, createOne as createOnePeriod, update as updatePeriod } from '../../assets/FetchServices/TimeOffHistory';
 import { fetchOne, update as updatePolicy } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
@@ -169,11 +167,6 @@ export default function TimeOffRequest({
     const stateContext = useContext(StateContext);
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
-    //URL endpoints to be used for API calls
-    //const timeOffPolicyPOSTURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
-    //const timeOffPolicyPUTURL = `http://localhost:5000/api/employeeannualtimeoffs`;
-    //const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
-
     //Function for retrieving the time off category options
     function getTimeOffPolicies() {
         //Retrieve employeeAnnualTimeOff records from database
@@ -196,28 +189,6 @@ export default function TimeOffRequest({
                 setCategoryMenu(Object.values(policies));
             }
         });
-        /*
-        axios.post(timeOffPolicyPOSTURL)
-        .then((response) => {
-            const policies = {};
-            //We are only interested in the records for the current year
-            const data = response.data.filter((p) => p.year === dayjs().year());
-            data.forEach((p) => {
-                policies[p.category] = {
-                    id: p.id,
-                    timeOffId: p.timeOffId,
-                    type: p.category,
-                    availableHours: p.hoursLeft + ((initialRequest && initialRequest.timeOffId === p.timeOffId) ? initialRequest.hours : 0),
-                    hoursUsed: p.hoursUsed
-                }
-            });
-            //Set each policy as a selectable item in the dropdown
-            setCategoryMenu(Object.values(policies));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-        */
     };
 
     //Function for retrieving the dates of the upcoming time off periods for ensuring there are
@@ -228,7 +199,6 @@ export default function TimeOffRequest({
         .then((data) => {
             if (data) {
                 let periods = [];
-                //const data = response.data;
                 data.forEach((p) => {
                     //Only retrieve periods that are upcoming
                     if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && 
@@ -248,33 +218,6 @@ export default function TimeOffRequest({
                 setTimeOffDates(periods);
             }
         })
-        /*
-        axios.post(`http://localhost:5000/api/timeoffhistories/employee/${currentUser}`)
-        .then((response) => {
-            let periods = [];
-            const data = response.data;
-            data.forEach((p) => {
-                //Only retrieve periods that are upcoming
-                if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && 
-                    (p.status === "Approved" || p.status === "Pending")) 
-                {
-                    periods.push({
-                        id: p.id,
-                        from: dayjs(p.startDate).toDate(),
-                        to: dayjs(p.endDate).toDate(),
-                    });
-                }
-            });
-            //If we are editing an existing period, then this period should not be included
-            if (initialRequest) {
-                periods = periods.filter((p) => p.id !== initialRequest.id);
-            }
-            setTimeOffDates(periods);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-        */
     };
 
     //Date range for setting full and half days off
@@ -379,9 +322,7 @@ export default function TimeOffRequest({
             requestDate: dayjs().toString(),
             decisionDate: dayjs().add(1, "day").toString()
         };
-        //console.log(newPeriod);
-        createOnePeriod(newPeriod)
-        .then((data) => {
+        createOnePeriod(newPeriod).then((data) => {
             if (data) {
                 console.log(data);
                 //Update the time off balance
@@ -389,8 +330,7 @@ export default function TimeOffRequest({
                     id: category.id,
                     cumulativeHoursTaken: category.hoursUsed + totalHoursOff
                 };
-                updatePolicy(newBalance)
-                .then((data) => {
+                updatePolicy(newBalance).then((data) => {
                     console.log(data);
                     sendRequest();
                 });
@@ -399,27 +339,6 @@ export default function TimeOffRequest({
                 setErrorOccurred(true);
             }
         });
-        /*
-        axios.post(timeOffPeriodURL, newPeriod)
-        .then((response) => {
-            console.log(response);
-            //Update the time off balance
-            const newBalance = {
-                id: category.id,
-                cumulativeHoursTaken: category.hoursUsed + totalHoursOff
-            }
-            axios.put(timeOffPolicyPUTURL, newBalance)
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => console.log(error));
-            sendRequest();
-        })
-        .catch((error) => {
-            console.log(error);
-            setErrorOccurred(true);
-        });
-        */
     };
 
     //Function for modifying an existing time off request
@@ -433,8 +352,7 @@ export default function TimeOffRequest({
             timeOffId: category.timeOffId,
             status: "Pending"
         };
-        updatePeriod(updatedPeriod)
-        .then((data) => {
+        updatePeriod(updatedPeriod).then((data) => {
             if (data) {
                 console.log(data);
                 //If the time off policy has changed
@@ -445,16 +363,14 @@ export default function TimeOffRequest({
                         id: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].id,
                         cumulativeHoursTaken: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].hoursUsed - initialRequest.hours
                     };
-                    updatePolicy(refundBalance)
-                    .then((data) => {
+                    updatePolicy(refundBalance).then((data) => {
                         console.log(data);
                         //Subtract the hours used in the new policy
                         const newBalance = {
                             id: category.id,
                             cumulativeHoursTaken: category.hoursUsed + totalHoursOff
                         };
-                        updatePolicy(newBalance)
-                        .then((data) => {
+                        updatePolicy(newBalance).then((data) => {
                             console.log(data);
                             sendRequest();
                         });
@@ -467,8 +383,7 @@ export default function TimeOffRequest({
                         id: category.id,
                         cumulativeHoursTaken: category.hoursUsed + totalHoursOff - initialRequest.hours
                     };
-                    updatePolicy(newBalance)
-                    .then((data) => {
+                    updatePolicy(newBalance).then((data) => {
                         console.log(data);
                         sendRequest();
                     });
@@ -481,58 +396,6 @@ export default function TimeOffRequest({
                 setErrorOccurred(true);
             }
         });
-        /*
-        axios.put(timeOffPeriodURL, updatedPeriod)
-        .then((response) => {
-            console.log(response);
-            //If the time off policy has changed
-            if (initialRequest.timeOffId !== category.timeOffId) {
-                //Refund the hours used in the original policy
-                const refundBalance = {
-                    //Need to get employeeAnnualTimeOff id
-                    id: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].id,
-                    cumulativeHoursTaken: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].hoursUsed - initialRequest.hours
-                }
-                axios.put(timeOffPolicyPUTURL, refundBalance)
-                .then((response) => {
-                    console.log(response);
-                    //Subtract the hours used in the new policy
-                    const newBalance = {
-                        id: category.id,
-                        cumulativeHoursTaken: category.hoursUsed + totalHoursOff
-                    };
-                    axios.put(timeOffPolicyPUTURL, newBalance)
-                    .then((response) => {
-                        console.log(response);
-                        sendRequest();
-                    })
-                    .catch((error) => console.log(error));
-                })
-                .catch((error) => console.log(error));
-            }
-            //If the time off policy is the same but the amount of time off has changed
-            else if (initialRequest.hours !== totalHoursOff) {
-                //Update the new balance for the current policy
-                const newBalance = {
-                    id: category.id,
-                    cumulativeHoursTaken: category.hoursUsed + totalHoursOff - initialRequest.hours
-                };
-                axios.put(timeOffPolicyPUTURL, newBalance)
-                .then((response) => {
-                    console.log(response);
-                    sendRequest();
-                })
-                .catch((error) => console.log(error));
-            }
-            else {
-                sendRequest();
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            setErrorOccurred(true);
-        });
-        */
     };
 
     return (

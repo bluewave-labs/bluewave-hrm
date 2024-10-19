@@ -2,16 +2,13 @@ import Box from '@mui/system/Box';
 import Stack from '@mui/system/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-//import axios from 'axios';
 import AvailableTimeOffTable from './AvailableTimeOffTable';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
-//import { currentUserID } from '../../testConfig';
 import { fetchOne } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
 import { fetchAllByEmployee } from '../../assets/FetchServices/TimeOffHistory';
 import StateContext from '../../context/StateContext';
@@ -48,10 +45,6 @@ export default function BoardTabContent({style}) {
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
-
-    //URL endpoints to be used for API calls
-    //const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories/employee/${currentUser}`;
-    //const timeOffPolicyURL = `http://localhost:5000/api/employeeannualtimeoffs/${currentUser}`;
     
     dayjs.extend(isSameOrAfter);
 
@@ -83,26 +76,6 @@ export default function BoardTabContent({style}) {
             }
         })
         .finally(() => setLoadingPolicies(false));
-        /*
-        axios.post(timeOffPolicyURL)
-        .then((response) => {
-            const policies = {};
-            //Only display the information for the current year
-            const data = response.data.filter((p) => p.year === dayjs().year());
-            data.forEach((p) => {
-                policies[p.category] = {
-                    id: p.timeOffId,
-                    type: p.category,
-                    availableHours: p.hoursLeft,
-                    hoursUsed: p.hoursUsed
-                }
-            });
-            setTimeOffPolicies(policies);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-        */
     }
 
     //Function for retrieving any upcoming time off periods
@@ -116,7 +89,7 @@ export default function BoardTabContent({style}) {
                 //const data = response.data;
                 data.forEach((p) => {
                     //Only retrieve and display periods that are upcoming
-                    if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && (p.status === "Approved" || p.status === "Pending")) {
+                    if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && (["Approved", "Pending", "Deleting"].includes(p.status))) {
                         periods.push({
                             id: p.id,
                             timeOffId: p.timeOffId,
@@ -133,32 +106,6 @@ export default function BoardTabContent({style}) {
             }
         })
         .finally(() => setLoadingPeriods(false));
-        /*
-        axios.post(timeOffPeriodURL)
-        .then((response) => {
-            const periods = [];
-            const data = response.data;
-            data.forEach((p) => {
-                //Only retrieve and display periods that are upcoming
-                if (dayjs(p.startDate).isSameOrAfter(dayjs().subtract(1, "day")) && (p.status === "Approved" || p.status === "Pending")) {
-                    periods.push({
-                        id: p.id,
-                        timeOffId: p.timeOffId,
-                        from: formatDate(dayjs(p.startDate).toDate()),
-                        to: formatDate(dayjs(p.endDate).toDate()),
-                        type: p.timeOff.category,
-                        hours: p.hours,
-                        note: p.note,
-                        status: p.status
-                    });
-                }
-            });
-            setTimeOffPeriods(periods);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-        */
     };
 
     //Only shows 10 periods at a time
@@ -178,17 +125,17 @@ export default function BoardTabContent({style}) {
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Available time off header and table*/}
-            <h3 style={{marginBottom: "40px"}}>Available time offs</h3>
+            <h3 style={{marginBottom: "16px"}}>Available time offs</h3>
 
             <AvailableTimeOffTable policies={timeOffPolicies} />
             {/*Upcoming time off header*/}
             {loadingPolicies ? 
-                <CircularProgress sx={{marginX: "50%", marginY: "40%"}} /> :
+                <CircularProgress sx={{marginX: "50%", marginY: "10%"}} /> :
                 <Stack 
                     direction="row" 
                     alignItems="center" 
                     spacing={2} 
-                    sx={{marginTop: "50px", marginBottom: "25px"}}
+                    sx={{marginTop: "50px", marginBottom: "16px"}}
                 >
                     <h3>Upcoming time offs</h3>
                     <Label 
@@ -199,7 +146,7 @@ export default function BoardTabContent({style}) {
                 </Stack>
             }
             {loadingPeriods ?
-                <CircularProgress sx={{marginX: "50%", marginY: "40%"}} /> :
+                <CircularProgress sx={{marginX: "50%", marginY: "10%"}} /> :
                 timeOffPeriods.length > 0 ?
                     <>
                         {/*Upcoming time off table*/}
@@ -227,13 +174,7 @@ export default function BoardTabContent({style}) {
 };
 
 //Control panel settings for storybook
-BoardTabContent.propTypes = {
-    //Time off policies to be displayed
-    policies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
-
-    //Periods of time off to be displayed
-    timeOffPeriods: PropTypes.arrayOf(PropTypes.object)
-};
+BoardTabContent.propTypes = {};
 
 //Default values for this component
 BoardTabContent.defaultProps = {

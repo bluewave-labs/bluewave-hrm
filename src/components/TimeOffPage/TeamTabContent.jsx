@@ -3,16 +3,13 @@ import Stack from '@mui/system/Stack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-//import axios from 'axios';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
 import PagesNavBar from '../UpdatesPage/PagesNavBar';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
-//import { currentUserID } from '../../testConfig';
 import StateContext from '../../context/StateContext';
 import { fetchAllByEmployee } from '../../assets/FetchServices/TimeOffHistory';
 import { fetchMyTeam, fetchAll } from '../../assets/FetchServices/Employee';
@@ -32,9 +29,6 @@ function formatDate(date) {
  * controls for navigating between pages of components.
  * 
  * Props:
- * - timeOffPeriods<Array<Object>>: List of objects containing information of upcoming periods
- *      of time off.
- * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
@@ -48,8 +42,6 @@ export default function TeamTabContent({style}) {
     const [timeOffPeriods, setTimeOffPeriods] = useState([]);
     //Flag for determining if records are being retrieved from the database
     const [loadingPeriods, setLoadingPeriods] = useState(false);
-    //Hook for refreshing the list of time off periods
-    //const [refresh, setRefresh] = useState(false);
     
 
     //ID of the currently logged in employee
@@ -58,9 +50,6 @@ export default function TeamTabContent({style}) {
     const isManager = stateContext.state.user && stateContext.state.user.permission.id === 2;
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
-    //URL endpoints to be used in API calls
-    //const empUrl = `http://localhost:5000/api/managers/employees/${currentUser}`;
-    //const timeOffURL = `http://localhost:5000/api/timeoffhistories/employee`;
 
     //Set the current page back to 1 each time the filters are changed
     useEffect(() => {
@@ -181,7 +170,7 @@ export default function TeamTabContent({style}) {
                 alignItems="center" 
                 justifyContent="space-between"
                 sx={{
-                    marginY: "40px"
+                    marginY: "16px"
                 }}
             >
                 <Stack 
@@ -247,10 +236,7 @@ export default function TeamTabContent({style}) {
 };
 
 //Control panel settings for storybook
-TeamTabContent.propTypes = {
-    //Periods of time off to be displayed
-    timeOffPeriods: PropTypes.arrayOf(PropTypes.object)
-};
+TeamTabContent.propTypes = {};
 
 //Default values for this component
 TeamTabContent.defaultProps = {

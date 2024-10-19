@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import AppTable from "../components/PeopleComponents/AppTable";
 import AppTabs from "../components/PeopleComponents/AppTabs";
 import ActionMenu from "../components/PeopleComponents/ActionMenu";
+import ActionMenu from "../components/PeopleComponents/ActionMenu";
 import { formatPhoneNumber } from "../assets/utils";
 import StateContext from "../context/StateContext";
 /**
@@ -92,6 +93,37 @@ function formatTableData({
   const showActionMenu = (key) => {
     return addActionMenu && key === "action" && permissionId < 3;
   };
+  const createActionTableCell = (item) => {
+    return (
+      <TableCell
+        key={-1}
+        style={{
+          position: "sticky",
+          backgroundColor: "white",
+          boxShadow: "5px 2px 5px grey",
+          right: 0,
+        }}
+      >
+        {item}
+      </TableCell>
+    );
+  };
+
+  // Inner function to disable action menu
+  const disableActionMenu = (data, empId) => {
+    if (permissionId === 1) {
+      return false;
+    }
+    if (permissionId === 2) {
+      return data.managerId !== empId;
+    }
+    return true;
+  };
+
+  // Inner function to check if action menu should be displayed.
+  const showActionMenu = (key) => {
+    return addActionMenu && key === "action" && permissionId < 3;
+  };
 
   data.forEach(async (emp) => {
     emp.name = `${emp.firstName} ${emp.lastName}`;
@@ -134,6 +166,14 @@ function formatTableData({
           />
         );
       } else if (key !== "action") {
+      } else if (showActionMenu(key)) {
+        cell = createActionTableCell(
+          <ActionMenu
+            actions={actions(row)}
+            disableMenu={disableActionMenu(row, empId)}
+          />
+        );
+      } else if (key !== "action") {
         cell = createTableCell(row[key], index);
       }
       newData.push(cell);
@@ -143,6 +183,16 @@ function formatTableData({
     }
   });
 }
+const tabItems = ({
+  isAdmin,
+  loading,
+  showActionHeader,
+  employees,
+  headCells,
+  hasTeam,
+  team,
+  terminated,
+}) => {
 const tabItems = ({
   isAdmin,
   loading,
@@ -164,6 +214,8 @@ const tabItems = ({
           rowsPerPage={rowsPerPage}
           loading={loading}
           showActionHeader={showActionHeader}
+          loading={loading}
+          showActionHeader={showActionHeader}
         />
       ),
     },
@@ -178,6 +230,8 @@ const tabItems = ({
           headCells={headCells}
           data={team}
           rowsPerPage={rowsPerPage}
+          loading={loading}
+          showActionHeader={true}
           loading={loading}
           showActionHeader={true}
         />
@@ -195,6 +249,8 @@ const tabItems = ({
           headCells={headCells}
           data={terminated}
           rowsPerPage={rowsPerPage}
+          loading={loading}
+          showActionHeader={false}
           loading={loading}
           showActionHeader={false}
         />
@@ -216,10 +272,17 @@ export default function People({
   handleSurvey,
   handleTermination,
 }) {
+export default function People({
+  handleAddNewEmployee,
+  handleEdit,
+  handleSurvey,
+  handleTermination,
+}) {
   const stateContext = useContext(StateContext);
   const [employees, setEmployees] = useState([]);
   const [myTeam, setMyTeam] = useState([]);
   const [terminated, setTerminated] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const isAdmin =
     stateContext.state.user && stateContext.state.user.permission.id === 1;
@@ -227,6 +290,24 @@ export default function People({
   //permission.id 1 is for admin, 2 for managers, 3 for employees
   const hasTeam =
     stateContext.state.user && stateContext.state.user.permission.id < 3;
+  //Get the employee id of the system user if any. Note employee can be null.
+  const empId = stateContext.state.employee
+    ? stateContext.state.employee.empId
+    : -1;
+  // Get the permission id of the system user
+  const permissionId = stateContext.state.user
+    ? stateContext.state.user.permission.id
+    : -1;
+
+  const params = {
+    data: null,
+    headCells,
+    empId,
+    permissionId,
+    addActionMenu: permissionId < 3,
+    handleEdit,
+    handleSurvey,
+    handleTermination,
   //Get the employee id of the system user if any. Note employee can be null.
   const empId = stateContext.state.employee
     ? stateContext.state.employee.empId
@@ -301,10 +382,7 @@ export default function People({
       <Box
         sx={{
           boxSizing: "border-box",
-          width: "100%",
-          height: "87px",
-          mt: 5,
-          mb: -5,
+          mt: 4,
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -322,6 +400,7 @@ export default function People({
           <Button
             variant="contained"
             disableElevation
+            onClick={(evt) => handleAddNewEmployee()}
             onClick={(evt) => handleAddNewEmployee()}
             sx={{
               width: "166px",
@@ -351,11 +430,8 @@ export default function People({
           minHeight: "50vh",
           backgroundColor: "#FFFFFF",
           border: "1px solid #EBEBEB",
-          pt: 7.5,
-          pb: 4,
-          pr: 4,
-          pl: 5,
-          mt: 0,
+          p: 4,
+          mt: 4,
         }}
       >
         {
@@ -364,10 +440,13 @@ export default function People({
               isAdmin,
               loading,
               showActionHeader: permissionId < 3,
+              loading,
+              showActionHeader: permissionId < 3,
               employees,
               hasTeam,
               team: myTeam,
               headCells,
+              terminated,
               terminated,
             })}
           />
