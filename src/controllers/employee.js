@@ -5,6 +5,7 @@ const message = require("../../constants/messages.json");
 const appUser = require("./appUser");
 const { getAuthUser } = require("../../config/authJwt");
 const { runAtSpecificTimeOfDay } = require("../helper/utils");
+const timeOffController = require("./timeOff");
 
 const autoDelete = async () => {
   let employeeCount = 0;
@@ -111,6 +112,18 @@ const employeeQueryObject = {
   ],
 };
 
+// Utility function to assign timeOff to new employee
+const assignTimeOffToEmployee = async (empId) => {
+  try {
+    const timeOff = await db.timeOff.findAll();
+    for (let time of timeOff) {
+      timeOffController.assignTimeOff(time, empId);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.showManagers = async (req, res) => {
   const data = await db.employee.aggregate("managerId", "DISTINCT", {
     plain: false,
@@ -199,7 +212,7 @@ exports.showAllByManager = async (req, res) => {
         as: "Manager",
       },
     ],
-    where: { managerId: req.params.id }
+    where: { managerId: req.params.id },
   });
   if (!employee) {
     return res.send("No results found");
@@ -233,10 +246,45 @@ exports.findOneByEmail = async (req, res) => {
   }
 };
 
+exports.finalizeOnboarding = async (req, res) => {
+  const { empId } = req.body;
+  const data = {
+    empId,
+    updated: false,
+    completedOnboardingAt: null,
+    message: null,
+  };
+  try {
+    if (!empId) {
+      data.message = "empId cannot be null";
+      return res.status(200).json(data);
+    }
+    const employee = await db.employee.findByPk(empId);
+    if (!employee) {
+      // No results
+      data.message = `No result found for empId ${empId}`;
+    } else if (employee.completedOnboardingAt) {
+      data.message = "Employee has already completed onboarding process";
+      data.completedOnboardingAt = employee.completedOnboardingAt;
+    } else {
+      const date = new Date();
+      employee.completedOnboardingAt = date;
+      await employee.save();
+      data.updated = true;
+      data.completedOnboardingAt = date;
+      data.message = "Record updated successfully";
+    }
+  } catch (error) {
+    console.log(error);
+    data.message = `Operation failed due to ${error}`;
+  }
+  res.status(200).json(data);
+};
+
 exports.createRecord = async (req, res) => {
   try {
     const inputs = req.body.inputs;
-    console.log(inputs);
+    // console.log(inputs);
     const data = await db.employee.create(inputs, {
       include: ["socialProfiles"],
     });
@@ -279,6 +327,8 @@ exports.createRecord = async (req, res) => {
       };
       appUser.createRecord(req, res);
     }
+    // Assign time off to new employee
+    assignTimeOffToEmployee(empId);
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -337,9 +387,9 @@ exports.updateRecord = async (req, res) => {
 //     "terminationReason":"Personal",
 //     "terminationNote": "Goodbye"
 // }
- 
+
 exports.deleteRecord = async (req, res) => {
-  try {console.log(req.body);
+  try {
     const data = req.body;
     const employee = await db.employee.findByPk(data.empId);
     if (!employee) {
@@ -392,7 +442,7 @@ exports.deleteRecord = async (req, res) => {
 // Routes for data summaries
 exports.summarizeByDepartments = async (req, res) => {
   try {
-    const query = `select  d."departmentName", count(e."empId") as "count" from employee e JOIN department d ON e."departmentId" = d."id" GROUP BY e."departmentId", d."departmentName" ORDER BY d."departmentName"`;
+    const query = `select d."id", d."departmentName", count(e."empId") as "count" from department d left join employee e ON e."departmentId" = d."id" group by d."id", d."departmentName" order by d."id";`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).send(results);
   } catch (error) {
@@ -402,7 +452,7 @@ exports.summarizeByDepartments = async (req, res) => {
 
 exports.summarizeByJobTitles = async (req, res) => {
   try {
-    const query = `select r."roleTitle", count(e."empId") from employee e JOIN role r ON e."roleId" = r."roleId" GROUP BY r."roleTitle" ORDER BY 1;`;
+    const query = `select r."roleId", r."roleTitle", count(e."empId") from role r left join employee e on e."roleId" = r."roleId" group by r."roleId", r."roleTitle" order by r."roleId";`;
     const [results, metadata] = await db.sequelize.query(query);
     res.status(200).send(results);
   } catch (error) {

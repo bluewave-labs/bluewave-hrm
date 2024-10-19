@@ -8,11 +8,11 @@ const app = express();
 const router = express.Router();
 app.use(cookieParser());
 
-app.use(cors());
+// app.use(cors());
 
 app.use(
   cors({
-    origin: "http://localhost:5433",
+    origin: "*",
     credentials: true,
   })
 );
@@ -46,9 +46,9 @@ Table(s) that must be prepopulated in production
 // db.sequelize.sync({ force: true }).then(async () => {
 //   let data = require("./constants/data");
 
-//   await data.populateTables(db);
+//  await data.populateTables(db);
 
-//   //await data.populatePermissionTable(db);
+//   // await data.populatePermissionTable(db);
 
 //   console.log("Sync operation successful.");
 // });

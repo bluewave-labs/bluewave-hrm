@@ -16,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      hours: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
     },
     {
       sequelize,

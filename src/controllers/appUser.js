@@ -44,8 +44,7 @@ exports.findByEmail = async (req, res) => {
   if (data === null) {
     res.send(null);
   } else {
-    //console.log(data);
-    res.status(200).send(data);
+      res.status(200).send(data);
   }
 };
 

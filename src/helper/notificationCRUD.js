@@ -63,7 +63,7 @@ async function formatNotificationData(notification) {
   const recipients = [];
   if (notification.employees) {
     // Get employee id, first name and last name of the recipient
-    if (notification.employee.photo) {
+    if (notification.employee && notification.employee.photo) {
       notification.employee.photo =
         notification.employee.photo.toString("base64");
     }

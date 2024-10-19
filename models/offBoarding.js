@@ -12,26 +12,6 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      answer1: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      answer2: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      answer3: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      answer4: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      answer5: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
       SignedDocumentAck: {
         type: Sequelize.BOOLEAN,
         allowNull: true,

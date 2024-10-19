@@ -211,7 +211,7 @@ exports.showOne = async (req, res) => {
 {
     "category": "Maternity Leave",
     "description": "xxx",
-    "days": 180,
+    "hours": 180,
     "year": 2026 //This is optional
   } 
  */
@@ -396,7 +396,7 @@ exports.getRenewalDate = async (req, res) => {
     const data = await db.timeOffRenewalDate.findOne();
     if (data) {
       const renewalDate = data.renewalDate;
-      const monthIndex = renewalDate.getMonth() - 1;
+      const monthIndex = renewalDate.getMonth();
       let month = months[monthIndex];
       month = month[0].toUpperCase() + month.slice(1).toLowerCase();
       const response = {

@@ -53,7 +53,10 @@ db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
 
-db.offBoarding = require('./offBoarding')(sequelize, Sequelize);
+db.offBoarding = require("./offBoarding")(sequelize, Sequelize);
+db.offBoardingQuestion = require("./offBoardingQuestion")(sequelize, Sequelize);
+db.offBoardingResponse = require("./offBoardingResponse")(sequelize, Sequelize);
+db.offBoardingDocument = require("./offBoardingDocument")(sequelize, Sequelize);
 
 db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
 
@@ -63,12 +66,19 @@ db.notificationRecipient = require("./notificationRecipient")(
   Sequelize
 );
 
-
 db.reportTo = require("./reportTo")(sequelize, Sequelize);
 db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
   sequelize,
   Sequelize
 );
+
+db.offBoardingSurvey = require("./offBoardingSurvey")(sequelize, Sequelize);
+db.offBoardingDocumentation = require("./offBoardingDocumentation")(
+  sequelize,
+  Sequelize
+);
+
+db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
 
 db.onBoarding = require("./Onboarding/onBoarding")(sequelize, Sequelize);
 db.video = require("./Onboarding/video")(sequelize, Sequelize);
@@ -209,12 +219,72 @@ db.appUser.belongsTo(db.permission, {
   foreignKey: "permissionId",
 });
 
-db.employee.hasMany(db.offBoarding, {
+db.employee.hasOne(db.offBoarding, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+db.offBoarding.belongsTo(db.employee, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
 
+db.offBoarding.belongsToMany(db.offBoardingResponse, {
+  through: { model: db.offBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+db.offBoardingResponse.belongsToMany(db.offBoarding, {
+  through: { model: db.offBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+db.offBoarding.belongsToMany(db.offBoardingDocument, {
+  through: { model: db.offBoardingDocumentation, unique: false },
+  constraints: false,
+});
+
+db.offBoardingDocument.belongsToMany(db.offBoarding, {
+  through: { model: db.offBoardingDocumentation, unique: false },
+  constraints: false,
+});
+
+
+/*
+Remove the following commented codes
+db.offBoarding.hasMany(db.offBoardingResponse, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+db.offBoardingResponse.belongsTo(db.offBoarding, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "empId",
+});
+*/
+
+// db.offBoarding.hasMany(db.offBoardingDocument, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
+// db.offBoardingDocument.belongsTo(db.offBoarding, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
+// db.offBoarding.hasMany(db.document, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
+// db.document.belongsTo(db.offBoarding, {
+//   onDelete: "CASCADE",
+//   OnUpdate: "CASCADE",
+//   foreignKey: "empId",
+// });
 db.appUser.hasMany(db.passwordHistory, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
@@ -252,13 +322,6 @@ db.notification.belongsTo(db.timeOffHistory, {
 });
 
 db.employeeAnnualTimeOff.belongsTo(db.employee, {
-  onDelete: "CASCADE",
-  OnUpdate: "CASCADE",
-  foreignKey: "empId",
-});
-
-
-db.offBoarding.belongsTo(db.employee, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
