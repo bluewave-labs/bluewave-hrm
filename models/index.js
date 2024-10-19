@@ -70,6 +70,12 @@ db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
   Sequelize
 );
 
+db.onBoarding = require("./Onboarding/onBoarding")(sequelize, Sequelize);
+db.video = require("./Onboarding/video")(sequelize, Sequelize);
+db.file = require("./Onboarding/file")(sequelize, Sequelize);
+db.task = require("./Onboarding/task")(sequelize, Sequelize);
+db.surveyQuestion = require("./Onboarding/surveyQuestion")(sequelize, Sequelize);
+
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
   onDelete: "CASCADE",
@@ -259,7 +265,6 @@ db.offBoarding.belongsTo(db.employee, {
 });
 
 db.employee.hasMany(db.employeeAnnualTimeOff, {
-
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
@@ -283,6 +288,24 @@ db.notification.belongsToMany(db.employee, {
 db.employee.belongsToMany(db.notification, {
   through: { model: db.notificationRecipient, unique: false },
   constraints: false,
+});
+
+db.onBoarding.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
+});
+
+db.onBoarding.hasMany(db.task, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
+
+db.onBoarding.hasMany(db.surveyQuestion, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
 });
 
 module.exports = db;
