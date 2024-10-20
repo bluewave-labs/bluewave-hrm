@@ -26,7 +26,7 @@ const theme = createTheme({
       fontWeight: 400,
       fontFamily:'Inter',
       fontSize: '13px',
-      color: '<#344054',
+      color: '#344054',
     },
    
   },

@@ -7,7 +7,8 @@ import MyInfoJob from './MyInfoJob';
 import { styled } from '@mui/material/styles';
 import { colors } from '../../assets/Styles';
 import {formatPhoneNumber} from "../../assets/utils"
-
+import MyinfoDocument from './MyinfoDocument';
+import MyinfoJourney from './MyinfoJourney';
 
 const theme = createTheme({
   typography: {
@@ -34,6 +35,13 @@ const theme = createTheme({
       fontSize: '13px',
       color: '#344054',
     },
+
+    body3: {
+      fontWeight: 400,
+      fontFamily:'Inter',
+      fontSize: '11px',
+      color: '#909090',
+    },
    
   },
 });
@@ -48,7 +56,9 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  padding: '55px',
+  padding: '32px 48px 48px 48px',
+  
+  
 }));
 
 function MyInfoPersonalCard({ employee }) {
@@ -71,11 +81,11 @@ function MyInfoPersonalCard({ employee }) {
     },
     {
       label: 'Documents',
-      child: <div>Content for Document Tab</div>,
+      child: <div><MyinfoDocument key={employee.empId} employee={employee}/></div>,
     },
     {
       label: 'Journey',
-      child: <div>Content for Journey Tab</div>,
+      child: <div><MyinfoJourney key={employee.empId} employee={employee}/></div>,
     },
   ];
 
@@ -93,7 +103,7 @@ function MyInfoPersonalCard({ employee }) {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          minWidth: '980px', 
+          minWidth: '952px', 
           overflowX: 'auto', 
         }}
       >
@@ -103,8 +113,8 @@ function MyInfoPersonalCard({ employee }) {
             height: '153px',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingLeft: '55px',
-            paddingRight: '55px',
+            paddingLeft: '48px',
+            paddingRight: '48px',
             background: colors.darkGrey2,
             borderBottom: 1,
             borderColor: '#D0D5DD',
@@ -126,7 +136,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               Role
             </Typography>
             <Typography variant="body2" className="data">
@@ -138,7 +148,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               E-mail
             </Typography>
             <Typography variant="body2" className="data">
@@ -150,7 +160,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               Phone
             </Typography>
             <Typography variant="body2" className="data">
@@ -162,7 +172,7 @@ function MyInfoPersonalCard({ employee }) {
               height: '44px',
             }}
           >
-            <Typography variant="body1" className="header">
+            <Typography variant="body3" className="header">
               Reporting to
             </Typography>
             <Typography variant="body2" className="data">

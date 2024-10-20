@@ -1,7 +1,7 @@
 import Stack from "@mui/system/Stack";
 import HRMButton from "../Button/HRMButton";
 import MyInfoPersonCard from "./MyInfoPersonalCard";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
 import { Box } from "@mui/material";
 import StateContext from "../../context/StateContext";
@@ -11,7 +11,7 @@ export default function MyInfoMain({style, onClickEdit}) {
   const employee = state.employee;
 
   if (!employee) {
-    return <div style={{paddingTop:"25px"}}>No record to display.</div>;
+    return <div style={{paddingTop:"0px"}}>No record to display.</div>;
   }
   return (
     <Box>
@@ -20,9 +20,7 @@ export default function MyInfoMain({style, onClickEdit}) {
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{
-          marginBottom: "40px",
-        }}
+       
       >
         <h2
           style={{
@@ -30,6 +28,8 @@ export default function MyInfoMain({style, onClickEdit}) {
             fontFamily: "Inter",
             fontWeight: "600",
             color: "#101828",
+            marginTop:"0px",
+            marginBottom: "16px",
           }}
         >
           {employee.firstName} {employee.lastName}
@@ -42,7 +42,7 @@ export default function MyInfoMain({style, onClickEdit}) {
             }
           }}
           mode={"primary"}
-          sx={{ borderRadius: "8px", width: "60px", height: "34px" }}
+          style={{ borderRadius: "8px", width: "60.0px", height: "34.0px",}}
         >
           Edit
         </HRMButton>
