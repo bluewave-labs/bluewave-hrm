@@ -11,7 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import axios from 'axios';
-import '../../App.css'
+//import '../../App.css'
 import { upload } from '@testing-library/user-event/dist/upload';
 
 // const rows = [
@@ -19,9 +19,6 @@ import { upload } from '@testing-library/user-event/dist/upload';
 //   {name:"Vacation types",date:"Jan 4, 2022"},
 //   {name:"Offer letter2",date:"Jan 2, 2022"}
 // ]
-
-
-
 
 const MyinfoDocument = () => {
 

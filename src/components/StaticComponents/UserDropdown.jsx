@@ -64,7 +64,7 @@ export default function UserDropdown({ style }) {
     finally{
       pageContext.navigateTo("login");
       navigate("/", {replace: true});
-      stateContext.updateStates({ user: null, employee: null });
+      stateContext.clearState();
     }
   };
 
