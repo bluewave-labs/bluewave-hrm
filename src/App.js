@@ -6,7 +6,8 @@ import Dashboard from "./containers/Dashboard.js";
 import Placeholder from "./components/PeopleComponents/Placeholder.js";
 import CompleteSignup from "./components/LoginComponents/CompleteSignupPage.js";
 import OffBoardingPage from "./components/OffBoardingComponents/OffBoardingPage.jsx";
-import { StepContent } from "@mui/material";
+//import { StepContent } from "@mui/material";
+
 
 function App() {
   return (

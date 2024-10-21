@@ -93,16 +93,19 @@ export default function ActionButtonEmployee() {
   // Custom styling for InputBase component used in the Select component
   const BootstrapInput = styled(InputBase)(({ theme }) => ({
     height: '34px',
+    
     'label + &': {
       marginTop: theme.spacing(3),
     },
     '& .MuiInputBase-input': {
-      borderRadius: 8,
+      borderRadius: '8px',
       position: 'relative',
       backgroundColor: theme.palette.background.paper,
       border: '1px solid #D0D5DD',
       fontSize: 13,
-      height: '24px',
+      //height: '34px',
+      minHeight: '34px', 
+      padding: '0px',
       display: 'flex',
       alignItems: 'center',
       transition: theme.transitions.create(['border-color', 'box-shadow']),
@@ -154,7 +157,7 @@ export default function ActionButtonEmployee() {
   const handleCloseEndEmployeeDialog = () => {
     setOpenEndEmployeeDialog(false);
     setDialogData({ Option: '', Date: null, Notes: '', Reason: '', empId: null });
-    setAction(''); // Select'i sıfırlayın
+    setAction(''); // Select is null
     
   };
 
@@ -209,14 +212,14 @@ export default function ActionButtonEmployee() {
       window.location.reload();
     }, 5000); // 5 seconds
 
-    setAction(''); // Select'i sıfırlayın
+    setAction(''); // Select  is null
   };
 
 
   return (
     <ThemeProvider theme={customTheme}>
     
-    <FormControl sx={{ m: 2, width: '195px' }}>
+    <FormControl sx={{ width: '195px' }}>
           <Select
             labelId="demo-customized-select-label"
             id="demo-customized-select"

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import DateSelect from '../PopupComponents/DateSelect';
-import Checkbox from '../Checkbox/Checkbox';
 import HRMButton from '../Button/HRMButton';
 import dayjs from 'dayjs';
 import { 
@@ -13,7 +12,8 @@ import {
     FormControlLabel,
     Autocomplete,
     TextField,
-    Chip} from '@mui/material';
+    Chip,
+    Radio} from '@mui/material';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -72,7 +72,8 @@ const reasonCategories = [
     "Breaching confidentiality"
 ];
 
-export default function EndEmployeeDialog({ open, onClose, openConfirmationDialog, empId }) {
+export default function EndEmployeeDialog({ open, onClose, openConfirmationDialog, dialogData }) {
+    
     const [selectedOption, setSelectedOption] = useState('endnow');
     const [terminationReason, setTerminationReason] = useState(reasonCategories[0]);
     const [terminationNote, setTerminationNote] = useState('');
@@ -86,11 +87,11 @@ export default function EndEmployeeDialog({ open, onClose, openConfirmationDialo
 
     const handleEndEmployment = () => {
         const data = {
-            empId: empId,
+            empId: dialogData.empId,
             option: selectedOption,
-            date: selectedOption === 'endlater' ? date : null,
-            notes: terminationNote,
-            reason: terminationReason
+            date: selectedOption === 'endlater' ? date : new Date().toISOString(),
+            terminationNote: terminationNote,
+            terminationReason: terminationReason
         };
         openConfirmationDialog(data); // Pass the data to the second dialog
     };
@@ -167,14 +168,33 @@ export default function EndEmployeeDialog({ open, onClose, openConfirmationDialo
                             <FormControlLabel
                                 value="endnow"
                                 control={
-                                    <Checkbox 
-                                        type="radio" 
+                                    <Radio 
+                                        //type="radio" 
                                         checked={selectedOption === "endnow"} 
                                         onChange={handleChange}
+                                        sx={{
+                                            color: '#D0D5DD',
+                                            borderRadius: '4px',
+                                            
+                                            '&.Mui-checked': {
+                                                color: '#7F56D9',
+                                            },
+                                            '&:hover': {
+                                                backgroundColor: 'transparent', 
+                                            },
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16, 
+                                                borderRadius: '4px',
+                                            },
+                                           
+                                            '& .MuiTouchRipple-root': {
+                                                display: 'none', 
+                                            },
+                                        }}
                                     />
                                 }
                                 label={<Typography variant="body2">End employment now</Typography>}
-                                sx={{ paddingX: '5px' }}
+                                
                             />
                         </Grid>
                         
@@ -182,14 +202,31 @@ export default function EndEmployeeDialog({ open, onClose, openConfirmationDialo
                             <FormControlLabel
                                 value="endlater"
                                 control={
-                                    <Checkbox 
-                                        type="radio" 
+                                    <Radio 
+                                        //type="radio" 
                                         checked={selectedOption === "endlater"} 
                                         onChange={handleChange}
-                                        sx={{ paddingX: '30px' }}
+                                        sx={{
+                                            color: '#D0D5DD', 
+                                            borderRadius: '4px',
+                                            
+                                            '&.Mui-checked': {
+                                                color: '#7F56D9',
+                                            },
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 16,
+                                                borderRadius: '4px',
+                                            },
+                                            '& .MuiTouchRipple-root': {
+                                                display: 'none',
+                                            },
+                                            '&:hover': {
+                                                backgroundColor: 'transparent', 
+                                            },
+                                        }}
                                     />
                                 }
-                                sx={{ paddingX: '5px' }}
+                               
                                 label={<Typography variant="body2">End employment at a later date</Typography>}
                             />
                         </Grid>
