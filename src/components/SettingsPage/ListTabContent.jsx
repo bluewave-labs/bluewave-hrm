@@ -85,11 +85,11 @@ export default function ListTabContent({
 
   const saveNewRenewalMonth = async () => {
     try {
-      console.log("selectedRenewalMonth", selectedRenewalMonth);
-
-      const response = await timeOffPoliciesApi.setRenewDateMonth({
+      await timeOffPoliciesApi.setRenewDateMonth({
         month: selectedRenewalMonth,
       });
+
+      setCurrentRenewalMonth(selectedRenewalMonth);
 
       setToast({
         open: true,

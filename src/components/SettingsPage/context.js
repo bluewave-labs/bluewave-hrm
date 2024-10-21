@@ -61,6 +61,7 @@ export const SettingsProvider = ({ children }) => {
     setIsLoading((isLoading) => ({ ...isLoading, timeoffPolicies: true }));
     const timeOffPolicies = await timeOffPoliciesApi.fetch();
     setTimeOffPolicies(timeOffPolicies);
+    console.log("timeoffPolicies context", timeOffPolicies);
     setIsLoading((isLoading) => ({ ...isLoading, timeoffPolicies: false }));
   };
 

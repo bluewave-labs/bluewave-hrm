@@ -31,6 +31,7 @@ export const AddEditTimeOffPolicy = ({ form, action, selectedItem }) => {
     register,
     setValue,
     formState: { errors },
+    clearErrors,
   } = form;
 
   useEffect(() => {
@@ -71,12 +72,19 @@ export const AddEditTimeOffPolicy = ({ form, action, selectedItem }) => {
       >
         <TextField
           id="balanceInput"
+          sx={{ width: "100px" }}
           disabled={isUnlimitedBalance}
           fullWidth
           {...register(fieldBalance, {
             validate: (value) => {
-              if (!isUnlimitedBalance && value.trim() === "")
+              if (isUnlimitedBalance) return true;
+
+              if (!value && value !== null) {
                 return "Balance is required.";
+              } else if (isNaN(value)) {
+                return "Balance must be a number.";
+              }
+
               return true;
             },
           })}
@@ -124,6 +132,7 @@ export const AddEditTimeOffPolicy = ({ form, action, selectedItem }) => {
             const isChecked = e.target.checked;
             setIsUnlimitedBalance(isChecked);
             setValue(fieldBalance, isChecked ? null : "");
+            if (isChecked) clearErrors(fieldBalance);
           }}
           size="large"
           sx={{ marginRight: "100px", borderColor: "red" }}

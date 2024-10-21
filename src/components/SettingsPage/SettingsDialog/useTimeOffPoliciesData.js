@@ -1,7 +1,8 @@
 import { useSettingsContext } from "../context";
 import { timeOffPoliciesApi } from "../api";
 
-const successMessage = (action) => `Time off policy ${action}ed successfully`;
+const successMessage = (action) =>
+  `Time off policy ${action}${action === "delete" ? "d" : "ed"}  successfully`;
 
 const errorMessage = (action) => `Failed to ${action}`;
 
@@ -11,7 +12,7 @@ export const useTimeOffPoliciesData = ({
   setToast,
   action,
 }) => {
-  const { fetchTimeOffPolicies } = useSettingsContext();
+  const { fetchTimeOffPolicies, timeOffPolicies } = useSettingsContext();
 
   const handleSuccess = (response) => {
     if (typeof response === "string" && response?.includes("already exists")) {
@@ -19,7 +20,10 @@ export const useTimeOffPoliciesData = ({
         message: response,
       });
     } else {
-      fetchTimeOffPolicies();
+      action === "delete"
+        ? setTimeout(fetchTimeOffPolicies, 300)
+        : fetchTimeOffPolicies();
+      console.log("time off policies", timeOffPolicies);
       onClose();
       setToast({
         open: true,

@@ -48,6 +48,16 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const openMenu = Boolean(anchorEl);
+
+  const isTimeOffList = columns.some(column => column.header === "Policy type");
+  console.log("isTimeOffList", isTimeOffList);
+
+  if (isTimeOffList) {
+    contentList.sort((a, b) => {
+      return a.category.toLowerCase().localeCompare(b.category.toLowerCase());
+    });
+  }
+
   const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
     setSelectedItem(item);
