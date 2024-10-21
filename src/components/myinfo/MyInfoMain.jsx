@@ -3,8 +3,21 @@ import HRMButton from "../Button/HRMButton";
 import MyInfoPersonCard from "./MyInfoPersonalCard";
 //import { useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
-import { Box } from "@mui/material";
+import { Box, ThemeProvider, Typography, createTheme  } from "@mui/material";
 import StateContext from "../../context/StateContext";
+
+const theme = createTheme({
+  typography: {
+
+    bodybutton: {
+      fontWeight: 400,
+      fontFamily:'Inter',
+      fontSize: '13px',
+      color: '#FFF',
+    },
+   
+  },
+});
 
 export default function MyInfoMain({style, onClickEdit}) {
   const {state} = useContext(StateContext);
@@ -14,6 +27,7 @@ export default function MyInfoMain({style, onClickEdit}) {
     return <div style={{paddingTop:"0px"}}>No record to display.</div>;
   }
   return (
+    <ThemeProvider theme={theme}>
     <Box>
       {/*Main page content*/}
       <Stack
@@ -22,6 +36,7 @@ export default function MyInfoMain({style, onClickEdit}) {
         justifyContent="space-between"
        
       >
+        
         <h2
           style={{
             fontSize: "24px",
@@ -44,11 +59,12 @@ export default function MyInfoMain({style, onClickEdit}) {
           mode={"primary"}
           style={{ borderRadius: "8px", width: "60.0px", height: "34.0px",}}
         >
-          Edit
+          <Typography variant='bodybutton'>Edit</Typography>
         </HRMButton>
       </Stack>
       <MyInfoPersonCard key={employee.empId} employee={employee} />
     </Box>
+    </ThemeProvider>
   );
 }
 

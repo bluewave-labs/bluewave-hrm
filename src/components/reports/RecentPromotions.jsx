@@ -224,7 +224,6 @@ function RecentPromotions(props) {
         </Box>
         <Box sx={{ position: 'relative', width: '100%', height: '230px'  }}>
           <DataGrid
-            
             componentsProps={{
               columnHeaders: {
                 style: {
@@ -253,10 +252,7 @@ function RecentPromotions(props) {
               '& .MuiDataGrid-scrollbarFiller': {
                 backgroundColor: '#F9FAFB',
               },
-              // '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-              //   width: '10px',  // Kaydırma çubuğunun genişliği
-              //   height: '8px',  // Kaydırma çubuğunun yüksekliği
-              // },
+              
               '& .MuiDataGrid-row': {
                 backgroundColor: '#FFFFFF',
                 typography: 'body2',

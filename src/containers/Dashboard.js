@@ -11,6 +11,7 @@ import { produce } from "immer";
 import Placeholder from "../components/PeopleComponents/Placeholder";
 import UpdatesPage from "../components/UpdatesPage/UpdatesPage";
 import TimeOffPage from "../components/TimeOffPage/TimeOffPage";
+import SatisfactionSurveysMain from "../components/Surveys/SatisfactionSurveysMain";
 const api = require("../assets/FetchServices");
 
 const dashboardMenu = {
@@ -18,6 +19,7 @@ const dashboardMenu = {
   myinfo: false,
   people: false,
   timeoff: false,
+  surveys: false,
   reporting: false,
   settings: false,
 };
@@ -110,6 +112,7 @@ export default function Dashboard() {
           {current.myinfo && <MyInfoHome />}
           {current.people && <PeopleHome />}
           {current.timeoff && <TimeOffPage />}
+          {current.surveys && <SatisfactionSurveysMain/>}
           {current.reporting && <ReportsMain />}
           {current.settings && (
             <Placeholder>
