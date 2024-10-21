@@ -1,4 +1,5 @@
 import Box from '@mui/system/Box';
+
 import Stack from '@mui/system/Stack';
 import { useContext } from 'react';
 import dayjs from 'dayjs';
@@ -17,7 +18,8 @@ export default function UpdatesPage({style}) {
     const stateContext = useContext(StateContext);
 
     return (
-        <Box sx={style}>
+        
+        <Box>
             <Stack 
                 direction="row" 
                 alignItems="center"

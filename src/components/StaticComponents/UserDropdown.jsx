@@ -176,7 +176,7 @@ export default function UserDropdown({ style }) {
 }
 
 //Control panel settings for storybook
-UserDropdown.propTypes = {};
+//UserDropdown.propTypes = {};
 
 //Default values for this component
 UserDropdown.defaultProps = {};
