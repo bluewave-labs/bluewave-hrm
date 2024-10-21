@@ -1,6 +1,8 @@
 import Stack from '@mui/system/Stack';
-import Page from '../StaticComponents/Page';
+import { useContext } from 'react';
+import dayjs from 'dayjs';
 import UpdatesMenu from './UpdatesMenu';
+import StateContext from '../../context/StateContext';
 
 /**
  * Home page of the HRM application. Contains the updates menu.
@@ -12,31 +14,33 @@ import UpdatesMenu from './UpdatesMenu';
  * - innerStyle<Object>: Optional prop for adding further inline styling in the inner component.
  *      Default: {}
  */
-export default function UpdatesPage({style, innerStyle}) {
+export default function UpdatesPage({style}) {
+    //ID of the currently logged in employee
+    const stateContext = useContext(StateContext);
+
     return (
-        <Page style={style} innerStyle={innerStyle}>
+        <Box sx={style}>
             <Stack 
                 direction="row" 
                 alignItems="center"
                 justifyContent="space-between"
                 sx={{
-                    marginBottom: "40px",
+                    marginBottom: "16px",
                     minWidth: "1042px"
                 }}
             >
-                <h3>Hello, Gabriel</h3>
-                <p>Today is Monday, June 6, 2024</p>
+                <h3>Hello, {stateContext.state.employee.firstName}</h3>
+                <p>Today is {dayjs().format("dddd, MMMM D, YYYY")}</p>
             </Stack>
             <UpdatesMenu />
-        </Page>
+        </Box>
     );
 };
 
-//Control panel settings for storybook
+//Control panel settings for storybooks
 UpdatesPage.propTypes = {};
 
 //Default values for this component
 UpdatesPage.defaultProps = {
-    style: {},
-    innerStyle: {}
+    style: {}
 };

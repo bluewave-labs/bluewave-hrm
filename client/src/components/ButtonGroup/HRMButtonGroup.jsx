@@ -12,7 +12,7 @@ import { colors } from '../../Styles';
  * - style<Object>: Optional prop for adding further inline styling 
  *      Default: {}
  */
-export default function HRMButtonGroup({buttonLabels, style}) {
+export default function HRMButtonGroup({buttonLabels, onClick, style}) {
     return (
         <ButtonGroup 
             variant="outlined"
@@ -20,6 +20,8 @@ export default function HRMButtonGroup({buttonLabels, style}) {
         >
             {buttonLabels.map(label => {
                 return <Button
+                    key={label} 
+                    onClick={() => onClick(label)}
                     sx={{
                         fontFamily: `"Inter", sans-serif`,
                         textTransform: "none",
