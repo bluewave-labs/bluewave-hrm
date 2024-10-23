@@ -47,8 +47,8 @@ export default function SetupCompanyPage({ style }) {
       sx={{
         ...{
           width: "100%",
-          height: "100%",
-          paddingX: "10%",
+          height: "100vh",
+          paddingX: "15%",
           paddingY: "50px",
           backgroundColor: "#FCFCFD",
         },
@@ -58,7 +58,11 @@ export default function SetupCompanyPage({ style }) {
       <img
         src={stateContext.state.logo}
         alt={"Company Logo"}
-        style={{ display: "block", margin: "60px auto" }}
+        style={{ 
+          display: "block", 
+          margin: "60px auto",
+          maxWidth: "30%"
+        }}
       />
       <CustomizedSteppers
         stepnumber={
