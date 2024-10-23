@@ -66,6 +66,7 @@ export default function SetupCompanyMenu({ advancePage, style }) {
       sx={{
         ...{
           //boxSizing: "border-box",
+          width: "1003px",
           border: "1px solid #EBEBEB",
           borderRadius: "10px",
           paddingY: "52px",
@@ -140,7 +141,7 @@ export default function SetupCompanyMenu({ advancePage, style }) {
               style={{
                 width: "175px",
                 height: "100px",
-                marginRight: "50px",
+                marginRight: "20px",
               }}
             />
           ) : (
@@ -150,7 +151,7 @@ export default function SetupCompanyMenu({ advancePage, style }) {
                 width: "32px",
                 height: "32px",
                 padding: "32px",
-                marginRight: "50px",
+                marginRight: "20px",
                 borderRadius: "50%",
               }}
             />
