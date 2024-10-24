@@ -176,10 +176,7 @@ export default function UserDropdown({ style }) {
 }
 
 //Control panel settings for storybook
-UserDropdown.propTypes = {
-    //Object containing the current user's information
-    user: PropTypes.objectOf(PropTypes.string)
-};
+//UserDropdown.propTypes = {};
 
 //Default values for this component
 UserDropdown.defaultProps = {};
