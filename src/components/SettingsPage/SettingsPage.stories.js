@@ -1,22 +1,16 @@
-import SettingsPage from "./SettingsPage";
-import { SettingsProvider } from "./context";
+import SettingsPage from './SettingsPage';
 
 //Storybook display settings
 export default {
-  title: "SettingsMenu/SettingsPage",
-  component: SettingsPage,
-  parameters: {
-    layout: "fullscreen",
-  },
-  tags: ["autodocs"],
+    title: 'SettingsMenu/SettingsPage',
+    component: SettingsPage,
+    parameters: {
+        layout: 'centered'
+    },
+    tags: ['autodocs']
 };
 
 //Stories for each SettingsPage type
 export const Primary = {
-  args: {},
-  render: (args) => (
-    <SettingsProvider>
-      <SettingsPage {...args} />
-    </SettingsProvider>
-  ),
+    args: {}
 };

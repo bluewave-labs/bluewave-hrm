@@ -55,12 +55,19 @@ const Text = styled(Typography)({
   color: " #344054",
 });
 
+const convertImage = (logo) => {
+  if (logo) {
+    return Buffer.from(logo);
+  }
+  return "";
+};
+
 const parseDefaultValues = (company) => ({
   companyName: company?.companyName || "",
   companyWebsite: company?.companyWebsite || "",
   companyDomain: company?.companyDomain || "",
   administratorEmail: company?.administratorEmail || "",
-  companyLogo: company.companyLogo || "",
+  companyLogo: convertImage(company.companyLogo) || "",
   city: company?.city || "",
   streetAddress: company?.streetAddress || "",
   unitSuite: company?.unitSuite || "",
@@ -75,10 +82,9 @@ const parseDefaultValues = (company) => ({
 export default function CompanyProfileForm({ style }) {
   const { company } = useSettingsContext();
   const [countries, setCountries] = useState([]);
-
-  // const [companyLogo, setCompanyLogo] = useState();
-  const [logoSrc, setLogoSrc] = useState("");
-
+  const [companyLogo, setCompanyLogo] = useState(
+    parseDefaultValues(company).companyLogo
+  );
   const {
     register,
     handleSubmit,
@@ -94,27 +100,12 @@ export default function CompanyProfileForm({ style }) {
     message: "",
   });
 
-  useEffect(() => {
-    const logoBuffer = company.companyLogo;
-    if (logoBuffer) {
-      setLogoSrc(Buffer.from(logoBuffer));
-    }
-    // if (logoBuffer?.data) {
-    //   // Convert buffer to Base64 string
-    //   const base64String = Buffer.from(logoBuffer.data).toString('base64');
-    //   setLogoSrc(`data:image/png;base64,${base64String}`);
-    // }
-  }, [company.companyLogo]);
-
-  console.log("COMPANY", company);
-  console.log("LOGO", logoSrc);
-
   const [countryValue, setCountryValue] = useState(
     parseDefaultValues(company).country
   );
 
   const handleLogoUpload = (file) => {
-    setLogoSrc(file);
+    setCompanyLogo(file);
 
     setValue("companyLogo", file);
   };
@@ -274,9 +265,9 @@ export default function CompanyProfileForm({ style }) {
             <Text>Company logo</Text>
           </Grid>
           <Grid item xs={7} sx={{ display: "flex" }}>
-            {logoSrc ? (
+            {companyLogo ? (
               <img
-                src={logoSrc.includes("data:image") ? logoSrc : `data:image/jpeg;base64,${logoSrc}`}
+                src={companyLogo}
                 style={{
                   width: "200px",
                   height: "200px",
@@ -390,7 +381,6 @@ export default function CompanyProfileForm({ style }) {
               fullWidth
               size="small"
               color="secondary"
-              inputProps={{ ...register("country") }}
             />
           </Grid>
           {/*Textfield for Social profiles*/}
@@ -458,7 +448,6 @@ export default function CompanyProfileForm({ style }) {
           >
             Save changes
           </HRMButton>
-          {/* <input type="submit" /> */}
         </Grid>
         <Grid item xs={10} alignContent="right" spacing={2}>
           <Toast
