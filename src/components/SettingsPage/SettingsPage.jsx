@@ -22,7 +22,7 @@ const StyledTabPanel = styled(TabPanel)({
   padding: 0,
 });
 
-export default function SettingsPage({ style }) {
+export function SettingsPage({ style }) {
   const [tab, setTab] = useState("Company profile");
 
   function handleChange(e, newValue) {

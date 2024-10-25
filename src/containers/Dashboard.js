@@ -4,6 +4,7 @@ import SideMenu from "../components/StaticComponents/SideMenu";
 import PeopleHome from "./PeopleHome";
 import MyInfoHome from "./MyInfoHome";
 import ReportsMain from "../components/reports/ReportsMain";
+import SettingsPage from "../components/SettingsPage/SettingsPage";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StateContext from "../context/StateContext";
@@ -107,11 +108,7 @@ export default function Dashboard() {
           {current.people && <PeopleHome />}
           {current.timeoff && <TimeOffPage />}
           {current.reporting && <ReportsMain />}
-          {current.settings && (
-            <Placeholder>
-              <h1>Settings page</h1>
-            </Placeholder>
-          )}
+          {current.settings && <SettingsPage />}
         </Box>
       </Stack>
     </Box>
