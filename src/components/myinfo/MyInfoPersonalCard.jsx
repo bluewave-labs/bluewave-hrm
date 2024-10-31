@@ -9,6 +9,7 @@ import { colors } from '../../assets/Styles';
 import {formatPhoneNumber} from "../../assets/utils"
 import MyinfoDocument from './MyinfoDocument';
 import MyinfoJourney from './MyinfoJourney';
+import CustomTabs from '../tabs/CustomTabs';
 
 const theme = createTheme({
   typography: {
@@ -182,7 +183,7 @@ function MyInfoPersonalCard({ employee }) {
         </Stack>
         </ThemeProvider>
         <StyledCardContent>
-          <MyInfoTab items={tabItems} key={employee.empId} employee={employee} />
+          <CustomTabs items={tabItems} key={employee.empId} employee={employee} />
         </StyledCardContent>
       </Box>
     </Card>
