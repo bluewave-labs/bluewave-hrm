@@ -1,4 +1,6 @@
-import React,{useEffect,useState} from 'react'
+import React,{
+  //useEffect,
+  useState} from 'react'
 import Box from '@mui/material/Box';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { Typography,Stack } from '@mui/material';
@@ -10,9 +12,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import axios from 'axios';
-import '../../App.css'
-import { upload } from '@testing-library/user-event/dist/upload';
+//import axios from 'axios';
+// import '../../App.css'
+//import { upload } from '@testing-library/user-event/dist/upload';
 
 // const rows = [
 //   {name:"Offer letter",date:"Jan 4, 2022"},
@@ -21,6 +23,7 @@ import { upload } from '@testing-library/user-event/dist/upload';
 // ]
 
 
+const api = require("../../assets/FetchServices");
 
 
 const MyinfoDocument = () => {
@@ -46,28 +49,16 @@ const MyinfoDocument = () => {
     }
 };
 
-  const sendFileAPI = async () => {
+  const sendFileAPI = async (data) => {
     if (uploaded) {
       clearFileInput();
       return
     }
     
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/documents',
-        { file: filelist },
-        {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            onUploadProgress: (progressEvent) => {
-                const percentCompleted = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                );
-                setProgress(percentCompleted);
-          }
-        } 
-      );
+      const response = await api.document.createOne(data)
+     
+  
       
     }
     catch (error) {
@@ -157,6 +148,7 @@ const handleDelete = (index) => {
     onDrop={handleDrop} >
   <Box
       height={126}
+      overflow={'hidden'}
       width={812}
       my={4}
       display="flex"

@@ -77,12 +77,13 @@ function ReportsMainCards(props) {
                         {/* Third Row: Only Large component on the right */}
                         <Grid item>
                             <Box sx={{ width: '533px' , marginRight: '20px', marginTop:'20px',  marginBottom:'20px' }}>
-                                {/* Empty to balance grid */}
+                                {tasks[4].component} {/* Large component on the right */}
                             </Box>
                         </Grid>
                         <Grid item>
                             <Box sx={{ width: '533px', marginLeft: '20px' , marginTop:'20px' ,  marginBottom:'20px'  }}>
-                                {tasks[4].component} {/* Large component on the right */}
+                                
+                                {/* Empty to balance grid */}
                             </Box>
                         </Grid>
                     </Grid>
