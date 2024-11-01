@@ -1,9 +1,11 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
 import { styled } from "@mui/system";
-import PropTypes from 'prop-types';
+import { useContext } from "react";
+import PropTypes from "prop-types";
 import HRMButton from "../Button/HRMButton";
 import { fonts } from "../../Styles";
+import StateContext from "../../context/StateContext";
 
 /**
  * Menu component for the onboarding page containing the welcome message for the new employee.
@@ -20,10 +22,13 @@ import { fonts } from "../../Styles";
  *      Default: {}
  */
 export default function IntroductoryMessage({next, save, style}) {
+    const stateContext = useContext(StateContext);
+    //const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
+
     //Obtain company name, employee name and job title
     const companyName = "[Company Name]";
-    const jobTitle = "[Job Title]";
-    const employeeName = "[Employee Name]";
+    const jobTitle = stateContext.state.employee.role.roleTitle;
+    const employeeName = stateContext.state.employee.firstName;
 
     //Custom style elements
     const StyledP = styled("p")({

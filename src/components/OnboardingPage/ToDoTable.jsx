@@ -23,13 +23,10 @@ import { fonts, colors } from "../../Styles";
  * - setTasks<Function>: Function provided by the parent component to modify the status of each task.
  *      Syntax: setTasks(<Object>)
  * 
- * - setAllTasksComplete<Function>: Function to set the allTasksComplete state in the parent component.
- *      Syntax: setAllTasksComplete(<Boolean>)
- * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function ToDoTable({tasks, setTasks, setAllTasksComplete, style}) {
+export default function ToDoTable({tasks, setTasks, style}) {
     //Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey,
@@ -39,12 +36,15 @@ export default function ToDoTable({tasks, setTasks, setAllTasksComplete, style})
 
     //Function to handle changes made to the to-do list
     function handleChange(e, index) {
+        //console.log(tasks);
+        //console.log(index);
         const newTasks = tasks.filter((task) => task.index !== index);
+        //console.log(newTasks);
         const updatedTask = tasks.filter((task) => task.index === index)[0];
+        //console.log(updatedTask);
         updatedTask.done = !updatedTask.done;
         newTasks.push(updatedTask);
         setTasks(newTasks);
-        setAllTasksComplete(tasks.every((task) => task.done));
     }
 
     return (
@@ -66,8 +66,7 @@ export default function ToDoTable({tasks, setTasks, setAllTasksComplete, style})
                 </TableHead>
                 {/*Tasks*/}
                 <TableBody>
-                    {tasks.sort((task1, task2) => task1.index - task2.index)
-                    .map((task, index) => (
+                    {tasks.sort((task1, task2) => task1.index - task2.index).map((task, index) => (
                         <TableRow>
                             <TableCell>
                                 {task.name}
@@ -98,10 +97,7 @@ ToDoTable.propTypes = {
     tasks: PropTypes.arrayOf(PropTypes.object),
 
     //Function for setting the status of tasks
-    setTasks: PropTypes.func,
-
-    //Function to set the allTasksComplete state in the parent component
-    setAllTasksComplete: PropTypes.func
+    setTasks: PropTypes.func
 };
 
 //Default values for this component

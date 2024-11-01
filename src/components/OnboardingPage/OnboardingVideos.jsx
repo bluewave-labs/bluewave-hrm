@@ -1,9 +1,11 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import HRMButton from "../Button/HRMButton";
 import Checkbox from "../Checkbox/Checkbox";
+import { fetchAll } from "../../assets/FetchServices/Video";
 import { fonts } from "../../Styles";
 
 /**
@@ -20,12 +22,6 @@ import { fonts } from "../../Styles";
  *      application's homepage.
  *      Syntax: save()
  * 
- * - videos<Array<Object<String>>>: List of videos represented by objects containing the video name and Youtube source.
- *      Syntax of video: {
- *          title: <String>,
- *          src: <String>
- *      }
- * 
  * - watchedVideos<Boolean>: Flag determining whether the user has declared that s/he has watched all the videos.
  * 
  * - setWatchedVideos<Function>: Function provided by the parent component to set the watchedVideos flag.
@@ -34,7 +30,19 @@ import { fonts } from "../../Styles";
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function OnboardingVideos({prev, next, save, videos, watchedVideos, setWatchedVideos, style}) {
+export default function OnboardingVideos({prev, next, save, watchedVideos, setWatchedVideos, style}) {
+    //Videos to be displayed
+    const [videos, setVideos] = useState([]);
+
+    useEffect(() => {
+        getVideos();
+    }, []);
+
+    //Function for retrieving the onboarding videos
+    function getVideos() {
+        fetchAll().then((data) => setVideos(data));
+    };
+
     return (
         <Box sx={{...{
             border: "1px solid #EBEBEB",
@@ -105,9 +113,6 @@ OnboardingVideos.propTypes = {
 
     //Function for saving the onboarding status
     save: PropTypes.func,
-
-    //List of videos
-    videos: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
 
     //Flag determining whether the user has declared that s/he has watched all the videos
     watchedVideos: PropTypes.bool,

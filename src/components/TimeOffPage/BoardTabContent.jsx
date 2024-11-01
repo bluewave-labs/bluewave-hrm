@@ -58,8 +58,7 @@ export default function BoardTabContent({style}) {
     function getTimeOffPolicies() {
         //Send Request to database for time off policies
         setLoadingPolicies(true);
-        fetchOne(currentUser)
-        .then((data) => {
+        fetchOne(currentUser).then((data) => {
             if (data) {
                 const policies = {};
                 //Only display the information for the current year
@@ -74,16 +73,14 @@ export default function BoardTabContent({style}) {
                 });
                 setTimeOffPolicies(policies);
             }
-        })
-        .finally(() => setLoadingPolicies(false));
+        }).finally(() => setLoadingPolicies(false));
     }
 
     //Function for retrieving any upcoming time off periods
     function getUpcomingTimeOffPeriods() {
         //Send request to database for time off periods
         setLoadingPeriods(true);
-        fetchAllByEmployee(currentUser)
-        .then((data) => {
+        fetchAllByEmployee(currentUser).then((data) => {
             if (data) {
                 const periods = [];
                 //const data = response.data;
@@ -104,8 +101,7 @@ export default function BoardTabContent({style}) {
                 });
                 setTimeOffPeriods(periods);
             }
-        })
-        .finally(() => setLoadingPeriods(false));
+        }).finally(() => setLoadingPeriods(false));
     };
 
     //Only shows 10 periods at a time

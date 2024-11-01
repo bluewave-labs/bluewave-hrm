@@ -2,9 +2,10 @@ import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HRMButton from "../Button/HRMButton";
 import ToDoTable from "./ToDoTable";
+import { fetchAllByOnboardingId, update } from "../../assets/FetchServices/Task";
 import { fonts } from "../../Styles";
 
 /**
@@ -21,22 +22,42 @@ import { fonts } from "../../Styles";
  *      application's homepage.
  *      Syntax: save()
  * 
- * - tasks<Array<Object>>: List of tasks represented by objects containing the task name, status and index.
- *      Syntax of task: {
- *          name: <String>,
- *          done: <Boolean>,
- *          index: <Integer>
- *      }
- * 
- * - setTasks<Function>: Function provided by the parent component to modify the status of each task.
- *      Syntax: setTasks(<Object>)
+ * - onboardingId<Integer>: Onboarding ID provided by the parent component
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function OnboardingTasks({prev, next, save, tasks, setTasks, style}) {
+export default function OnboardingTasks({prev, next, save, onboardingId, style}) {
+    //Tasks to be displayed
+    const [tasks, setTasks] = useState([]);
     //Flag determining if the user has completed all the tasks
-    const [allTasksComplete, setAllTasksComplete] = useState(tasks.every((task) => task.done));
+    const [allTasksComplete, setAllTasksComplete] = useState(false);
+
+    useEffect(() => {
+        getTasks();
+        console.log(tasks);
+    }, []);
+
+    useEffect(() => {
+        setAllTasksComplete(tasks.every((task) => task.done));
+    }, [tasks]);
+
+    //Function for retrieving the onboarding tasks
+    function getTasks() {
+        fetchAllByOnboardingId(onboardingId).then((data) => {
+            console.log(data);
+            if (data) {
+                setTasks(data);
+            }
+        });
+    };
+
+    //Function for saving changes to the onboarding tasks
+    function saveTasks() {
+        console.log(tasks);
+        tasks.forEach((task) => update(task));
+        save();
+    };
 
     return (
         <Box sx={{...{
@@ -48,7 +69,9 @@ export default function OnboardingTasks({prev, next, save, tasks, setTasks, styl
             fontFamily: fonts.fontFamily
         }, ...style}}>
             {/*Title*/}
-            <h4 style={{textAlign: "center", marginTop: 0, marginBottom: "10px"}}>Complete your to-do items</h4>
+            <h4 style={{textAlign: "center", marginTop: 0, marginBottom: "10px"}}>
+                Complete your to-do items
+            </h4>
             <p style={{textAlign: "center", marginBottom: "50px"}}>
                 You may discuss your to-dos with your manager
             </p>
@@ -56,7 +79,6 @@ export default function OnboardingTasks({prev, next, save, tasks, setTasks, styl
             <ToDoTable
                 tasks={tasks} 
                 setTasks={setTasks}
-                setAllTasksComplete={setAllTasksComplete} 
                 style={{marginBottom: "50px"}}
             />
             {/*Buttons*/}
@@ -65,7 +87,7 @@ export default function OnboardingTasks({prev, next, save, tasks, setTasks, styl
                 <Stack direction="row" alignContent="center" spacing={2}>
                     <HRMButton 
                         mode="secondaryB" 
-                        onClick={save}
+                        onClick={saveTasks}
                     >
                         Save and complete later
                     </HRMButton>
@@ -87,11 +109,8 @@ OnboardingTasks.propTypes = {
     //Function for saving the onboarding status
     save: PropTypes.func,
 
-    //List of tasks
-    tasks: PropTypes.arrayOf(PropTypes.object),
-
-    //Function for setting the status of tasks
-    setTasks: PropTypes.func
+    //Onboarding ID
+    onboardingId: PropTypes.number
 };
 
 //Default values for this component
