@@ -1,10 +1,10 @@
-const db = require("../../../models/Onboarding");
+const db = require("../../../models");
 require("dotenv").config();
-const message = require("../../constants/messages.json");
+const message = require("../../../constants/messages.json");
 
 //Retrieve all videos
 exports.showAll = async (req, res, next) => {
-    const data = db.video.findAll({
+    const data = await db.video.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] }
     });
     if (!data) { 

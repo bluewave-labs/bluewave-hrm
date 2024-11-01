@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
                 autoIncrement: true,
                 allowNull: false
             },
+            //Order number of question
+            orderNumber: {
+                type: Sequelize.INTEGER
+            },
             //Question text
             question: {
                 type: Sequelize.STRING,

@@ -1,0 +1,23 @@
+[
+    {
+        "id": 10,
+        "onBoardingId": 10,
+        "index": 1,
+        "name": "Discuss and set your first 30/60/90-day goals with your manager",
+        "done": false
+    },
+    {
+        "id": 11,
+        "onBoardingId": 10,
+        "index": 2,
+        "name": "Complete personal info & documents on Bluewave HRM",
+        "done": false
+    },
+    {
+        "id": 12,
+        "onBoardingId": 10,
+        "index": 3,
+        "name": "Sign and submit essential documents",
+        "done": false
+    }
+]

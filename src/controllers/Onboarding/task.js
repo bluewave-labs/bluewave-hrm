@@ -1,10 +1,10 @@
-const db = require("../../../models/Onboarding");
+const db = require("../../../models");
 require("dotenv").config();
-const message = require("../../constants/messages.json");
+const message = require("../../../constants/messages.json");
 
 //Retrieve all tasks
 exports.showAll = async (req, res, next) => {
-    const data = db.task.findAll({
+    const data = await db.task.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] }
     });
     if (!data) {
@@ -19,7 +19,7 @@ exports.showAll = async (req, res, next) => {
 exports.showOne = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = db.task.findByPk(id);
+        const data = await db.task.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }

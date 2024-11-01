@@ -1,9 +1,10 @@
-const db = require("../../../models/Onboarding");
+const db = require("../../../models");
 require("dotenv").config();
 const message = require("../../../constants/messages.json");
 
 //Retrieve all survey responses
 exports.showAll = async (req, res, next) => {
+    console.log("Executing showAll");
     const data = await db.surveyResponse.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] }
     });

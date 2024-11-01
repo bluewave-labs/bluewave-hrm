@@ -18,6 +18,13 @@ const offBoardingQuestion = require("./offBoardingQuestion");
 const offBoardingResponse = require("./offBoardingResponse");
 const offBoardingDocument = require("./offBoardingDocument");
 const notification = require("./notification");
+const onBoarding = require("./Onboarding/onBoarding");
+const video = require("./Onboarding/video");
+const file = require("./Onboarding/file");
+const task = require("./Onboarding/task");
+const taskName = require("./Onboarding/taskName.js");
+const surveyQuestion = require("./Onboarding/surveyQuestion");
+const surveyResponse = require("./Onboarding/surveyResponse");
 
 module.exports = (router) => {
   authentication(router);
@@ -40,6 +47,13 @@ module.exports = (router) => {
   offBoardingResponse(router);
   offBoardingDocument(router);
   notification(router);
+  onBoarding(router);
+  video(router);
+  file(router);
+  task(router);
+  taskName(router);
+  surveyQuestion(router);
+  surveyResponse(router);
 
   return router;
 };

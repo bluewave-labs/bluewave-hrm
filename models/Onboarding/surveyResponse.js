@@ -13,6 +13,10 @@ module.exports = (sequelize, Sequelize) => {
             onBoardingId: {
                 type: Sequelize.INTEGER,
             },
+            //Order number of response
+            orderNumber: {
+                type: Sequelize.INTEGER
+            },
             //ID number of the employee this response belongs to
             empId: {
                 type: Sequelize.INTEGER,

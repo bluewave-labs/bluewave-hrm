@@ -84,7 +84,10 @@ db.onBoarding = require("./Onboarding/onBoarding")(sequelize, Sequelize);
 db.video = require("./Onboarding/video")(sequelize, Sequelize);
 db.file = require("./Onboarding/file")(sequelize, Sequelize);
 db.task = require("./Onboarding/task")(sequelize, Sequelize);
+db.taskName = require("./Onboarding/taskName")(sequelize, Sequelize);
 db.surveyQuestion = require("./Onboarding/surveyQuestion")(sequelize, Sequelize);
+db.surveyResponse = require("./Onboarding/surveyResponse")(sequelize, Sequelize);
+db.onBoardingSurvey = require("./Onboarding/onBoardingSurvey")(sequelize, Sequelize);
 
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
@@ -359,16 +362,32 @@ db.onBoarding.belongsTo(db.employee, {
   foreignKey: "empId"
 });
 
+
 db.onBoarding.hasMany(db.task, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
   foreignKey: "onBoardingId"
 });
 
-db.onBoarding.hasMany(db.surveyQuestion, {
+/*
+db.onBoarding.hasMany(db.surveyResponse, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
   foreignKey: "onBoardingId"
 });
+*/
+
+db.surveyResponse.belongsToMany(db.onBoarding, {
+  through: { model: db.onBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+/*
+db.employee.hasMany(db.surveyResponse, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
+});
+*/
 
 module.exports = db;

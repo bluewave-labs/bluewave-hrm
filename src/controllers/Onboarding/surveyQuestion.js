@@ -1,4 +1,4 @@
-const db = require("../../../models/Onboarding");
+const db = require("../../../models");
 require("dotenv").config();
 const message = require("../../../constants/messages.json");
 

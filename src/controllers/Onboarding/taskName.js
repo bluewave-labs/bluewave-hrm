@@ -1,11 +1,11 @@
-const db = require("../../../models/Onboarding");
+const db = require("../../../models");
 require("dotenv").config();
 const message = require("../../../constants/messages.json");
 
-//Retrieve all onboarding processes
+//Retrieve all task names
 exports.showAll = async (req, res, next) => {
-    const data = await db.onBoarding.findAll({
-        attributes: { exclude: ["createdAt", "updatedAt"] }
+    const data = await db.taskName.findAll({
+        attributes: { exclude: ["createdAt", "updatedAt"]}
     });
     if (!data) {
         res.send("No results found");
@@ -15,11 +15,11 @@ exports.showAll = async (req, res, next) => {
     }
 };
 
-//Retrieve an onboarding process with a given id
+//Retrieve a task name with a given id
 exports.showOne = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.onBoarding.findByPk(id);
+        const data = await db.taskName.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -33,30 +33,10 @@ exports.showOne = async (req, res, next) => {
     }
 };
 
-//Retrieve an onboarding process with a given employee id
-exports.showAllByEmployee = async (req, res, next) => {
-    const empId = req.params.empid;
-    try {
-        const data = await db.onBoarding.findAll({
-            where: { empId: empId }
-        });
-        if (data === null) {
-            res.status(404).send("Not found!");
-        }
-        else {
-            res.status(200).send(data);
-        }
-    }
-    catch (err) {
-        console.log(err);
-        res.status(400).send({ message: err.message || message.failed });
-    }
-};
-
-//Create an onboarding process
+//Create a task name
 exports.createRecord = async (req, res, next) => {
     try {
-        const data = await db.onBoarding.create(req.body);
+        const data = await db.taskName.create(req.body);
         res.status(201).send(data);
     }
     catch (err) {
@@ -65,11 +45,11 @@ exports.createRecord = async (req, res, next) => {
     }
 };
 
-//Update an onboarding process
+//Update a task name
 exports.updateRecord = async (req, res, next) => {
     const updatedData = req.body;
     try {
-        const data = await db.onBoarding.findByPk(updatedData.id);
+        const data = await db.taskName.findByPk(updatedData.id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -85,22 +65,22 @@ exports.updateRecord = async (req, res, next) => {
     }
 };
 
-//Delete an onboarding process
+//Delete a task name
 exports.deleteRecord = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.onBoarding.findByPk(id);
+        const data = await db.taskName.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
         else {
-            await db.onBoarding.destroy({
+            await db.taskName.destroy({
                 where: { id: id }
             });
-            res.status(204).send({ message: message.deleted });
         }
     }
     catch (err) {
+        console.log(err);
         res.status(400).send({ message: err.message || message.failed });
     }
 };

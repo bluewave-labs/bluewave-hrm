@@ -1,0 +1,10 @@
+[
+    {
+        "id": 10,
+        "empId": 101,
+        "stepNumber": 0,
+        "watchedVideos": false,
+        "readDocuments": false,
+        "isComplete": false
+    }
+]

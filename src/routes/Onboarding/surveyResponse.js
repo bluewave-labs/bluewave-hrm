@@ -1,5 +1,5 @@
 const controller = require("../../controllers/Onboarding/surveyResponse");
-const { requireAuth } = require("../../config/authJwt");
+const { requireAuth } = require("../../../config/authJwt");
 
 module.exports = (router) => {
     router.route("/surveyresponses").get(controller.showAll);

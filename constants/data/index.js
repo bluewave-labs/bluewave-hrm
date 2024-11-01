@@ -186,6 +186,70 @@ module.exports = {
     displayInfo(results2.length, "notificationRecipient");
   },
 
+  populateVideoTable: async function (db) {
+    const data = require("./video.json");
+    const results = await db.video.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "video");
+  },
+
+  populateFileTable: async function (db) {
+    const data = require("./file.json");
+    const jobOffer = fs.readFileSync("./constants/data/job_offer.docx", {
+      encoding: "base64",
+    });
+    const NDA = fs.readFileSync("./constants/data/NDA.pdf", {
+      encoding: "base64",
+    });
+    data[0].file = jobOffer;
+    data[1].file = NDA;
+    const results = await db.file.bulkCreate(data, {
+      validate: true
+    });
+    displayInfo(results.length, "file")
+  },
+
+  populateSurveyQuestionTable: async function (db) {
+    const data = require("./onBoardingSurveyQuestion.json");
+    const results = await db.surveyQuestion.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "surveyQuestion");
+  },
+
+  populateTaskNameTable: async function (db) {
+    const data = require("./taskName.json");
+    const results = await db.taskName.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "taskName");
+  },
+
+  populateOnboardingTable: async function (db) {
+    const data = require("./onBoarding.json");
+    const results = await db.onBoarding.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "onBoarding");
+  },
+
+  populateTaskTable: async function (db) {
+    const data = require("./task.json");
+    const results = await db.task.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "task");
+  },
+
+  populateSurveyResponseTable: async function (db) {
+    const data = require("./onBoardingSurveyResponse.json");
+    const results = await db.surveyResponse.bulkCreate(data, {
+      validate: true,
+    });
+    displayInfo(results.length, "surveyResponse");
+  },
+
   populateTables: async function (db) {
     console.log("Populating tables...");
     await this.populateRoleTable(db);
@@ -204,6 +268,13 @@ module.exports = {
     await this.populateReportToTable(db);
     await this.populateEmployeeAnnualTimeOffTable(db);
     await this.populateNotificationTable(db);
+    await this.populateVideoTable(db);
+    await this.populateFileTable(db);
+    await this.populateSurveyQuestionTable(db);
+    await this.populateTaskNameTable(db);
+    // await this.populateOnboardingTable(db);
+    // await this.populateTaskTable(db);
+    // await this.populateSurveyResponseTable(db);
     console.log("Operation successful, tables Populated.");
   },
 };
