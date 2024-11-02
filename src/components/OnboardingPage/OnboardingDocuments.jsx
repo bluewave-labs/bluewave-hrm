@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import HRMButton from "../Button/HRMButton";
 import Checkbox from "../Checkbox/Checkbox";
 import FilesTable from "./FilesTable";
-import { fetchAll } from "../../assets/FetchServices/File";
+import { fetchAllByOnboardingId } from "../../assets/FetchServices/File";
 import { fonts } from "../../Styles";
 
 /**
@@ -31,17 +31,18 @@ import { fonts } from "../../Styles";
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function OnboardingDocuments({prev, next, save, readDocuments, setReadDocuments, style}) {
+export default function OnboardingDocuments({prev, next, save, readDocuments, setReadDocuments, onboardingId, style}) {
     //Files to be displayed
     const [files, setFiles] = useState([]);
 
     useEffect(() => {
         getFiles();
+        console.log(files);
     }, []);
 
     //Function for retrieving the onboarding files
     function getFiles() {
-        fetchAll().then((data) => setFiles(data));
+        fetchAllByOnboardingId(onboardingId).then((data) => setFiles(data));
     };
 
     return (

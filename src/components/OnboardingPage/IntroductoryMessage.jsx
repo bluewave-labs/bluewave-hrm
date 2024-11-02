@@ -26,7 +26,6 @@ export default function IntroductoryMessage({next, save, style}) {
     //const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
     //Obtain company name, employee name and job title
-    const companyName = "[Company Name]";
     const jobTitle = stateContext.state.employee.role.roleTitle;
     const employeeName = stateContext.state.employee.firstName;
 
@@ -53,7 +52,7 @@ export default function IntroductoryMessage({next, save, style}) {
                 for you.
             </StyledP>
             <StyledP>
-                Congratulations on accepting the job offer to join {companyName} as our new {jobTitle}. 
+                Congratulations on accepting the job offer to join our team as our new {jobTitle}. 
                 We were impressed by your skills and experiences throughout the interview process and 
                 are confident in your ability to make valuable contributions to our team.
             </StyledP>

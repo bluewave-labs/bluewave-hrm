@@ -121,6 +121,7 @@ export default function OnboardingPage({style}) {
                     next={nextPage} 
                     save={save}
                     readDocuments={onboardingStatus.readDocuments}
+                    onboardingId={onboardingStatus.id}
                     setReadDocuments={(value) => setOnboardingStatus({...onboardingStatus, readDocuments: value})}
                 />
             }

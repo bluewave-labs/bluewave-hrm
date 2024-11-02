@@ -1,10 +1,10 @@
 import axios from "axios";
-const BASE_URL = require("./BaseUrl.json").value;
+const BASE_URL = require("./BaseUrl.json");
 const addCred = require("./withCredentials.json");
 
 export const fetchAll = async () => {
     try {
-        const url = `${BASE_URL}/api/files`;
+        const url = `${BASE_URL}/api/fileName`;
         const res = await axios.get(url, addCred);
         return res.data;
     }
@@ -16,7 +16,7 @@ export const fetchAll = async () => {
 
 export const fetchOne = async (id) => {
     try {
-        const url = `${BASE_URL}/api/files/${id}`;
+        const url = `${BASE_URL}/api/fileName/${id}`;
         const res = await axios.get(url, addCred);
         return res.data;
     }
@@ -26,21 +26,9 @@ export const fetchOne = async (id) => {
     }
 };
 
-export const fetchAllByOnboardingId = async (onboardingid) => {
-    try {
-        const url = `${BASE_URL}/api/files/onboarding/${onboardingid}`;
-        const res = await axios.get(url, addCred);
-        return res.data;
-    }
-    catch (err) {
-        console.log(err);
-        return [];
-    }
-}
-
 export const createOne = async (data) => {
     try {
-        const url = `${BASE_URL}/api/files`;
+        const url = `${BASE_URL}/api/fileName`;
         const res = await axios.post(url, data, addCred);
         return res.data;
     }
@@ -52,7 +40,7 @@ export const createOne = async (data) => {
 
 export const update = async (data) => {
     try {
-        const url = `${BASE_URL}/api/files`;
+        const url = `${BASE_URL}/api/fileName`;
         const res = await axios.put(url, data, addCred);
         return res.data;
     }
@@ -64,7 +52,7 @@ export const update = async (data) => {
 
 export const remove = async (id) => {
     try {
-        const url = `${BASE_URL}/api/files/${id}`;
+        const url = `${BASE_URL}/api/fileName/${id}`;
         const res = await axios.delete(url, addCred);
         return res.data;
     }
