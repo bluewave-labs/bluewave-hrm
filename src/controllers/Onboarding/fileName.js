@@ -4,7 +4,7 @@ const message = require("../../../constants/messages.json");
 
 //Retrieve all files
 exports.showAll = async (req, res, next) => {
-    const data = await db.file.findAll({
+    const data = await db.fileName.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] }
     });
     if (!data) {
@@ -19,27 +19,7 @@ exports.showAll = async (req, res, next) => {
 exports.showOne = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.file.findByPk(id);
-        if (data === null) {
-            res.status(404).send("Not found!");
-        }
-        else {
-            res.status(200).send(data);
-        }
-    }
-    catch (err) {
-        console.log(err);
-        res.status(400).send({ message: err.message || message.failed });
-    }
-};
-
-//Retrieve all files with a given onboarding id
-exports.showAllByOnboarding = async (req, res, next) => {
-    const onBoardingId = req.params.onboardingid;
-    try {
-        const data = await db.file.findAll({
-            where: { onBoardingId: onBoardingId }
-        });
+        const data = await db.fileName.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -56,7 +36,7 @@ exports.showAllByOnboarding = async (req, res, next) => {
 //Create a file
 exports.createRecord = async (req, res, next) => {
     try {
-        const data = await db.file.create(req.body);
+        const data = await db.fileName.create(req.body);
         res.status(201).send(data);
     }
     catch (err) {
@@ -69,7 +49,7 @@ exports.createRecord = async (req, res, next) => {
 exports.updateRecord = async (req, res, next) => {
     const updatedData = req.body;
     try {
-        const data = await db.file.findByPk(updatedData.id);
+        const data = await db.fileName.findByPk(updatedData.id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -89,7 +69,7 @@ exports.updateRecord = async (req, res, next) => {
 exports.deleteRecord = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.file.findByPk(id);
+        const data = await db.fileName.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }

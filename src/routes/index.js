@@ -21,6 +21,7 @@ const notification = require("./notification");
 const onBoarding = require("./Onboarding/onBoarding");
 const video = require("./Onboarding/video");
 const file = require("./Onboarding/file");
+const fileName = require("./Onboarding/fileName");
 const task = require("./Onboarding/task");
 const taskName = require("./Onboarding/taskName.js");
 const surveyQuestion = require("./Onboarding/surveyQuestion");
@@ -50,6 +51,7 @@ module.exports = (router) => {
   onBoarding(router);
   video(router);
   file(router);
+  fileName(router);
   task(router);
   taskName(router);
   surveyQuestion(router);

@@ -48,10 +48,23 @@ exports.showByEmployee = async (req, res, next) => {
             }
         });
         if (created) {
+            const files = await db.fileName.findAll();
             const tasks = await db.taskName.findAll();
             const survey = await db.surveyQuestion.findAll();
             console.log(tasks);
             console.log(survey);
+            console.log(files);
+            for (const f of files) {
+                //Some function to tailor the file to the new employee should execute here
+                await db.file.create({
+                    onBoardingId: data.id,
+                    title: f.title,
+                    name: f.name,
+                    file: f.file,
+                    category: f.category,
+                    extension: f.extension
+                });
+            }
             for (const t of tasks) {
                 await db.task.create({
                     onBoardingId: data.id,
@@ -82,6 +95,7 @@ exports.showByEmployee = async (req, res, next) => {
 };
 
 //Create an onboarding process
+/*
 exports.createRecord = async (req, res, next) => {
     try {
         console.log(req.body);
@@ -114,6 +128,7 @@ exports.createRecord = async (req, res, next) => {
         res.status(400).send({ message: err.message || message.failed });
     }
 };
+*/
 
 //Update an onboarding process
 exports.updateRecord = async (req, res, next) => {

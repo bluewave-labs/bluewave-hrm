@@ -1,14 +1,16 @@
 [
     {
         "id": 1,
-        "name": "Job Offer",
+        "title": "Job Offer",
+        "name": "job_offer.pdf",
         "file": null,
         "category": "Onboarding",
         "extension": "docx"
     },
     {
         "id": 2,
-        "name": "NDA",
+        "title": "NDA",
+        "name": "NDA.pdf",
         "file": null,
         "category": "Onboarding",
         "extension": "pdf"

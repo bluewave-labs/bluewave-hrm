@@ -83,6 +83,7 @@ db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
 db.onBoarding = require("./Onboarding/onBoarding")(sequelize, Sequelize);
 db.video = require("./Onboarding/video")(sequelize, Sequelize);
 db.file = require("./Onboarding/file")(sequelize, Sequelize);
+db.fileName = require("./Onboarding/fileName")(sequelize, Sequelize);
 db.task = require("./Onboarding/task")(sequelize, Sequelize);
 db.taskName = require("./Onboarding/taskName")(sequelize, Sequelize);
 db.surveyQuestion = require("./Onboarding/surveyQuestion")(sequelize, Sequelize);
@@ -362,6 +363,11 @@ db.onBoarding.belongsTo(db.employee, {
   foreignKey: "empId"
 });
 
+db.onBoarding.hasMany(db.file, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
 
 db.onBoarding.hasMany(db.task, {
   onDelete: "CASCADE",

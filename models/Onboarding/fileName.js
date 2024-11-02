@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     return sequelize.define(
-        "file",
+        "fileName",
         {
             //File ID number
             id: {
@@ -9,11 +9,6 @@ module.exports = (sequelize, Sequelize) => {
                 autoIncrement: true,
                 allowNull: false
             },
-            //ID number of the onboarding process this file belongs to
-            onBoardingId: {
-                type: Sequelize.INTEGER,
-                allowNull: false
-            }, 
             //File name
             title: {
                 type: Sequelize.STRING

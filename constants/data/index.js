@@ -194,9 +194,9 @@ module.exports = {
     displayInfo(results.length, "video");
   },
 
-  populateFileTable: async function (db) {
-    const data = require("./file.json");
-    const jobOffer = fs.readFileSync("./constants/data/job_offer.docx", {
+  populateFileNameTable: async function (db) {
+    const data = require("./fileName.json");
+    const jobOffer = fs.readFileSync("./constants/data/job_offer.pdf", {
       encoding: "base64",
     });
     const NDA = fs.readFileSync("./constants/data/NDA.pdf", {
@@ -204,7 +204,7 @@ module.exports = {
     });
     data[0].file = jobOffer;
     data[1].file = NDA;
-    const results = await db.file.bulkCreate(data, {
+    const results = await db.fileName.bulkCreate(data, {
       validate: true
     });
     displayInfo(results.length, "file")
@@ -269,7 +269,7 @@ module.exports = {
     await this.populateEmployeeAnnualTimeOffTable(db);
     await this.populateNotificationTable(db);
     await this.populateVideoTable(db);
-    await this.populateFileTable(db);
+    await this.populateFileNameTable(db);
     await this.populateSurveyQuestionTable(db);
     await this.populateTaskNameTable(db);
     // await this.populateOnboardingTable(db);
