@@ -52,7 +52,7 @@ export default function FilesTable({files, style}) {
                                     <b>{file.title}</b>
                                     <HRMButton mode="tertiary">
                                         <a
-                                            href={`data:application/pdf;base64,${file.file.data}`}
+                                            href={`data:application/pdf;base64,${atob(file.file)}`}
                                             download={file.name}
                                             style={{
                                                 textDecoration: "none",
