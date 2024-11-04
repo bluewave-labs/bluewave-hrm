@@ -2,6 +2,10 @@ const db = require("../../../models");
 require("dotenv").config();
 const message = require("../../../constants/messages.json");
 
+const convertFileToBase64 = (document) => {
+    document.file = document.file && document.file.toString("base64");
+};
+
 //Retrieve all files
 exports.showAll = async (req, res, next) => {
     const data = await db.file.findAll({
@@ -11,6 +15,9 @@ exports.showAll = async (req, res, next) => {
         res.send("No results found");
     }
     else {
+        for (let d of data) {
+            convertFileToBase64(d);
+        }
         res.send(data);
     }
 };
@@ -24,6 +31,7 @@ exports.showOne = async (req, res, next) => {
             res.status(404).send("Not found!");
         }
         else {
+            convertFileToBase64(data);
             res.status(200).send(data);
         }
     }
@@ -44,6 +52,9 @@ exports.showAllByOnboarding = async (req, res, next) => {
             res.status(404).send("Not found!");
         }
         else {
+            for (let d of data) {
+                convertFileToBase64(d);
+            }
             res.status(200).send(data);
         }
     }
