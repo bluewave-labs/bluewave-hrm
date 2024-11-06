@@ -8,15 +8,7 @@ import {
     //ThemeProvider 
 } from '@mui/material/styles';
 import React from 'react';
-//import MyInfoTab from './MyInfoTab';
-//import MyInfoPersonal from './MyInfoPersonal';
-//import MyInfoJob from './MyInfoJob';
 import { styled } from '@mui/material/styles';
-//import { colors } from '../../assets/Styles';
-//import {formatPhoneNumber} from "../../assets/utils"
-//import MyinfoDocument from './MyinfoDocument';
-//import MyinfoJourney from './MyinfoJourney';
-import SatisfactionSurveysTabs from './SatisfactionSurveysTabs';
 import SatisfactionSurveysResults from './SatisfactionSurveysResults';
 import CustomTabs from '../tabs/CustomTabs';
 
@@ -98,7 +90,7 @@ function SatisfactionSurveysCards({ employee }) {
         border: '1px solid #EBEBEB',
         borderRadius: '5px',
         boxShadow: 'none',
-        height: '659px',
+        maxHeight: '659px',
         overflowX: 'auto',
       }}
     >

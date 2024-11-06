@@ -15,7 +15,7 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ pt: 3 }}>
+        <Box sx={{ pt: 6, pl:4, pr:4 }}>
           {children}
         </Box>
       )}
@@ -36,7 +36,7 @@ function a11yProps(index) {
   }
 }
 
-export default function MyInfoTab(props) {
+export default function SatisfactionSurveysTabs(props) {
   const { items } = props;
   const [value, setValue] = React.useState(0);
 
@@ -44,28 +44,22 @@ export default function MyInfoTab(props) {
     setValue(newValue);
   }
   return (
-    <Box sx={{ width: "100%",}}>
-      <Box sx={{ borderBottom: 1, borderColor: "#EAECF0" , height:"32px"}}>
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label='tabs'
           
           sx={{
-            height: "32px",
-            minHeight: "32px",
-            
             ".MuiTab-root": {
-              paddingTop:"0",
-              minHeight: "32px",
-              height:"32px",
               color: "#344054", 
               fontWeight: 400,
               fontFamily:'Inter',
               fontSize: '13px',
             },
             ".Mui-selected": {
-              backgroundColor: "#fff", 
+              backgroundColor: "#F9F5FF", 
               color: "#6941C6", 
               fontWeight: 400,
               fontFamily:'Inter',
@@ -77,10 +71,6 @@ export default function MyInfoTab(props) {
               fontFamily:'Inter',
               fontSize: '13px',
             },
-            '& .MuiTabs-scroller': {
-              height: "32px",
-              minHeight: "32px",
-            },
           }}
         >
         {items.map((item, index) => {
@@ -91,10 +81,9 @@ export default function MyInfoTab(props) {
               key={index}
               {...a11yProps(index)}
               sx={{
-                height:"32px",
                 textTransform: "none",
                 '&.Mui-selected': {
-                  backgroundColor: "#fff",
+                  backgroundColor: "#F9F5FF",
                   color: "#6941C6",
                   fontWeight: 400,
                   fontFamily:'Inter',

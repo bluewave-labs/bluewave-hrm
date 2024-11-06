@@ -1,7 +1,7 @@
 import { Avatar, Box, Card, CardContent, Paper, Stack, Typography  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React from 'react';
-import MyInfoTab from './MyInfoTab';
+//import MyInfoTab from './MyInfoTab';
 import MyInfoPersonal from './MyInfoPersonal';
 import MyInfoJob from './MyInfoJob';
 import { styled } from '@mui/material/styles';

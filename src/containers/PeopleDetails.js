@@ -13,7 +13,8 @@ import AppTabs from "../components/PeopleComponents/AppTabs";
 import ActionMenu from "../components/PeopleComponents/ActionMenu";
 import { formatPhoneNumber } from "../assets/utils";
 import StateContext from "../context/StateContext";
-import { tr } from "date-fns/locale";
+//import { tr } from "date-fns/locale";
+//import CustomTabs from "../components/tabs/CustomTabs";
 
 const tableView = require("../assets/table-view.json");
 const api = require("../assets/FetchServices");
