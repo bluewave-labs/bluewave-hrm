@@ -19,10 +19,12 @@ import CustomTabs from "../tabs/CustomTabs";
  * off. The Team tab shows the periods of time off for each member of the user's team.
  *
  * Props:
+ * - update<Boolean>: Flag for triggering the useEffect hook in the BoardTabContent component.
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function TimeOffMenu({ style }) {
+export default function TimeOffMenu({ update, style }) {
   //const [tab, setTab] = useState("Board"); //State determining which flag is selected
 
   const stateContext = useContext(StateContext);
@@ -32,11 +34,11 @@ export default function TimeOffMenu({ style }) {
     stateContext.state.user && stateContext.state.user.permission.id === 2;
 
   const tabs = isAdmin || isManager ? [
-    { label: "Board", child: <BoardTabContent /> },
+    { label: "Board", child: <BoardTabContent update={update} /> },
     { label: "History", child: <HistoryTabContent /> },
     { label: "My Team", child: <TeamTabContent /> }
   ] : [
-    { label: "Board", child: <BoardTabContent /> },
+    { label: "Board", child: <BoardTabContent update={update} /> },
     { label: "History", child: <HistoryTabContent /> }
   ];
 
