@@ -24,6 +24,7 @@ export default function TimeOffPage({style}) {
     //should be displayed
     const [openRequest, setOpenRequest] = useState(false);
     const [requestSuccess, setRequestSuccess] = useState(false);
+    console.log(openRequest);
 
     //Function for sending a time off request
     function sendRequest() {
@@ -56,7 +57,7 @@ export default function TimeOffPage({style}) {
             <Dialog open={openRequest} onClose={() => setOpenRequest(false)}>
                 <TimeOffRequest 
                     close={() => setOpenRequest(false)} 
-                    sendRequest={() => sendRequest()} 
+                    sendRequest={sendRequest} 
                 />
             </Dialog>
             {/*Request successful notification*/}

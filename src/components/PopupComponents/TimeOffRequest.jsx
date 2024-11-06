@@ -25,13 +25,16 @@ import { fetchOne, update as updatePolicy } from '../../assets/FetchServices/Emp
 function isValidPeriod(from, to) {
     if (from.getFullYear() < to.getFullYear()) {
         return true;
-    } else if (from.getFullYear() === to.getFullYear()) {
+    } 
+    else if (from.getFullYear() === to.getFullYear()) {
         if (from.getMonth() < to.getMonth()) {
-        return true;
-        } else if (from.getMonth() === to.getMonth()) {
-        return from.getDate() <= to.getDate();
-        } else {
-        return false;
+            return true;
+        } 
+        else if (from.getMonth() === to.getMonth()) {
+            return from.getDate() <= to.getDate();
+        } 
+        else {
+            return false;
         }
     } else {
         return false;
@@ -300,9 +303,9 @@ export default function TimeOffRequest({
     //time off periods
     function validateDates() {
         for (const p of timeOffDates) {
-            if ((p.from <= from && from <= p.to) || 
-                (p.from <= to && to <= p.to) ||
-                (from < p.from && p.to < to))
+            if ((isValidPeriod(p.from, from) && isValidPeriod(from, p.to)) || 
+                (isValidPeriod(p.from, to) && isValidPeriod(to, p.to)) ||
+                (isValidPeriod(from, p.from) && isValidPeriod(p.to, to)))
             {
                 return false;
             }
@@ -465,6 +468,7 @@ export default function TimeOffRequest({
                     label={formatDate(from)}
                     variant="outlined"
                     onClick={() => setOpenFrom(true)}
+                    disableTouchRipple
                     sx={{ borderRadius: "4px" }}
                 />
                 </Box>
@@ -475,6 +479,7 @@ export default function TimeOffRequest({
                     label={formatDate(to)}
                     variant="outlined"
                     onClick={() => setOpenTo(true)}
+                    disableTouchRipple
                     sx={{ borderRadius: "4px" }}
                 />
                 </Box>
