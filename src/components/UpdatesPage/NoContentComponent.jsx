@@ -1,5 +1,5 @@
 import Box from '@mui/system/Box';
-import { fonts } from '../../assets/Styles';
+import { fonts } from '../../Styles';
 
 /**
  * Component with some text or web elements to be displayed when there is no content to display in

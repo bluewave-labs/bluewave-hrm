@@ -3,7 +3,6 @@ import Stack from '@mui/system/Stack';
 import HRMButton from '../Button/HRMButton';
 import SuccessImage from '../../Images/Success_HR_Management_1.0.png';
 import { colors, fonts } from '../../assets/Styles';
-import { useNavigate } from "react-router-dom";
 
 /**
  * Setup menu component for onboarding purposes. Lets the user know that they are finished the
@@ -14,14 +13,8 @@ import { useNavigate } from "react-router-dom";
  *      Default: {}
  */
 export default function SuccessMenu({style}) {
-    const navigate = useNavigate();
-
-    const handleClick = ()=> {
-        navigate("/dashboard", {replace: true})
-    }
     return (
         <Box sx={{...{
-            width: "1003px",
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingY: 8,
@@ -40,8 +33,7 @@ export default function SuccessMenu({style}) {
             {/*Complete setup button*/}
             <HRMButton mode="primary" style={{
                 marginTop: "40px"
-            }}
-            onClick={handleClick}>
+            }}>
                 Dismiss and complete setup
             </HRMButton>
         </Box>

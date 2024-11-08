@@ -99,7 +99,6 @@ export default function SetupRolesMenu({advancePage, style}) {
 
     return (
         <Box sx={{...{
-            width: "1003px",
             boxSizing: "border-box",
             border: "1px solid #EBEBEB",
             borderRadius: 2,
