@@ -1,9 +1,25 @@
 import Stack from '@mui/system/Stack';
-import React  from 'react';
-import ReportsMainCard from './ReportsMainCard';
+import React, { useContext } from "react";
 import { Box } from '@mui/material';
+import StateContext from "../../context/StateContext";
+import ReportsMainCards from './ReportsMainCards';
+
 
 export default function ReportsMain(style) {
+    
+    const stateContext = useContext(StateContext);
+    const user = stateContext.state.user;
+
+    // Check if the user is an Admin or a Manager
+    const isAdmin = user && user.permission.id === 1;
+    const isManager = user && user.permission.id === 2;
+
+    // Conditionally render content if the user is an Admin or Manager
+    if (!isAdmin && !isManager) {
+        // Return null or any other fallback content if the user is neither Admin nor Manager
+        return null;
+    }
+
     return (
 
         <Box >
@@ -12,14 +28,22 @@ export default function ReportsMain(style) {
                 direction="row"
                 alignItems="center"
                 justifyContent="space-between"
-                sx={{
-                    marginBottom: "40px"
-                }}
+                
             >
-                <h2 style={{fontSize:'24px', fontFamily:'Inter', fontWeight:'600', color:'#101828'}}>Reports</h2>
+                <h2 style={{
+                    fontSize:'24px', 
+                    fontFamily:'Inter', 
+                    fontWeight:'600',
+                    color:'#101828',
+                    marginTop:"0px",
+                    marginBottom: "16px",
+                    }}
+                >
+                    Reports
+                </h2>
                 
             </Stack>
-            <ReportsMainCard />
+            <ReportsMainCards/>
         </Box>
     );
 };

@@ -1,65 +1,134 @@
-import React from 'react';
+
+import React, { useEffect,useState } from 'react';
 import { Card, Typography, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { LineChart, areaElementClasses } from '@mui/x-charts/LineChart';
-import { useYScale, useDrawingArea } from '@mui/x-charts/hooks';
-import { green } from '@mui/material/colors';
+import { LineChart } from '@mui/x-charts/LineChart';
+//import axios from 'axios';
+import { Select, MenuItem, FormControl,InputBase, styled} from '@mui/material';
+
+const api = require("../../assets/FetchServices");
 
 const theme = createTheme({
-    typography: {
-      h2: {
-        fontWeight: 600,
-        fontFamily: 'Inter',
-        fontSize: '16px',
-        color: '#101828',
-        marginTop: '24px',
-        marginLeft: '24px',
-      },
-      body1: {
-        fontWeight: 600,
-        fontFamily: 'Inter',
-        fontSize: '13px',
-        color: '#344054',
-      },
-      body2: {
-        fontWeight: 400,
-        fontFamily: 'Inter',
-        fontSize: '13px',
-        color: '#475467',
-      },
+  typography: {
+    h2: {
+      fontWeight: 600,
+      fontFamily: 'Inter',
+      fontSize: '16px',
+      color: '#101828',
     },
-  });
+    body1: {
+      fontWeight: 600,
+      fontFamily: 'Inter',
+      fontSize: '13px',
+      color: '#344054',
+    },
+    body2: {
+      fontWeight: 400,
+      fontFamily: 'Inter',
+      fontSize: '13px',
+      color: '#475467',
+    },
 
-const data = [50, 40, 55, 60, 57, 63, 68, 77,80,75,73,81];
-// const xData = [0, 40, 30, 10, 50, 30, 25, 40,30,50,11,20];
-const xData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    body3: {
+      fontWeight: 550,
+      fontFamily: 'Inter',
+      fontSize: '12px',
+      color: '#475467',
+    },
 
-function ColorPalette({ id }) {
-    const { top, height, bottom } = useDrawingArea();
-    const svgHeight = top + bottom + height;
-    const scale = useYScale(); // You can provide the axis Id if you have multiple ones
-  
-    return (
-      <defs>
-        <linearGradient
-          id={id}
-          x1="0"
-          x2="0"
-          y1="0"
-          y2={`${svgHeight}px`}
-          gradientUnits="userSpaceOnUse" // Use the SVG coordinate instead of the component ones.
-        >
-          <stop offset={scale(100) / svgHeight} stopColor={green[400]} stopOpacity={1} />
-          <stop offset={scale(0) / svgHeight} stopColor={green[50]} stopOpacity={1} />
-        </linearGradient>
-      </defs>
-    );
-  }
+  },
+});
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  height: '34px',
+  marginBottom: '0px',
+  marginTop: '0px',
+   'label + &': {
+    marginTop: theme.spacing(3),
+  },
+  '& .MuiInputBase-input': {
+    borderRadius: 8,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #D0D5DD',
+    fontSize: 13,
+    height: '24px',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '10px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    fontFamily: 'Inter',
+    '&:focus': {
+      borderRadius: 8,
+      borderColor: '#D0D5DD',
+    },
+  },
+}));
+
+
+// const getAllEmployeesAPI = async ()=> {
+//   const res = await fetch('http://localhost:5000/api/employees', {
+//     method:'GET',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     }
+//   });
+//   const result = await res.json();
+//   return result
+// }
+
+const xLabels = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Agu',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+const years = Array.from({ length: 6 }, (_, i) => 2016 + i);
+
 
 export default function HeadcountChanges() {
+  const [cumulativeHireStats, setCumulativeHireStats] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(2016);
+
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        // const response = await axios.get('http://localhost:5000/api/employees'); // Adjust the endpoint as needed
     
+        // const employeeData = await api.employee.fetchAll()
+        const cumulativeData = await api.employee.fetchHeadCounts(selectedYear)
+        console.log("cumulativeData")
+        console.log(cumulativeData.pData)
+        setCumulativeHireStats(cumulativeData.pData);
+      
+
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    };
+
+    fetchEmployeeData();
+  }, [selectedYear]);
+
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
+
+
   
+const pData = cumulativeHireStats
+// const pData = [headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount,headcount];
   return (
+
     <Card
       sx={{
         border: '1px solid #EAECF0',
@@ -69,7 +138,7 @@ export default function HeadcountChanges() {
         height: '296px',
         backgroundColor: '#FFFFFF',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         padding: '24px',
       }}
     >
@@ -78,49 +147,122 @@ export default function HeadcountChanges() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'center',
         }}
       >
         <ThemeProvider theme={theme}>
-          <Typography variant="h2" className="header">
-            Headcount changes
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0px' }}>
+          <Typography variant="h2" className="header" gutterBottom>
+          Cumulative headcount
           </Typography>
-          <LineChart
-            
-            
-            xAxis={[{ data: xData, label:"Month",scaleType: 'point',}]}
-            yAxis={[{ min: 0, max: 100,label: 'Number of employees' }]}
-            series={[{ curve: 'natural', data, showMark: false, area: false, color: '#7F56D9' }]}
-            width={400}
-            height={300}
-            // margin={{ top: 5, bottom: 22, left: 0 }}
-            sx={{
-                [`& .${areaElementClasses.root}`]: {
-                fill: 'url(#swich-color-id-2)',
+          <FormControl sx={{ width: '70px' }}>
+                <Select 
+                  value={selectedYear} 
+                  onChange={handleYearChange} 
+                  input={<BootstrapInput />} 
+                  displayEmpty
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        "& .MuiMenuItem-root": {
+                          "&:hover": {
+                            backgroundColor: "transparent", 
+                          },
+                        
+                          '&.Mui-focused': {
+                                  backgroundColor: "transparent !important",
+                              },
+                          "&.Mui-selected": {
+                            backgroundColor: "transparent !important", 
+                            "&:hover": {
+                              backgroundColor: "transparent !important", 
+                            },
+                            "&:active": {
+                            backgroundColor: "transparent !important", 
+                            },
+                          },
+                        },
+                     },
+                    }
+                  }}
+                >
+                  {years.map((year) => (
+                    <MenuItem key={year} value={year}>{year}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+        </Box> 
+        
+    
+          <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
+            <LineChart
+              series={[
+                {
+                  data: pData,
+                  showMark: false,
+                  color: '#7F56D9',
                 },
-            }}
-        >
-            
-        </LineChart>
+              ]}
+              xAxis={[{ scaleType: 'point', data: xLabels }]}
+              yAxis={[{ label: ''}]} 
+              width={500}
+              height={230}
+              grid={{ horizontal: true }}
+              leftAxis={{
+                disableLine: true,
+                disableTicks: true,
+                labelStyle: {
+                  fontSize: 12,
+                  color: '#475467',
+                },
+                tickValues: Array.from({length: 11}, (_, i) => i * 10), 
+                tickLabelStyle: {
+                  textAnchor: 'end',
+                  fontSize: 12,
+                  color: '#475467',
+                },
+              }}
+              bottomAxis={{
+                disableLine: true,
+                disableTicks: true,
+                labelStyle: {
+                  fontSize: 25,
+                  color: '#7F56D9',
+                },
+                tickLabelStyle: {
+                  textAnchor: 'start',
+                  fontSize: 12,
+                  color: '#475467',
+                },
+              }}
+            />
+            <Typography
+              variant="body3"
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '-60px', 
+                transform: 'translateY(-50%) rotate(-90deg)',
+               
+              }}
+            >
+              Number of employees
+            </Typography>
+
+            <Typography
+              variant="body3"
+              sx={{
+                position: 'absolute',
+                bottom: '0%',
+                left: '244px', 
+                transform: 'translateY(-70%)',
+               
+              }}
+            >
+              Months
+            </Typography>
+          </Box>
         </ThemeProvider>
-
-        
-      </Box>
-
-      <Box
-        sx={{
-          marginLeft: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-
-        
-       
       </Box>
     </Card>
-  )
+  );
 }
-
- 

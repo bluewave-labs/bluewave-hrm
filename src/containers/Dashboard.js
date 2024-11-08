@@ -33,13 +33,13 @@ export default function Dashboard() {
     setCurrent(newCurrent);
   };
   useEffect(() => {
-    console.log(stateContext);
+   // console.log(stateContext);
     async function fetchData() {
       try {
-        console.log(stateContext.state.user, "state1");
+       // console.log(stateContext.state.user, "state1");
         if (!stateContext.state.user) {
           const currentUser = await api.user.refresh();
-          console.log("state2", { currentUser });
+         // console.log("state2", { currentUser });
           if (currentUser) {
             // Get associated employee record
             const currentEmployee = await api.employee.fetchOneByEmail(
@@ -82,12 +82,14 @@ export default function Dashboard() {
     // return <Placeholder content={"Loading, please wait..."} />;
   }
   return (
-    <Box sx={{
-      width: "100%",
-      height: "100%"
-    }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <Header />
-      <Stack spacing={10} direction={"row"}>
+      <Stack spacing={"32px"} direction={"row"}>
         <SideMenu
           onSelect={(menuItem) => {
             displayMenu(menuItem);
@@ -98,6 +100,7 @@ export default function Dashboard() {
           paddingLeft: "280px",
           paddingRight: "120px",
           paddingTop: "137px",
+          backgroundColor: "#FCFCFD"
         }}>
           {current.home && <UpdatesPage />}
           {current.myinfo && <MyInfoHome />}

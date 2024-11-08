@@ -45,8 +45,17 @@ export const StateProvider = ({ children }) => {
     setState(data);
   };
 
+  // Remove all items in the state object except items that do not dependend on a session such as logo.
+  const clearState = () => {
+    // You may include other items
+    const data = {
+      logo: state.logo
+    };
+    setState(data);
+  }
+
   return (
-    <StateContext.Provider value={{ state, updateState, updateStates }}>
+    <StateContext.Provider value={{ state, updateState, updateStates, clearState }}>
       {children}
     </StateContext.Provider>
   );

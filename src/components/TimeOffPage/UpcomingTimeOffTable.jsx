@@ -145,35 +145,37 @@ export default function UpcomingTimeOffTable({
                                             dot={
                                                 (period.status === "Approved") ? "green" :
                                                 (period.status === "Pending") ? "orange" :
-                                                (period.status === "Declined") ? "red" : null
+                                                (period.status === "Declined") ? "red" : 
+                                                (period.status === "Deleting") ? "grey" : 
+                                                (period.status === "Cancelled") ? "grey" : null
                                             }
                                             label={period.status}
                                         />
-                                    </TableBodyCell>
+                                    </TableBodyCell> 
                                 }
                                 {/*Buttons to edit and delete time off period*/}
                                 {editFlag && 
                                     <TableBodyCell>
-                                        <Stack direction="row" alignItems="center" justifyContent="flex-end">
+                                        <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={4}>
                                             <HRMButton 
                                                 mode="tertiary" 
                                                 onClick={() => {
                                                     retrieveDetails(period);
                                                     setDeleteTimeOff(true);
                                                 }}
+                                                enabled={period.status !== "Deleting"}
                                             >
                                                 <b>Delete</b>
                                             </HRMButton>
                                             <HRMButton 
-                                                mode="tertiary"
+                                                mode="secondaryA"
                                                 onClick={() => {
                                                     retrieveDetails(period);
                                                     setEditTimeOff(true);
                                                 }}
+                                                enabled={period.status !== "Deleting"}
                                             >
-                                                <b style={{color: "#7F56D9"}}>
-                                                    Edit
-                                                </b>
+                                                <b>Edit</b>
                                             </HRMButton>
                                         </Stack>
                                     </TableBodyCell>

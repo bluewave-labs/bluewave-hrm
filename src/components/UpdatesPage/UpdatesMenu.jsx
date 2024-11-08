@@ -10,8 +10,6 @@ import { colors, fonts } from '../../Styles';
 import { fetchAllByEmployee } from '../../assets/FetchServices/Notification';
 import StateContext from '../../context/StateContext';
 
-//import axios from 'axios';
-
 /**
  * Menu component for the home menu page. Displays up to 10 updates at a time along with controls
  * for filtering between read and unread updates as well as navigating between pages of components.
@@ -89,9 +87,8 @@ export default function UpdatesMenu({style}) {
     return (
         <Box sx={{...{
             boxSizing: "border-box",
-            minWidth: "1042px",
-            paddingX: "59px",
-            paddingY: "31px",
+            minWidth: "952px",
+            padding: "48px",
             border: "1px solid #EBEBEB",
             borderRadius: "10px",
             backgroundColor: "#FFFFFF"
@@ -107,7 +104,7 @@ export default function UpdatesMenu({style}) {
                             alignItems="center" 
                             sx={{
                                 fontFamily: fonts.fontFamily,
-                                marginBottom: "10px"
+                                marginBottom: "16px"
                             }}
                         >
                             <h3 style={{color: colors.darkGrey}}>Latest updates</h3>

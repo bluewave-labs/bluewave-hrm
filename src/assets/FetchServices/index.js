@@ -16,5 +16,12 @@ service.timeOff = require("./TimeOff");
 service.timeOffHistory = require("./TimeOffHistory");
 service.user = require("./AppUser");
 service.offboarding = require("./Offboarding");
+service.onboarding = require("./Onboarding");
+service.video = require("./Video");
+service.file = require("./File");
+service.task = require("./Task");
+service.taskName = require("./TaskName");
+service.surveyQuestion = require("./SurveyQuestion");
+service.surveyResponse = require("./SurveyResponse");
 
 module.exports = service;

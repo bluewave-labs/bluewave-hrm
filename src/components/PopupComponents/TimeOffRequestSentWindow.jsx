@@ -17,7 +17,6 @@ import PropTypes from 'prop-types';
  *          timeOffRequested: <String>
  *          requestedDaysTotal: <String>
  *          timeOffCategory: <String>
- *          notes: <String>
  *      }
  * 
  * - close<Function>: Function for closing this popup component.
@@ -79,8 +78,6 @@ export default function TimeOffRequestSentWindow({request_information, close, st
                     <StyledTD>{request_information.timeOffCategory}</StyledTD>
                 </tr>
             </table>
-            <b>Your Notes</b>
-            <p>{request_information.notes}</p>
             {/*Buttons*/}
             <Stack direction="row" alignItems="center" justifyContent="flex-end">
                 <HRMButton mode="primary" onClick={close}>OK</HRMButton>

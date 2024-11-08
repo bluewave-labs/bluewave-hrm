@@ -1,9 +1,14 @@
 import axios from "axios";
 const BASE_URL = require("./BaseUrl.json").value; 
+<<<<<<< HEAD
 
 const addCred = {
   withCredentials: true,
 };
+=======
+const addCred = require("./withCredentials.json");
+
+>>>>>>> 916e7549067db2af140026a3ca1630bd1d71983c
 export const fetchAll = async () => {
   try {
     const url = `${BASE_URL}/api/documents`;

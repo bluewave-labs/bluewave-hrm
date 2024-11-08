@@ -7,20 +7,19 @@ import SelectPhoto from "./SelectPhoto";
 import HRMDatePicker from "./HRMDatePicker";
 import dayjs from "dayjs";
 import PopupModal from "./PopupModal";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 const api = require("../../assets/FetchServices");
 const selectOptions = require("../../assets/employee-form-select-options.json");
 const validator = require("validator");
 
-  
-const getHomePath = (location) =>{
+const getHomePath = (location) => {
   const fullUrl = window.location.href;
   const relativeUrl = location.pathname;
-  if(fullUrl === relativeUrl){
+  if (fullUrl === relativeUrl) {
     return fullUrl;
   }
   return fullUrl.substring(0, fullUrl.indexOf(relativeUrl));
-}
+};
 
 const deformatNumber = (phoneNumber) => {
   try {
@@ -376,7 +375,7 @@ function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
   const [prompt, setPrompt] = useState(false);
 
   let location = useLocation();
-  
+
   useEffect(() => {
     async function fetchData() {
       // You can await here
@@ -559,12 +558,12 @@ function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
     try {
       if (employee) {
         const newData = await api.employee.update(inputs);
-               // Update social profiles
+        // Update social profiles
         for (let profile of socialProfiles) {
           if (profile.id) {
             // Existing profile, update it
-            await api.socialProfile.update(profile)
-                     console.log(`Social profile - ${profile.mediumName} updated.`);
+            await api.socialProfile.update(profile);
+            console.log(`Social profile - ${profile.mediumName} updated.`);
           } else {
             // New profile, create it.
             await api.socialProfile.createOne(profile);
@@ -577,10 +576,10 @@ function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
         console.log("Record successfully updated.");
       } else {
         const data = {
-          inputs:inputs,
+          inputs: inputs,
           frontendUrl: `${getHomePath(location)}/complete-signup/`,
-        }
-        await api.employee.createOne(data)
+        };
+        await api.employee.createOne(data);
         console.log("Employee successfully added.");
         if (onSave) {
           onSave(null);
@@ -608,7 +607,12 @@ function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
   };
 
   return (
-    <Stack>
+    <Stack
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh", maxWidth: "950px" }}
+    >
       {change && prompt && (
         <PopupModal
           onAccept={handleSubmit}
@@ -622,7 +626,6 @@ function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
           boxSizing: "border-box",
           display: "flex",
           width: "100%",
-          minHeight: "1345px",
           backgroundColor: "#FFFFFF",
           border: "1px solid #EBEBEB",
           borderRadius: "10px",
@@ -1163,7 +1166,7 @@ const validateForm = async (employee) => {
     results.email = "Invalid email. Please, enter a valid email";
   } else {
     const res = await api.employee.fetchOneByEmail(employee.email);
-    
+
     if (res && res.empId !== employee.empId) {
       valid = false;
       results.email = "Email already exists";

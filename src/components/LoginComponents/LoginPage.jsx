@@ -21,11 +21,13 @@ function LoginPage() {
     return !validator.isEmail(email) || !password;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     try {
+      e.preventDefault();
       const res = await api.authentication.login({email, password});
       const { user, employee } = await getAuthUser(email);
       stateContext.updateStates({ user, employee });
+
       navigate("/dashboard", { replace: true });
     } catch (error) {
       if (error.response && error.response.data) {
@@ -43,49 +45,52 @@ function LoginPage() {
         </div>
         <h2>Log in to your account</h2>
         {message && <div className="error-alert">{message}</div>}
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <div className="form-group-2">
-            <label>
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-              />
-              Remember for 30 days
-            </label>
-            <button
-              className="button-forgot-password "
-              onClick={() => pageContext.navigateTo("forgotPassword")}
-            >
-              Forgot Password
-            </button>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
-        </div>
-        <button
-          className="sign-in-button"
-          onClick={handleSubmit}
-          disabled={disableButton()}
-        >
-          Sign in
-        </button>
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <div className="form-group-2">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                Remember for 30 days
+              </label>
+              <button
+                type="button"
+                className="button-forgot-password "
+                onClick={() => pageContext.navigateTo("forgotPassword")}
+              >
+                Forgot Password
+              </button>
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="sign-in-button"
+            disabled={disableButton()}
+          >
+            Sign in
+          </button>
+        </form>
       </div>
     </div>
   );

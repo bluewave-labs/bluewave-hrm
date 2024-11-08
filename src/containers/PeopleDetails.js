@@ -13,36 +13,15 @@ import AppTabs from "../components/PeopleComponents/AppTabs";
 import ActionMenu from "../components/PeopleComponents/ActionMenu";
 import { formatPhoneNumber } from "../assets/utils";
 import StateContext from "../context/StateContext";
-import { tr } from "date-fns/locale";
-
+/**
+ * Expected headCell format for the table. Each object represents a
+ * column. Note, AppTable implementation depends on this format to make the
+ * table generic. Modification to the format may result in unpredictable outcome.
+ */
 const tableView = require("../assets/table-view.json");
 const api = require("../assets/FetchServices");
 // Number of rows to display on the table at a time.
 const rowsPerPage = 10;
-
-// Expected headCell format for the table. Each object represents a
-// column. Note, AppTable implementation depends on this format to make the
-// table generic. Modification to this format may result in unpredictable outcome.
-// const headCells = [
-//   { id: "empId", width: 50, label: "Emp No", visible: false },
-//   { id: "name", width: 221, label: "Name", visible: true },
-//   { id: "preferredName", width: 100, label: "Preferred Name", visible: false },
-//   { id: "role", width: 176, label: "Role", visible: true },
-//   { id: "team", width: 210, label: "Team", visible: true },
-//   { id: "manager", width: 150, label: "Manager", visible: true },
-//   { id: "department", width: 100, label: "Department", visible: true },
-//   { id: "phoneNumber", width: 100, label: "Phone", visible: true },
-//   { id: "email", width: 200, label: "Email", visible: true },
-//   { id: "gender", width: 50, label: "Gender", visible: true },
-//   { id: "nationality", width: 100, label: "Nationality", visible: true },
-//   { id: "dateOfBirth", width: 100, label: "Birthday", visible: true },
-//   { id: "maritalStatus", width: 100, label: "Marital Status", visible: true },
-//   { id: "hireDate", width: 182, label: "Hire Date", visible: true },
-//   { id: "salary", width: 100, label: "Salary", visible: true },
-//   { id: "employmentType", width: 100, label: "Emp Type", visible: true },
-//   { id: "compensationType", width: 100, label: "Comp. Type", visible: true },
-//   { id: "weeklyHours", width: 50, label: "Hours", visible: true },
-// ];
 
 function formatTableData({
   data,
@@ -272,25 +251,43 @@ export default function People({
     async function fetchData() {
       // You can await here
       try {
-        const res = await api.employee.fetchAll();
-        setLoading(false);
-        params.data = res;
-        formatTableData(params);
-        setEmployees(params.data);
-        if (stateContext.state.employee) {
-          const managerId = stateContext.state.employee.empId;
-          const team = await api.employee.fetchMyTeam(managerId);
-          params.data = team;
-          params.addActionMenu = true;
+        if (stateContext.state.pdEmployees) {
+          //pd stands for people details
+          setEmployees(stateContext.state.pdEmployees);
+          setLoading(false);
+        } else {
+          const res = await api.employee.fetchAll();
+          setLoading(false);
+          params.data = res;
           formatTableData(params);
-          setMyTeam(params.data);
+          setEmployees(params.data);
+          stateContext.updateState("pdEmployees", params.data);
+        }
+
+        if (stateContext.state.employee) {
+          if (stateContext.state.pdMyTeam) {
+            setMyTeam(stateContext.state.pdMyTeam);
+          } else {
+            const managerId = stateContext.state.employee.empId;
+            const team = await api.employee.fetchMyTeam(managerId);
+            params.data = team;
+            params.addActionMenu = true;
+            formatTableData(params);
+            setMyTeam(params.data);
+            stateContext.updateState("pdMyTeam", params.data);
+          }
         }
         if (isAdmin) {
-          const terms = await api.employee.fetchTerminated();
-          params.data = terms;
-          params.addActionMenu = false;
-          formatTableData(params);
-          setTerminated(params.data);
+          if (stateContext.state.pdTerminated) {
+            setTerminated(stateContext.state.pdTerminated);
+          } else {
+            const terms = await api.employee.fetchTerminated();
+            params.data = terms;
+            params.addActionMenu = false;
+            formatTableData(params);
+            setTerminated(params.data);
+            stateContext.updateState("pdTerminated", params.data);
+          }
         }
       } catch (err) {
         console.log(err);
@@ -300,11 +297,14 @@ export default function People({
   }, []);
 
   return (
-    <Stack>
+    <Stack sx={{ minWidth: window.innerWidth < 1550 ? 1100 : 1350 }}>
       <Box
         sx={{
           boxSizing: "border-box",
-          mt: 4,
+          width: "100%",
+          height: "87px",
+          mt: 5,
+          mb: -5,
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -346,11 +346,16 @@ export default function People({
         sx={{
           boxSizing: "border-box",
           display: "flex",
-          minWidth: window.innerWidth < 1550 ? 1100 : 1350,
+          width: "100%",
+          height: "100%",
+          minHeight: "50vh",
           backgroundColor: "#FFFFFF",
           border: "1px solid #EBEBEB",
-          p: 4,
-          mt: 4,
+          pt: 7.5,
+          pb: 4,
+          pr: 4,
+          pl: 5,
+          mt: 0,
         }}
       >
         {

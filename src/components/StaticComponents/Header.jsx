@@ -1,50 +1,66 @@
 import Box from "@mui/system/Box";
-import { useScrollTrigger } from '@mui/material';
+import { useScrollTrigger } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import HRMButton from "../Button/HRMButton";
 import UserDropdown from "./UserDropdown";
-//import { useContext } from "react";
-//import StateContext from "../../context/StateContext";
+import StateContext from "../../context/StateContext";
+import { useContext } from "react";
 
 /**
  * Header component for most pages. Contains the company logo and the current user's information.
  *
  * Props:
- *
- * - user<Object>: Object containing the user's information including avatar, name and role.
- *      Syntax: {avatar: <image source>, name: <string>, role: <string>}
+ * - window: Used to handle changes to the header when scrolling
  *
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
- *
- *  - actions<Object>: Array of objects in which each object contains a label and action.
- *     Syntax: [...{label: <string>, action: <function>]
  */
-export default function Header({window, style }) {
-  //const stateContext = useContext(StateContext);
+export default function Header({ window, style }) {
+  const navigate = useNavigate();
 
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
     disableHysteresis: true,
-    threshold: 0
-});
+    threshold: 0,
+  });
 
+  const stateContext = useContext(StateContext);
+
+  const showOnboardingButton =
+    stateContext.state.employee &&
+    !stateContext.state.employee.completedOnboardingAt;
   return (
-    <Box className={trigger ? "scrolled" : ""} sx={{...{
-        boxSizing: "border-box",
-        width: "100%",
-        height: "87px",
-        padding: "20px",
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        position: "fixed",
-        "&.scrolled": {
+    <Box
+      className={trigger ? "scrolled" : ""}
+      sx={{
+        ...{
+          boxSizing: "border-box",
+          width: "100%",
+          height: "64px",
+          padding: "20px",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          position: "fixed",
+          "&.scrolled": {
             backgroundColor: "#FFFFFF",
             borderBottom: "1px solid #EBEBEB",
             boxShadow: "0 10px 6px #10182808",
-            zIndex: 1
-        }
-      }, ...style}}
+            zIndex: 1,
+          },
+        },
+        ...style,
+      }}
     >
+      {showOnboardingButton && (
+        <HRMButton
+          mode="primary"
+          onClick={() => navigate("/onboarding", { replace: true })}
+          style={{ marginRight: "40px" }}
+        >
+          Complete onboarding
+        </HRMButton>
+      )}
       <UserDropdown />
     </Box>
   );

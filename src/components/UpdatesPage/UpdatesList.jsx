@@ -6,7 +6,6 @@ import TableRow from '@mui/material/TableRow';
 import Dialog from '@mui/material/Dialog';
 import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-//import axios from 'axios';
 import dayjs from 'dayjs';
 import Label from '../Label/Label';
 import HRMButton from '../Button/HRMButton';
@@ -14,9 +13,11 @@ import NewTeamMember from '../PopupComponents/NewTeamMember';
 import TimeOffRequestSentWindow from '../PopupComponents/TimeOffRequestSentWindow';
 import TimeOffApproval from '../PopupComponents/TimeOffApproval';
 import TimeOffRequestResolved from '../PopupComponents/TimeOffRequestResolved';
-//import { currentUserID } from '../../testConfig';
 import { update } from '../../assets/FetchServices/Notification';
 import StateContext from '../../context/StateContext';
+import TimeOffConfirmDelete from '../PopupComponents/TimeOffConfirmDelete';
+import TimeOffDeleted from '../PopupComponents/TimeOffDeleted';
+import TimeOffNotDeleted from '../PopupComponents/TimeOffNotDeleted';
 
 /**
  * Menu component for listing update notifications in the home page.
@@ -31,17 +32,22 @@ import StateContext from '../../context/StateContext';
  *      Default: {}
  */
 export default function UpdatesList({updates, refresh, style}) {
-    //States determining whether the new team member, time off request sent and time off approval
-    //components should be displayed
+    //States determining which popup components should be displayed
     const [newMember, setNewMember] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
     const [approval, setApproval] = useState(false);
     const [requestResolved, setRequestResolved] = useState(false);
+    const [deleteRequest, setDeleteRequest] = useState(false);
+    const [requestDeleted, setRequestDeleted] = useState(false);
+    const [requestNotDeleted, setRequestNotDeleted] = useState(false);
     //Details for each notification popup component
     const [newMemberDetails, setNewMemberDetails] = useState({});
     const [requestSentDetails, setRequestSentDetails] = useState({});
     const [approvalDetails, setApprovalDetails] = useState({});
     const [requestResolvedDetails, setRequestResolvedDetails] = useState({});
+    const [deleteRequestDetails, setDeleteRequestDetails] = useState({});
+    const [requestDeletedDetails, setRequestDeletedDetails] = useState({});
+    const [requestNotDeletedDetails, setRequestNotDeletedDetails] = useState({}); 
 
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
@@ -112,8 +118,7 @@ export default function UpdatesList({updates, refresh, style}) {
                 timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} -
                     ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
                 requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
-                timeOffCategory: up.timeOff.category,
-                notes: up.timeOffHistory.note
+                timeOffCategory: up.timeOff.category
             };
             setRequestSentDetails(details);
         }
@@ -127,6 +132,51 @@ export default function UpdatesList({updates, refresh, style}) {
                 notes: up.timeOffHistory.note
             };
             setRequestResolvedDetails(details);
+        }
+        //Retrieve details for "Delete time off request" update
+        else if (up.subject === "Employee would like to delete time off request") {
+            const details = {
+                notification: up,
+                timeOffId: up.timeOffHistory.id,
+                avatar: up.employee.photo,
+                name: `${up.employee.firstName} ${up.employee.lastName}`,
+                role: up.employee.role.roleTitle,
+                email: up.employee.email,
+                office: up.employee.officeLocation,
+                effectiveDate: dayjs(up.employee.effectiveDate).format("DD/MM/YYYY"),
+                timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed - 
+                    up.employeeAnnualTimeOff.cumulativeHoursTaken),
+                timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} - 
+                    ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
+                requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
+                timeOffCategory: up.timeOff.category,
+                status: up.timeOffHistory.status
+            };
+            setDeleteRequestDetails(details);
+        }
+        //Retrieve details for "Time off request deleted" update
+        else if (up.subject === "Your time off request has been deleted") {
+            const details = {
+                timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed -
+                    up.employeeAnnualTimeOff.cumulativeHoursTaken),
+                timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} -
+                    ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
+                requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
+                timeOffCategory: up.timeOff.category
+            };
+            setRequestDeletedDetails(details);
+        }
+        //Retrieve details for "Time off request not deleted" update
+        else if (up.subject === "Your time off request was not deleted") {
+            const details = {
+                timeOffBalance: (up.employeeAnnualTimeOff.hoursAllowed -
+                    up.employeeAnnualTimeOff.cumulativeHoursTaken),
+                timeOffRequested: `${dayjs(up.timeOffHistory.startDate).format("DD/MM/YYYY")} -
+                    ${dayjs(up.timeOffHistory.endDate).format("DD/MM/YYYY")}`,
+                requestedDaysTotal: dayjs(up.timeOffHistory.endDate).diff(dayjs(up.timeOffHistory.startDate), "day"),
+                timeOffCategory: up.timeOff.category
+            };
+            setRequestNotDeletedDetails(details);
         }
     };
 
@@ -177,6 +227,15 @@ export default function UpdatesList({updates, refresh, style}) {
                                             update.subject === "Your time off request has been rejected") {
                                                 setRequestResolved(true);
                                             }
+                                            else if (update.subject === "Employee would like to delete time off request") {
+                                                setDeleteRequest(true);
+                                            }
+                                            else if (update.subject === "Your time off request has been deleted") {
+                                                setRequestDeleted(true);
+                                            }
+                                            else if (update.subject === "Your time off request was not deleted") {
+                                                setRequestNotDeleted(true);
+                                            }
                                         }} 
                                     >
                                         <a 
@@ -220,10 +279,36 @@ export default function UpdatesList({updates, refresh, style}) {
                     }}
                 />
             </Dialog>
+            {/*Time off request approved/rejected popup component*/}
             <Dialog open={requestResolved} onClose={() => setRequestResolved(false)}>
                 <TimeOffRequestResolved 
                     time_off_information={requestResolvedDetails}
                     close={() => setRequestResolved(false)}
+                />
+            </Dialog>
+            {/*Delete time off request popup component*/}
+            <Dialog open={deleteRequest} onClose={() => setDeleteRequest(false)}>
+                <TimeOffConfirmDelete
+                    request_information={deleteRequestDetails}
+                    close={() => setDeleteRequest(false)}
+                    refresh={() => {
+                        setDeleteRequest(false);
+                        handleSwitch(deleteRequestDetails.notification);
+                    }}
+                />
+            </Dialog>
+            {/*Time off period successfully deleted popup component*/}
+            <Dialog open={requestDeleted} onClose={() => setRequestDeleted(false)}>
+                <TimeOffDeleted
+                    request_information={requestDeletedDetails}
+                    close={() => setRequestDeleted(false)}
+                />
+            </Dialog>
+            {/*Time off period not deleted popup component*/}
+            <Dialog open={requestNotDeleted} onClose={() => setRequestNotDeleted(false)}>
+                <TimeOffNotDeleted
+                    request_information={requestNotDeletedDetails}
+                    close={() => setRequestNotDeleted(false)}
                 />
             </Dialog>
         </>

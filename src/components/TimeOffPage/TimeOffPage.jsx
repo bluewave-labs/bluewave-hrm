@@ -24,12 +24,15 @@ export default function TimeOffPage({style}) {
     //should be displayed
     const [openRequest, setOpenRequest] = useState(false);
     const [requestSuccess, setRequestSuccess] = useState(false);
+    const [update, setUpdate] = useState(false);
+    console.log(update);
 
     //Function for sending a time off request
     function sendRequest() {
         setOpenRequest(false);
         setRequestSuccess(true);
         setTimeout(() => setRequestSuccess(false), 5000);
+        setUpdate(!update);
     }
 
     return (
@@ -40,7 +43,7 @@ export default function TimeOffPage({style}) {
                 alignItems="center"
                 justifyContent="space-between"
                 sx={{
-                    marginBottom: "40px"
+                    marginBottom: "16px"
                 }}
             >
                 <h3>Time off</h3>
@@ -51,12 +54,12 @@ export default function TimeOffPage({style}) {
                     Request new time off
                 </HRMButton>
             </Stack>
-            <TimeOffMenu />
+            <TimeOffMenu update={update} />
             {/*Time off request menu*/}
             <Dialog open={openRequest} onClose={() => setOpenRequest(false)}>
                 <TimeOffRequest 
                     close={() => setOpenRequest(false)} 
-                    sendRequest={() => sendRequest()} 
+                    sendRequest={sendRequest} 
                 />
             </Dialog>
             {/*Request successful notification*/}

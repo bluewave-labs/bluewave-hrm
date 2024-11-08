@@ -4,7 +4,6 @@ import SelectItem from "./SelectItem";
 import HRMButton from "../Button/HRMButton";
 import { colors, fonts } from "../../assets/Styles";
 import { useState } from "react";
-import axios from "axios";
 
 //Function for formatting the departments given in the props
 function divideIntoThree(options) {
@@ -76,11 +75,11 @@ export default function SetupMenu({
 
   const handleAdd = async () => {
     const data = activeStates(columnName, selectedOptions);
-    console.log("key", columnName);
-    console.log(data);
+   // console.log("key", columnName);
+   // console.log(data);
     if (onSubmit) {
       const response = await onSubmit(data);
-      console.log(response);
+      //console.log(response);
     }
     if (advancePage) {
       advancePage();

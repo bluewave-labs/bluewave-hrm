@@ -246,7 +246,6 @@ export default function AppTable(props) {
 
   useEffect(() => {
     setDataSize(data.length);
-    console.log("width>>>", window.innerWidth);
   }, [data.length, loading]);
 
   const handleChangePage = (event, newPage) => {
@@ -267,19 +266,17 @@ export default function AppTable(props) {
   );
   if (loading) {
     return (
-      <Box sx={{ padding: 16 }}>
-        <NoContentComponent>
-          <p>Loading. Please wait...</p>
-        </NoContentComponent>
-      </Box>
+      <NoContentComponent>
+        <p>Loading. Please wait...</p>
+      </NoContentComponent>
     );
   }
   if (data.length === 0) {
     return (
       <Box sx={{ padding: 16 }}>
-        <NoContentComponent>
-          <p>No data to display</p>
-        </NoContentComponent>
+      <NoContentComponent>
+        <p>No data to display</p>
+      </NoContentComponent>
       </Box>
     );
   }

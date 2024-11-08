@@ -4,16 +4,17 @@ import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
+import dayjs from "dayjs";
 import PropTypes from 'prop-types';
-//import axios from 'axios';
 import { useState } from 'react';
 import HRMButton from '../Button/HRMButton';
 import { colors, fonts } from '../../Styles';
-import { update } from '../../assets/FetchServices';
+import { update as updatePeriod } from '../../assets/FetchServices/TimeOffHistory';
+import { fetchOne, update as updatePolicy } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
 
 /**
  * Popup component for displaying the information of a time off request and the options to reject
- * or approve it to an administrator.
+ * or approve it to a manager or administrator.
  * 
  * Props:
  * - request_information<Object>: Contains the request information.
@@ -32,21 +33,18 @@ import { update } from '../../assets/FetchServices';
  *          status: <String>
  *      }
  * 
- * - close<Function>: Function for closing this popup component
+ * - close<Function>: Function for closing this popup component.
  *      Syntax: close()
  * 
  * - refresh<Function>: Function for closing this popup and refreshing the list of updates in the
  *      parent component.
  *      Syntax: refresh()
  * 
- * - style<Object>: Optional prop for adding further inline styling 
+ * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
 export default function TimeOffApproval({request_information, close, refresh, style}) {
     const [notes, setNotes] = useState("");
-
-    //URL endpoints to be used for API calls
-    //const timeOffPeriodURL = `http://localhost:5000/api/timeoffhistories`;
 
     //Custom style elements
     const StyledTD = styled('td')({
@@ -58,29 +56,38 @@ export default function TimeOffApproval({request_information, close, refresh, st
     //Function for sending the PUT request to change the time off request status
     function resolveRequest(newStatus) {
         //Update the time off period status
-        update({
+        updatePeriod({
             id: request_information.timeOffId,
             status: newStatus,
             note: notes
         })
         .then((data) => {
             console.log(data);
+            if (newStatus === "Declined") {
+                const period = data.data;
+                //Retrieve the related employeeAnnualTimeOff record
+                fetchOne(period.empId)
+                .then((data) => {
+                    if (data) {
+                        console.log(data);
+                        const policy = data.filter((p) => (p.year === dayjs().year() && p.timeOffId === period.timeOffId))[0];
+                        //Refund the hours used in the time off request
+                        const refundBalance = {
+                            id: policy.id,
+                            cumulativeHoursTaken: policy.hoursUsed - period.hours
+                        };
+                        updatePolicy(refundBalance)
+                        .then((data) => {
+                            if (data) {
+                                console.log(data);
+                                refresh();
+                            }
+                        })
+                    }
+                });
+            }
             refresh();
         });
-        /*
-        axios.put(timeOffPeriodURL, {
-            id: request_information.timeOffId,
-            status: newStatus,
-            note: notes
-        })
-        .then((response) => {
-            console.log(response);
-            refresh();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-        */
     }
 
     return (
@@ -171,9 +178,13 @@ export default function TimeOffApproval({request_information, close, refresh, st
             </Box>
             {/*Reject, approve or close*/}
             {request_information.status === "Declined" && 
-                <b style={{color: "#D92D20", marginBottom: "15px"}}>Time off request has been rejected</b>}
+                <b style={{color: "#D92D20", marginBottom: "30px"}}>Time off request has been rejected</b>}
             {request_information.status === "Approved" &&
-                <b style={{color: "#079455", marginBottom: "15px"}}>Time off request has been approved</b>}
+                <b style={{color: "#079455", marginBottom: "30px"}}>Time off request has been approved</b>}
+            {request_information.status === "Deleting" && 
+                <b style={{color: "#5D6B98", marginBottom: "30px"}}>Employee is requesting to delete this time off request</b>}
+            {request_information.status === "Cancelled" && 
+                <b style={{color: "#5D6B98", marginBottom: "30px"}}>Time off request has been deleted</b>}
             <Stack 
                 direction="row" 
                 alignItems="center" 

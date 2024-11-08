@@ -20,7 +20,7 @@ function MyInfoHome(props) {
       show: true,
       message: `Record successfully updated.`,
     });
-    const { user, employee } = await getAuthUser(axios, email);
+    const { user, employee } = await getAuthUser(email);
     updateStates({user, employee});
   };
   return (
