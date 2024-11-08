@@ -1,20 +1,33 @@
-import React, { useState } from 'react'
-import App from '../App'
+import React, { useState } from "react";
 
 export const multiStepContext = React.createContext();
 
+const StepContext = ({ children }) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [finalData, setFinalData] = useState({
+    filelist: [],
+    SignedDocumentAck: false,
+    answer1: "",
+    answer2: "",
+    answer3: "",
+    answer4: "",
+    answer5: "",
+  });
+  return (
+    <>
+      <multiStepContext.Provider
+        value={{
+          currentStep,
+          setCurrentStep,
 
-const StepContext = () => {
-    const [currentStep, setCurrentStep] = useState(1);
-    const [userData, setUserData] = useState([]);
-    const [finalData, setFinalData] = useState([]);
-    return (
-        <>
-        <multiStepContext.Provider value={{currentStep,setCurrentStep,userData,setUserData,finalData,setFinalData}}>
-            <App/>
-        </multiStepContext.Provider>
-        </>
-    )
-}
+          finalData,
+          setFinalData,
+        }}
+      >
+        {children}
+      </multiStepContext.Provider>
+    </>
+  );
+};
 
 export default StepContext;

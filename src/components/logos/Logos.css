@@ -1,0 +1,17 @@
+.Logos {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.views-card{
+    flex-wrap: wrap;
+    
+}
+
+.views-title {
+    color: #000;
+    font: 600 16px/24px Inter, sans-serif;
+
+}
+
