@@ -74,6 +74,24 @@ db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
   Sequelize
 );
 
+db.offBoardingSurvey = require("./offBoardingSurvey")(sequelize, Sequelize);
+db.offBoardingDocumentation = require("./offBoardingDocumentation")(
+  sequelize,
+  Sequelize
+);
+
+db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
+
+db.onBoarding = require("./Onboarding/onBoarding")(sequelize, Sequelize);
+db.video = require("./Onboarding/video")(sequelize, Sequelize);
+db.file = require("./Onboarding/file")(sequelize, Sequelize);
+db.fileName = require("./Onboarding/fileName")(sequelize, Sequelize);
+db.task = require("./Onboarding/task")(sequelize, Sequelize);
+db.taskName = require("./Onboarding/taskName")(sequelize, Sequelize);
+db.surveyQuestion = require("./Onboarding/surveyQuestion")(sequelize, Sequelize);
+db.surveyResponse = require("./Onboarding/surveyResponse")(sequelize, Sequelize);
+db.onBoardingSurvey = require("./Onboarding/onBoardingSurvey")(sequelize, Sequelize);
+
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
   onDelete: "CASCADE",
@@ -217,6 +235,30 @@ db.offBoarding.belongsTo(db.employee, {
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
+
+db.offBoarding.belongsToMany(db.offBoardingResponse, {
+  through: { model: db.offBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+db.offBoardingResponse.belongsToMany(db.offBoarding, {
+  through: { model: db.offBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+db.offBoarding.belongsToMany(db.offBoardingDocument, {
+  through: { model: db.offBoardingDocumentation, unique: false },
+  constraints: false,
+});
+
+db.offBoardingDocument.belongsToMany(db.offBoarding, {
+  through: { model: db.offBoardingDocumentation, unique: false },
+  constraints: false,
+});
+
+
+/*
+Remove the following commented codes
 db.offBoarding.hasMany(db.offBoardingResponse, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
@@ -227,6 +269,8 @@ db.offBoardingResponse.belongsTo(db.offBoarding, {
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
+*/
+
 // db.offBoarding.hasMany(db.offBoardingDocument, {
 //   onDelete: "CASCADE",
 //   OnUpdate: "CASCADE",
@@ -314,5 +358,44 @@ db.employee.belongsToMany(db.notification, {
   through: { model: db.notificationRecipient, unique: false },
   constraints: false,
 });
+
+db.onBoarding.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
+});
+
+db.onBoarding.hasMany(db.file, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
+
+db.onBoarding.hasMany(db.task, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
+
+/*
+db.onBoarding.hasMany(db.surveyResponse, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
+*/
+
+db.surveyResponse.belongsToMany(db.onBoarding, {
+  through: { model: db.onBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+/*
+db.employee.hasMany(db.surveyResponse, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
+});
+*/
 
 module.exports = db;

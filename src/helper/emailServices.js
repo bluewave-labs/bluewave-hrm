@@ -43,13 +43,13 @@ class EmailService {
      * @type {Object}
      */
     this.transporter = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: "2525",
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
       service: "gmail",
       secure: false,
       auth: {
-        user: "4cc626b7b76067",
-        pass: "4504d43e40f45f",
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
   }

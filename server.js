@@ -43,13 +43,17 @@ Table(s) that must be prepopulated in production
 
 //Uncomment the following codes to populate your database
 
-// db.sequelize.sync({ force: true }).then(async () => {
-//   let data = require("./constants/data");
+db.sequelize.sync({ force: true }).then(async () => {
+  let data = require("./constants/data");
 
-//   await data.populateTables(db);
+  await data.populateTables(db);
 
+<<<<<<< HEAD
 //   // await data.populatePermissionTable(db);
 //   await data.populatePermissionTable(db);
+=======
+  // await data.populatePermissionTable(db);
+>>>>>>> 4fba0d3f7d489389a082bd99594691b635975de1
 
-//   console.log("Sync operation successful.");
-// });
+  console.log("Sync operation successful.");
+});

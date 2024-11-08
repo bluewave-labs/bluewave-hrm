@@ -3,9 +3,11 @@ require("dotenv").config();
 const message = require("../../constants/messages.json");
 const { getComparator } = require("../helper/utils");
 const { where } = require("sequelize");
-const EmailService = require("../helper/emailServices");
 const mailService = require("../helper/email");
-const crypto = require("crypto");
+const EmailService = require("../helper/emailServices");
+// const template = require("../../client/templates/offboarding.mjml");
+const mjml2html = require("mjml");
+const fs = require("fs");
 
 exports.showAll = async (req, res) => {
   try {
@@ -23,7 +25,7 @@ exports.showAll = async (req, res) => {
 
 exports.showOne = async (req, res) => {
   const id = req.params.id;
-  const data = await db.offBoarding.findOne({ where: { empId: id } });
+  const data = await db.offBoarding.fineOne({ where: { empID: id } });
   if (data === null) {
     res.status(400).send("Not found!");
   } else {

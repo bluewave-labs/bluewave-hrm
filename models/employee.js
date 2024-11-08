@@ -145,6 +145,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      completedOnboardingAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
     },
     {
       sequelize,

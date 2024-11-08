@@ -44,8 +44,7 @@ exports.findByEmail = async (req, res) => {
   if (data === null) {
     res.send(null);
   } else {
-    //console.log(data);
-    res.status(200).send(data);
+      res.status(200).send(data);
   }
 };
 
@@ -108,7 +107,13 @@ exports.createRecord = async (req, res) => {
   // Send the plain resetToken to the user email and user record
   const resetUrl = `${frontendUrl}${resetToken}`;
   const message = `Please use the link below to set your password\n\n${resetUrl}\n\nThis link will expire in 30 days.`;
+  for (let i = 1; i < 5; i++) {
+    console.log("---------------------------------------");
+  }
   console.log(resetUrl);
+  for (let i = 1; i < 5; i++) {
+    console.log("---------------------------------------");
+  }
 
   try {
     const userData = {

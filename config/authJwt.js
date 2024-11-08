@@ -10,8 +10,8 @@ const requireAuth = (req, res, next) => {
   if (token) {
     jwt.verify(token, process.env.secret, (err, decodedToken) => {
       if (err) {
-        next();
-        // res.status(404).json({ message: message.sessionExpired });
+       next();
+       // res.status(404).json({ message: message.sessionExpired });
       } else {
         next();
       }
