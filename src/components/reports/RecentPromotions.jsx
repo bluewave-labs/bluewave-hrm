@@ -5,7 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import HRMButtonGroup from '../ButtonGroup/HRMButtonGroup';
 import { useEffect, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
-//mport { GridOverlay } from '@mui/x-data-grid';
+//import { GridOverlay } from '@mui/x-data-grid';
 
 const api = require("../../assets/FetchServices");
 
@@ -158,7 +158,7 @@ function RecentPromotions(props) {
           map[employee.empId] = employee;
           return map;
         }, {});
-        console.log({employeeMap});
+        
       
 
         setEmployeeMap(employeeMap);
@@ -179,7 +179,6 @@ function RecentPromotions(props) {
       filterData(data, selectedPeriod);
     }, [selectedPeriod, data, filterData]);
     const handlePeriodChange = (period) => {
-        console.log('Button clicked', period);
         setSelectedPeriod(period);
       };
   return (

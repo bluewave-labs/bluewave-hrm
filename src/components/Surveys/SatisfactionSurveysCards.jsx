@@ -90,7 +90,9 @@ function SatisfactionSurveysCards({ employee }) {
         border: '1px solid #EBEBEB',
         borderRadius: '5px',
         boxShadow: 'none',
-        maxHeight: '659px',
+        //minHeight: '659px',
+        // height: "100%",
+        // minHeight: "100vh",
         overflowX: 'auto',
       }}
     >

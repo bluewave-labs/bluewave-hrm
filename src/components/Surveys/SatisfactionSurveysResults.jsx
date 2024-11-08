@@ -150,7 +150,7 @@ function SatisfactionSurveysResults(props) {
                         mode={"primary"}
                         style={{ borderRadius: "8px", width: "158px", height: "34.0px", }}
                     >
-                        <Typography variant='bodybutton'>Send New Survey</Typography>
+                        <Typography variant='bodybutton'>Send new survey</Typography>
                     </HRMButton>
                 </Stack>
                 <Stack sx={{paddingTop:'16px'}}>

@@ -21,6 +21,7 @@ export default function SuccessMenu({style}) {
     }
     return (
         <Box sx={{...{
+            width: "1003px",
             border: "1px solid #EBEBEB",
             borderRadius: 2,
             paddingY: 8,

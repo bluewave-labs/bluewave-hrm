@@ -176,32 +176,7 @@ export default function ActionButtonEmployee() {
 
   // Close dialogs and open successpopu for 5 seconds.
   const handleConfirm = async () => {
-    console.log('data from firstdialog', dialogData);
-    // try {
-    //   // Define API endpoint
-    //   const apiUrl = 'http://localhost:5000/api/employees/'; 
-
-    //   // Prepare the request options
-    //   const response = await fetch(apiUrl, {
-    //       method: 'POST', // POST method to send data
-    //       headers: {
-    //           'Content-Type': 'application/json', // Set content type to JSON
-    //       },
-    //       body: JSON.stringify(dialogData), // Convert dialogData to JSON
-    //   });
-    //   // Check if the request was successful
-    //   if (!response.ok) {
-    //     throw new Error(`HTTP error! Status: ${response.status}`);
-    //   }
-
-    //   // Parse the JSON response if needed
-    //   const result = await response.json();
-    //   console.log('API response:', result);
-
-    //   // Handle successful response (if needed)
-    // } catch (error) {
-    //   console.error('Error occurred while sending data to the API:', error);
-    // }
+    
 
     //Close dialogs and open success popup for 5 seconds
     setOpenConfirmationDialog(false);

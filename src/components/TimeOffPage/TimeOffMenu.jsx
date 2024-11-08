@@ -1,15 +1,16 @@
 import Box from "@mui/system/Box";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import { styled } from "@mui/system";
-import { useState, useContext } from "react";
+//import Tab from "@mui/material/Tab";
+//import TabContext from "@mui/lab/TabContext";
+//import TabList from "@mui/lab/TabList";
+//import TabPanel from "@mui/lab/TabPanel";
+//import { styled } from "@mui/system";
+import { useContext } from "react";
 import BoardTabContent from "./BoardTabContent";
 import HistoryTabContent from "./HistoryTabContent";
 import TeamTabContent from "./TeamTabContent";
 import { colors, fonts } from "../../Styles";
 import StateContext from "../../context/StateContext";
+import CustomTabs from "../tabs/CustomTabs";
 
 /**
  * Menu component for the time off page. Contains the Board, History and Team tabs for controlling
@@ -18,11 +19,13 @@ import StateContext from "../../context/StateContext";
  * off. The Team tab shows the periods of time off for each member of the user's team.
  *
  * Props:
+ * - update<Boolean>: Flag for triggering the useEffect hook in the BoardTabContent component.
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function TimeOffMenu({ style }) {
-  const [tab, setTab] = useState("Board"); //State determining which flag is selected
+export default function TimeOffMenu({ update, style }) {
+  //const [tab, setTab] = useState("Board"); //State determining which flag is selected
 
   const stateContext = useContext(StateContext);
   const isAdmin =
@@ -30,6 +33,16 @@ export default function TimeOffMenu({ style }) {
   const isManager =
     stateContext.state.user && stateContext.state.user.permission.id === 2;
 
+  const tabs = isAdmin || isManager ? [
+    { label: "Board", child: <BoardTabContent update={update} /> },
+    { label: "History", child: <HistoryTabContent /> },
+    { label: "My Team", child: <TeamTabContent /> }
+  ] : [
+    { label: "Board", child: <BoardTabContent update={update} /> },
+    { label: "History", child: <HistoryTabContent /> }
+  ];
+
+  /*
   //Function for selecting a new tab
   function handleChange(e, newValue) {
     setTab(newValue);
@@ -43,6 +56,7 @@ export default function TimeOffMenu({ style }) {
   const StyledTabPanel = styled(TabPanel)({
     padding: 0,
   });
+  */
 
     return (
         <Box sx={{...{
@@ -55,6 +69,8 @@ export default function TimeOffMenu({ style }) {
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily
         }, ...style}}>
+          <CustomTabs items={tabs}/>
+          {/*
             <TabContext value={tab}>
                 <Box sx={{ borderBottom: 1, borderColor: "#EAECF0" }}>
                     <TabList 
@@ -68,19 +84,20 @@ export default function TimeOffMenu({ style }) {
                         {(isAdmin || isManager) && <StyledTab label="My team" value="My team" />}
                     </TabList>
                 </Box>
-                {/*Board tab*/}
+                
                 <StyledTabPanel value="Board">
                     <BoardTabContent />
                 </StyledTabPanel>
-                {/*History tab*/}
+                
                 <StyledTabPanel value="History">
                     <HistoryTabContent />
                 </StyledTabPanel>
-                {/*Team tab*/}
+                
                 <StyledTabPanel value="My team">
                     <TeamTabContent />
                 </StyledTabPanel>
             </TabContext>
+          */}
         </Box>
     );
 };

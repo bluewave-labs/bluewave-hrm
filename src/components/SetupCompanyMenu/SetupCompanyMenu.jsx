@@ -1,6 +1,5 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
-import Grid from "@mui/system/Grid";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
@@ -24,8 +23,8 @@ const api = require("../../assets/FetchServices");
  */
 export default function SetupCompanyMenu({ advancePage, style }) {
   //State variables for holding the new company's information
-  const [companyName, setCompanyName] = useState(null);
-  const [companyWebsite, setCompanyWebsite] = useState(null);
+  const [companyName, setCompanyName] = useState("");
+  const [companyWebsite, setCompanyWebsite] = useState("");
   const [companyLogo, setCompanyLogo] = useState(null);
 
   const stateContext = useContext(StateContext);
@@ -43,7 +42,7 @@ export default function SetupCompanyMenu({ advancePage, style }) {
     //Parse data into JSON format
     const data = {
       companyName: companyName,
-      companyWebsite: companyWebsite,
+      companyWebsite: "https://" + companyWebsite,
       companyLogo: getBinary(companyLogo),
       administratorEmail:
         stateContext.state.user && stateContext.state.user.email,
@@ -67,11 +66,11 @@ export default function SetupCompanyMenu({ advancePage, style }) {
       sx={{
         ...{
           //boxSizing: "border-box",
+          width: "1003px",
           border: "1px solid #EBEBEB",
-          borderRadius: 2,
-          paddingTop: 6,
-          paddingX: "18%",
-          paddingBottom: 20,
+          borderRadius: "10px",
+          paddingY: "52px",
+          paddingX: "120px",
           backgroundColor: "#FFFFFF",
           color: colors.darkGrey,
           fontFamily: fonts.fontFamily,
@@ -79,86 +78,97 @@ export default function SetupCompanyMenu({ advancePage, style }) {
         ...style,
       }}
     >
-      <Grid container columns={10} rowSpacing={2} columnSpacing={1}>
-        <Grid xs={10} textAlign="center">
-          <h3>Add fundamental company details</h3>
-          <p>You can modify these later in settings</p>
-        </Grid>
-        {/*Textfield for company name*/}
-        <Grid xs={3}>
-          <h5>Company name</h5>
-        </Grid>
-        <Grid xs={7} alignContent="center">
-          <TextField
-            onChange={(e) => setCompanyName(e.target.value)}
-            fullWidth
-            size="small"
-          />
-        </Grid>
-        {/*Textfield for company website*/}
-        <Grid xs={3}>
-          <h5>Company website</h5>
-        </Grid>
-        <Grid xs={7} alignContent="center">
-          <TextField
-            onChange={(e) => setCompanyWebsite("https://" + e.target.value)}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="end">https://</InputAdornment>
-              ),
-            }}
-            size="small"
-          />
-        </Grid>
-        {/*Section for uploading company logo*/}
-        <Grid xs={3}>
-          <h5>Company logo</h5>
-        </Grid>
-        <Grid xs={7} sx={{ display: "flex", justifyContent: "center" }}>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            sx={{ width: "100%" }}
-          >
-            {companyLogo ? (
-              <img
-                src={companyLogo}
-                style={{
-                  width: "175px",
-                  height: "100px",
-                  marginRight: "50px",
-                }}
-              />
-            ) : (
-              <AddPhotoAlternateOutlinedIcon
-                sx={{
-                  backgroundColor: "#F2F4F7",
-                  width: "32px",
-                  height: "32px",
-                  padding: "32px",
-                  marginRight: "50px",
-                  borderRadius: "50%",
-                }}
-              />
-            )}
-            <UploadFile setFile={setCompanyLogo} />
-          </Stack>
-        </Grid>
-      </Grid>
-      {/*Add company button*/}
-      <HRMButton
-        mode="primary"
-        enabled={companyName}
-        onClick={handleSubmit}
-        style={{
-          float: "right",
-          marginTop: "80px",
-        }}
+      <h3 style={{textAlign: "center", marginTop: 0, marginBottom: "10px"}}>
+        Add fundamental company details
+      </h3>
+      <p style={{textAlign: "center", marginBottom: "50px"}}>
+        You can modify these later in settings
+      </p>
+      {/*Textfield for company name*/}
+      <Stack 
+        direction="row" 
+        alignItems="center" 
+        justifyContent="space-between"
+        sx={{ marginBottom: "20px"}}
       >
-        Add Company
-      </HRMButton>
+        <h4>Company name</h4>
+        <TextField
+          id="company-name"
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
+          size="small"
+          sx={{ width: "70%" }}
+        />
+      </Stack>
+      {/*Textfield for company website*/}
+      <Stack 
+        direction="row" 
+        alignItems="center" 
+        justifyContent="space-between"
+        sx={{ marginBottom: "20px"}}
+      >
+        <h4>Company website</h4>
+        <TextField
+          id="company-website"
+          value={companyWebsite}
+          onChange={(e) => setCompanyWebsite(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="end">https://</InputAdornment>
+            ),
+          }}
+          size="small"
+          sx={{ width: "70%" }}
+        />
+      </Stack>
+      {/*Section for uploading company logo*/}
+      <Stack 
+        direction="row" 
+        alignItems="center" 
+        justifyContent="space-between"
+        sx={{ marginBottom: "40px"}}
+      >
+        <h4>Company logo</h4>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="flex-end"
+          spacing={2}
+        >
+          {companyLogo ? (
+            <img
+              src={companyLogo}
+              style={{
+                width: "175px",
+                height: "100px",
+                marginRight: "20px",
+              }}
+            />
+          ) : (
+            <AddPhotoAlternateOutlinedIcon
+              sx={{
+                backgroundColor: "#F2F4F7",
+                width: "32px",
+                height: "32px",
+                padding: "32px",
+                marginRight: "20px",
+                borderRadius: "50%",
+              }}
+            />
+          )}
+          <UploadFile setFile={setCompanyLogo} />
+        </Stack>
+      </Stack>
+      {/*Add company button*/}
+      <Stack direction="row" alignItems="center" justifyContent="flex-end">
+        <HRMButton
+          mode="primary"
+          enabled={companyName}
+          onClick={handleSubmit}
+        >
+          Add Company
+        </HRMButton>
+      </Stack>
     </Box>
   );
 }

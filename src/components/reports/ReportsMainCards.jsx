@@ -37,7 +37,7 @@ function ReportsMainCards(props) {
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    minWidth: '1181px',
+                    minWidth: '952px',
                     //maxWidth: '1181px', 
                     overflowX: 'auto',
                     
@@ -49,39 +49,41 @@ function ReportsMainCards(props) {
                     
                     justifyContent="center" >
                         {/* First Row: Small component on the left, Large on the right */}
+                        
                         <Grid item>
-                            <Box sx={{ width: '533px', marginRight: '20px', marginTop:'20px',  marginBottom:'20px'  }}>
+                            <Box sx={{ width: '533px', marginRight: '15px', marginTop:'10px',  marginBottom:'15px' }}>
+                                {tasks[2].component} {/* Large component on the right */}
+                            </Box>
+                        </Grid>
+                        <Grid item>
+                            <Box sx={{ width: '470px', marginLeft: '15px' , marginTop:'10px' ,  marginBottom:'15px'  }}>
                                 
                                 {tasks[0].component} {/* Small component on the left */}
                             </Box>
                         </Grid>
-                        <Grid item>
-                            <Box sx={{ width: '533px', marginLeft: '20px' , marginTop:'20px' ,  marginBottom:'20px' }}>
-                                {tasks[2].component} {/* Large component on the right */}
-                            </Box>
-                        </Grid>
 
                         {/* Second Row: Small component on the left, Large on the right */}
+                        
                         <Grid item>
-                            <Box sx={{ width: '533px',marginRight: '20px', marginTop:'20px', marginBottom:'20px' }}>
-                               
-                                {tasks[1].component} {/* Small component on the left */}
+                            <Box sx={{ width: '533px', marginRight: '15px', marginTop:'15px', marginBottom:'15px' }}>
+                                {tasks[3].component} {/* Large component on the right */}
                             </Box>
                         </Grid>
                         <Grid item>
-                            <Box sx={{ width: '533px', marginLeft: '20px' , marginTop:'20px'  ,  marginBottom:'20px' }}>
-                                {tasks[3].component} {/* Large component on the right */}
+                            <Box sx={{ width: '470px', marginLeft: '15px' , marginTop:'15px'  ,  marginBottom:'15px' }}>
+                               
+                                {tasks[1].component} {/* Small component on the left */}
                             </Box>
                         </Grid>
 
                         {/* Third Row: Only Large component on the right */}
                         <Grid item>
-                            <Box sx={{ width: '533px' , marginRight: '20px', marginTop:'20px',  marginBottom:'20px' }}>
+                            <Box sx={{ width: '533px' , marginRight: '15px', marginTop:'15px',  marginBottom:'10px' }}>
                                 {tasks[4].component} {/* Large component on the right */}
                             </Box>
                         </Grid>
                         <Grid item>
-                            <Box sx={{ width: '533px', marginLeft: '20px' , marginTop:'20px' ,  marginBottom:'20px'  }}>
+                            <Box sx={{ width: '470px', marginLeft: '15px' , marginTop:'15px' ,  marginBottom:'10px'  }}>
                                 
                                 {/* Empty to balance grid */}
                             </Box>

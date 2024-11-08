@@ -12,7 +12,7 @@ function PasswordResetPage() {
   const navigate = useNavigate(); // used to return to landing page
 
   const handleContinue = () => {
-      navigate("/dashboard", { replace: true });
+    navigate("/dashboard", { replace: true });
   };
 
   const handleBackToLogin = async () => {
@@ -20,11 +20,9 @@ function PasswordResetPage() {
       await logout({ pageContext, navigate });
     } catch (error) {
       console.log(error);
+    } finally {
+      stateContext.clearState();
     }
-    finally{
-      stateContext.updateStates({ user: null, employee: null });
-    }
-
   };
 
   return (

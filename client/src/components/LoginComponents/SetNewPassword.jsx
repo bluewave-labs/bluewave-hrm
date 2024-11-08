@@ -202,3 +202,4 @@ function SetNewPassword({ user, onSubmit }) {
 }
 
 export default SetNewPassword;
+

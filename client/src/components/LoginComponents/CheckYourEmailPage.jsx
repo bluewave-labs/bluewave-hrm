@@ -72,3 +72,4 @@ CheckYourEmailPage.propTypes = {};
 
 //Default values for this component
 CheckYourEmailPage.defaultProps = {};
+

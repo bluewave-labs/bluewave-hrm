@@ -81,3 +81,4 @@ ForgotPasswordPage.propTypes = {};
 
 //Default values for this component
 ForgotPasswordPage.defaultProps = {};
+

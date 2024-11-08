@@ -18,8 +18,6 @@ import { useState, forwardRef, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { colors } from "../../assets/Styles";
 import StateContext from "../../context/StateContext";
-//import { WidthWideTwoTone } from "@mui/icons-material";
-
 const Link = forwardRef(function Link(itemProps, ref) {
   return (
     <RouterLink
@@ -69,7 +67,7 @@ const items = [
   { name: "People", menuItem: "people" },
   { name: "Time off", menuItem: "timeoff" },
   { name: "Surveys", menuItem: "surveys" },
-  { name: "Reporting", menuItem: "reporting" },
+ // { name: "Reporting", menuItem: "reporting" },
 ];
 
 /**
@@ -83,6 +81,7 @@ export default function SideMenu({ style, onSelect }) {
   const stateContext = useContext(StateContext);
   const user = useContext(StateContext).state.user;
   const isAdmin = user && user.permission.id === 1;
+  const isManager = user && user.permission.id === 2;
     
     const [selectedIndex, setSelectedIndex] = useState(isAdmin ? 0 : 2);
 
@@ -139,6 +138,15 @@ export default function SideMenu({ style, onSelect }) {
               />
             );
           })}
+            {(isAdmin || isManager) && (
+            <CustomizedListItem
+              primary={"Reporting"}
+              index={5}
+              menuItem={"reporting"}
+              selected={selectedIndex === 5}
+              handleListItemClick={handleListItemClick}
+            />
+          )}
           {isAdmin && (
             <CustomizedListItem
               primary={"Settings"}

@@ -1,9 +1,7 @@
 import axios from "axios";
 const BASE_URL = require("./BaseUrl.json").value; 
+const addCred = require("./withCredentials.json");
 
-const addCred = {
-  withCredentials: true,
-};
 
 export const fetchAll = async () => {
   try {

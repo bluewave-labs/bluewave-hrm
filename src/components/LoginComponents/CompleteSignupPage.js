@@ -2,6 +2,7 @@ import React from "react";
 import SingupPage from "./SingupPage";
 import { useParams } from "react-router-dom";
 import Placeholder from "../PeopleComponents/Placeholder";
+import ErrorPage from "../Error/ErrorPage";
 const api = require("../../assets/FetchServices");
 
 export default function CompleteSignup() {
@@ -12,7 +13,8 @@ export default function CompleteSignup() {
   React.useEffect(() => {
     async function fetch() {
       try {
-        const user = await api.user.fetchOneByToken({token});
+        const user = await api.user.fetchOneByToken(token);
+        // User will be null if token is not valid
         setUser(user);
       } catch (err) {
         console.log(err);
@@ -22,10 +24,8 @@ export default function CompleteSignup() {
     fetch();
   }, []);
 
-  if(error){
-    return (<Placeholder>
-      <h1>Page not found</h1>
-  </Placeholder>
+  if(error || !user){ // Display error page if there is an error or no user
+    return (<ErrorPage />
     )
 }
   return (

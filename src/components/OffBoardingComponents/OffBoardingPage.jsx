@@ -1,23 +1,60 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
-import { Step, StepLabel, Stepper } from "@mui/material";
 import { multiStepContext } from "../../context/stepContext";
 import FinalStep from "./FinalStep";
-import {
-  bgcolor,
-  Box,
-  display,
-  height,
-  margin,
-  padding,
-  textAlign,
-  width,
-} from "@mui/system";
+import { Box } from "@mui/system";
+import CustomizedSteppers from "../SetupCompanyMenu/CustomizedSteppers";
+import StateContext from "../../context/StateContext";
+import { useNavigate } from "react-router-dom";
+const api = require("../../assets/FetchServices");
 
 function OffBoardingPage() {
-  const { currentStep } = useContext(multiStepContext);
+  const { currentStep, finalData } = useContext(multiStepContext);
+  const stateContext = useContext(StateContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (!stateContext.state.user) {
+          const currentUser = await api.user.refresh();
+
+          if (currentUser) {
+            // Get associated employee record
+            const currentEmployee = await api.employee.fetchOneByEmail(
+              currentUser.email
+            );
+
+            const data = {
+              user: currentUser,
+              employee: currentEmployee,
+            };
+            //Set logo =
+            try {
+              const res = await api.company.fetchLogo();
+              const logo = `data:image/png;base64,${atob(res)}`;
+              if (logo) {
+                data["logo"] = logo;
+              }
+            } catch (error) {
+              console.log("Error, failed to reload logo");
+            }
+            // console.log({ data });
+            stateContext.updateStates(data);
+          } else {
+            throw "No active session, please log in.";
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        navigate("/", { replace: true }); // Redirect to login page
+      }
+    }
+    fetchData();
+    // console.log({ stateContext });
+  }, []);
+
   const stepStyle = {
     "&.MuiStepper-root": {
       padding: "50px 50px",
@@ -73,28 +110,23 @@ function OffBoardingPage() {
     <>
       <Box
         width={"1003px"}
-        margin={"20px auto"}
-        paddingInline={0}
-        sx={{ border: "2px solid #ebebeb" }}
+        height={"166px"}
+        margin={"125px auto 49px auto"}
+        sx={{
+          border: "2px solid #ebebeb",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
       >
-        <Stepper
-          activeStep={currentStep - 1}
-          orientation="horizontal"
-          sx={stepStyle}
-        >
-          <Step>
-            <StepLabel>Start</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Sign and Upload</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Complete questionnaire </StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Finish </StepLabel>
-          </Step>
-        </Stepper>
+        <CustomizedSteppers
+          stepnumber={currentStep - 1}
+          steps={[
+            { label: "Start", description: "" },
+            { label: "Sign and Upload", description: "" },
+            { label: "Complete questionnaire", description: "" },
+            { label: "Finish", description: "" },
+          ]}
+        />
       </Box>
       {showstep(currentStep)}
     </>

@@ -124,7 +124,7 @@ function EmployeesRoleGraph() {
         border: '1px solid #EAECF0',
         borderRadius: '12px',
         boxShadow: 'none',
-        width: '532px',
+        width: '470px',
         height: '296px',
         backgroundColor: '#FFFFFF',
         display: 'flex',
