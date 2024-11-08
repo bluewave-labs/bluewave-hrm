@@ -7,16 +7,21 @@ import Placeholder from "./components/PeopleComponents/Placeholder.js";
 import CompleteSignup from "./components/LoginComponents/CompleteSignupPage.js";
 import OffBoardingPage from "./components/OffBoardingComponents/OffBoardingPage.jsx";
 import { StepContent } from "@mui/material";
+import ProfilePages from "./containers/ProfilePages.js";
 
 function App() {
   return (
     <StateProvider>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        {/* <Route path="/" element={<LandingPage />} />
         <Route path="/resetpassword/:id" element={<SetNewPasswordPage />} />
         <Route path="/complete-signup/:token" element={<CompleteSignup />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="off-boarding/:token" element={<OffBoardingPage />} />
+        <Route path="off-boarding/:token" element={<OffBoardingPage />} /> */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="profile" element={<ProfilePages />} />
+
         <Route
           path="*"
           element={

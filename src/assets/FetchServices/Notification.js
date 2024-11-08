@@ -4,7 +4,6 @@ const BASE_URL = require("./BaseUrl.json").value;
 const addCred = {
   withCredentials: true,
 };
-
 export const fetchAll = async () => {
   try {
     const url = `${BASE_URL}/api/notifications`;

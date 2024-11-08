@@ -63,7 +63,7 @@ export const remove = async (id) => {
 export const fetchLogo = async () => {
   try {
     const url = `${BASE_URL}/api/company/prop/logo`;
-    const res = await axios.post(url, addCred);
+    const res = await axios.post(url);
     return res.data;
   } catch (err) {
     //console.log("err", err);
