@@ -1,18 +1,18 @@
 const Sequelize = require("sequelize");
 require("dotenv").config();
 
-const sequelize = new Sequelize("hrm", "admin", "hrm", {
-  host: "54.173.233.239",
-  port: "5432",
-  dialect: process.env.dialect,
-  define: {
-    //freezeTableName: true,
-  },
-  dialectOptions: {
-    connectTimeout: 60000
-  }
-});
-*/
+// const sequelize = new Sequelize("hrm", "admin", "hrm", {
+//   host: "54.173.233.239",
+//   port: "5432",
+//   dialect: process.env.dialect,
+//   define: {
+//     //freezeTableName: true,
+//   },
+//   dialectOptions: {
+//     connectTimeout: 60000
+//   }
+// });
+// */
 const sequelize = new Sequelize(
   process.env.DB,
   process.env.USER,
