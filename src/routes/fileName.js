@@ -1,5 +1,5 @@
-const controller = require("../../controllers/Onboarding/fileName");
-const { requireAuth } = require("../../../config/authJwt");
+const controller = require("../controllers/fileName");
+const { requireAuth } = require("../../config/authJwt");
 
 module.exports = (router) => {
     router.route("/filenames").get(controller.showAll);

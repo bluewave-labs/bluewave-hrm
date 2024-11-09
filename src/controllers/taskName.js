@@ -1,11 +1,11 @@
-const db = require("../../../models");
+const db = require("../../models");
 require("dotenv").config();
-const message = require("../../../constants/messages.json");
+const message = require("../../constants/messages.json");
 
-//Retrieve all tasks
+//Retrieve all task names
 exports.showAll = async (req, res, next) => {
-    const data = await db.task.findAll({
-        attributes: { exclude: ["createdAt", "updatedAt"] }
+    const data = await db.taskName.findAll({
+        attributes: { exclude: ["createdAt", "updatedAt"]}
     });
     if (!data) {
         res.send("No results found");
@@ -15,11 +15,11 @@ exports.showAll = async (req, res, next) => {
     }
 };
 
-//Retrieve a task with a given id
+//Retrieve a task name with a given id
 exports.showOne = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.task.findByPk(id);
+        const data = await db.taskName.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -33,43 +33,23 @@ exports.showOne = async (req, res, next) => {
     }
 };
 
-//Retrieve all tasks with a given onboarding id
-exports.showAllByOnboarding = async (req, res, next) => {
-    const onBoardingId = req.params.onboardingid;
-    try {
-        const data = await db.task.findAll({
-            where: { onBoardingId: onBoardingId }
-        });
-        if (data === null) {
-            res.status(404).send("Not found!");
-        }
-        else {
-            res.status(200).send(data);
-        }
-    }
-    catch (err) {
-        console.log(err);
-        res.status(400).send({ message: err.message || message.failed });
-    }
-};
-
-//Create a task
+//Create a task name
 exports.createRecord = async (req, res, next) => {
     try {
-        const data = await db.task.create(req.body);
+        const data = await db.taskName.create(req.body);
         res.status(201).send(data);
     }
     catch (err) {
         console.log(err);
         res.status(400).send({ message: err.message || message.failed });
     }
-}
+};
 
-//Update a task
+//Update a task name
 exports.updateRecord = async (req, res, next) => {
     const updatedData = req.body;
     try {
-        const data = await db.task.findByPk(updatedData.id);
+        const data = await db.taskName.findByPk(updatedData.id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -85,19 +65,18 @@ exports.updateRecord = async (req, res, next) => {
     }
 };
 
-//Delete a task
+//Delete a task name
 exports.deleteRecord = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.task.findByPk(id);
+        const data = await db.taskName.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
         else {
-            await db.task.destroy({
+            await db.taskName.destroy({
                 where: { id: id }
             });
-            res.status(204).send({ message: message.deleted });
         }
     }
     catch (err) {

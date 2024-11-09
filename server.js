@@ -48,12 +48,7 @@ db.sequelize.sync({ force: true }).then(async () => {
 
   await data.populateTables(db);
 
-<<<<<<< HEAD
-//   // await data.populatePermissionTable(db);
-//   await data.populatePermissionTable(db);
-=======
   // await data.populatePermissionTable(db);
->>>>>>> 4fba0d3f7d489389a082bd99594691b635975de1
 
   console.log("Sync operation successful.");
 });

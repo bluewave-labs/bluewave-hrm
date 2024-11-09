@@ -20,7 +20,7 @@ class EmailService {
     this.loadTemplate = (templateName) => {
       const templatePath = path.join(
         __dirname,
-        `../../client/templates/${templateName}.mjml`
+        `../../constants/templates/${templateName}.mjml`
       );
       console.log("path:", templatePath);
       const templateContent = fs.readFileSync(templatePath, "utf8");

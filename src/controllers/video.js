@@ -1,13 +1,13 @@
-const db = require("../../../models");
+const db = require("../../models");
 require("dotenv").config();
-const message = require("../../../constants/messages.json");
+const message = require("../../constants/messages.json");
 
-//Retrieve all task names
+//Retrieve all videos
 exports.showAll = async (req, res, next) => {
-    const data = await db.taskName.findAll({
-        attributes: { exclude: ["createdAt", "updatedAt"]}
+    const data = await db.video.findAll({
+        attributes: { exclude: ["createdAt", "updatedAt"] }
     });
-    if (!data) {
+    if (!data) { 
         res.send("No results found");
     }
     else {
@@ -15,11 +15,11 @@ exports.showAll = async (req, res, next) => {
     }
 };
 
-//Retrieve a task name with a given id
+//Retrieve a video with a given id
 exports.showOne = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.taskName.findByPk(id);
+        const data = await db.video.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -33,10 +33,10 @@ exports.showOne = async (req, res, next) => {
     }
 };
 
-//Create a task name
+//Create a video
 exports.createRecord = async (req, res, next) => {
     try {
-        const data = await db.taskName.create(req.body);
+        const data = await db.video.create(req.body);
         res.status(201).send(data);
     }
     catch (err) {
@@ -45,11 +45,11 @@ exports.createRecord = async (req, res, next) => {
     }
 };
 
-//Update a task name
+//Update a video
 exports.updateRecord = async (req, res, next) => {
     const updatedData = req.body;
     try {
-        const data = await db.taskName.findByPk(updatedData.id);
+        const data = await db.video.findByPk(updatedData.id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
@@ -65,18 +65,19 @@ exports.updateRecord = async (req, res, next) => {
     }
 };
 
-//Delete a task name
+//Delete a video
 exports.deleteRecord = async (req, res, next) => {
     const id = req.params.id;
     try {
-        const data = await db.taskName.findByPk(id);
+        const data = await db.video.findByPk(id);
         if (data === null) {
             res.status(404).send("Not found!");
         }
         else {
-            await db.taskName.destroy({
+            await db.video.destroy({
                 where: { id: id }
             });
+            res.status(204).send({ message: message.deleted });
         }
     }
     catch (err) {

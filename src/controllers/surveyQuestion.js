@@ -1,6 +1,6 @@
-const db = require("../../../models");
+const db = require("../../models");
 require("dotenv").config();
-const message = require("../../../constants/messages.json");
+const message = require("../../constants/messages.json");
 
 //Retrieve all survey questions
 exports.showAll = async (req, res, next) => {

@@ -1,5 +1,5 @@
-const controller = require("../../controllers/Onboarding/video");
-const { requireAuth } = require("../../../config/authJwt");
+const controller = require("../controllers/video");
+const { requireAuth } = require("../../config/authJwt");
 
 module.exports = (router) => {
     router.route("/videos").get(controller.showAll);

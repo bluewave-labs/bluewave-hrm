@@ -1,5 +1,5 @@
-const controller = require("../../controllers/Onboarding/onBoarding");
-const { requireAuth } = require("../../../config/authJwt");
+const controller = require("../controllers/onBoarding");
+const { requireAuth } = require("../../config/authJwt");
 
 module.exports = (router) => {
     router.route("/onboarding").get(controller.showAll);
