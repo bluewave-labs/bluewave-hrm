@@ -18,14 +18,14 @@ const offBoardingQuestion = require("./offBoardingQuestion");
 const offBoardingResponse = require("./offBoardingResponse");
 const offBoardingDocument = require("./offBoardingDocument");
 const notification = require("./notification");
-const onBoarding = require("./Onboarding/onBoarding");
-const video = require("./Onboarding/video");
-const file = require("./Onboarding/file");
-const fileName = require("./Onboarding/fileName");
-const task = require("./Onboarding/task");
-const taskName = require("./Onboarding/taskName.js");
-const surveyQuestion = require("./Onboarding/surveyQuestion");
-const surveyResponse = require("./Onboarding/surveyResponse");
+const onBoarding = require("./onBoarding");
+const video = require("./video");
+const file = require("./file");
+const fileName = require("./fileName");
+const task = require("./task");
+const taskName = require("./taskName.js");
+const surveyQuestion = require("./surveyQuestion");
+const surveyResponse = require("./surveyResponse");
 
 module.exports = (router) => {
   authentication(router);

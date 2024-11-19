@@ -82,15 +82,15 @@ db.offBoardingDocumentation = require("./offBoardingDocumentation")(
 
 db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
 
-db.onBoarding = require("./Onboarding/onBoarding")(sequelize, Sequelize);
-db.video = require("./Onboarding/video")(sequelize, Sequelize);
-db.file = require("./Onboarding/file")(sequelize, Sequelize);
-db.fileName = require("./Onboarding/fileName")(sequelize, Sequelize);
-db.task = require("./Onboarding/task")(sequelize, Sequelize);
-db.taskName = require("./Onboarding/taskName")(sequelize, Sequelize);
-db.surveyQuestion = require("./Onboarding/surveyQuestion")(sequelize, Sequelize);
-db.surveyResponse = require("./Onboarding/surveyResponse")(sequelize, Sequelize);
-db.onBoardingSurvey = require("./Onboarding/onBoardingSurvey")(sequelize, Sequelize);
+db.onBoarding = require("./onBoarding")(sequelize, Sequelize);
+db.video = require("./video")(sequelize, Sequelize);
+db.file = require("./file")(sequelize, Sequelize);
+db.fileName = require("./fileName")(sequelize, Sequelize);
+db.task = require("./task")(sequelize, Sequelize);
+db.taskName = require("./taskName")(sequelize, Sequelize);
+db.surveyQuestion = require("./surveyQuestion")(sequelize, Sequelize);
+db.surveyResponse = require("./surveyResponse")(sequelize, Sequelize);
+db.onBoardingSurvey = require("./onBoardingSurvey")(sequelize, Sequelize);
 
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {

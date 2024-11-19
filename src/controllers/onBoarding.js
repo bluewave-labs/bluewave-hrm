@@ -1,6 +1,9 @@
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
+const mailService = require("../helper/email");
+const EmailService = require("../helper/emailServices");
+const mjml2html = require("mjml");
 
 //Retrieve all onboarding processes
 exports.showAll = async (req, res, next) => {
@@ -164,6 +167,34 @@ exports.deleteRecord = async (req, res, next) => {
             });
             res.status(204).send({ message: message.deleted });
         }
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send({ message: err.message || message.failed });
+    }
+};
+
+//Send an email to HR to notify them that an employee has finished onboarding
+exports.completeOnboarding = async (req, res, next) => {
+    const empId = req.params.empid;
+    const employee = await db.employee.findByPk(empId);
+    const { firstName, lastName } = employee;
+
+    try {
+        const context = {
+            employeeName: `${firstName} ${lastName}`,
+            senderName: "BlueWave Labs Management"
+        };
+
+        const emailService = new EmailService();
+        const messageId = await emailService.buildAndSendEmail(
+            "onboarding",
+            context,
+            "gabriel.chan166@gmail.com",
+            "An employee has completed Onboarding"
+        );
+        console.log(`Email sent successfully! Message ID: ${messageId}`);
+        res.status(200).send("Email sent");
     }
     catch (err) {
         console.log(err);

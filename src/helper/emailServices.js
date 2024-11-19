@@ -36,6 +36,7 @@ class EmailService {
       //welcomeEmailTemplate: this.loadTemplate("welcomeEmail"),
       timeOff: this.loadTemplate("timeoff"),
       offboarding: this.loadTemplate("offboarding"),
+      onboarding: this.loadTemplate("onboarding")
     };
 
     /**
@@ -43,8 +44,8 @@ class EmailService {
      * @type {Object}
      */
     this.transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
+      //host: process.env.EMAIL_HOST,
+      //port: process.env.EMAIL_PORT,
       service: "gmail",
       secure: false,
       auth: {
