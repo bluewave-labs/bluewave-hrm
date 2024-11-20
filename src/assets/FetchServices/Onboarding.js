@@ -73,3 +73,15 @@ export const remove = async (id) => {
         return null;
     }
 };
+
+export const completeOnboarding = async (empId) => {
+    try {
+        const url = `${BASE_URL}/api/onboarding/${empId}/submit`;
+        const res = await axios.post(url, addCred);
+        return res.data;
+    }
+    catch (err) {
+        console.log(err);
+        return null;
+    }
+};

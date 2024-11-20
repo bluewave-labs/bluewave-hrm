@@ -2,7 +2,7 @@ import Box from "@mui/system/Box";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
-import { fetchByEmployeeId, update } from "../../assets/FetchServices/Onboarding";
+import { fetchByEmployeeId, update, completeOnboarding as complete } from "../../assets/FetchServices/Onboarding";
 import CustomizedSteppers from "../CustomizedSteppers";
 import IntroductoryMessage from "./IntroductoryMessage";
 import OnboardingVideos from "./OnboardingVideos";
@@ -55,14 +55,15 @@ export default function OnboardingPage({style}) {
 
     //Function for saving onboarding process for later
     function save() {
-        console.log(onboardingStatus);
+        //console.log(onboardingStatus);
         update(onboardingStatus);
         navigate("/dashboard", { replace: true });
     };
 
     //Function for marking the onboarding process as complete
     function completeOnboarding() {
-        console.log("Executing completeOnboarding")
+        //console.log("Executing completeOnboarding")
+        complete(currentUser);
         update({
             ...onboardingStatus,
             isComplete: true

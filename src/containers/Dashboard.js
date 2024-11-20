@@ -97,6 +97,7 @@ export default function Dashboard() {
         />
         <Box sx={{
           width: "100%",
+          height: "100vh",
           paddingLeft: "280px",
           paddingRight: "120px",
           paddingTop: "137px",
