@@ -97,7 +97,7 @@ export default function CompanyProfileForm({ style }) {
   useEffect(() => {
     const logoBuffer = company.companyLogo;
     if (logoBuffer) {
-      setLogoSrc(Buffer.from(logoBuffer));
+      setLogoSrc(window.Buffer.from(logoBuffer));
     }
     // if (logoBuffer?.data) {
     //   // Convert buffer to Base64 string
