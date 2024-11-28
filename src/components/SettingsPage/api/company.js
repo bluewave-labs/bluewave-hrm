@@ -5,6 +5,7 @@ const getCompanyDetails = async () => {
     const response = await axios.post(
       `http://localhost:3000/api/company/${companyId}`
     );
+    console.log("API response", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching company:", error);

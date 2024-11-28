@@ -5,7 +5,8 @@ import { Autocomplete } from "@mui/material";
 import { TextField } from "../styles";
 
 export const DeleteTimeOffPolicy = ({ form, selectedItem }) => {
-  const { timeOffPolicies } = useSettingsContext();
+  const context = useSettingsContext();
+  const timeOffPolicies = context?.timeOffPolicies;
 
   const transferTimeOffPoliciesOptions = useMemo(() => {
     if (!selectedItem) return [];

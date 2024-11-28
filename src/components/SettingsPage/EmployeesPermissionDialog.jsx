@@ -32,7 +32,9 @@ const Text = styled(Typography)({
 });
 
 export default function EmployeesPermissionDialog({ open, onClose }) {
-  const { employees, updatedPermissions } = useSettingsContext();
+  const context = useSettingsContext();
+  const employees = context?.employees;
+  const updatedPermissions = context?.updatedPermissions;
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [managedEmployees, setManagedEmployees] = useState("");
 
@@ -95,7 +97,7 @@ export default function EmployeesPermissionDialog({ open, onClose }) {
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <MenuList>
-              {updatedPermissions.map(({ employee }) => {
+              {updatedPermissions?.map(({ employee }) => {
                 return (
                   <Button
                     variant="text"
@@ -109,7 +111,7 @@ export default function EmployeesPermissionDialog({ open, onClose }) {
                       textTransform: "none",
                       color: "#667085",
                       backgroundColor:
-                        selectedEmployee.empId === employee.empId
+                        selectedEmployee?.empId === employee?.empId
                           ? "#F9FAFB"
                           : "",
                     }}
@@ -130,7 +132,7 @@ export default function EmployeesPermissionDialog({ open, onClose }) {
                   fontSize: "13px",
                 }}
               >
-                {`Select all employees under ${selectedEmployee.firstName}`}
+                {`Select all employees under ${selectedEmployee?.firstName}`}
               </Typography>
             )}
             <Autocomplete
@@ -150,9 +152,9 @@ export default function EmployeesPermissionDialog({ open, onClose }) {
               }}
               onChange={(event, value) => addNewManagedEmployee(value)}
             />
-            {managedEmployees.length > 0 && (
+            {managedEmployees?.length > 0 && (
               <Grid container spacing={2}>
-                {managedEmployees.map((employee) => (
+                {managedEmployees?.map((employee) => (
                   <Grid item xs={6} key={employee.empId}>
                     <Chip
                       sx={{

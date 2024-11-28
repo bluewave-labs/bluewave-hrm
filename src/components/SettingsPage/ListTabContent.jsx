@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import HRMButton from "../Button/HRMButton";
 import Toast from "./Toast";
 import SettingsDialog from "./SettingsDialog";
-import Grid from "@mui/system/Unstable_Grid";
+import { Grid } from "@mui/material";
 import ListTable from "./ListTable";
 import { timeOffPoliciesApi } from "./api";
 
@@ -49,7 +49,10 @@ export default function ListTabContent({
 
   const itemsToDisplay = useMemo(
     () =>
-      contentList.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+      contentList?.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE
+      ),
     [currentPage, contentList]
   );
 
@@ -73,7 +76,7 @@ export default function ListTabContent({
   const handlePage = (pageNumber) => {
     if (
       pageNumber > 0 &&
-      pageNumber <= Math.ceil(contentList.length / PAGE_SIZE)
+      pageNumber <= Math.ceil(contentList?.length / PAGE_SIZE)
     ) {
       setCurrentPage(pageNumber);
     }
@@ -192,7 +195,7 @@ export default function ListTabContent({
           setToast={setToast}
         />
 
-        {contentList.length > 0 ? (
+        {contentList?.length > 0 ? (
           <>
             <ListTable
               openDialog={openDialog}
@@ -200,9 +203,9 @@ export default function ListTabContent({
               contentList={itemsToDisplay}
               sx={{ marginBottom: "40px" }}
             />
-            {contentList.length > PAGE_SIZE && (
+            {contentList?.length > PAGE_SIZE && (
               <PagesNavBar
-                numOfEntries={contentList.length}
+                numOfEntries={contentList?.length}
                 currentPage={currentPage}
                 handlePage={handlePage}
               />

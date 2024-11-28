@@ -52,12 +52,13 @@ export default function PermissionsDialog({
   onClose,
   openEmployeesPermissionDialog,
 }) {
-  const { updatedPermissions } = useSettingsContext();
+  const context = useSettingsContext();
+  const updatedPermissions = context?.updatedPermissions;
 
   const onSave = () => {
     openEmployeesPermissionDialog(true);
     onClose();
-  }
+  };
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -97,12 +98,12 @@ export default function PermissionsDialog({
               </TableRow>
             </TableHead>
             <TableBody>
-              {updatedPermissions.map(({ employee, newPermission }) => {
+              {updatedPermissions?.map(({ employee, newPermission }) => {
                 return (
-                  <TableRow key={`${employee.firstName}${employee.lastName}`}>
+                  <TableRow key={`${employee?.firstName}${employee?.lastName}`}>
                     <TableBodyCell>
                       <Text>
-                        {employee.firstName} {employee.lastName}
+                        {employee?.firstName} {employee?.lastName}
                       </Text>
                     </TableBodyCell>
                     <TableBodyCell>

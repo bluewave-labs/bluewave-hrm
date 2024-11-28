@@ -6,10 +6,10 @@ const departmentColumns = [
 ];
 
 export const useDepartmentPeople = () => {
-  const { departmentsPeople } = useSettingsContext();
+  const context = useSettingsContext();
 
   return {
-    data: departmentsPeople,
+    data: context?.departmentsPeople,
     columns: departmentColumns,
   };
 };

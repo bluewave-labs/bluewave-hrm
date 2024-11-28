@@ -6,10 +6,10 @@ const jobTitlesColumns = [
 ];
 
 export const useJobTitlesPeople = () => {
-  const { jobTitlesPeople } = useSettingsContext();
+  const context = useSettingsContext();
 
   return {
-    data: jobTitlesPeople,
+    data: context?.jobTitlesPeople,
     columns: jobTitlesColumns,
   };
 };

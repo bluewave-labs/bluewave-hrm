@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Box from "@mui/system/Box";
-import Grid from "@mui/system/Unstable_Grid";
+import { Grid } from "@mui/material";
 import { Buffer } from "buffer";
 import {
   styled,
@@ -60,7 +60,7 @@ const parseDefaultValues = (company) => ({
   companyWebsite: company?.companyWebsite || "",
   companyDomain: company?.companyDomain || "",
   administratorEmail: company?.administratorEmail || "",
-  companyLogo: company.companyLogo || "",
+  companyLogo: company?.companyLogo || "",
   city: company?.city || "",
   streetAddress: company?.streetAddress || "",
   unitSuite: company?.unitSuite || "",
@@ -73,7 +73,9 @@ const parseDefaultValues = (company) => ({
 });
 
 export default function CompanyProfileForm({ style }) {
-  const { company } = useSettingsContext();
+  const context = useSettingsContext();
+  console.log("context", context);
+  const company = context?.company;
   const [countries, setCountries] = useState([]);
 
   // const [companyLogo, setCompanyLogo] = useState();
@@ -95,16 +97,16 @@ export default function CompanyProfileForm({ style }) {
   });
 
   useEffect(() => {
-    const logoBuffer = company.companyLogo;
+    const logoBuffer = company?.companyLogo;
     if (logoBuffer) {
-      setLogoSrc(window.Buffer.from(logoBuffer));
+      setLogoSrc(Buffer.from(logoBuffer));
     }
     // if (logoBuffer?.data) {
     //   // Convert buffer to Base64 string
     //   const base64String = Buffer.from(logoBuffer.data).toString('base64');
     //   setLogoSrc(`data:image/png;base64,${base64String}`);
     // }
-  }, [company.companyLogo]);
+  }, [company?.companyLogo]);
 
   console.log("COMPANY", company);
   console.log("LOGO", logoSrc);
@@ -276,7 +278,11 @@ export default function CompanyProfileForm({ style }) {
           <Grid item xs={7} sx={{ display: "flex" }}>
             {logoSrc ? (
               <img
-                src={logoSrc.includes("data:image") ? logoSrc : `data:image/jpeg;base64,${logoSrc}`}
+                src={
+                  logoSrc.includes("data:image")
+                    ? logoSrc
+                    : `data:image/jpeg;base64,${logoSrc}`
+                }
                 style={{
                   width: "200px",
                   height: "200px",

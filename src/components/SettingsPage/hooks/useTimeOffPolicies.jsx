@@ -7,10 +7,10 @@ const policiesColumns = [
 ];
 
 export const useTimeOffPolicies = () => {
-  const { timeOffPolicies } = useSettingsContext();
+  const context = useSettingsContext();
 
   return {
-    data: timeOffPolicies,
+    data: context?.timeOffPolicies,
     columns: policiesColumns,
   };
 }; 

@@ -12,8 +12,11 @@ export const useDepartmentData = ({
   setToast,
   action,
 }) => {
-  const { departments, fetchDepartmentsPeople, fetchDepartments, employees } =
-    useSettingsContext();
+  const context = useSettingsContext();
+  const departments = context?.departments;
+  const fetchDepartmentsPeople = context?.fetchDepartmentsPeople;
+  const fetchDepartments = context?.fetchDepartments;
+  const employees = context?.employees;
 
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);

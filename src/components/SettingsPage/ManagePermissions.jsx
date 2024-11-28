@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import PagesNavBar from "../UpdatesPage/PagesNavBar";
 import { useMemo, useState, useEffect } from "react";
-import Grid from "@mui/system/Unstable_Grid";
+import { Grid } from "@mui/material";
 import PermissionsTable from "./PermissionsTable";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Toast from "./Toast";
@@ -37,7 +37,8 @@ export default function ManagePermissions({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEmployeesPermissionDialogOpen, setIsEmployeesPermissionDialogOpen] =
     useState(false);
-  const { updatedPermissions } = useSettingsContext();
+  const context = useSettingsContext();
+  const updatedPermissions = context?.updatedPermissions;
 
   const [toast, setToast] = useState({
     open: false,
@@ -48,7 +49,7 @@ export default function ManagePermissions({
   console.log("updatedPermissions", updatedPermissions);
 
   useEffect(() => {
-    const filteredItems = contentList.filter((item) =>
+    const filteredItems = contentList?.filter((item) =>
       `${item.firstName} ${item.lastName}`
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
@@ -60,7 +61,7 @@ export default function ManagePermissions({
   const itemsToDisplay = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
     const end = start + PAGE_SIZE;
-    return filteredContentList.slice(start, end);
+    return filteredContentList?.slice(start, end);
   }, [currentPage, filteredContentList]);
 
   const handlePage = (pageNumber) => {
@@ -167,7 +168,7 @@ export default function ManagePermissions({
         >
           <HRMButton
             mode="primary"
-            enabled={updatedPermissions.length > 0}
+            enabled={updatedPermissions?.length > 0}
             onClick={openDialog}
           >
             Save changes

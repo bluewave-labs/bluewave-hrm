@@ -18,8 +18,8 @@ const Text = styled(Typography)({
 });
 
 export default function JobTitlesTabContent({ style }) {
-  const { jobTitles } = useSettingsContext();
-  console.log("jobTitles", jobTitles);
+  const context = useSettingsContext();
+  const jobTitles = context?.jobTitles;
   const [currentPage, setCurrentPage] = useState(1); //The current page number
   //Function for changing the page number
   function handlePage(n) {

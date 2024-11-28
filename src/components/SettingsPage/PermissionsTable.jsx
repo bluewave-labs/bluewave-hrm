@@ -39,8 +39,11 @@ const TableBodyCell = styled(TableCell)({
 });
 
 export default function PermissionsTable({ contentList, style }) {
-  const { updatedPermissions, setUpdatedPermissions, isLoading } =
-    useSettingsContext();
+  const context = useSettingsContext();
+  console.log("context", context);
+  const updatedPermissions = context?.updatedPermissions;
+  const setUpdatedPermissions = context?.setUpdatedPermissions;
+  const isLoading = context?.isLoading;
 
   const updatePermission = (newPermission, employee) => {
     setUpdatedPermissions((updatedPermissions) => {
@@ -50,13 +53,13 @@ export default function PermissionsTable({ contentList, style }) {
       };
 
       const isEmployeeAlreadySelected = updatedPermissions.some(
-        (emp) => emp.employee.id === updatedPermissionEmployee.employee.id
+        (emp) => emp.employee.id === updatedPermissionEmployee?.employee?.id
       );
       if (!isEmployeeAlreadySelected) {
         return [...updatedPermissions, updatedPermissionEmployee];
       }
 
-      const filteredEmployees = updatedPermissions.filter(
+      const filteredEmployees = updatedPermissions?.filter(
         (emp) => emp.employee.id !== employee.id
       );
 
@@ -70,7 +73,7 @@ export default function PermissionsTable({ contentList, style }) {
 
   console.log("updatedPermissions", updatedPermissions, isLoading);
 
-  if (isLoading.employees || isLoading.users)
+  if (isLoading?.employees || isLoading?.users)
     return (
       <Stack
         direction="row"
@@ -81,7 +84,7 @@ export default function PermissionsTable({ contentList, style }) {
         <CircularProgress />
       </Stack>
     );
-  if (contentList.length === 0) return <p>There are no records right now.</p>;
+  if (contentList?.length === 0) return <p>There are no records right now.</p>;
 
   return (
     <TableContainer
@@ -124,7 +127,10 @@ export default function PermissionsTable({ contentList, style }) {
               <TableRow key={item.id}>
                 <TableBodyCell>
                   <Stack direction="row" alignItems="center" spacing={2}>
-                    <Avatar alt="Employee Photo" src={"data:image/png;base64," + atob(item.photo)} />
+                    <Avatar
+                      alt="Employee Photo"
+                      src={"data:image/png;base64," + atob(item.photo)}
+                    />
                     <Text>{`${item?.firstName} ${item?.lastName}`}</Text>
                   </Stack>
                 </TableBodyCell>

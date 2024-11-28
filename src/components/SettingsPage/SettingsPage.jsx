@@ -29,15 +29,20 @@ const StyledTabPanel = styled(TabPanel)({
 
 export default function SettingsPage({ style, innerStyle }) {
   const [tab, setTab] = useState("Company profile");
-  const { data: departmentsPeopleData, columns: departmentsPeopleColumns } =
-    useDepartmentPeople();
-  const { data: jobTitlesPeopleData, columns: jobTitlesPeopleColumns } =
-    useJobTitlesPeople();
+  const getPeopleInfo = useDepartmentPeople();
+  const getJobTitlesInfo = useJobTitlesPeople();
+  const getTimeOffPoliciesInfo = useTimeOffPolicies();
+  const getPermissionsInfo = usePermissions();
+  const departmentsPeopleData = getPeopleInfo.data
+  const departmentsPeopleColumns = getPeopleInfo.columns;
+    
+  const jobTitlesPeopleData = getJobTitlesInfo.data
+  const  jobTitlesPeopleColumns = getJobTitlesInfo.columns
 
-  const { data: timeoffPoliciesData, columns: timeOffPoliciesColumns } =
-    useTimeOffPolicies();
+  const timeoffPoliciesData = getTimeOffPoliciesInfo.data;
+  const timeOffPoliciesColumns = getTimeOffPoliciesInfo.columns;
 
-  const { data: permissionsData } = usePermissions();
+  const permissionsData = getPermissionsInfo.data;
 
   console.log("permissionsData", permissionsData);
 
@@ -46,16 +51,16 @@ export default function SettingsPage({ style, innerStyle }) {
   }
 
   return (
-    <Page style={style} innerStyle={innerStyle}>
+    <div>
       <Stack
         direction="row"
         alignItems="center"
         justifyContent="space-between"
         sx={{
-          marginBottom: "10px",
+          marginBottom: "16px",
         }}
       >
-        <h3>Settings</h3>
+        <h2>Settings</h2>
       </Stack>
       <Box
         sx={{
@@ -96,7 +101,7 @@ export default function SettingsPage({ style, innerStyle }) {
               contentList={departmentsPeopleData}
               titleTabPage="Departments"
               columns={departmentsPeopleColumns}
-              tabName={tabNames.departments}
+              tabName={tabNames?.departments}
             />
           </StyledTabPanel>
           <StyledTabPanel value="Job titles">
@@ -124,6 +129,6 @@ export default function SettingsPage({ style, innerStyle }) {
           </StyledTabPanel>
         </TabContext>
       </Box>
-    </Page>
+    </div>
   );
 }

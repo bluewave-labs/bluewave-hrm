@@ -12,8 +12,11 @@ export const useJobTitleData = ({
   setToast,
   action,
 }) => {
-  const { jobTitles, fetchJobTitlesPeople, fetchJobTitles, employees } =
-    useSettingsContext();
+  const context = useSettingsContext();
+  const jobTitles = context?.jobTitles;
+  const fetchJobTitlesPeople = context?.fetchJobTitlesPeople;
+  const fetchJobTitles = context?.fetchJobTitles;
+  const employees = context?.employees;
 
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);

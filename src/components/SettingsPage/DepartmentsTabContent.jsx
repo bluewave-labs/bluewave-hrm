@@ -7,7 +7,7 @@ import HRMButton from "../Button/HRMButton";
 import Toast from "./Toast";
 import CustomDialog from "./Dialog";
 import { useSettingsContext } from "./context";
-import Grid from "@mui/system/Unstable_Grid";
+import { Grid } from "@mui/material";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -18,7 +18,9 @@ const HeadText = styled(Typography)({
 
 export default function DepartmentsTabContent({ style }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { departmentsPeople, departments } = useSettingsContext();
+  const context = useSettingsContext();
+  const departmentsPeople = context?.departmentsPeople;
+  const departments = context?.departments;
   const [selectedDepartment, setSelectedDepartment] = useState({});
   const [action, setAction] = useState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,13 +41,13 @@ export default function DepartmentsTabContent({ style }) {
     setSelectedDepartment();
   };
 
-  const departmentsToDisplay = departmentsPeople.slice(
+  const departmentsToDisplay = departmentsPeople?.slice(
     (currentPage - 1) * 8,
     currentPage * 8
   );
 
   const handlePage = (n) => {
-    if (n > 0 && n <= Math.ceil(departments.length / 8)) {
+    if (n > 0 && n <= Math.ceil(departments?.length / 8)) {
       setCurrentPage(n);
     }
   };
@@ -90,16 +92,16 @@ export default function DepartmentsTabContent({ style }) {
           setToast={setToast}
         />
 
-        {departmentsPeople.length > 0 ? (
+        {departmentsPeople && departmentsPeople.length > 0 ? (
           <>
             <DepartmentsTable
               openDialog={openDialog}
               departments={departmentsToDisplay}
               sx={{ marginBottom: "40px" }}
             />
-            {departmentsPeople.length > 10 && (
+            {departmentsPeople && departmentsPeople.length > 10 && (
               <PagesNavBar
-                numOfEntries={departmentsPeople.length}
+                numOfEntries={departmentsPeople?.length}
                 currentPage={currentPage}
                 handlePage={handlePage}
               />

@@ -5,7 +5,8 @@ import { Autocomplete } from "@mui/material";
 import { TextField } from "../styles";
 
 export const DeleteDepartment = ({ form, selectedItem }) => {
-  const { departments } = useSettingsContext();
+  const context = useSettingsContext();
+  const departments = context?.departments;
 
   const transferDepartmentOptions = useMemo(() => {
     if (!selectedItem) return [];

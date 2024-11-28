@@ -12,7 +12,9 @@ export const useTimeOffPoliciesData = ({
   setToast,
   action,
 }) => {
-  const { fetchTimeOffPolicies, timeOffPolicies } = useSettingsContext();
+  const context = useSettingsContext();
+  const fetchTimeOffPolicies = context?.fetchTimeOffPolicies;
+  const timeOffPolicies = context?.timeOffPolicies;
 
   const handleSuccess = (response) => {
     if (typeof response === "string" && response?.includes("already exists")) {

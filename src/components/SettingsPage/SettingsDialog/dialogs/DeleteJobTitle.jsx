@@ -5,7 +5,8 @@ import { Autocomplete } from "@mui/material";
 import { TextField } from "../styles";
 
 export const DeleteJobTitle = ({ form, selectedItem }) => {
-  const { jobTitles } = useSettingsContext();
+  const context = useSettingsContext();
+  const jobTitles = context?.jobTitles;
 
   const transferJobTitleOptions = useMemo(() => {
     if (!selectedItem) return [];

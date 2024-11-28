@@ -12,7 +12,11 @@ export const usePermissionData = ({
   setToast,
   action,
 }) => {
-  const { users, fetchUsers, fetchEmployees, employees } = useSettingsContext();
+  const context = useSettingsContext();
+  const users = context?.users;
+  const fetchUsers = context?.fetchUsers;
+  const fetchEmployees = context?.fetchEmployees;
+  const employees = context?.employees;
 
   const handleSuccess = (response) => {
     console.log("Data submitted successfully:", response.data);
