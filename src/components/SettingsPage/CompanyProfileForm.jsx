@@ -74,7 +74,6 @@ const parseDefaultValues = (company) => ({
 
 export default function CompanyProfileForm({ style }) {
   const context = useSettingsContext();
-  console.log("context", context);
   const company = context?.company;
   const [countries, setCountries] = useState([]);
 
@@ -107,9 +106,6 @@ export default function CompanyProfileForm({ style }) {
     //   setLogoSrc(`data:image/png;base64,${base64String}`);
     // }
   }, [company?.companyLogo]);
-
-  console.log("COMPANY", company);
-  console.log("LOGO", logoSrc);
 
   const [countryValue, setCountryValue] = useState(
     parseDefaultValues(company).country

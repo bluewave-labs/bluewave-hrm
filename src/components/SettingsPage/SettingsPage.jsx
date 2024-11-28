@@ -10,7 +10,6 @@ import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
 import ManagePermissions from "./ManagePermissions";
-import Page from "../StaticComponents/Page";
 import {
   useDepartmentPeople,
   useJobTitlesPeople,
@@ -33,18 +32,18 @@ export default function SettingsPage({ style, innerStyle }) {
   const getJobTitlesInfo = useJobTitlesPeople();
   const getTimeOffPoliciesInfo = useTimeOffPolicies();
   const getPermissionsInfo = usePermissions();
-  const departmentsPeopleData = getPeopleInfo.data
+  const departmentsPeopleData = getPeopleInfo.data;
   const departmentsPeopleColumns = getPeopleInfo.columns;
-    
-  const jobTitlesPeopleData = getJobTitlesInfo.data
-  const  jobTitlesPeopleColumns = getJobTitlesInfo.columns
+
+  const jobTitlesPeopleData = getJobTitlesInfo.data;
+  const jobTitlesPeopleColumns = getJobTitlesInfo.columns;
 
   const timeoffPoliciesData = getTimeOffPoliciesInfo.data;
   const timeOffPoliciesColumns = getTimeOffPoliciesInfo.columns;
 
   const permissionsData = getPermissionsInfo.data;
 
-  console.log("permissionsData", permissionsData);
+  console.log("SETTINGS PAGE");
 
   function handleChange(e, newValue) {
     setTab(newValue);
@@ -90,7 +89,7 @@ export default function SettingsPage({ style, innerStyle }) {
               <StyledTab label="Job titles" value="Job titles" />
               <StyledTab label="Time off" value="Time off" />
               <StyledTab label="Permissions" value="Permissions" />
-              <StyledTab label="Offboarding" value="Offboarding" />
+              {/* <StyledTab label="Offboarding" value="Offboarding" /> */}
             </TabList>
           </Box>
           <StyledTabPanel value="Company profile">

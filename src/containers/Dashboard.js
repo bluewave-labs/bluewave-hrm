@@ -12,6 +12,7 @@ import Placeholder from "../components/PeopleComponents/Placeholder";
 import UpdatesPage from "../components/UpdatesPage/UpdatesPage";
 import TimeOffPage from "../components/TimeOffPage/TimeOffPage";
 import SettingsPage from "../components/SettingsPage/SettingsPage";
+import { SettingsProvider } from "../components/SettingsPage/context";
 const api = require("../assets/FetchServices");
 
 const dashboardMenu = {
@@ -111,7 +112,11 @@ export default function Dashboard() {
           {current.people && <PeopleHome />}
           {current.timeoff && <TimeOffPage />}
           {current.reporting && <ReportsMain />}
-          {current.settings && <SettingsPage />}
+          {current.settings && (
+            <SettingsProvider>
+              <SettingsPage />
+            </SettingsProvider>
+          )}
         </Box>
       </Stack>
     </Box>
