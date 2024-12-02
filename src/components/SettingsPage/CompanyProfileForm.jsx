@@ -399,51 +399,53 @@ export default function CompanyProfileForm({ style }) {
           <Grid item xs={3}>
             <Text>Social profiles</Text>
           </Grid>
-          <Grid container xs={7} alignContent="center" spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      twitter.com/
-                    </InputAdornment>
-                  ),
-                  ...register("twitterUrl"),
-                }}
-                color="secondary"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      facebook.com/
-                    </InputAdornment>
-                  ),
-                  ...register("facebookUrl"),
-                }}
-                color="secondary"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      linkedin.com/company/
-                    </InputAdornment>
-                  ),
-                  ...register("linkedinUrl"),
-                }}
-                color="secondary"
-              />
+          <Grid item xs={7} alignContent="center">
+            <Grid container columns={10} rowSpacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        twitter.com/
+                      </InputAdornment>
+                    ),
+                    ...register("twitterUrl"),
+                  }}
+                  color="secondary"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        facebook.com/
+                      </InputAdornment>
+                    ),
+                    ...register("facebookUrl"),
+                  }}
+                  color="secondary"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        linkedin.com/company/
+                      </InputAdornment>
+                    ),
+                    ...register("linkedinUrl"),
+                  }}
+                  color="secondary"
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
