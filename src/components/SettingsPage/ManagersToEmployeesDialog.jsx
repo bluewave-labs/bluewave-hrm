@@ -34,17 +34,12 @@ const Text = styled(Typography)({
 export default function EmployeesPermissionDialog({ open, onClose }) {
   const context = useSettingsContext();
   const employees = context?.employees;
-  const updatedPermissions = context?.updatedPermissions;
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [managedEmployees, setManagedEmployees] = useState("");
-
-  // const selectEmployee = (employee) => {
-  //   setSelectedEmployee(employee);
-  //   const getManagedEmployees = employees.filter(
-  //     (emp) => emp.Manager && emp.Manager.empId === employee.empId
-  //   );
-  //   setManagedEmployees(getManagedEmployees);
-  // };
+  const updatedPermissions = context?.updatedPermissions;
+  const managersToEmployees = updatedPermissions?.filter(
+    (emp) => emp.newPermission === "Employee"
+  );
 
   const onSubmit = (data) => {
     console.log("data", data);
@@ -77,7 +72,7 @@ export default function EmployeesPermissionDialog({ open, onClose }) {
   return (
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
-        <DialogTitle>Select all employees under each manager</DialogTitle>
+        <DialogTitle>Select a manager under each employee</DialogTitle>
         <CloseIcon
           onClick={onClose}
           sx={{
@@ -97,7 +92,7 @@ export default function EmployeesPermissionDialog({ open, onClose }) {
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <MenuList>
-              {updatedPermissions?.map(({ employee }) => {
+              {managersToEmployees?.map(({ employee }) => {
                 return (
                   <Button
                     variant="text"
