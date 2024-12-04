@@ -1,7 +1,7 @@
-import axios from "axios";
+import { axios } from './axios';
 const getUsers = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/appusers");
+    const response = await axios.get("appusers");
     return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -12,7 +12,7 @@ const getUsers = async () => {
 const updateUser = async (data) => {
   try {
     const response = await axios.put(
-      "http://localhost:3000/api/appusers",
+      "appusers",
       data
     );
     return response.data;

@@ -1,8 +1,8 @@
-import axios from "axios";
+import { axios } from './axios';
 
 const getJobTitles = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/roles`);
+    const response = await axios.get("roles");
     return response.data;
   } catch (error) {
     console.error("Error fetching roles:", error);
@@ -13,7 +13,7 @@ const getJobTitles = async () => {
 const createJobTitles = async (data) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/roles`,
+      "roles",
       data
     );
     return response.data;
@@ -26,7 +26,7 @@ const createJobTitles = async (data) => {
 const editJobTitles = async (data) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/roles`,
+      "roles",
       data
     );
     return response.data;
@@ -39,7 +39,7 @@ const editJobTitles = async (data) => {
 const deleteJobTitles = async (roleId) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/roles/${roleId}`
+      `roles/${roleId}`
     );
     return response.data;
   } catch (error) {

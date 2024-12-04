@@ -1,11 +1,8 @@
-import axios from "axios";
-import employees from "./employees.json";
-
+import { axios } from './axios';
 const getEmployees = async () => {
   try {
-    // const response = await axios.get("http://localhost:3000/api/employees");
-    // return response.data;
-    return employees;
+    const response = await axios.get("employees");
+    return response.data;
   } catch (error) {
     console.error("Error fetching employees:", error);
     throw error;

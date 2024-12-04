@@ -1,9 +1,8 @@
-import axios from "axios";
+import { axios } from './axios';
 
 const getTimeOffs = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/timeoffs`);
-    console.log(response.data);
+    const response = await axios.get(`timeoffs`);
     return response.data;
   } catch (error) {
     console.error("Error fetching timeoffs:", error);
@@ -14,7 +13,7 @@ const getTimeOffs = async () => {
 const createTimeOff = async (data) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/timeoffs`,
+      `timeoffs`,
       data
     );
     return response.data;
@@ -27,7 +26,7 @@ const createTimeOff = async (data) => {
 const editTimeOff = async (data) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/timeoffs`,
+      `timeoffs`,
       data
     );
     return response.data;
@@ -38,18 +37,16 @@ const editTimeOff = async (data) => {
 };
 
 const deleteTimeOffInitiate = async (data) => {
-  console.log("deleteTimeOffInitiate");
   const { timeOffId, newTimeOffId } = data;
   console.log({ timeOffId: data.timeOffId });
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/timeoffs/deletion/initiate`,
+      `timeoffs/deletion/initiate`,
       { timeOffId: timeOffId }
     );
     const { message } = response.data;
     const { timeOffId: oldTimeOffId, ...changedMessage } = message;
 
-    console.log("return API response");
     const deleteData = {
       ...changedMessage,
       oldTimeOffId,
@@ -64,11 +61,9 @@ const deleteTimeOffInitiate = async (data) => {
 };
 
 const deleteTimeOffConfirm = async (data) => {
-  console.log("data deleteTimeOffConfirm");
-  console.log(data);
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/timeoffs/deletion/confirm/ `,
+      "timeoffs/deletion/confirm/ ",
       { data }
     );
     return response.data;
@@ -81,9 +76,9 @@ const deleteTimeOffConfirm = async (data) => {
 const getRenewDateMonth = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/timeoffs/renewaldate/get`
+      "timeoffs/renewaldate/get"
     );
-    console.log(response.data);
+    console.log("getRenewDateMonth", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching timeoff renew date:", error);
@@ -94,7 +89,7 @@ const getRenewDateMonth = async () => {
 const setRenewDateMonth = async (data) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/timeoffs/renewaldate/set`,
+      "timeoffs/renewaldate/set",
       data
     );
     return response.data;

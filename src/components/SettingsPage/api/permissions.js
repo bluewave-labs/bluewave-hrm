@@ -1,8 +1,8 @@
-import axios from "axios";
+import { axios } from './axios';
 
 const getUsers = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/departments`);
+    const response = await axios.get("departments");
     return response.data;
   } catch (error) {
     console.error("Error fetching departments:", error);
@@ -13,7 +13,7 @@ const getUsers = async () => {
 const editPermision = async (data) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/departments`,
+      "departments",
       data
     );
     return response.data;

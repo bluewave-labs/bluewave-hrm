@@ -1,9 +1,9 @@
-import axios from "axios";
+import { axios } from './axios';
 const companyId = 1;
 const getCompanyDetails = async () => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/company/${companyId}`
+      `company/${companyId}`
     );
     return response.data;
   } catch (error) {

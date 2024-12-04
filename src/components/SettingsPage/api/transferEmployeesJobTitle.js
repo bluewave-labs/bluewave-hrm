@@ -1,9 +1,9 @@
-import axios from "axios";
+import { axios } from './axios';
 
 export const transferEmployeesJobTitle = async (data) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/employees/change/job`,
+      "employees/change/job",
       data
     );
     return response.data;

@@ -1,8 +1,8 @@
-import axios from "axios";
+import { axios } from './axios';
 export const fetchDepartments = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/departments`
+      "departments"
     );
     return response.data;
   } catch (error) {
