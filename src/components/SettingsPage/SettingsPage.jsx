@@ -43,8 +43,6 @@ export default function SettingsPage({ style, innerStyle }) {
 
   const permissionsData = getPermissionsInfo.data;
 
-  console.log("SETTINGS PAGE");
-
   function handleChange(e, newValue) {
     setTab(newValue);
   }

@@ -25,7 +25,6 @@ export const useTimeOffPoliciesData = ({
       action === "delete"
         ? setTimeout(fetchTimeOffPolicies, 300)
         : fetchTimeOffPolicies();
-      console.log("time off policies", timeOffPolicies);
       onClose();
       setToast({
         open: true,
@@ -46,7 +45,6 @@ export const useTimeOffPoliciesData = ({
   };
 
   const addPolicy = (data) => {
-    console.log("addPolicy");
     timeOffPoliciesApi.create(data).then(handleSuccess).catch(handleError);
   };
 
@@ -63,15 +61,10 @@ export const useTimeOffPoliciesData = ({
   };
 
   const deletePolicy = (data, selectedItem) => {
-    console.log("deletePolicy");
     const formattedData = {
       timeOffId: selectedItem.id,
       newTimeOffId: data.newTimeOffPolicy.id,
     };
-    console.log({
-      timeOffId: selectedItem.id,
-      newTimeOffId: data.newTimeOffPolicy.id,
-    });
     timeOffPoliciesApi
       .delete(formattedData)
       .then(handleSuccess)

@@ -13,8 +13,7 @@ import PermissionsTable from "./PermissionsTable";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Toast from "./Toast";
 import PermissionsDialog from "./PermissionsDialog";
-import EmployeesToManagersDialog from "./EmployeesToManagersDialog";
-import ManagersToEmployeesDialog from "./ManagersToEmployeesDialog";
+import PermissionsChangesDialog from "./PermissionsChangesDialog";
 import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
 
@@ -36,9 +35,7 @@ export default function ManagePermissions({
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredContentList, setFilteredContentList] = useState(contentList);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isEmployeesToManagersDialogOpen, setIsEmployeesToManagersDialogOpen] =
-    useState(false);
-  const [isManagersToEmployeesDialogOpen, setIsManagersToEmployeesDialogOpen] =
+  const [isPermissionsChangesDialogOpen, setIsPermissionsChangesDialogOpen] =
     useState(false);
   const context = useSettingsContext();
   const updatedPermissions = context?.updatedPermissions;
@@ -51,17 +48,11 @@ export default function ManagePermissions({
     (emp) => emp.newPermission === "Employee"
   );
 
-  console.log("UPDATED PERMISSIONS", updatedPermissions);
-  console.log("MANAGERS TO EMPLOYEES", managersToEmployees);
-  console.log("EMPLOYEES TO MANAGERS", employeesToManagers);
-
   const [toast, setToast] = useState({
     open: false,
     severity: "success",
     message: "",
   });
-
-  console.log("updatedPermissions", updatedPermissions);
 
   useEffect(() => {
     const filteredItems = contentList?.filter((item) =>
@@ -91,25 +82,11 @@ export default function ManagePermissions({
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
 
-  const openNextDialog = () => {
-    if (employeesToManagers?.length > 0) {
-      openEmployeesToManagersDialog();
-    } else if (managersToEmployees?.length > 0) {
-      openManagersToEmployeesDialog();
-    }
-  };
+  const openPermissionsChangesDialog = () =>
+    setIsPermissionsChangesDialogOpen(true);
 
-  const openEmployeesToManagersDialog = () =>
-    setIsEmployeesToManagersDialogOpen(true);
-
-  const closeEmployeesToManagersDialog = () =>
-    setIsEmployeesToManagersDialogOpen(false);
-
-  const openManagersToEmployeesDialog = () =>
-    setIsManagersToEmployeesDialogOpen(true);
-
-  const closeManagersToEmployeesDialog = () =>
-    setIsManagersToEmployeesDialogOpen(false);
+  const closePermissionsChangesDialog = () =>
+    setIsPermissionsChangesDialogOpen(false);
 
   const handleCloseToast = () => {
     setToast({ ...toast, open: false });
@@ -168,22 +145,11 @@ export default function ManagePermissions({
           </Stack>
         </Grid>
 
-        <PermissionsDialog
-          open={isDialogOpen}
-          onClose={closeDialog}
-          openNextDialog={openNextDialog}
-        />
+        <PermissionsDialog open={isDialogOpen} onClose={closeDialog} openNextDialog={openPermissionsChangesDialog}/>
 
-        <EmployeesToManagersDialog
-          onClosePermissionDialog={closeDialog}
-          open={isEmployeesToManagersDialogOpen}
-          onClose={closeEmployeesToManagersDialog}
-        />
-
-        <ManagersToEmployeesDialog
-          onClosePermissionDialog={closeDialog}
-          open={isManagersToEmployeesDialogOpen}
-          onClose={closeManagersToEmployeesDialog}
+        <PermissionsChangesDialog
+          open={isPermissionsChangesDialogOpen}
+          onClose={closePermissionsChangesDialog}
         />
 
         <PermissionsTable

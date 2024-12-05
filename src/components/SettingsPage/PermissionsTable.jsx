@@ -40,7 +40,6 @@ const TableBodyCell = styled(TableCell)({
 
 export default function PermissionsTable({ contentList, style }) {
   const context = useSettingsContext();
-  console.log("context", context);
   const updatedPermissions = context?.updatedPermissions;
   const setUpdatedPermissions = context?.setUpdatedPermissions;
   const isLoading = context?.isLoading;
@@ -70,8 +69,6 @@ export default function PermissionsTable({ contentList, style }) {
       return [...filteredEmployees, updatedPermissionEmployee];
     });
   };
-
-  console.log("updatedPermissions", updatedPermissions, isLoading);
 
   if (isLoading?.employees || isLoading?.users)
     return (

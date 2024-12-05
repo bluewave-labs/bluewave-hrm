@@ -22,7 +22,6 @@ export const Checkbox = styled(HRMCheckbox)({
 });
 
 export const AddEditTimeOffPolicy = ({ form, action, selectedItem }) => {
-  console.log(action);
   const [isUnlimitedBalance, setIsUnlimitedBalance] = useState(
     selectedItem?.hours === null
   );

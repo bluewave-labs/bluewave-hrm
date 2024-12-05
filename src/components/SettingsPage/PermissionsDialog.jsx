@@ -15,7 +15,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HRMButton from "../Button/HRMButton";
 import { Dialog, DialogTitle } from "./SettingsDialog/styles";
-import EmployeesPermissionDialog from "./EmployeesToManagersDialog";
 import { useSettingsContext } from "./context";
 
 const TextHeader = styled(Typography)({

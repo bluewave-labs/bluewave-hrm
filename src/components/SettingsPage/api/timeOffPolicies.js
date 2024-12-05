@@ -38,7 +38,6 @@ const editTimeOff = async (data) => {
 
 const deleteTimeOffInitiate = async (data) => {
   const { timeOffId, newTimeOffId } = data;
-  console.log({ timeOffId: data.timeOffId });
   try {
     const response = await axios.post(
       `timeoffs/deletion/initiate`,
@@ -52,7 +51,6 @@ const deleteTimeOffInitiate = async (data) => {
       oldTimeOffId,
       newTimeOffId,
     };
-    console.log(deleteData);
     deleteTimeOffConfirm(deleteData);
   } catch (error) {
     console.error("Error delete timeoff:", error);
@@ -78,7 +76,6 @@ const getRenewDateMonth = async () => {
     const response = await axios.get(
       "timeoffs/renewaldate/get"
     );
-    console.log("getRenewDateMonth", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching timeoff renew date:", error);

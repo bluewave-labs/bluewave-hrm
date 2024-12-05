@@ -50,7 +50,6 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
   const openMenu = Boolean(anchorEl);
 
   const isTimeOffList = columns.some(column => column.header === "Policy type");
-  console.log("isTimeOffList", isTimeOffList);
 
   if (isTimeOffList) {
     contentList.sort((a, b) => {
