@@ -105,7 +105,7 @@ exports.createRecord = async (req, res) => {
   // Send the plain resetToken to the user email and user record
   const resetUrl = `${frontendUrl}${resetToken}`;
   //const message = `Please use the link below to set your password\n\n${resetUrl}\n\nThis link will expire in 30 days.`;
-  console.log("\n\n\n",resetUrl, "\n\n\n");
+  //console.log("\n\n\n",resetUrl, "\n\n\n");
 
   try {
     const userData = {

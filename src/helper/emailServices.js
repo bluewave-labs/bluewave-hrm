@@ -36,7 +36,7 @@ class EmailService {
     this.templateLookup = {
       timeOff: this.loadTemplate("timeoff"),
       offboarding: this.loadTemplate("offboarding"),
-      onboarding: this.loadTemplate("onboarding")
+      onboarding: this.loadTemplate("onboarding"),
       offboardingSurveyInvitation: this.loadTemplate("offboarding_survey_invitation"),
       resetpassword: this.loadTemplate("password_reset"),
       newEmployeeActivation: this.loadTemplate("new_employee_activation"),
