@@ -1,16 +1,18 @@
 const Sequelize = require("sequelize");
 require("dotenv").config();
 
-/*
-const sequelize = new Sequelize("hrm", "admin", "hrm", {
-  host: "54.173.233.239",
-  port: "5432",
-  dialect: "postgres",
-  define: {
-    //freezeTableName: true,
-  },
-});
-*/
+// const sequelize = new Sequelize("hrm", "admin", "hrm", {
+//   host: "54.173.233.239",
+//   port: "5432",
+//   dialect: process.env.dialect,
+//   define: {
+//     //freezeTableName: true,
+//   },
+//   dialectOptions: {
+//     connectTimeout: 60000
+//   }
+// });
+// */
 const sequelize = new Sequelize(
   process.env.DB,
   process.env.USER,
@@ -121,6 +123,16 @@ db.satisfactionSurveyRecipient =
   );
 
 // satisfaction models end here
+
+db.onBoarding = require("./onBoarding")(sequelize, Sequelize);
+db.video = require("./video")(sequelize, Sequelize);
+db.file = require("./file")(sequelize, Sequelize);
+db.fileName = require("./fileName")(sequelize, Sequelize);
+db.task = require("./task")(sequelize, Sequelize);
+db.taskName = require("./taskName")(sequelize, Sequelize);
+db.surveyQuestion = require("./surveyQuestion")(sequelize, Sequelize);
+db.surveyResponse = require("./surveyResponse")(sequelize, Sequelize);
+db.onBoardingSurvey = require("./onBoardingSurvey")(sequelize, Sequelize);
 
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
@@ -406,5 +418,44 @@ db.employee.belongsToMany(db.notification, {
   through: { model: db.notificationRecipient, unique: false },
   constraints: false,
 });
+
+db.onBoarding.belongsTo(db.employee, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
+});
+
+db.onBoarding.hasMany(db.file, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
+
+db.onBoarding.hasMany(db.task, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
+
+/*
+db.onBoarding.hasMany(db.surveyResponse, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "onBoardingId"
+});
+*/
+
+db.surveyResponse.belongsToMany(db.onBoarding, {
+  through: { model: db.onBoardingSurvey, unique: false },
+  constraints: false,
+});
+
+/*
+db.employee.hasMany(db.surveyResponse, {
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+  foreignKey: "empId"
+});
+*/
 
 module.exports = db;

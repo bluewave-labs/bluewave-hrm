@@ -25,6 +25,14 @@ const satisfactionSurvey = require("./satisfactionSurvey/satisfactionSurvey");
 // satisfaction survey routes ends here
 
 const notification = require("./notification");
+const onBoarding = require("./onBoarding");
+const video = require("./video");
+const file = require("./file");
+const fileName = require("./fileName");
+const task = require("./task");
+const taskName = require("./taskName.js");
+const surveyQuestion = require("./surveyQuestion");
+const surveyResponse = require("./surveyResponse");
 
 module.exports = (router) => {
   authentication(router);
@@ -48,6 +56,14 @@ module.exports = (router) => {
   offboardingDocument(router);
   offboardingSignedDocument(router);
   notification(router);
+  onBoarding(router);
+  video(router);
+  file(router);
+  fileName(router);
+  task(router);
+  taskName(router);
+  surveyQuestion(router);
+  surveyResponse(router);
   satisfactionSurvey(router);
 
   return router;

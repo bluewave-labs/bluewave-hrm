@@ -1,0 +1,33 @@
+<mjml>
+  <mj-body>
+    <mj-section background-color="#f8f8f8" padding="20px">
+      <mj-column>
+        <mj-text align="center" font-size="22px" font-weight="bold">
+          Employee Onboarding Notice
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="20px">
+      <mj-column>
+        <mj-text font-size="16px">
+          Dear <strong>HR Admin</strong>,
+        </mj-text>
+        
+				<mj-text font-size="16px">
+          <strong>{{employeeName}}</strong> has completed the Onboarding process and will be joining our team.
+        </mj-text>
+
+        <mj-divider
+          border-width="1px"
+          border-color="#cccccc"
+          padding="20px 0"
+        />
+
+        <mj-text font-size="14px" color="#888888">
+          Best regards,<br />
+          <strong>{{senderName}}</strong><br />
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

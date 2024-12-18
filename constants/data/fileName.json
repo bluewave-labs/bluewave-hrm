@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "title": "Job Offer",
+        "name": "job_offer.pdf",
+        "file": null,
+        "category": "Onboarding",
+        "extension": "pdf"
+    },
+    {
+        "id": 2,
+        "title": "NDA",
+        "name": "NDA.pdf",
+        "file": null,
+        "category": "Onboarding",
+        "extension": "pdf"
+    }
+]
