@@ -3,6 +3,7 @@ const { compile } = require("handlebars");
 const mjml2html = require("mjml");
 const path = require("path");
 const fs = require("fs");
+
 /**
  * Represents an email service that can load templates, build, and send emails.
  */
@@ -20,9 +21,9 @@ class EmailService {
     this.loadTemplate = (templateName) => {
       const templatePath = path.join(
         __dirname,
-        `../../client/templates/${templateName}.mjml`
+        `../../constants/templates/${templateName}.mjml`
       );
-      console.log("path:", templatePath);
+      //console.log("path:", templatePath);
       const templateContent = fs.readFileSync(templatePath, "utf8");
       return compile(templateContent);
     };
@@ -33,9 +34,12 @@ class EmailService {
      * TODO  Load less used templates in their respective functions
      */
     this.templateLookup = {
-      //welcomeEmailTemplate: this.loadTemplate("welcomeEmail"),
       timeOff: this.loadTemplate("timeoff"),
       offboarding: this.loadTemplate("offboarding"),
+      offboardingSurveyInvitation: this.loadTemplate("offboarding_survey_invitation"),
+      resetpassword: this.loadTemplate("password_reset"),
+      newEmployeeActivation: this.loadTemplate("new_employee_activation"),
+      satisfactionSurveyInvitation: this.loadTemplate("satisfaction_survey_invitation"),
     };
 
     /**
@@ -43,12 +47,10 @@ class EmailService {
      * @type {Object}
      */
     this.transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
       service: "gmail",
       secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
+        auth: {
+        user: process.env.EMAIL,
         pass: process.env.EMAIL_PASSWORD,
       },
     });
@@ -72,6 +74,7 @@ class EmailService {
 
     const sendEmail = async (to, subject, html) => {
       const info = await this.transporter.sendMail({
+        from: `BlueWave HRM support<${process.env.EMAIL}>`,
         to: to,
         subject: subject,
         html: html,

@@ -13,10 +13,17 @@ const team = require("./team");
 const timeOff = require("./timeOff");
 const timeOffHistory = require("./timeOffHistory");
 const appUser = require("./appUser");
-const offBoarding = require("./offBoarding");
-const offBoardingQuestion = require("./offBoardingQuestion");
-const offBoardingResponse = require("./offBoardingResponse");
-const offBoardingDocument = require("./offBoardingDocument");
+// offboarding routes start here
+const offboarding = require("./offboarding/offboarding");
+const offboardingSurveyQuestion = require("./offboarding/offboardingSurveyQuestion");
+const offboardingSurveyResponse = require("./offboarding/offboardingSurveyResponse");
+const offboardingDocument = require("./offboarding/offboardingDocument");
+const offboardingSignedDocument = require("./offboarding/offboardingSignedDocument");
+// offboarding routes end here
+// satisfaction survey routes start here
+const satisfactionSurvey = require("./satisfactionSurvey/satisfactionSurvey");
+// satisfaction survey routes ends here
+
 const notification = require("./notification");
 
 module.exports = (router) => {
@@ -35,11 +42,13 @@ module.exports = (router) => {
   timeOff(router);
   timeOffHistory(router);
   appUser(router);
-  offBoarding(router);
-  offBoardingQuestion(router);
-  offBoardingResponse(router);
-  offBoardingDocument(router);
+  offboarding(router);
+  offboardingSurveyQuestion(router);
+  offboardingSurveyResponse(router);
+  offboardingDocument(router);
+  offboardingSignedDocument(router);
   notification(router);
+  satisfactionSurvey(router);
 
   return router;
 };

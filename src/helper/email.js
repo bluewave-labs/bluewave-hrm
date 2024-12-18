@@ -10,12 +10,10 @@ const mjml2html = require("mjml");
 exports.sendEmail = async (option) => {
   //Create a transporter
   const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
     service: "gmail",
     secure: false,
     auth: {
-      user: process.env.EMAIL_USER,
+      user: process.env.EMAIL,
       pass: process.env.EMAIL_PASSWORD,
     },
   });

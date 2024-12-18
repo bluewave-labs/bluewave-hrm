@@ -1,11 +1,9 @@
 const db = require("../../models");
 require("dotenv").config();
 const message = require("../../constants/messages.json");
-const { getComparator } = require("../helper/utils");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const mailService = require("../helper/email");
+const EmailService = require("../helper/emailServices");
+const { createEmailContext } = require("../helper/utils");
 const { getAuthUser } = require("../../config/authJwt");
 
 exports.showAll = async (req, res) => {
@@ -106,8 +104,8 @@ exports.createRecord = async (req, res) => {
 
   // Send the plain resetToken to the user email and user record
   const resetUrl = `${frontendUrl}${resetToken}`;
-  const message = `Please use the link below to set your password\n\n${resetUrl}\n\nThis link will expire in 30 days.`;
-  console.log(resetUrl);
+  //const message = `Please use the link below to set your password\n\n${resetUrl}\n\nThis link will expire in 30 days.`;
+  console.log("\n\n\n",resetUrl, "\n\n\n");
 
   try {
     const userData = {
@@ -127,11 +125,17 @@ exports.createRecord = async (req, res) => {
       passwordCreatedAt: new Date(),
     });
 
-    // await mailService.sendEmail({
-    //   email: user.email,
-    //   subject: "Complete signup",
-    //   message: message,
-    // });
+    // Create and send email
+    const context = await createEmailContext({ email, db });
+    context.resetUrl = resetUrl;  
+    const emailService = new EmailService();
+    const messageId = await emailService.buildAndSendEmail(
+      "newEmployeeActivation", // Template name
+      context, 
+      email, // receiver's email
+      "Account Activation" // Subject
+    );
+    console.log(`Email sent successfully! Message ID: ${messageId}`);
 
     res.status(200).json({
       status: "success",

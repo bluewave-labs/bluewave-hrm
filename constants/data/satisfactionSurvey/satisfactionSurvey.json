@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Q2 2024 General",
+    "welcomeTitle": "Satisfaction Survey 2024",
+    "welcomeMessage": "Thank you for taking time to provide feedback. Your input is invaluable in helping us improve your experience at BlueWave Labs. Please be honest in your responses as your feedback will remain confidential.",
+    "endTitle": "Satisfaction Survey 2024",
+    "endMessage": "Thank you for taking the time to provide feedback.",
+    "startedAt": "2024-08-31T05:00:00.000Z",
+    "completedAt": "2024-09-30T05:00:00.000Z",
+    "anonymous": false
+  },
+  {
+    "name": "Website and mobile app satisfaction",
+    "welcomeTitle": "Satisfaction Survey 2024",
+    "welcomeMessage": "Thank you for taking time to provide feedback. Your input is invaluable in helping us improve your experience at BlueWave Labs. Please be honest in your responses as your feedback will remain confidential.",
+    "endTitle": "Satisfaction Survey 2024",
+    "endMessage": "Thank you for taking the time to provide feedback.",
+    "startedAt": "2024-01-31T05:00:00.000Z",
+    "completedAt": "2026-01-31T05:00:00.000Z",
+    "anonymous": true
+  }
+]

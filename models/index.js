@@ -52,12 +52,6 @@ db.socialProfile = require("./socialProfile")(sequelize, Sequelize);
 db.team = require("./team")(sequelize, Sequelize);
 db.timeOff = require("./timeOff")(sequelize, Sequelize);
 db.timeOffHistory = require("./timeOffHistory")(sequelize, Sequelize);
-
-db.offBoarding = require("./offBoarding")(sequelize, Sequelize);
-db.offBoardingQuestion = require("./offBoardingQuestion")(sequelize, Sequelize);
-db.offBoardingResponse = require("./offBoardingResponse")(sequelize, Sequelize);
-db.offBoardingDocument = require("./offBoardingDocument")(sequelize, Sequelize);
-
 db.passwordHistory = require("./passwordHistory")(sequelize, Sequelize);
 
 db.notification = require("./notification")(sequelize, Sequelize);
@@ -72,13 +66,61 @@ db.employeeAnnualTimeOff = require("./employeeAnnualTimeOff")(
   Sequelize
 );
 
-db.offBoardingSurvey = require("./offBoardingSurvey")(sequelize, Sequelize);
-db.offBoardingDocumentation = require("./offBoardingDocumentation")(
+db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
+
+// offboarding models begin here
+db.offboarding = require("./offboarding/offboarding")(sequelize, Sequelize);
+db.offboardingSurveyQuestion =
+  require("./offboarding/offboardingSurveyQuestion")(sequelize, Sequelize);
+db.offboardingSurveyResponse =
+  require("./offboarding/offboardingSurveyResponse")(sequelize, Sequelize);
+db.offboardingDocument = require("./offboarding/offboardingDocument")(
   sequelize,
   Sequelize
 );
+db.offboardingSignedDocument =
+  require("./offboarding/offboardingSignedDocument")(sequelize, Sequelize);
 
-db.timeOffRenewalDate = require("./timeOffRenewalDate")(sequelize, Sequelize);
+// through table/models
+db.offboardingSurvey = require("./offboarding/offboardingSurvey")(
+  sequelize,
+  Sequelize
+);
+db.offboardingDocumentation = require("./offboarding/offboardingDocumentation")(
+  sequelize,
+  Sequelize
+);
+// offboarding models end here
+
+// satisfaction models begin here
+db.satisfactionSurvey = require("./satisfactionSurvey/satisfactionSurvey")(
+  sequelize,
+  Sequelize
+);
+db.satisfactionSurveyQuestion =
+  require("./satisfactionSurvey/satisfactionSurveyQuestion")(
+    sequelize,
+    Sequelize
+  );
+db.satisfactionSurveyRespondent =
+  require("./satisfactionSurvey/satisfactionSurveyRespondent")(
+    sequelize,
+    Sequelize
+  );
+db.satisfactionSurveyResponse =
+  require("./satisfactionSurvey/satisfactionSurveyResponse")(
+    sequelize,
+    Sequelize
+  );
+
+//through table/model linking employee to a survey
+db.satisfactionSurveyRecipient =
+  require("./satisfactionSurvey/satisfactionSurveyRecipient")(
+    sequelize,
+    Sequelize
+  );
+
+// satisfaction models end here
 
 //Establishing the relationships
 db.employee.hasMany(db.reportTo, {
@@ -213,72 +255,90 @@ db.appUser.belongsTo(db.permission, {
   foreignKey: "permissionId",
 });
 
-db.employee.hasOne(db.offBoarding, {
+// ******************** offboarding models relationships start here *******************
+db.employee.hasOne(db.offboarding, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
-db.offBoarding.belongsTo(db.employee, {
+db.offboarding.belongsTo(db.employee, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
   foreignKey: "empId",
 });
 
-db.offBoarding.belongsToMany(db.offBoardingResponse, {
-  through: { model: db.offBoardingSurvey, unique: false },
+db.offboarding.belongsToMany(db.offboardingSurveyResponse, {
+  through: { model: db.offboardingSurvey, unique: false },
   constraints: false,
 });
 
-db.offBoardingResponse.belongsToMany(db.offBoarding, {
-  through: { model: db.offBoardingSurvey, unique: false },
+db.offboardingSurveyResponse.belongsToMany(db.offboarding, {
+  through: { model: db.offboardingSurvey, unique: false },
   constraints: false,
 });
 
-db.offBoarding.belongsToMany(db.offBoardingDocument, {
-  through: { model: db.offBoardingDocumentation, unique: false },
+db.offboarding.belongsToMany(db.offboardingSignedDocument, {
+  through: { model: db.offboardingDocumentation, unique: false },
   constraints: false,
 });
 
-db.offBoardingDocument.belongsToMany(db.offBoarding, {
-  through: { model: db.offBoardingDocumentation, unique: false },
+db.offboardingSignedDocument.belongsToMany(db.offboarding, {
+  through: { model: db.offboardingDocumentation, unique: false },
   constraints: false,
 });
 
+// ******************** offboarding models relationships end here *******************
 
-/*
-Remove the following commented codes
-db.offBoarding.hasMany(db.offBoardingResponse, {
+// ******************** satisfaction survery models relationships start here *******************
+db.satisfactionSurvey.hasMany(db.satisfactionSurveyRespondent, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
-  foreignKey: "empId",
+  foreignKey: "surveyId",
 });
-db.offBoardingResponse.belongsTo(db.offBoarding, {
+
+db.satisfactionSurveyRespondent.belongsTo(db.satisfactionSurvey, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",
-  foreignKey: "empId",
+  foreignKey: "surveyId",
 });
-*/
 
-// db.offBoarding.hasMany(db.offBoardingDocument, {
-//   onDelete: "CASCADE",
-//   OnUpdate: "CASCADE",
-//   foreignKey: "empId",
-// });
-// db.offBoardingDocument.belongsTo(db.offBoarding, {
-//   onDelete: "CASCADE",
-//   OnUpdate: "CASCADE",
-//   foreignKey: "empId",
-// });
-// db.offBoarding.hasMany(db.document, {
-//   onDelete: "CASCADE",
-//   OnUpdate: "CASCADE",
-//   foreignKey: "empId",
-// });
-// db.document.belongsTo(db.offBoarding, {
-//   onDelete: "CASCADE",
-//   OnUpdate: "CASCADE",
-//   foreignKey: "empId",
-// });
+db.satisfactionSurvey.hasMany(db.satisfactionSurveyRecipient, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "surveyId",
+});
+
+db.satisfactionSurveyRecipient.belongsTo(db.satisfactionSurvey, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "surveyId",
+});
+
+db.satisfactionSurvey.hasMany(db.satisfactionSurveyQuestion, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "surveyId",
+});
+
+db.satisfactionSurveyQuestion.belongsTo(db.satisfactionSurvey, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "surveyId",
+});
+db.satisfactionSurveyRespondent.hasMany(db.satisfactionSurveyResponse, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "respondentId",
+});
+
+db.satisfactionSurveyResponse.belongsTo(db.satisfactionSurveyRespondent, {
+  onDelete: "CASCADE",
+  OnUpdate: "CASCADE",
+  foreignKey: "respondentId",
+});
+
+// ******************** satisfaction survey models relationships end here *******************
+
 db.appUser.hasMany(db.passwordHistory, {
   onDelete: "CASCADE",
   OnUpdate: "CASCADE",

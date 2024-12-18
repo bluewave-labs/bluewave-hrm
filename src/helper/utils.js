@@ -68,16 +68,23 @@ const getManagerName = async (db, managerId) => {
   return null;
 };
 // source: https://gist.github.com/farhad-taran/f487a07c16fd53ee08a12a90cdaea082
-function runAtSpecificTimeOfDay(hour, minutes, func)
-{
+function runAtSpecificTimeOfDay(hour, minutes, func) {
   const twentyFourHours = 86400000;
   const now = new Date();
-  let eta_ms = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minutes, 0, 0).getTime() - now;
-  if (eta_ms < 0)
-  {
+  let eta_ms =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hour,
+      minutes,
+      0,
+      0
+    ).getTime() - now;
+  if (eta_ms < 0) {
     eta_ms += twentyFourHours;
   }
-  setTimeout(function() {
+  setTimeout(function () {
     //run once
     func();
     // run every 24 hours from now on
@@ -85,4 +92,40 @@ function runAtSpecificTimeOfDay(hour, minutes, func)
   }, eta_ms);
 }
 
-module.exports = { getReportTo, getComparator, getManagerName, runAtSpecificTimeOfDay };
+// Utility function to create email context such recipient name, company name etc.
+async function createEmailContext({ empId, email, db, copyrightYear }) {
+  // Obtain employee's name
+  let employee = null;
+  if (empId) {
+    employee = await db.employee.findByPk(empId, {
+      attributes: ["firstName", "lastName"],
+    });
+  } else if (email) {
+    employee = await db.employee.findOne({
+      attributes: ["firstName", "lastName"],
+      where: { email: email },
+    });
+  }
+  // Obtain company name
+  const company = await db.company.findOne({
+    attributes: ["companyName"],
+  });
+
+  const context = {
+    employeeName: employee
+      ? `${employee.firstName} ${employee.lastName}`
+      : `Sir/Madam`,
+    companyName: company ? `${company.companyName}` : "BlueWave Labs",
+    email: process.env.EMAIL, // Support email
+    copyrightYear: copyrightYear? copyrightYear : 2024
+  };
+  return context;
+}
+
+module.exports = {
+  getReportTo,
+  getComparator,
+  getManagerName,
+  runAtSpecificTimeOfDay,
+  createEmailContext,
+};
