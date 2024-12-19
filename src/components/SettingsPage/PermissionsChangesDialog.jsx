@@ -1,8 +1,4 @@
-import {
-  Stack,
-  Typography,
-  DialogContent,
-} from "@mui/material";
+import { Stack, Typography, DialogContent } from "@mui/material";
 import { styled } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 import HRMButton from "../Button/HRMButton";
@@ -10,29 +6,13 @@ import { Dialog, DialogTitle } from "./SettingsDialog/styles";
 import { useSettingsContext } from "./context";
 import ManagersToEmpSection from "./ManagersToEmpSection";
 import EmpToManagersSection from "./EmpToManagersSection";
+import { changeManagerEmployees } from "./api/employees";
 
-const TextHeader = styled(Typography)({
-  fontFamily: "Inter",
-  fontSize: "12px",
-  fontWeight: "500",
-  lineHeight: "18px",
-  color: "#475467",
-});
-
-const Text = styled(Typography)({
-  fontFamily: "Inter",
-  lineHeight: "20px",
-  fontWeight: "400",
-  color: "#475467",
-  fontSize: "13px",
-});
-
-export default function PermissionsChangesDialog({ open, onClose }) {
+export default function PermissionsChangesDialog({ open, onClose, setToast }) {
   const context = useSettingsContext();
   const updatedPermissions = context?.updatedPermissions;
   const employee = updatedPermissions?.[0]?.employee;
-  console.log(updatedPermissions);
-  console.log(employee);
+  const employeesManagementUpdate = context?.employeesManagementUpdate;
   const employeesToManagers = updatedPermissions?.filter(
     (emp) => emp.newPermission === "Manager"
   );
@@ -40,15 +20,40 @@ export default function PermissionsChangesDialog({ open, onClose }) {
     (emp) => emp.newPermission === "Employee"
   );
 
-  const onSubmit = (data) => {
-    // if(managersToEmployees)
+  const onSubmit = async () => {
+    try {
+      const payload = {
+        managerId: employeesManagementUpdate?.manager?.empId,
+        empIds:
+          employeesManagementUpdate?.managedEmployees?.map(
+            (emp) => emp.empId
+          ) || [],
+      };
+      console.log(payload);
+
+      await changeManagerEmployees([payload]);
+      onClose();
+      setToast({
+        open: true,
+        severity: "success",
+        message: "Permission updated successfully",
+      });
+    } catch (error) {
+      console.error("Error submitting manager changes:", error);
+      setToast({
+        open: true,
+        severity: "error",
+        message: "Failed to update permissions",
+      });
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
         <DialogTitle>
-          Select all employees under {`${employee?.firstName} ${employee?.lastName}`}{" "}
+          Select all employees under{" "}
+          {`${employee?.firstName} ${employee?.lastName}`}{" "}
         </DialogTitle>
         <CloseIcon
           onClick={onClose}
@@ -66,8 +71,12 @@ export default function PermissionsChangesDialog({ open, onClose }) {
         />
       </Stack>
       <DialogContent>
-        {employeesToManagers.some((emp) => emp.newPermission === "Employee") && updatedPermissions ? (
-          <ManagersToEmpSection targetEmployees={managersToEmployees} onSubmit={onSubmit}/>
+        {employeesToManagers.some((emp) => emp.newPermission === "Employee") &&
+        updatedPermissions ? (
+          <ManagersToEmpSection
+            targetEmployees={managersToEmployees}
+            onSubmit={onSubmit}
+          />
         ) : (
           <EmpToManagersSection />
         )}

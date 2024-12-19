@@ -150,6 +150,7 @@ export default function ManagePermissions({
         <PermissionsChangesDialog
           open={isDialogOpen}
           onClose={closeDialog}
+          setToast={setToast}
         />
 
         <PermissionsTable
