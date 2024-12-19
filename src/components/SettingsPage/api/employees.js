@@ -9,6 +9,17 @@ const getEmployees = async () => {
   }
 };
 
+export const changeManagerEmployees = async (data) => {
+  try {
+    const response = await axios.post('employees/manager/change', data);
+    return response.data;
+  } catch (error) {
+    console.error("Error changing manager:", error);
+    throw error;
+  }
+};
+
 export const employeesApi = {
   fetch: getEmployees,
+  changeManagerEmployees,
 };

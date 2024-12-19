@@ -145,16 +145,17 @@ export default function ManagePermissions({
           </Stack>
         </Grid>
 
-        <PermissionsDialog open={isDialogOpen} onClose={closeDialog} openNextDialog={openPermissionsChangesDialog}/>
+        {/* <PermissionsDialog open={isDialogOpen} onClose={closeDialog} openNextDialog={openPermissionsChangesDialog}/> */}
 
         <PermissionsChangesDialog
-          open={isPermissionsChangesDialogOpen}
-          onClose={closePermissionsChangesDialog}
+          open={isDialogOpen}
+          onClose={closeDialog}
         />
 
         <PermissionsTable
           contentList={itemsToDisplay}
           sx={{ marginBottom: "40px" }}
+          open={openDialog}
         />
         {contentList?.length > PAGE_SIZE && (
           <PagesNavBar
@@ -168,13 +169,13 @@ export default function ManagePermissions({
           justifyContent="flex-end"
           sx={{ marginTop: "20px", width: "100%" }}
         >
-          <HRMButton
+          {/* <HRMButton
             mode="primary"
             enabled={updatedPermissions?.length > 0}
             onClick={openDialog}
           >
             Save changes
-          </HRMButton>
+          </HRMButton> */}
         </Stack>
 
         <Toast

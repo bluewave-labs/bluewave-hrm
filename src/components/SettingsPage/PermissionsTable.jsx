@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -38,36 +39,60 @@ const TableBodyCell = styled(TableCell)({
   paddingBottom: "25px",
 });
 
-export default function PermissionsTable({ contentList, style }) {
+export default function PermissionsTable({ contentList, style, open }) {
   const context = useSettingsContext();
   const updatedPermissions = context?.updatedPermissions;
   const setUpdatedPermissions = context?.setUpdatedPermissions;
   const isLoading = context?.isLoading;
 
   const updatePermission = (newPermission, employee) => {
-    setUpdatedPermissions((updatedPermissions) => {
+    const oldPermission = employee.permission.type;
+    console.log("oldPermission", oldPermission);
+    console.log("newPermission", newPermission);
+    if (
+      (oldPermission === "Manager" && newPermission === "Employee") ||
+      (oldPermission === "Employee" && newPermission === "Manager")
+    ) {
+      console.log("open", open);
+      open(true);
+    }
+
+    setUpdatedPermissions(() => {
       const updatedPermissionEmployee = {
         employee,
         newPermission,
       };
 
-      const isEmployeeAlreadySelected = updatedPermissions.some(
-        (emp) => emp.employee.id === updatedPermissionEmployee?.employee?.id
-      );
-      if (!isEmployeeAlreadySelected) {
-        return [...updatedPermissions, updatedPermissionEmployee];
-      }
-
-      const filteredEmployees = updatedPermissions?.filter(
-        (emp) => emp.employee.id !== employee.id
-      );
-
       if (newPermission === employee.permission.type) {
-        return filteredEmployees;
+        return [];
       }
-
-      return [...filteredEmployees, updatedPermissionEmployee];
+      console.log("updatePermission", [updatedPermissionEmployee]);
+      return [updatedPermissionEmployee];
     });
+
+    // setUpdatedPermissions((updatedPermissions) => {
+    //   const updatedPermissionEmployee = {
+    //     employee,
+    //     newPermission,
+    //   };
+
+    //   const isEmployeeAlreadySelected = updatedPermissions.some(
+    //     (emp) => emp.employee.id === updatedPermissionEmployee?.employee?.id
+    //   );
+    //   if (!isEmployeeAlreadySelected) {
+    //     return [...updatedPermissions, updatedPermissionEmployee];
+    //   }
+
+    //   const filteredEmployees = updatedPermissions?.filter(
+    //     (emp) => emp.employee.id !== employee.id
+    //   );
+
+    //   if (newPermission === employee.permission.type) {
+    //     return filteredEmployees;
+    //   }
+
+    //   return [...filteredEmployees, updatedPermissionEmployee];
+    // });
   };
 
   if (isLoading?.employees || isLoading?.users)
