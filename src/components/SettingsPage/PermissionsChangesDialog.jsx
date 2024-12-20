@@ -16,6 +16,7 @@ export default function PermissionsChangesDialog({ open, onClose, setToast }) {
   const employeesToManagers = updatedPermissions?.filter(
     (emp) => emp.newPermission === "Manager"
   );
+  console.log("employeesToManagers", employeesToManagers);
   const managersToEmployees = updatedPermissions?.filter(
     (emp) => emp.newPermission === "Employee"
   );
@@ -52,8 +53,9 @@ export default function PermissionsChangesDialog({ open, onClose, setToast }) {
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
         <DialogTitle>
-          Select all employees under{" "}
-          {`${employee?.firstName} ${employee?.lastName}`}{" "}
+          {employeesToManagers.length > 0
+            ? `Select all employees under ${employee?.firstName} ${employee?.lastName}`
+            : `Select manager of ${employee?.firstName} ${employee?.lastName}`}
         </DialogTitle>
         <CloseIcon
           onClick={onClose}
@@ -71,14 +73,13 @@ export default function PermissionsChangesDialog({ open, onClose, setToast }) {
         />
       </Stack>
       <DialogContent>
-        {employeesToManagers.some((emp) => emp.newPermission === "Employee") &&
-        updatedPermissions ? (
+        {employeesToManagers.length > 0 ? (
+          <EmpToManagersSection />
+        ) : (
           <ManagersToEmpSection
             targetEmployees={managersToEmployees}
             onSubmit={onSubmit}
           />
-        ) : (
-          <EmpToManagersSection />
         )}
         <Stack
           direction="row"
