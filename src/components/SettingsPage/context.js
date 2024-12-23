@@ -23,10 +23,8 @@ export const SettingsProvider = ({ children }) => {
   const [employees, setEmployees] = useState([]);
   const [users, setUsers] = useState([]);
   const [updatedPermissions, setUpdatedPermissions] = useState([]);
-  const [employeesManagementUpdate, setEmployeesManagementUpdate] = useState({
-    managerId: null,
-    empIds: []
-  });
+  const [employeesManagementUpdate, setEmployeesManagementUpdate] = useState([]);
+  const [managerToEmployee, setManagerToEmployee] = useState([]);
 
   const [isLoading, setIsLoading] = useState({
     company: false,
@@ -126,8 +124,10 @@ export const SettingsProvider = ({ children }) => {
       users,
       updatedPermissions,
       employeesManagementUpdate,
+      managerToEmployee,
       setUpdatedPermissions,
       setEmployeesManagementUpdate,
+      setManagerToEmployee,
       fetchCompany,
       fetchDepartments,
       fetchDepartmentsPeople,
@@ -149,6 +149,7 @@ export const SettingsProvider = ({ children }) => {
       users,
       updatedPermissions,
       employeesManagementUpdate,
+      managerToEmployee,
     ]
   );
 

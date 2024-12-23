@@ -3,7 +3,8 @@ import { Grid, Autocomplete } from "@mui/material";
 import { TextField } from "./SettingsDialog/styles";
 import { useSettingsContext } from "./context";
 
-export default function ManagersToEmpSection() {
+export default function ChooseManager() {
+  console.log("Ïnside ChooseManager");
   const context = useSettingsContext();
   const employees = context?.employees;
   const updatedPermissions = context?.updatedPermissions;
@@ -17,7 +18,14 @@ export default function ManagersToEmpSection() {
     [employees, updatedPermissions]
   );
 
-  const addNewManager = (value) => console.log(value);
+  const addNewManager = (newManager) => {
+    const managerToEmployee = {
+      employee: updatedPermissions?.[0]?.employee,
+      manager: newManager
+    };
+    
+    context.setManagerToEmployee(managerToEmployee);
+  };
 
   return (
     <Grid container spacing={2}>

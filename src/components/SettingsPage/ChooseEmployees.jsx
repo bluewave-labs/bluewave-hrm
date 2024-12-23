@@ -4,44 +4,33 @@ import { TextField } from "./SettingsDialog/styles";
 import { useSettingsContext } from "./context";
 import { useEffect, useMemo } from "react";
 
-export default function EmpToManagersSection() {
+export default function ChooseEmployees() {
   const context = useSettingsContext();
   const employees = context?.employees;
   const updatedPermissions = context?.updatedPermissions;
   const employeesManagementUpdate = context?.employeesManagementUpdate;
 
-  const availableEmployees = useMemo(() =>
-    employees?.filter(
-      (emp) => Number(emp?.id) !== Number(updatedPermissions?.[0]?.employee?.id)
-    ) || [],
+  const availableEmployees = useMemo(
+    () =>
+      employees?.filter(
+        (emp) =>
+          Number(emp?.id) !== Number(updatedPermissions?.[0]?.employee?.id)
+      ) || [],
     [employees, updatedPermissions]
   );
 
   useEffect(() => {
-    context.setEmployeesManagementUpdate({
-      manager: updatedPermissions?.[0]?.employee,
-      managedEmployees: [],
-    });
+    context.setEmployeesManagementUpdate([]);
   }, [updatedPermissions]);
 
   const addNewManagedEmployee = (employee) => {
-    const newManagedEmployees = {
-      manager: updatedPermissions?.[0]?.employee,
-      managedEmployees: employeesManagementUpdate?.managedEmployees
-        ? [...employeesManagementUpdate.managedEmployees, employee]
-        : [employee],
-    };
-    context.setEmployeesManagementUpdate(newManagedEmployees);
+    context.setEmployeesManagementUpdate((prev) => [...prev, employee]);
   };
 
   const deleteManagedEmployee = (employeeToDelete) => {
-    const updatedManagedEmployees = {
-      manager: updatedPermissions?.[0]?.employee,
-      managedEmployees: employeesManagementUpdate?.managedEmployees?.filter(
-        (emp) => Number(emp.empId) !== Number(employeeToDelete.empId)
-      ) || []
-    };
-    context.setEmployeesManagementUpdate(updatedManagedEmployees);
+    context.setEmployeesManagementUpdate((prev) =>
+      prev.filter((emp) => Number(emp.id) !== Number(employeeToDelete.id))
+    );
   };
 
   return (
@@ -51,7 +40,7 @@ export default function EmpToManagersSection() {
           fullWidth
           color="secondary"
           size="small"
-          options={availableEmployees?.sort((a, b) => 
+          options={availableEmployees?.sort((a, b) =>
             a.firstName.localeCompare(b.firstName)
           )}
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}

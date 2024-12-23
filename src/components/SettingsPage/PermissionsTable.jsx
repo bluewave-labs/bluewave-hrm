@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -40,59 +40,31 @@ const TableBodyCell = styled(TableCell)({
 });
 
 export default function PermissionsTable({ contentList, style, open }) {
-  const context = useSettingsContext();
-  const updatedPermissions = context?.updatedPermissions;
-  const setUpdatedPermissions = context?.setUpdatedPermissions;
-  const isLoading = context?.isLoading;
+  const { updatedPermissions, setUpdatedPermissions, isLoading } =
+    useSettingsContext();
+  // const updatedPermissions = context?.updatedPermissions;
+  // const setUpdatedPermissions = context?.setUpdatedPermissions;
+  // const isLoading = context?.isLoading;
 
-  const updatePermission = (newPermission, employee) => {
-    const oldPermission = employee.permission.type;
-    console.log("oldPermission", oldPermission);
-    console.log("newPermission", newPermission);
-    if (
-      (oldPermission === "Manager" && newPermission === "Employee") ||
-      (oldPermission === "Employee" && newPermission === "Manager")
-    ) {
-      console.log("open", open);
+  useEffect(() => {
+    if (updatedPermissions?.length > 0) {
       open(true);
     }
+  }, [updatedPermissions]);
 
-    setUpdatedPermissions(() => {
-      const updatedPermissionEmployee = {
-        employee,
-        newPermission,
-      };
+  const updatePermission = (newPermission, employee) => {
+    console.log("employee", employee);
+    console.log("newPermission", newPermission);
+    const updatedPermissionEmployee = {
+      employee,
+      newPermission,
+    };
 
-      if (newPermission === employee.permission.type) {
-        return [];
-      }
-      console.log("updatePermission", [updatedPermissionEmployee]);
-      return [updatedPermissionEmployee];
-    });
-
-    // setUpdatedPermissions((updatedPermissions) => {
-    //   const updatedPermissionEmployee = {
-    //     employee,
-    //     newPermission,
-    //   };
-
-    //   const isEmployeeAlreadySelected = updatedPermissions.some(
-    //     (emp) => emp.employee.id === updatedPermissionEmployee?.employee?.id
-    //   );
-    //   if (!isEmployeeAlreadySelected) {
-    //     return [...updatedPermissions, updatedPermissionEmployee];
-    //   }
-
-    //   const filteredEmployees = updatedPermissions?.filter(
-    //     (emp) => emp.employee.id !== employee.id
-    //   );
-
-    //   if (newPermission === employee.permission.type) {
-    //     return filteredEmployees;
-    //   }
-
-    //   return [...filteredEmployees, updatedPermissionEmployee];
-    // });
+    if (newPermission !== employee.permission.type) {
+      setUpdatedPermissions([updatedPermissionEmployee]);
+      return;
+    }
+    setUpdatedPermissions([]);
   };
 
   if (isLoading?.employees || isLoading?.users)
@@ -137,7 +109,6 @@ export default function PermissionsTable({ contentList, style, open }) {
             <TableHeaderCell key="Employee">
               <TextHeader>Employee</TextHeader>
             </TableHeaderCell>
-            <TableHeaderCell />
           </TableRow>
         </TableHead>
         <TableBody>

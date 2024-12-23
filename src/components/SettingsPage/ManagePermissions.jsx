@@ -145,14 +145,12 @@ export default function ManagePermissions({
           </Stack>
         </Grid>
 
-        {/* <PermissionsDialog open={isDialogOpen} onClose={closeDialog} openNextDialog={openPermissionsChangesDialog}/> */}
-
-        <PermissionsChangesDialog
+        <PermissionsDialog
           open={isDialogOpen}
           onClose={closeDialog}
           setToast={setToast}
         />
-
+        
         <PermissionsTable
           contentList={itemsToDisplay}
           sx={{ marginBottom: "40px" }}

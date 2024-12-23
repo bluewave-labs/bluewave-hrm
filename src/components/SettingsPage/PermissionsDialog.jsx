@@ -1,68 +1,99 @@
-import { Stack } from "@mui/system";
-import {
-  Typography,
-  DialogContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import { styled } from "@mui/system";
-import { colors, fonts } from "../../Styles";
+import { Stack, Typography, DialogContent } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import HRMButton from "../Button/HRMButton";
 import { Dialog, DialogTitle } from "./SettingsDialog/styles";
 import { useSettingsContext } from "./context";
+import ChooseManager from "./ChooseManager";
+import ChooseEmployees from "./ChooseEmployees";
+import {
+  changeManagerEmployees,
+  removeManagement,
+  changePermission,
+} from "./api/employees";
 
-const TextHeader = styled(Typography)({
-  fontFamily: "Inter",
-  fontSize: "12px",
-  fontWeight: "500",
-  lineHeight: "18px",
-  color: "#475467",
-});
+const PERMISSION_IDS = {
+  Administrator: 1,
+  Manager: 2,
+  Employee: 3,
+};
 
-const Text = styled(Typography)({
-  fontFamily: "Inter",
-  lineHeight: "20px",
-  fontWeight: "400",
-  color: "#475467",
-  fontSize: "13px",
-});
-
-const TableHeaderCell = styled(TableCell)({
-  color: colors.darkGrey,
-  paddingTop: "10px",
-  paddingBottom: "10px",
-});
-
-const TableBodyCell = styled(TableCell)({
-  color: colors.darkGrey,
-  paddingTop: "25px",
-  paddingBottom: "25px",
-});
-
-export default function PermissionsDialog({
-  style,
-  open,
-  onClose,
-  openNextDialog,
-}) {
+export default function PermissionsDialog({ open, onClose, setToast }) {
+  console.log("Ïnside PermissionsDialog");
   const context = useSettingsContext();
   const updatedPermissions = context?.updatedPermissions;
+  const managerToEmployee = context?.managerToEmployee;
+  const employee = updatedPermissions?.[0]?.employee;
+  const employeesManagementUpdate = context?.employeesManagementUpdate;
+  const employeesToManagers = updatedPermissions?.filter(
+    (emp) => emp.newPermission === "Manager"
+  );
+  console.log("employeesToManagers", employeesToManagers);
+  const managersToEmployees = updatedPermissions?.filter(
+    (emp) => emp.newPermission === "Employee"
+  );
 
-  const onContinue = () => {
-    openNextDialog(true);
-    onClose();
+  const handleManagerEmployeesChange = async () => {
+    const payload = {
+      managerId: employeesManagementUpdate?.manager?.empId,
+      empIds:
+        employeesManagementUpdate?.managedEmployees?.map((emp) => emp.empId) ||
+        [],
+    };
+    await changeManagerEmployees([payload]);
+  };
+
+  const handleRemoveManagement = async () => {
+    const payload = {
+      managerId: managerToEmployee?.manager?.empId,
+      employeeId: managerToEmployee?.employee?.empId,
+    };
+    await removeManagement(payload);
+  };
+
+  const handlePermissionChange = async () => {
+    console.log("handlePermissionChange", handlePermissionChange);
+    const payload = {
+      id: updatedPermissions?.[0]?.employee?.empId,
+      permissionId: PERMISSION_IDS[updatedPermissions?.[0]?.newPermission],
+    };
+    console.log("payload", payload);
+    // await changePermission(payload);
+  };
+
+  const onSubmit = async () => {
+    try {
+      if (employeesManagementUpdate?.managedEmployees?.length > 0) {
+        await handleManagerEmployeesChange();
+      }
+
+      if (managerToEmployee?.manager) {
+        await handleRemoveManagement();
+      }
+
+      await handlePermissionChange();
+
+      setToast({
+        open: true,
+        severity: "success",
+        message: "Permissions updated successfully",
+      });
+      onClose();
+    } catch (error) {
+      console.error("Error updating permissions:", error);
+      setToast({
+        open: true,
+        severity: "error",
+        message: "Failed to update permissions",
+      });
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
-        <DialogTitle>Do you want to approve following changes?</DialogTitle>
+        <DialogTitle>
+          {`Confirm ${employee?.firstName} ${employee?.lastName} change: ${employee?.permission?.type} → ${updatedPermissions?.[0]?.newPermission}`}
+        </DialogTitle>
         <CloseIcon
           onClick={onClose}
           sx={{
@@ -79,51 +110,12 @@ export default function PermissionsDialog({
         />
       </Stack>
       <DialogContent>
-        <TableContainer
-          sx={{
-            fontFamily: fonts.fontFamily,
-            ...style,
-          }}
-        >
-          <Table>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
-                <TableHeaderCell key="Name">
-                  <TextHeader>Name</TextHeader>
-                </TableHeaderCell>
-                <TableHeaderCell key="Role">
-                  <TextHeader>Changes</TextHeader>
-                </TableHeaderCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {updatedPermissions?.map(({ employee, newPermission }) => {
-                return (
-                  <TableRow key={`${employee?.firstName}${employee?.lastName}`}>
-                    <TableBodyCell>
-                      <Text>
-                        {employee?.firstName} {employee?.lastName}
-                      </Text>
-                    </TableBodyCell>
-                    <TableBodyCell>
-                      <Text sx={{ display: "flex", alignItems: "center" }}>
-                        {employee.permission.type}
-                        <ArrowForwardIcon
-                          sx={{
-                            margin: "0 5px",
-                            fontSize: "small",
-                            textAlign: "center",
-                          }}
-                        />
-                        {newPermission}
-                      </Text>
-                    </TableBodyCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {updatedPermissions?.[0]?.newPermission === "Manager" && (
+          <ChooseEmployees />
+        )}
+        {updatedPermissions?.[0]?.newPermission === "Employee" && (
+          <ChooseManager />
+        )}
         <Stack
           direction="row"
           alignItems="center"
@@ -134,8 +126,8 @@ export default function PermissionsDialog({
           <HRMButton mode="secondaryB" onClick={onClose} color="primary">
             Cancel
           </HRMButton>
-          <HRMButton mode="primary" onClick={onContinue}>
-            Continue
+          <HRMButton mode="primary" onClick={onSubmit}>
+              Confirm
           </HRMButton>
         </Stack>
       </DialogContent>
