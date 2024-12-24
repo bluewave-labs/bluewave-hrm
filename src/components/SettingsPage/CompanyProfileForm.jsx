@@ -14,7 +14,7 @@ import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternate
 import UploadFile from "./UploadFile";
 import HRMButton from "../Button/HRMButton";
 import "./settings.css";
-import axios from "axios";
+import { axios } from "./api/axios";
 import Toast from "./Toast";
 import { useSettingsContext } from "./context";
 
@@ -77,7 +77,6 @@ export default function CompanyProfileForm({ style }) {
   const company = context?.company;
   const [countries, setCountries] = useState([]);
 
-  // const [companyLogo, setCompanyLogo] = useState();
   const [logoSrc, setLogoSrc] = useState("");
 
   const {
@@ -100,11 +99,6 @@ export default function CompanyProfileForm({ style }) {
     if (logoBuffer) {
       setLogoSrc(Buffer.from(logoBuffer));
     }
-    // if (logoBuffer?.data) {
-    //   // Convert buffer to Base64 string
-    //   const base64String = Buffer.from(logoBuffer.data).toString('base64');
-    //   setLogoSrc(`data:image/png;base64,${base64String}`);
-    // }
   }, [company?.companyLogo]);
 
   const [countryValue, setCountryValue] = useState(
@@ -146,11 +140,9 @@ export default function CompanyProfileForm({ style }) {
 
   const onSubmit = (data) => {
     axios
-      .put("http://localhost:3000/api/company", { ...data, id: company.id })
+      .put("company", { ...data, id: company.id })
       .then((response) => {
-        console.log("Data submitted successfully:", response.data);
         const updatedCompany = response.data.message;
-        console.log("Updated company:", updatedCompany);
         reset(parseDefaultValues(updatedCompany));
         setCountryValue(updatedCompany.country);
         setToast({
@@ -282,6 +274,7 @@ export default function CompanyProfileForm({ style }) {
                 style={{
                   width: "200px",
                   height: "200px",
+                  objectFit: "contain",
                   marginRight: "50px",
                 }}
               />
@@ -449,8 +442,7 @@ export default function CompanyProfileForm({ style }) {
             </Grid>
           </Grid>
         </Grid>
-        {/*Add company button*/}
-        <Grid item xs={10} alignContent="right" spacing={2}>
+        <Grid item xs={10} alignContent="right">
           <HRMButton
             mode="primary"
             style={{
@@ -462,9 +454,8 @@ export default function CompanyProfileForm({ style }) {
           >
             Save changes
           </HRMButton>
-          {/* <input type="submit" /> */}
         </Grid>
-        <Grid item xs={10} alignContent="right" spacing={2}>
+        <Grid item xs={10} alignContent="right">
           <Toast
             open={toast.open}
             severity={toast.severity}
@@ -479,8 +470,3 @@ export default function CompanyProfileForm({ style }) {
 
 //Control panel settings for storybook
 CompanyProfileForm.propTypes = {};
-
-//Default values for this component
-CompanyProfileForm.defaultProps = {
-  style: {},
-};

@@ -25,10 +25,3 @@ export default function Toast({ open, severity, message, onClose }) {
     </Snackbar>
   );
 }
-
-Toast.defaultProps = {
-  open: false,
-  severity: "info",
-  message: "",
-  onClose: () => {},
-};

@@ -9,10 +9,12 @@ export const usePermissions = () => {
   const mergedUsers = useMemo(() => {
     if (employees?.length === 0 || users?.length === 0) return [];
 
-    return users?.map((user) => {
-      const employee = employees?.find((emp) => emp.empId === user.empId);
-      return { ...user, ...employee };
-    });
+    return users
+      ?.map((user) => {
+        const employee = employees?.find((emp) => emp.empId === user.empId);
+        return { ...user, ...employee };
+      })
+      .sort((a, b) => a.firstName.localeCompare(b.firstName));
   }, [users, employees]);
 
   return {

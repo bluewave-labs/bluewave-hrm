@@ -5,10 +5,15 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Typography, Stack, Avatar, CircularProgress } from "@mui/material";
+import {
+  Typography,
+  Stack,
+  Avatar,
+  CircularProgress,
+  Radio,
+} from "@mui/material";
 import { styled } from "@mui/system";
 import { colors, fonts } from "../../Styles";
-import Checkbox from "../Checkbox/Checkbox";
 import { useSettingsContext } from "./context";
 
 const TextHeader = styled(Typography)({
@@ -39,12 +44,15 @@ const TableBodyCell = styled(TableCell)({
   paddingBottom: "25px",
 });
 
+const CustomRadio = styled(Radio)({
+  "&.Mui-checked": {
+    color: "#7F56D9",
+  },
+});
+
 export default function PermissionsTable({ contentList, style, open }) {
   const { updatedPermissions, setUpdatedPermissions, isLoading } =
     useSettingsContext();
-  // const updatedPermissions = context?.updatedPermissions;
-  // const setUpdatedPermissions = context?.setUpdatedPermissions;
-  // const isLoading = context?.isLoading;
 
   useEffect(() => {
     if (updatedPermissions?.length > 0) {
@@ -53,8 +61,6 @@ export default function PermissionsTable({ contentList, style, open }) {
   }, [updatedPermissions]);
 
   const updatePermission = (newPermission, employee) => {
-    console.log("employee", employee);
-    console.log("newPermission", newPermission);
     const updatedPermissionEmployee = {
       employee,
       newPermission,
@@ -113,9 +119,6 @@ export default function PermissionsTable({ contentList, style, open }) {
         </TableHead>
         <TableBody>
           {contentList?.map((item) => {
-            const selectedEmployeePermission = updatedPermissions.find(
-              (emp) => emp.employee.id === item.id
-            )?.newPermission;
             return (
               <TableRow key={item.id}>
                 <TableBodyCell>
@@ -134,42 +137,43 @@ export default function PermissionsTable({ contentList, style, open }) {
                   <Text>{item?.team.teamName}</Text>
                 </TableBodyCell>
                 <TableBodyCell>
-                  <Checkbox
-                    type="radio"
+                  <CustomRadio
                     id={`permission-admin-${item?.id}`}
                     name={`permission-${item?.id}`}
                     value="Administrator"
-                    checked={
-                      (selectedEmployeePermission || item?.permission.type) ===
-                      "Administrator"
-                    }
+                    checked={item?.permission.type === "Administrator"}
                     onChange={(e) => updatePermission(e.target.value, item)}
+                    size="small"
                   />
                 </TableBodyCell>
                 <TableBodyCell>
-                  <Checkbox
-                    type="radio"
+                  <CustomRadio
                     id={`permission-manager-${item?.id}`}
                     name={`permission-${item?.id}`}
                     value="Manager"
-                    checked={
-                      (selectedEmployeePermission || item?.permission.type) ===
-                      "Manager"
-                    }
+                    checked={item?.permission.type === "Manager"}
                     onChange={(e) => updatePermission(e.target.value, item)}
+                    size="small"
+                    sx={{
+                      "&.Mui-checked": {
+                        color: "#7F56D9",
+                      },
+                    }}
                   />
                 </TableBodyCell>
                 <TableBodyCell>
-                  <Checkbox
-                    type="radio"
+                  <CustomRadio
                     id={`permission-employee-${item?.id}`}
                     name={`permission-${item?.id}`}
                     value="Employee"
-                    checked={
-                      (selectedEmployeePermission || item?.permission.type) ===
-                      "Employee"
-                    }
+                    checked={item?.permission.type === "Employee"}
                     onChange={(e) => updatePermission(e.target.value, item)}
+                    size="small"
+                    sx={{
+                      "&.Mui-checked": {
+                        color: "#7F56D9",
+                      },
+                    }}
                   />
                 </TableBodyCell>
               </TableRow>

@@ -10,6 +10,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
 import ListTabContent from "./ListTabContent";
 import ManagePermissions from "./ManagePermissions";
+import { useSettingsContext } from "./context";
 import {
   useDepartmentPeople,
   useJobTitlesPeople,
@@ -26,7 +27,7 @@ const StyledTabPanel = styled(TabPanel)({
   padding: 0,
 });
 
-export default function SettingsPage({ style, innerStyle }) {
+export default function SettingsPage({ style }) {
   const [tab, setTab] = useState("Company profile");
   const getPeopleInfo = useDepartmentPeople();
   const getJobTitlesInfo = useJobTitlesPeople();
@@ -43,8 +44,14 @@ export default function SettingsPage({ style, innerStyle }) {
 
   const permissionsData = getPermissionsInfo.data;
 
+  const context = useSettingsContext();
+    if (!context) return;
+
+  const setUpdatedPermissions = context.setUpdatedPermissions;
+
   function handleChange(e, newValue) {
     setTab(newValue);
+    setUpdatedPermissions([]);
   }
 
   return (

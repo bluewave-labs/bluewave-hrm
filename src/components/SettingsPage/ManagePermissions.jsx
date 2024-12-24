@@ -13,8 +13,6 @@ import PermissionsTable from "./PermissionsTable";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Toast from "./Toast";
 import PermissionsDialog from "./PermissionsDialog";
-import PermissionsChangesDialog from "./PermissionsChangesDialog";
-import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
 
 const HeadText = styled(Typography)({
@@ -35,18 +33,6 @@ export default function ManagePermissions({
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredContentList, setFilteredContentList] = useState(contentList);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isPermissionsChangesDialogOpen, setIsPermissionsChangesDialogOpen] =
-    useState(false);
-  const context = useSettingsContext();
-  const updatedPermissions = context?.updatedPermissions;
-
-  const employeesToManagers = updatedPermissions?.filter(
-    (emp) => emp.newPermission === "Manager"
-  );
-
-  const managersToEmployees = updatedPermissions?.filter(
-    (emp) => emp.newPermission === "Employee"
-  );
 
   const [toast, setToast] = useState({
     open: false,
@@ -80,13 +66,9 @@ export default function ManagePermissions({
   };
 
   const openDialog = () => setIsDialogOpen(true);
-  const closeDialog = () => setIsDialogOpen(false);
-
-  const openPermissionsChangesDialog = () =>
-    setIsPermissionsChangesDialogOpen(true);
-
-  const closePermissionsChangesDialog = () =>
-    setIsPermissionsChangesDialogOpen(false);
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   const handleCloseToast = () => {
     setToast({ ...toast, open: false });
@@ -150,7 +132,7 @@ export default function ManagePermissions({
           onClose={closeDialog}
           setToast={setToast}
         />
-        
+
         <PermissionsTable
           contentList={itemsToDisplay}
           sx={{ marginBottom: "40px" }}

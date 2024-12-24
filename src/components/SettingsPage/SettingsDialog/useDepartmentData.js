@@ -19,7 +19,6 @@ export const useDepartmentData = ({
   const employees = context?.employees;
 
   const handleSuccess = (response) => {
-    console.log("Data submitted successfully:", response.data);
     if (typeof response === "string" && response?.includes("already exists")) {
       setError("departmentName", {
         message: response,

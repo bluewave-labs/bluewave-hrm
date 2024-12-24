@@ -18,64 +18,67 @@ const PERMISSION_IDS = {
 };
 
 export default function PermissionsDialog({ open, onClose, setToast }) {
-  console.log("Ïnside PermissionsDialog");
   const context = useSettingsContext();
+  if (!context) return;
   const updatedPermissions = context?.updatedPermissions;
   const managerToEmployee = context?.managerToEmployee;
   const employee = updatedPermissions?.[0]?.employee;
-  const employeesManagementUpdate = context?.employeesManagementUpdate;
-  const employeesToManagers = updatedPermissions?.filter(
-    (emp) => emp.newPermission === "Manager"
-  );
-  console.log("employeesToManagers", employeesToManagers);
-  const managersToEmployees = updatedPermissions?.filter(
-    (emp) => emp.newPermission === "Employee"
-  );
+  const addEmployeesToManager = context?.addEmployeesToManager;
+  const setAddEmployeesToManager = context?.setAddEmployeesToManager;
+  const fetchUsers = context?.fetchUsers;
 
-  const handleManagerEmployeesChange = async () => {
-    const payload = {
-      managerId: employeesManagementUpdate?.manager?.empId,
-      empIds:
-        employeesManagementUpdate?.managedEmployees?.map((emp) => emp.empId) ||
-        [],
+  const handleAddEmployeesToManager = async (oldManagerNewEmployeePayload) => {
+    const employeesPayload = {
+      managerId: updatedPermissions?.[0]?.employee?.empId,
+      empIds: addEmployeesToManager?.map((emp) => emp.empId) || [],
     };
-    await changeManagerEmployees([payload]);
+    await changeManagerEmployees([
+      oldManagerNewEmployeePayload
+        ? oldManagerNewEmployeePayload
+        : employeesPayload,
+    ]);
   };
 
-  const handleRemoveManagement = async () => {
+  const handleRemoveManager = async () => {
     const payload = {
-      managerId: managerToEmployee?.manager?.empId,
-      employeeId: managerToEmployee?.employee?.empId,
+      managerId: managerToEmployee?.employee?.empId,
     };
     await removeManagement(payload);
+
+    const oldManagerNewEmployeePayload = {
+      managerId: managerToEmployee?.manager?.empId,
+      empIds: [managerToEmployee?.employee?.empId],
+    };
+
+    setAddEmployeesToManager([]);
+    handleAddEmployeesToManager(oldManagerNewEmployeePayload);
   };
 
   const handlePermissionChange = async () => {
-    console.log("handlePermissionChange", handlePermissionChange);
     const payload = {
       id: updatedPermissions?.[0]?.employee?.empId,
       permissionId: PERMISSION_IDS[updatedPermissions?.[0]?.newPermission],
     };
-    console.log("payload", payload);
-    // await changePermission(payload);
+    await changePermission(payload);
   };
 
   const onSubmit = async () => {
     try {
-      if (employeesManagementUpdate?.managedEmployees?.length > 0) {
-        await handleManagerEmployeesChange();
+      if (addEmployeesToManager?.length > 0) {
+        await handleAddEmployeesToManager();
       }
 
-      if (managerToEmployee?.manager) {
-        await handleRemoveManagement();
+      if (managerToEmployee?.employee && managerToEmployee?.manager) {
+        await handleRemoveManager();
       }
 
       await handlePermissionChange();
+      fetchUsers();
 
       setToast({
         open: true,
         severity: "success",
-        message: "Permissions updated successfully",
+        message: "Permission updated successfully",
       });
       onClose();
     } catch (error) {
@@ -83,7 +86,7 @@ export default function PermissionsDialog({ open, onClose, setToast }) {
       setToast({
         open: true,
         severity: "error",
-        message: "Failed to update permissions",
+        message: "Failed to update permission",
       });
     }
   };
@@ -92,7 +95,7 @@ export default function PermissionsDialog({ open, onClose, setToast }) {
     <Dialog open={open} onClose={onClose}>
       <Stack direction="row" justifyContent="space-between">
         <DialogTitle>
-          {`Confirm ${employee?.firstName} ${employee?.lastName} change: ${employee?.permission?.type} → ${updatedPermissions?.[0]?.newPermission}`}
+          {`Do you approve the change: ${employee?.permission?.type} → ${updatedPermissions?.[0]?.newPermission}?`}
         </DialogTitle>
         <CloseIcon
           onClick={onClose}
@@ -111,7 +114,7 @@ export default function PermissionsDialog({ open, onClose, setToast }) {
       </Stack>
       <DialogContent>
         {updatedPermissions?.[0]?.newPermission === "Manager" && (
-          <ChooseEmployees />
+          <ChooseEmployees sx={{ overflowY: "auto", height: "100px" }} />
         )}
         {updatedPermissions?.[0]?.newPermission === "Employee" && (
           <ChooseManager />
@@ -127,7 +130,7 @@ export default function PermissionsDialog({ open, onClose, setToast }) {
             Cancel
           </HRMButton>
           <HRMButton mode="primary" onClick={onSubmit}>
-              Confirm
+            Confirm
           </HRMButton>
         </Stack>
       </DialogContent>

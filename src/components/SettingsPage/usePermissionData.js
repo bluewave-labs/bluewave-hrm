@@ -19,7 +19,6 @@ export const usePermissionData = ({
   const employees = context?.employees;
 
   const handleSuccess = (response) => {
-    console.log("Data submitted successfully:", response.data);
     fetchUsers();
     fetchEmployees();
     onClose();
@@ -31,7 +30,6 @@ export const usePermissionData = ({
   };
 
   const handleError = (error) => {
-    console.error("Error submitting data:", error);
     onClose();
     setToast({
       open: true,

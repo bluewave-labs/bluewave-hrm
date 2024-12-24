@@ -88,7 +88,7 @@ export default function ListTable({ openDialog, columns, contentList, style }) {
         </TableHead>
         <TableBody>
           {contentList?.map((item) => (
-            <TableRow key={item.id}>
+            <TableRow key={item.roleId ? item.roleId : item.id}>
               {columns?.map(({ header, contentKey }, index) => (
                 <TableBodyCell key={contentKey}>
                   <Typography
