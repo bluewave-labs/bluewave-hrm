@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Box from "@mui/system/Box";
-import Grid from "@mui/system/Unstable_Grid";
+import { Grid } from "@mui/material";
 import { Buffer } from "buffer";
 import {
   styled,
@@ -14,7 +14,7 @@ import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternate
 import UploadFile from "./UploadFile";
 import HRMButton from "../Button/HRMButton";
 import "./settings.css";
-import axios from "axios";
+import { axios } from "./api/axios";
 import Toast from "./Toast";
 import { useSettingsContext } from "./context";
 
@@ -55,19 +55,12 @@ const Text = styled(Typography)({
   color: " #344054",
 });
 
-const convertImage = (logo) => {
-  if (logo) {
-    return Buffer.from(logo);
-  }
-  return "";
-};
-
 const parseDefaultValues = (company) => ({
   companyName: company?.companyName || "",
   companyWebsite: company?.companyWebsite || "",
   companyDomain: company?.companyDomain || "",
   administratorEmail: company?.administratorEmail || "",
-  companyLogo: convertImage(company.companyLogo) || "",
+  companyLogo: company?.companyLogo || "",
   city: company?.city || "",
   streetAddress: company?.streetAddress || "",
   unitSuite: company?.unitSuite || "",
@@ -80,11 +73,12 @@ const parseDefaultValues = (company) => ({
 });
 
 export default function CompanyProfileForm({ style }) {
-  const { company } = useSettingsContext();
+  const context = useSettingsContext();
+  const company = context?.company;
   const [countries, setCountries] = useState([]);
-  const [companyLogo, setCompanyLogo] = useState(
-    parseDefaultValues(company).companyLogo
-  );
+
+  const [logoSrc, setLogoSrc] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -100,12 +94,19 @@ export default function CompanyProfileForm({ style }) {
     message: "",
   });
 
+  useEffect(() => {
+    const logoBuffer = company?.companyLogo;
+    if (logoBuffer) {
+      setLogoSrc(Buffer.from(logoBuffer));
+    }
+  }, [company?.companyLogo]);
+
   const [countryValue, setCountryValue] = useState(
     parseDefaultValues(company).country
   );
 
   const handleLogoUpload = (file) => {
-    setCompanyLogo(file);
+    setLogoSrc(file);
 
     setValue("companyLogo", file);
   };
@@ -139,11 +140,9 @@ export default function CompanyProfileForm({ style }) {
 
   const onSubmit = (data) => {
     axios
-      .put("http://localhost:3000/api/company", { ...data, id: company.id })
+      .put("company", { ...data, id: company.id })
       .then((response) => {
-        console.log("Data submitted successfully:", response.data);
         const updatedCompany = response.data.message;
-        console.log("Updated company:", updatedCompany);
         reset(parseDefaultValues(updatedCompany));
         setCountryValue(updatedCompany.country);
         setToast({
@@ -265,12 +264,17 @@ export default function CompanyProfileForm({ style }) {
             <Text>Company logo</Text>
           </Grid>
           <Grid item xs={7} sx={{ display: "flex" }}>
-            {companyLogo ? (
+            {logoSrc ? (
               <img
-                src={companyLogo}
+                src={
+                  logoSrc.includes("data:image")
+                    ? logoSrc
+                    : `data:image/jpeg;base64,${logoSrc}`
+                }
                 style={{
                   width: "200px",
                   height: "200px",
+                  objectFit: "contain",
                   marginRight: "50px",
                 }}
               />
@@ -381,62 +385,64 @@ export default function CompanyProfileForm({ style }) {
               fullWidth
               size="small"
               color="secondary"
+              inputProps={{ ...register("country") }}
             />
           </Grid>
           {/*Textfield for Social profiles*/}
           <Grid item xs={3}>
             <Text>Social profiles</Text>
           </Grid>
-          <Grid container xs={7} alignContent="center" spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      twitter.com/
-                    </InputAdornment>
-                  ),
-                  ...register("twitterUrl"),
-                }}
-                color="secondary"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      facebook.com/
-                    </InputAdornment>
-                  ),
-                  ...register("facebookUrl"),
-                }}
-                color="secondary"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      linkedin.com/company/
-                    </InputAdornment>
-                  ),
-                  ...register("linkedinUrl"),
-                }}
-                color="secondary"
-              />
+          <Grid item xs={7} alignContent="center">
+            <Grid container columns={10} rowSpacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        twitter.com/
+                      </InputAdornment>
+                    ),
+                    ...register("twitterUrl"),
+                  }}
+                  color="secondary"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        facebook.com/
+                      </InputAdornment>
+                    ),
+                    ...register("facebookUrl"),
+                  }}
+                  color="secondary"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        linkedin.com/company/
+                      </InputAdornment>
+                    ),
+                    ...register("linkedinUrl"),
+                  }}
+                  color="secondary"
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-        {/*Add company button*/}
-        <Grid item xs={10} alignContent="right" spacing={2}>
+        <Grid item xs={10} alignContent="right">
           <HRMButton
             mode="primary"
             style={{
@@ -449,7 +455,7 @@ export default function CompanyProfileForm({ style }) {
             Save changes
           </HRMButton>
         </Grid>
-        <Grid item xs={10} alignContent="right" spacing={2}>
+        <Grid item xs={10} alignContent="right">
           <Toast
             open={toast.open}
             severity={toast.severity}
@@ -464,8 +470,3 @@ export default function CompanyProfileForm({ style }) {
 
 //Control panel settings for storybook
 CompanyProfileForm.propTypes = {};
-
-//Default values for this component
-CompanyProfileForm.defaultProps = {
-  style: {},
-};

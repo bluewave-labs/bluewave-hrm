@@ -7,7 +7,6 @@ import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import TimeOffRequestSent from '../PopupComponents/TimeOffRequestSent';
 import HRMButton from '../Button/HRMButton';
 
-
 /**
  * Time off page of the HRM application. Contains the time off menu as well as controls for 
  * request time off.

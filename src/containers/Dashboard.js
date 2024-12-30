@@ -11,6 +11,8 @@ import { produce } from "immer";
 import Placeholder from "../components/PeopleComponents/Placeholder";
 import UpdatesPage from "../components/UpdatesPage/UpdatesPage";
 import TimeOffPage from "../components/TimeOffPage/TimeOffPage";
+import SettingsPage from "../components/SettingsPage/SettingsPage";
+import { SettingsProvider } from "../components/SettingsPage/context";
 const api = require("../assets/FetchServices");
 
 const dashboardMenu = {
@@ -33,13 +35,13 @@ export default function Dashboard() {
     setCurrent(newCurrent);
   };
   useEffect(() => {
-   // console.log(stateContext);
+    // console.log(stateContext);
     async function fetchData() {
       try {
-       // console.log(stateContext.state.user, "state1");
+        // console.log(stateContext.state.user, "state1");
         if (!stateContext.state.user) {
           const currentUser = await api.user.refresh();
-         // console.log("state2", { currentUser });
+          // console.log("state2", { currentUser });
           if (currentUser) {
             // Get associated employee record
             const currentEmployee = await api.employee.fetchOneByEmail(
@@ -95,23 +97,25 @@ export default function Dashboard() {
             displayMenu(menuItem);
           }}
         />
-        <Box sx={{
-          width: "100%",
-          height: "100vh",
-          paddingLeft: "280px",
-          paddingRight: "120px",
-          paddingTop: "137px",
-          backgroundColor: "#FCFCFD"
-        }}>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100vh",
+            paddingLeft: "280px",
+            paddingRight: "120px",
+            paddingTop: "137px",
+            backgroundColor: "#FCFCFD",
+          }}
+        >
           {current.home && <UpdatesPage />}
           {current.myinfo && <MyInfoHome />}
           {current.people && <PeopleHome />}
           {current.timeoff && <TimeOffPage />}
           {current.reporting && <ReportsMain />}
           {current.settings && (
-            <Placeholder>
-              <h1>Settings page</h1>
-            </Placeholder>
+            <SettingsProvider>
+              <SettingsPage />
+            </SettingsProvider>
           )}
         </Box>
       </Stack>
