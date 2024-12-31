@@ -1,8 +1,5 @@
 import {
-  Backdrop,
-  Button,
   CircularProgress,
-  Grow,
   Modal,
   Typography,
 } from "@mui/material";
@@ -11,24 +8,31 @@ import React, { useContext, useState } from "react";
 import HRMButton from "../Button/HRMButton";
 import { multiStepContext } from "../../context/stepContext";
 import thankYouVector from "../../Images/placeholder.svg";
-import StateContext from "../../context/StateContext";
 import api from "../../assets/FetchServices";
-import CloseIcon from "@mui/icons-material/Close";
-import Fade from "@mui/material/Fade";
+import { useLocation, useNavigate } from "react-router-dom";
+import EmployeeSnackbar from "../PeopleComponents/Snackbar";
+
+const getHomePath = (location) => {
+  const fullUrl = window.location.href;
+  const relativeUrl = location.pathname;
+  if (fullUrl === relativeUrl) {
+    return fullUrl;
+  }
+  return fullUrl.substring(0, fullUrl.indexOf(relativeUrl));
+};
 
 function FinalStep() {
-  const { finalData } = useContext(multiStepContext);
+  const { state } = useContext(multiStepContext);
   const [isSubmitted, setIsSubmitted] = useState(true);
-  const stateContext = useContext(StateContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [open, setOpen] = React.useState(false);
-  const [openToast, setOpenToast] = React.useState(false);
+  const [completed, setCompleted] = useState(false);
   const [loading, setLoading] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
-  const handleOpenToast = () => setOpenToast(true);
   const handleClose = () => setOpen(false);
-  const handleCloseToast = () => setOpenToast(false);
 
   const style = {
     container: {
@@ -107,45 +111,22 @@ function FinalStep() {
 
   const handleAlert = async () => {
     try {
-      await handleSubmit();
+      setLoading(true);
+      const offboardingId = state.id;
+      const dashboardUrl = `${getHomePath(location)}/dashboard`;
+      await api.offboarding.submit({ offboardingId, dashboardUrl });
+      setLoading(false);
       setIsSubmitted(false);
       handleClose();
-      handleOpenToast();
+      setCompleted(true);
       setTimeout(() => {
-        handleCloseToast();
-      }, 5000);
+        navigate("/dashboard", { replace: true });
+      }, 2000);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleSubmit = async () => {
-    const { answer1, answer2, answer3, answer4, answer5, SignedDocumentAck } =
-      finalData;
-    const empId = stateContext.state.user.empId;
-    const data = {
-      empId,
-      answer1,
-      answer2,
-      answer3,
-      answer4,
-      answer5,
-      SignedDocumentAck,
-      isCompleted: true,
-    };
-    const props = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    setLoading(true);
-    const response = await api.offboarding.submit(data, props);
-    const emailData = response?.data;
-    // console.log(response?.data);
-    const emailReq = await api.offboarding.sendEmail(emailData, props, empId);
-    // console.log(emailReq);
-    setLoading(false);
-  };
   return (
     <Box
       width={"1003px"}
@@ -154,6 +135,14 @@ function FinalStep() {
       padding={"100px 0"}
       sx={{ border: "2px solid #ebebeb" }}
     >
+      {completed && (
+        <EmployeeSnackbar
+          isOpen={true}
+          message={
+            " Thank you for filling in the survey. Your response is sent to the HR administrator."
+          }
+        />
+      )}
       <img
         src={thankYouVector}
         style={{ margin: "20px auto" }}
@@ -205,7 +194,7 @@ function FinalStep() {
             Are you sure you want to send your responses?
           </Typography>
           <Typography id="modal-modal-description" sx={style.description}>
-            When you confirm, all your responses will be ent to the HR
+            When you confirm, all your responses will be sent to the HR
             administrator.
           </Typography>
           <Box sx={style.buttonContainer}>
@@ -228,41 +217,6 @@ function FinalStep() {
             </HRMButton>
           </Box>
         </Box>
-      </Modal>
-      <Modal
-        open={openToast}
-        onClose={handleCloseToast}
-        aria-labelledby="toast-modal-title"
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Grow
-          in={openToast}
-          tyle={{ transformOrigin: "0 0 0" }}
-          {...(openToast ? { timeout: 1000 } : {})}
-        >
-          <Box sx={style.toastContainer}>
-            <Box sx={style.toastBox}>
-              <Typography
-                id="toast-modal-title"
-                variant="h6"
-                component="h2"
-                sx={style.toastTitle}
-              >
-                Thank you for filling in the survey. Your response is sent to
-                the HR administrator.
-              </Typography>
-              <Button sx={style.toastClose} onClick={handleCloseToast}>
-                <CloseIcon />
-              </Button>
-            </Box>
-          </Box>
-        </Grow>
       </Modal>
     </Box>
   );

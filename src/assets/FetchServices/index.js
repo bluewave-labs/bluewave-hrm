@@ -15,6 +15,11 @@ service.team = require("./Team");
 service.timeOff = require("./TimeOff");
 service.timeOffHistory = require("./TimeOffHistory");
 service.user = require("./AppUser");
-service.offboarding = require("./Offboarding");
+service.offboarding = require("./Offboarding/Offboarding");
+service.offboardingSurveyResponse = require("./Offboarding/OffboardingSurveyResponse");
+service.offboardingSurveyQuestion = require("./Offboarding/OffboardingSurveyQuestion");
+service.offboardingDocument = require("./Offboarding/OffboardingDocument");
+service.offboardingSignedDocument = require("./Offboarding/OffboardingSignedDocument");
+service.satisfactionSurvey = require("./SatifsactionSurvey");
 
 module.exports = service;

@@ -1,22 +1,14 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
-import Stack from "@mui/material/Stack";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import CheckIcon from "@mui/icons-material/Check";
-import AdjustIcon from "@mui/icons-material/Adjust";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import SettingsIcon from "@mui/icons-material/Settings";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import VideoLabelIcon from "@mui/icons-material/VideoLabel";
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
-import StepContent from "@mui/material/StepContent";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import "../CustomizedSteppers.css";
 import { fonts, colors } from "../../assets/Styles";
 
@@ -61,9 +53,6 @@ const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
     color: "#FFFFFF",
     border: "1px,solid",
     borderColor: "#F9F5FF",
-    // backgroundImage:
-    //   'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
-    // boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
   }),
   ...(ownerState.completed && {
     backgroundColor: "#7F56D9",
@@ -74,18 +63,12 @@ const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
 function ColorlibStepIcon(props) {
   const { active, completed, className } = props;
 
-  const icons = {
-    1: <CheckIcon />,
-    2: <FiberManualRecordIcon />,
-    3: <FiberManualRecordIcon />,
-  };
-
   return (
     <ColorlibStepIconRoot
       ownerState={{ completed, active }}
       className={className}
     >
-      {icons[String(props.icon)]}
+      {completed ? <CheckIcon /> : <FiberManualRecordIcon />}
     </ColorlibStepIconRoot>
   );
 }
@@ -108,13 +91,8 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 
-export default function CustomizedSteppers({ stepnumber, steps, style }) {
+export default function CustomizedSteppers({ stepnumber, steps }) {
   return (
-    // <Box sx={{...{
-    //   boxSizing: "border-box",
-    //   border: "1px solid #EBEBEB",
-    //   backgroundColor: "#FFFFFF"
-    // }, ...style}}>
     <Stepper
       alternativeLabel
       activeStep={stepnumber}
@@ -146,13 +124,11 @@ export default function CustomizedSteppers({ stepnumber, steps, style }) {
               className="font-semibold"
               style={{ fontFamily: fonts.fontFamily, color: colors.darkGrey }}
             >
-              {" "}
               {step.label}
             </div>
           </StepLabel>
         </Step>
       ))}
     </Stepper>
-    // </Box>
   );
 }

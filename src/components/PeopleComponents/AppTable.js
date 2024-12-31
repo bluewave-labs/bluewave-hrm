@@ -295,6 +295,7 @@ export default function AppTable(props) {
           sx={{
             border: "1px solid #EBEBEB",
             maxWidth: window.innerWidth < 1550 ? 1000 : 1250,
+            minWidth: "100%"
           }}
         >
           <Table aria-label="app table">

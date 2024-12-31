@@ -7,7 +7,7 @@ import CheckYourEmailPage from "../components/LoginComponents/CheckYourEmailPage
 import ForgotPasswordPage from "../components/LoginComponents/ForgotPasswordPage.jsx";
 import PasswordResetPage from "../components/LoginComponents/PassswordResetPage.jsx";
 import SetNewPasword from "../components/LoginComponents/SetNewPassword.jsx";
-import NoConnectionComponent from '../components/StaticComponents/NoConnectionComponent.jsx';
+import ServerErrorPage from "../components/Error/ServerErrorPage.js";
 import SingupPage from "../components/LoginComponents/SingupPage.js";
 import PageContext from "../context/PageContext.js";
 
@@ -24,7 +24,7 @@ function LandingPage() {
       {pageContext.page.resetPassword && <PasswordResetPage />}
       {pageContext.page.newPassword && <SetNewPasword />}
       {pageContext.page.signup && <SingupPage />}
-      {pageContext.page.networkError && <NoConnectionComponent />}
+      {pageContext.page.networkError && <ServerErrorPage />}
      </>
   )
 }

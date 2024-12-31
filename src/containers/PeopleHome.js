@@ -5,6 +5,17 @@ import EmployeeForm from "../components/PeopleComponents/EmployeeForm";
 import EmployeeSnackbar from "../components/PeopleComponents/Snackbar";
 import ActionButtonEmployee from "../components/PeopleComponents/EndEmployment";
 import StateContext from "../context/StateContext";
+import { useLocation } from "react-router-dom";
+const api = require("../assets/FetchServices");
+
+const getHomePath = (location) => {
+  const fullUrl = window.location.href;
+  const relativeUrl = location.pathname;
+  if (fullUrl === relativeUrl) {
+    return fullUrl;
+  }
+  return fullUrl.substring(0, fullUrl.indexOf(relativeUrl));
+};
 
 /**
  * This function enables users to view employees' details. Only the administrator can view all the details.
@@ -13,6 +24,7 @@ import StateContext from "../context/StateContext";
  */
 function PeopleHome() {
   const stateContext = useContext(StateContext);
+  const location = useLocation();
   const [viewOnly, setViewOnly] = useState(true); // view by default
   const [selectedEmployee, setSelectedEmployee] = useState();
   const [alert, setAlert] = useState({ show: false });
@@ -29,10 +41,15 @@ function PeopleHome() {
     setSelectedEmployee(data);
   };
 
-  const handleSurvey = (data) => {
-    const empId = data ? data.empId : -1;
-    console.log("handleSurvey clicked - empId", empId);
-    //Backend function call goes here
+  const handleSurvey = async (data) => {
+    if(!data || !data.empId){
+      return;
+    }
+    const params =  { 
+      empId: data.empId, 
+      email: data.email, 
+      frontendUrl: `${getHomePath(location)}/`} 
+      await api.offboarding.createOne(params);
     setLinkSent(true); // if the operation is successful
     setTimeout(() => {
       setLinkSent(false); // reset the variable

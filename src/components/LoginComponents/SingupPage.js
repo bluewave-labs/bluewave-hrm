@@ -199,7 +199,7 @@ function SingupPage({ user, token, onSubmit }) {
           <img src={stateContext.state.logo} alt="logo" />
         </div>
         <h2 style={{ marginBottom: "0px" }}>
-          {user ? "Create an account" : "Create HRM admin account"}
+          {user ? "Activate account" : "Create HRM admin account"}
         </h2>
         <form onSubmit={handleSubmit}>
           <Input
@@ -259,7 +259,7 @@ function SingupPage({ user, token, onSubmit }) {
           <Constraint text={"Must match"} passed={validators.match} />
 
           <button disabled={disableButton()} className="create-account-button">
-            Get started
+           {user ? "Activate" : "Get started"}
           </button>
         </form>
       </div>

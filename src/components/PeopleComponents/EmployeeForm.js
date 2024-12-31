@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { Box, Divider, Stack, Typography, Button } from "@mui/material";
 import "./EmployeeForm.css";
 import countryData from "../../assets/countries+states+cities.json";
-import axios from "axios";
 import SelectPhoto from "./SelectPhoto";
 import HRMDatePicker from "./HRMDatePicker";
 import dayjs from "dayjs";
 import PopupModal from "./PopupModal";
 import { useLocation } from "react-router-dom";
+import { padding } from "@mui/system";
 const api = require("../../assets/FetchServices");
 const selectOptions = require("../../assets/employee-form-select-options.json");
 const validator = require("validator");
@@ -112,18 +112,41 @@ const getManagerNames = (managers) => {
   return name;
 };
 
+const containerStyle = {
+  boxSizing: "border-box",
+  display: "flex",
+  width: "100%",
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #EBEBEB",
+  borderRadius: "10px",
+  pt: 0,
+  pb: 4,
+  pr: 4,
+  pl: 5,
+  mt: 0,
+};
+
 const rootStyle = {
   width: "100%",
-  minWidth: "800px",
-  display: "flex",
-  justifyContent: "space-between",
+  height: "100%",
+
 };
 
 const errorStyle = {
   fontSize: "10px",
+  fontFamily: "Inter",
   color: "red",
   paddingLeft: "5px",
 };
+
+
+function RowStack({ children }) {
+  return (
+    <Stack direction={"row"} spacing={3}>
+      {children}
+    </Stack>
+  );
+}
 
 function createHeader(employee, handleDiscard) {
   return (
@@ -153,13 +176,14 @@ function createHeader(employee, handleDiscard) {
         disableElevation
         onClick={() => handleDiscard(true)}
         sx={{
-          width: "166px",
+          width: "auto",
           height: "34px",
           border: "1px solid #D0D5DD",
           backgroundColor: "#FFFFFF",
           color: "#000000",
           fontSize: 13,
           fontWeight: 400,
+          fontFamily: "Inter",
           textTransform: "none",
           "&:hover": {
             backgroundColor: "#F5F5F5",
@@ -195,6 +219,7 @@ function createFooter(employee, handleSubmit) {
           backgroundColor: "#7F56D9",
           fontSize: 13,
           fontWeight: 400,
+          fontFamily: "Inter",
           textTransform: "none",
           "&:hover": {
             backgroundColor: "#602ece",
@@ -223,7 +248,7 @@ function ImagePicker(props) {
   const { employee, handleChange } = props;
   const image = employee && `data:image/png;base64,${atob(employee.photo)}`;
   return (
-    <Box sx={rootStyle}>
+    <Stack sx={rootStyle} spacing={1}>
       <label>Photo</label>
       <SelectPhoto
         imageData={image}
@@ -239,16 +264,16 @@ function ImagePicker(props) {
           handleChange(data);
         }}
       />
-    </Box>
+    </Stack>
   );
 }
 
 function CustomisedDatePicker(props) {
   const { label, name, value, handleChange, validator } = props;
   return (
-    <Box sx={rootStyle}>
-      <label>{label}</label>
-      <Typography sx={{ width: "520px" }}>
+    <Stack sx={rootStyle} spacing={1}>
+   <Typography>{label}</Typography>
+      <Typography>
         <HRMDatePicker
           name={name}
           initialValue={value}
@@ -257,25 +282,17 @@ function CustomisedDatePicker(props) {
         />
         {validator[name] && <Box sx={errorStyle}>{validator[name]} </Box>}
       </Typography>
-    </Box>
+    </Stack>
   );
 }
 
 function CustomisedSelectTag(props) {
-  const {
-    label,
-    name,
-    value,
-    options,
-    width,
-    handleChange,
-    validator,
-    restricted,
-  } = props;
+  const { label, name, value, options, handleChange, validator, restricted } =
+    props;
   return (
-    <Box sx={rootStyle}>
-      <label>{label}</label>
-      <Typography sx={{ width: "520px" }}>
+    <Stack sx={rootStyle} spacing={1}>
+      <Typography>{label}</Typography>
+      <Typography>
         <select
           className={
             validator[name] ? "select-element field-error" : "select-element"
@@ -283,17 +300,51 @@ function CustomisedSelectTag(props) {
           name={name}
           value={value}
           onChange={handleChange}
-          style={{ width: width ? width : 530 + "px" }}
           disabled={restricted}
         >
           {options &&
-            options.map((option) => {
-              return <option value={option}>{option}</option>;
+            options.map((option, index) => {
+              return (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              );
             })}
         </select>
         {validator[name] && <Box sx={errorStyle}>{validator[name]} </Box>}
       </Typography>
-    </Box>
+    </Stack>
+  );
+}
+function GenderSelectTag(props) {
+  const { label, name, value, options, handleChange, validator, restricted } =
+    props;
+  return (
+    <Stack sx={rootStyle} spacing={1}>
+    <Typography>{label}</Typography>
+      <Typography>
+        <select
+          className={
+            validator[name] ? "select-element field-error" : "select-element"
+          }
+          name={name}
+          value={value}
+          onChange={handleChange}
+          style={{ width: "30.3774%" }}
+          disabled={restricted}
+        >
+          {options &&
+            options.map((option, index) => {
+              return (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              );
+            })}
+        </select>
+        {validator[name] && <Box sx={errorStyle}>{validator[name]} </Box>}
+      </Typography>
+    </Stack>
   );
 }
 function CustomisedInput(props) {
@@ -307,7 +358,7 @@ function CustomisedInput(props) {
     restricted,
   } = props;
   return (
-    <Box sx={rootStyle}>
+    <Stack sx={rootStyle} spacing={1}>
       <Typography>{label}</Typography>
       <Typography>
         <input
@@ -322,21 +373,15 @@ function CustomisedInput(props) {
         />
         {validator[name] && <Box sx={errorStyle}>{validator[name]} </Box>}
       </Typography>
-    </Box>
+    </Stack>
   );
 }
 function CustomisedSocialMediaInput(props) {
-  const { label, title, name, value, handleChange, validator } = props;
+  const { title, name, value, handleChange, validator } = props;
   return (
-    <Box sx={rootStyle}>
-      <Typography>{label}</Typography>
-      <Typography>
-        <input
-          readOnly
-          tabIndex="-1"
-          value={title}
-          className="text-field-social-media-title"
-        />
+    <Stack sx={rootStyle} spacing={1}>
+      <Stack direction={"row"}>
+        <Box className="text-field-social-media-title">{title}</Box>
         <input
           className={
             validator[name]
@@ -350,8 +395,19 @@ function CustomisedSocialMediaInput(props) {
           require
         />
         {validator[name] && <Box sx={errorStyle}>{validator[name]} </Box>}
-      </Typography>
-    </Box>
+      </Stack>
+    </Stack>
+  );
+}
+
+function SocialMediaContainer({ children }) {
+  return (
+    <Stack spacing={1}>
+      <Typography>Social profiles</Typography>
+      <Stack spacing={1} direction={"row"}>
+        {children}
+      </Stack>
+    </Stack>
   );
 }
 
@@ -608,10 +664,10 @@ function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
 
   return (
     <Stack
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: "100vh", maxWidth: "950px" }}
+      //direction="column"
+      //alignItems="center"
+      //justifyContent="center"
+      sx={{ minHeight: "100vh" ,border: "0px solid red"}}
     >
       {change && prompt && (
         <PopupModal
@@ -621,327 +677,315 @@ function EmployeeForm({ employee, restricted, onDiscard, onSave }) {
         />
       )}
       {createHeader(employee, handleDiscard)}
-      <Stack
-        sx={{
-          boxSizing: "border-box",
-          display: "flex",
-          width: "100%",
-          backgroundColor: "#FFFFFF",
-          border: "1px solid #EBEBEB",
-          borderRadius: "10px",
-          pt: 0,
-          pb: 4,
-          pr: 4,
-          pl: 5,
-          mt: 0,
-        }}
-      >
-        <form sx={{ border: "2px red solid" }}>
-          <Stack spacing={2.5}>
+      <form>
+        <Stack spacing={5} sx={{ border: "0px blue solid", width: "100%", minWidth: "100%" }}>
+          {/* Personal Information container begins here */}
+          <Stack spacing={2.5} sx={containerStyle}>
             {createSubHead("Personal")}
-
-            <CustomisedInput
-              label={"First name"}
-              name={"firstName"}
-              value={inputs.firstName || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedInput
-              label={"Last name"}
-              name={"lastName"}
-              value={inputs.lastName || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedInput
-              label={"Preferred name"}
-              name={"preferredName"}
-              value={inputs.preferredName || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedSelectTag
-              label={"Gender"}
-              name={"gender"}
-              value={inputs.gender || ""}
-              options={selectOptions.gender}
-              width={161}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedSelectTag
-              label={"Nationality"}
-              name={"nationality"}
-              value={inputs.nationality || ""}
-              options={getNationality()}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedSelectTag
-              label={"Marital status"}
-              name={"maritalStatus"}
-              value={inputs.maritalStatus || ""}
-              options={selectOptions.maritalStatus}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedDatePicker
-              label={"Birth date"}
-              name={"dateOfBirth"}
-              value={inputs.dateOfBirth || dayjs().format("MMM D, YYYY")}
-              handleChange={handleChange}
-              validator={validator}
-            />
-            <ImagePicker employee={employee} handleChange={handleChange} />
-            <CustomisedInput
-              label={"Mobile"}
-              name={"phoneNumber"}
-              value={inputs.phoneNumber || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedInput
-              label={"Work email"}
-              name={"email"}
-              value={inputs.email || ""}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedInput
-              label={"Address line 1"}
-              name={"streetAddress"}
-              value={inputs.streetAddress || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedInput
-              label={"Address line 2"}
-              name={"unitSuite"}
-              value={inputs.unitSuite || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedSelectTag
-              label={"Country"}
-              name={"country"}
-              value={inputs.country || ""}
-              options={getCountryName()}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedSelectTag
-              label={"State (if applicable)"}
-              name={"stateProvince"}
-              value={inputs.stateProvince || ""}
-              options={getStates(inputs.country)}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <Stack spacing={1}>
-              <CustomisedSelectTag
-                label={"City"}
-                name={"city"}
-                value={inputs.city || ""}
-                options={getCities(inputs.country, inputs.stateProvince)}
-                width={520}
+            <RowStack>
+              <CustomisedInput
+                label={"First name"}
+                name={"firstName"}
+                value={inputs.firstName || ""}
                 handleChange={handleChange}
                 validator={validator}
               />
-
-              {inputs.city === "Others" && (
-                <CustomisedInput
-                  label={""}
-                  name={"_city"}
-                  value={inputs._city || ""}
-                  handleChange={handleChange}
-                  placeholder={"Please specify city"}
-                  validator={validator}
-                />
-              )}
-            </Stack>
-
-            <CustomisedInput
-              label={"Postal/zip code"}
-              name={"postalZipCode"}
-              value={inputs.postalZipCode || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-            <Stack spacing={1}>
+              <CustomisedInput
+                label={"Last name"}
+                name={"lastName"}
+                value={inputs.lastName || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedInput
+                label={"Preferred name"}
+                name={"preferredName"}
+                value={inputs.preferredName || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <GenderSelectTag
+                label={"Gender"}
+                name={"gender"}
+                value={inputs.gender || ""}
+                options={selectOptions.gender}
+                handleChange={handleChange}
+                validator={validator}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedDatePicker
+                label={"Birth date"}
+                name={"dateOfBirth"}
+                value={inputs.dateOfBirth || dayjs().format("MMM D, YYYY")}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <ImagePicker employee={employee} handleChange={handleChange} />
+            </RowStack>
+            <RowStack>
+              <CustomisedSelectTag
+                label={"Nationality"}
+                name={"nationality"}
+                value={inputs.nationality || ""}
+                options={getNationality()}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <CustomisedSelectTag
+                label={"Marital status"}
+                name={"maritalStatus"}
+                value={inputs.maritalStatus || ""}
+                options={selectOptions.maritalStatus}
+                handleChange={handleChange}
+                validator={validator}
+              />
+            </RowStack>
+            <SocialMediaContainer>
               <CustomisedSocialMediaInput
-                label={"Social profiles"}
                 title={"twitter.com/"}
                 name={"_twitter"}
                 value={inputs._twitter || ""}
                 handleChange={handleChange}
                 validator={validator}
               />
-
               <CustomisedSocialMediaInput
-                label={""}
                 title={"facebook.com/"}
                 name={"_facebook"}
                 value={inputs._facebook || ""}
                 handleChange={handleChange}
                 validator={validator}
               />
-
               <CustomisedSocialMediaInput
-                label={""}
                 title={"linkedin.com/in/"}
                 name={"_linkedin"}
                 value={inputs._linkedin || ""}
                 handleChange={handleChange}
                 validator={validator}
               />
-            </Stack>
-
-            <CustomisedInput
-              label={"Emergency contact name"}
-              name={"emergencyContactName"}
-              value={inputs.emergencyContactName || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedInput
-              label={"Emergency contact relationship"}
-              name={"emergencyContactRelationship"}
-              value={inputs.emergencyContactRelationship || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            <CustomisedInput
-              label={"Emergency contact phone"}
-              name={"emergencyContactPhoneNumber"}
-              value={inputs.emergencyContactPhoneNumber || ""}
-              handleChange={handleChange}
-              validator={validator}
-            />
-
-            {createSubHead("Job")}
-
-            <CustomisedDatePicker
-              label={"Hire date"}
-              name={"hireDate"}
-              value={inputs.hireDate || dayjs().format("MMM D, YYYY")}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-            <CustomisedSelectTag
-              label={"Reporting to"}
-              name={"reportTo"}
-              value={inputs.reportTo || ""}
-              options={getManagerNames(managers)}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedSelectTag
-              label={"Department"}
-              name={"_department"}
-              value={inputs._department || ""}
-              options={getValues(departments, "departmentName")}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedSelectTag
-              label={"Position"}
-              name={"_role"}
-              value={inputs._role || ""}
-              options={getValues(positions, "roleTitle")}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedInput
-              label={"Office"}
-              name={"officeLocation"}
-              value={inputs.officeLocation || ""}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedSelectTag
-              label={"Employment type"}
-              name={"employmentType"}
-              value={inputs.employmentType || ""}
-              options={selectOptions.employmentType}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedSelectTag
-              label={"Compensation type"}
-              name={"compensationType"}
-              value={inputs.compensationType || ""}
-              options={selectOptions.compensationType}
-              width={520}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedInput
-              label={"Salary"}
-              name={"salary"}
-              value={inputs.salary || ""}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedDatePicker
-              label={"Effective date"}
-              name={"effectiveDate"}
-              value={inputs.effectiveDate || dayjs().format("MMM D, YYYY")}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-
-            <CustomisedInput
-              label={"Hours per week"}
-              name={"weeklyHours"}
-              value={inputs.weeklyHours || ""}
-              handleChange={handleChange}
-              validator={validator}
-              restricted={restricted}
-            />
-            {createFooter(employee, handleSubmit)}
+            </SocialMediaContainer>
           </Stack>
-        </form>
-      </Stack>
+          {/* Personal Information container ends here */}
+
+          {/* Contact Information container begins here */}
+          <Stack spacing={2.5} sx={containerStyle}>
+            {createSubHead("Job")}
+            <RowStack>
+              <CustomisedInput
+                label={"Mobile"}
+                name={"phoneNumber"}
+                value={inputs.phoneNumber || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <CustomisedInput
+                label={"Work email"}
+                name={"email"}
+                value={inputs.email || ""}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedInput
+                label={"Address line 1"}
+                name={"streetAddress"}
+                value={inputs.streetAddress || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <CustomisedInput
+                label={"Address line 2"}
+                name={"unitSuite"}
+                value={inputs.unitSuite || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedSelectTag
+                label={"Country"}
+                name={"country"}
+                value={inputs.country || ""}
+                options={getCountryName()}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <CustomisedSelectTag
+                label={"State (if applicable)"}
+                name={"stateProvince"}
+                value={inputs.stateProvince || ""}
+                options={getStates(inputs.country)}
+                handleChange={handleChange}
+                validator={validator}
+              />
+            </RowStack>
+            <RowStack>
+              <Stack spacing={1} width={"100%"}>
+                <CustomisedSelectTag
+                  label={"City"}
+                  name={"city"}
+                  value={inputs.city || ""}
+                  options={getCities(inputs.country, inputs.stateProvince)}
+                  handleChange={handleChange}
+                  validator={validator}
+                />
+                {inputs.city === "Others" && (
+                  <CustomisedInput
+                    label={""}
+                    name={"_city"}
+                    value={inputs._city || ""}
+                    handleChange={handleChange}
+                    placeholder={"Please specify city"}
+                    validator={validator}
+                  />
+                )}
+              </Stack>
+
+              <CustomisedInput
+                label={"Postal/zip code"}
+                name={"postalZipCode"}
+                value={inputs.postalZipCode || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedInput
+                label={"Emergency contact name"}
+                name={"emergencyContactName"}
+                value={inputs.emergencyContactName || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <CustomisedInput
+                label={"Emergency contact relationship"}
+                name={"emergencyContactRelationship"}
+                value={inputs.emergencyContactRelationship || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedInput
+                label={"Emergency contact phone"}
+                name={"emergencyContactPhoneNumber"}
+                value={inputs.emergencyContactPhoneNumber || ""}
+                handleChange={handleChange}
+                validator={validator}
+              />
+              <Stack sx={{ width: "100%" }}></Stack>
+            </RowStack>
+          </Stack>
+          {/* Contact Information container ends here */}
+
+          {/* Job Information container begins here */}
+          <Stack spacing={2.5} sx={containerStyle}>
+            {createSubHead("Job")}
+            <RowStack>
+              <CustomisedDatePicker
+                label={"Hire date"}
+                name={"hireDate"}
+                value={inputs.hireDate || dayjs().format("MMM D, YYYY")}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+              <CustomisedSelectTag
+                label={"Reporting to"}
+                name={"reportTo"}
+                value={inputs.reportTo || ""}
+                options={getManagerNames(managers)}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedSelectTag
+                label={"Department"}
+                name={"_department"}
+                value={inputs._department || ""}
+                options={getValues(departments, "departmentName")}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+              <CustomisedSelectTag
+                label={"Position"}
+                name={"_role"}
+                value={inputs._role || ""}
+                options={getValues(positions, "roleTitle")}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedInput
+                label={"Office"}
+                name={"officeLocation"}
+                value={inputs.officeLocation || ""}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+              <CustomisedSelectTag
+                label={"Employment type"}
+                name={"employmentType"}
+                value={inputs.employmentType || ""}
+                options={selectOptions.employmentType}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedSelectTag
+                label={"Compensation type"}
+                name={"compensationType"}
+                value={inputs.compensationType || ""}
+                options={selectOptions.compensationType}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+              <CustomisedInput
+                label={"Salary"}
+                name={"salary"}
+                value={inputs.salary || ""}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+            </RowStack>
+            <RowStack>
+              <CustomisedDatePicker
+                label={"Effective date"}
+                name={"effectiveDate"}
+                value={inputs.effectiveDate || dayjs().format("MMM D, YYYY")}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+              <CustomisedInput
+                label={"Hours per week"}
+                name={"weeklyHours"}
+                value={inputs.weeklyHours || ""}
+                handleChange={handleChange}
+                validator={validator}
+                restricted={restricted}
+              />
+            </RowStack>
+          </Stack>
+          {/* Job Information container ends here */}
+
+          {createFooter(employee, handleSubmit)}
+        </Stack>
+      </form>
     </Stack>
   );
 }

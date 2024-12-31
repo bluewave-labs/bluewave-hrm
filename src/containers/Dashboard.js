@@ -25,21 +25,21 @@ const dashboardMenu = {
 export default function Dashboard() {
   const stateContext = useContext(StateContext);
   const [current, setCurrent] = useState({});
+  const [error, setError] = useState(true);
   const navigate = useNavigate();
+
   const displayMenu = (menuItem) => {
     const newCurrent = produce(dashboardMenu, (newDashboardMenu) => {
       newDashboardMenu[menuItem] = true;
     });
     setCurrent(newCurrent);
   };
+
   useEffect(() => {
-   // console.log(stateContext);
     async function fetchData() {
       try {
-       // console.log(stateContext.state.user, "state1");
         if (!stateContext.state.user) {
           const currentUser = await api.user.refresh();
-         // console.log("state2", { currentUser });
           if (currentUser) {
             // Get associated employee record
             const currentEmployee = await api.employee.fetchOneByEmail(
@@ -61,23 +61,32 @@ export default function Dashboard() {
               console.log("Error, failed to reload logo");
             }
             stateContext.updateStates(data);
-            //navigate("/dashboard", { replace: true });
+            const isAdmin = data.user && data.user.permission.id === 1;
+            const initialMenu = isAdmin ? "home" : "people";
+            displayMenu(initialMenu);
+            setError(false);
           } else {
             throw "No active session, please log in.";
           }
+        } else {
+          const isAdmin =
+            stateContext.state.user &&
+            stateContext.state.user.permission.id === 1;
+          const initialMenu = isAdmin ? "home" : "people";
+          displayMenu(initialMenu);
+          setError(false);
         }
-        const isAdmin =
-          stateContext.state.user &&
-          stateContext.state.user.permission.id === 1;
-        const initialMenu = isAdmin ? "home" : "people";
-        displayMenu(initialMenu);
       } catch (err) {
         console.log(err);
+        setError(true);
         navigate("/", { replace: true }); // Redirect to login page
       }
     }
     fetchData();
   }, []);
+  if (error) {
+    return null;
+  }
   if (!stateContext.state.user) {
     // return <Placeholder content={"Loading, please wait..."} />;
   }
@@ -95,13 +104,15 @@ export default function Dashboard() {
             displayMenu(menuItem);
           }}
         />
-        <Box sx={{
-          width: "100%",
-          paddingLeft: "280px",
-          paddingRight: "120px",
-          paddingTop: "137px",
-          backgroundColor: "#FCFCFD"
-        }}>
+        <Box
+          sx={{
+            width: "100%",
+            paddingLeft: "280px",
+            paddingRight: "120px",
+            paddingTop: "137px",
+            backgroundColor: "#FCFCFD",
+          }}
+        >
           {current.home && <UpdatesPage />}
           {current.myinfo && <MyInfoHome />}
           {current.people && <PeopleHome />}

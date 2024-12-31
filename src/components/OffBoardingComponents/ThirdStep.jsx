@@ -1,16 +1,43 @@
 import { TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import HRMButton from "../Button/HRMButton";
 import { multiStepContext } from "../../context/stepContext";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
+function QuestionBox({ index, data, setResponse }) {
+  return (
+    <Box>
+      <Typography
+        fontSize={"13px"}
+        fontWeight={400}
+        margin={"80px auto 20px auto"}
+        textAlign={"left"}
+        width={"70%"}
+      >
+        {data.question}
+      </Typography>
+
+      <TextField
+        style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
+        InputLabelProps={{ shrink: false }}
+        multiline
+        rows={3}
+        value={data.answer}
+        onChange={(e) => {
+          setResponse(index, e.target.value);
+        }}
+      />
+    </Box>
+  );
+}
+
 function ThirdStep() {
-  const { currentStep, setCurrentStep, finalData, setFinalData } =
+  const { setCurrentStep, state, setResponse, handleSave } =
     useContext(multiStepContext);
 
-  const handleNext = () => {
-    setCurrentStep(4);
+  const handleNext = async () => {
+    await handleSave();
   };
 
   return (
@@ -36,111 +63,18 @@ function ThirdStep() {
       >
         Your answers are going to be used to further improve our processs.
       </Typography>
-      <Typography
-        fontSize={"13px"}
-        fontWeight={400}
-        margin={"80px auto 20px auto"}
-        textAlign={"left"}
-        width={"70%"}
-      >
-        What suggestions do you have for improving the company culture or work
-        environment?
-      </Typography>
 
-      <TextField
-        style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        InputLabelProps={{ shrink: false }}
-        multiline
-        rows={3}
-        value={finalData["answer1"]}
-        onChange={(e) => {
-          setFinalData({ ...finalData, answer1: e.target.value });
-        }}
-      />
-      <Typography
-        fontSize={"13px"}
-        fontWeight={400}
-        margin={"80px auto 20px auto"}
-        textAlign={"left"}
-        width={"70%"}
-      >
-        Do you have any feedback on your manager or team that you'd like to
-        share?
-      </Typography>
+      {state.offboardingSurveyResponses.map((item, index) => {
+        return (
+          <QuestionBox
+            key={index}
+            index={index}
+            data={item}
+            setResponse={setResponse}
+          />
+        );
+      })}
 
-      <TextField
-        style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        InputLabelProps={{ shrink: false }}
-        multiline
-        rows={3}
-        value={finalData["answer2"]}
-        onChange={(e) => {
-          setFinalData({ ...finalData, answer2: e.target.value });
-        }}
-      />
-      <Typography
-        fontSize={"13px"}
-        fontWeight={400}
-        margin={"80px auto 20px auto"}
-        textAlign={"left"}
-        width={"70%"}
-      >
-        How was your experience working here?
-      </Typography>
-
-      <TextField
-        style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        InputLabelProps={{ shrink: false }}
-        multiline
-        rows={3}
-        value={finalData["answer3"]}
-        onChange={(e) => {
-          setFinalData({ ...finalData, answer3: e.target.value });
-        }}
-      />
-      <Typography
-        fontSize={"13px"}
-        fontWeight={400}
-        margin={"80px auto 20px auto"}
-        textAlign={"left"}
-        width={"70%"}
-      >
-        Do you have any feedback on your manager or team that you'd like to
-        share?
-      </Typography>
-
-      <TextField
-        style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        InputLabelProps={{ shrink: false }}
-        multiline
-        rows={3}
-        value={finalData["answer4"]}
-        onChange={(e) => {
-          setFinalData({ ...finalData, answer4: e.target.value });
-        }}
-      />
-      <Typography
-        fontSize={"13px"}
-        fontWeight={400}
-        margin={"80px auto 20px auto"}
-        textAlign={"left"}
-        width={"70%"}
-      >
-        Is there anything else you would like to share that we haven’t
-        discussed?
-      </Typography>
-
-      <TextField
-        style={{ textAlign: "left", width: "70%", margin: "0 auto" }}
-        // label="[Answer]"
-        multiline
-        rows={3}
-        value={finalData["answer5"]}
-        onChange={(e) => {
-          setFinalData({ ...finalData, answer5: e.target.value });
-        }}
-        InputLabelProps={{ shrink: false }}
-      />
       <br />
 
       <div
@@ -160,7 +94,7 @@ function ThirdStep() {
 
             fontSize: "13px",
           }}
-          onClick={() => setCurrentStep(currentStep - 1)}
+          onClick={() => setCurrentStep(state.step - 1)}
         >
           Previous
         </HRMButton>

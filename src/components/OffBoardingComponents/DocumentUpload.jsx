@@ -1,148 +1,98 @@
-import React, {
-  useState,
-  useContext,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import React, { useState, useContext, forwardRef } from "react";
 import Box from "@mui/material/Box";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { Typography, Stack } from "@mui/material";
 import Link from "@mui/material/Link";
-import CircularProgress, {
-  circularProgressClasses,
-} from "@mui/material/CircularProgress";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import axios from "axios";
+import dayjs from "dayjs";
 import { multiStepContext } from "../../context/stepContext";
-import api from "../../assets/FetchServices";
-import StateContext from "../../context/StateContext";
+import { produce } from "immer";
+
 const DocumentUpload = forwardRef((props, ref) => {
-  useImperativeHandle(ref, () => {
-    return {
-      handleSubmit: handleUpload,
-    };
-  });
   const fileInputRef = React.createRef();
-  const [progress, setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
-  const [currentfile, setCurrentFile] = useState("");
-  const [filesize, setFileSize] = useState(0);
-  const [filelist, setFileList] = useState([]);
-  const [uploaded, setUploaded] = useState(false);
-  const { finalData, setFinalData } = useContext(multiStepContext);
-  const stateContext = useContext(StateContext);
+  const { state, setState } = useContext(multiStepContext);
 
-  const handleUpload = async () => {
-    if (uploaded) {
-      clearFileInput();
-      return;
+  // Utility function to restrict the type of files that can be dragged and dropped
+  const permittedFile = (fileName) => {
+    const allowedExtensions = [
+      "PDF",
+      "DOC",
+      "DOCX",
+      "GIV",
+      "JPEG",
+      "JPG",
+      "PNG",
+      "SVG",
+    ];
+    if (!fileName) return false;
+    const indexOfDot = fileName.lastIndexOf(".");
+    if (indexOfDot < 0) {
+      return false;
     }
-    try {
-      const uploadFiles = JSON.parse(localStorage.getItem("files"));
-      for (let i = 0; i < uploadFiles.length; i++) {
-        const uploadFile = uploadFiles[i];
-        const props = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          onUploadProgress: async (progressEvent) => {
-            setCurrentFile(uploadFile.documentName);
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setProgress(percentCompleted);
-            await delay(1500);
-            setUploaded(false);
-          },
-        };
-        setUploaded(true);
-        const response = await api.offboarding.uploadDocs(uploadFile, props);
-        // console.log(response);
-      }
-    } catch (error) {
-      setUploaded(false);
-      console.log(error);
-    }
-  };
-  function delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  const uploadLocalStorage = (newFile) => {
-    if (localStorage.getItem("files") == null) {
-      const newArr = new Array();
-      localStorage.setItem("files", JSON.stringify(newArr));
-    }
-    // upload to local storage
-    let tempFiles = JSON.parse(localStorage.getItem("files"));
-    tempFiles.push(newFile);
-    localStorage.setItem("files", JSON.stringify(tempFiles));
+    const fileExtension = fileName.substring(indexOfDot + 1).toUpperCase();
+    return allowedExtensions.includes(fileExtension);
   };
 
-  // Add uploaded file to an Array
-  const addFile = async (newFile) => {
-    await setFileList((prevFiles) => [...prevFiles, newFile]);
-    await setFinalData({
-      ...finalData,
-      filelist: [...finalData["filelist"], newFile],
+  const addFile = (newFile) => {
+    const files = [...state.offboardingSignedDocuments, newFile];
+    const data = produce(state, (newState) => {
+      newState.offboardingSignedDocuments = files;
     });
-    uploadLocalStorage(newFile);
+    setState(data);
   };
 
   const handleDelete = (index) => {
-    const newFilelist = finalData["filelist"].filter((_, i) => i !== index);
-    // Update the state with the new array
-    setFileList(newFilelist);
-    setFinalData({ ...finalData, filelist: newFilelist });
-    localStorage.setItem("files", JSON.stringify(newFilelist));
-  };
+    const currFiles = state.offboardingSignedDocuments;
+    const updatedFiles = [];
+    for (let i = 0; i < currFiles.length; i++) {
+      if (i === index) {
+        continue;
+      }
+      updatedFiles.push(currFiles[i]);
+    }
 
-  const formatDate = (inputDate) => {
-    const [month, day, year] = inputDate.split("/").map(Number);
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const formattedMonth = monthNames[month - 1];
-    return `${formattedMonth} ${day}, ${year}`;
+    const data = produce(state, (newState) => {
+      newState.offboardingSignedDocuments = updatedFiles;
+      //Check if this file has already been uploaded
+      if (currFiles[index].id) {
+        // Keep track of ids of deleted files
+        if (state.deletedOffboardingSignedDocuments) {
+          newState.deletedOffboardingSignedDocuments = [
+            ...state.deletedOffboardingSignedDocuments,
+            currFiles[index].id,
+          ];
+        } else {
+          newState.deletedOffboardingSignedDocuments = [currFiles[index].id];
+        }
+      }
+    });
+    setState(data);
   };
 
   // Handle file change event
   const handleFileChange = async (e) => {
     const file = await e.target.files[0];
-    if (file) {
+    if (file && permittedFile(file.name)) {
       const name = file.name.split(".")[0];
       const documentExtension = file.name.split(".")[1];
-      const size = (file.size / 1000000).toFixed(1);
-      const date = new Date();
-      const newdate = date.toLocaleDateString();
-      const uploadedDate = formatDate(newdate);
-      setFileSize(size);
+      const uploadedDate = new Date();
       var reader = new FileReader();
       reader.onload = async function (event) {
         const base64String = await event.target.result.split(",")[1]; // Extract base64 string
         const uploadFile = {
-          empId: stateContext.state.user.empId,
+          offboardingId: state.id,
+          empId: state.empId,
           documentName: name,
           documentExtension,
           documentCategory: "offboarding",
           dateUploaded: uploadedDate,
-          documentDescription: "this is a test file",
+          documentDescription: "Signed document",
           documentFile: base64String,
         };
         addFile(uploadFile);
@@ -173,14 +123,6 @@ const DocumentUpload = forwardRef((props, ref) => {
       handleFileChange({ target: { files } });
     }
   };
-
-  // Function to clear file state
-  const clearFileInput = () => {
-    fileInputRef.current.value = "";
-    setProgress(0);
-  };
-
-  // Function to handle file upload
 
   return (
     <>
@@ -217,7 +159,7 @@ const DocumentUpload = forwardRef((props, ref) => {
                 ref={fileInputRef}
                 className="hidden-input"
                 onChange={handleFileChange}
-                accept=".pdf"
+                accept=".pdf,.doc,.docx,image/*"
                 hidden
               />
               <Link
@@ -253,79 +195,7 @@ const DocumentUpload = forwardRef((props, ref) => {
           </Stack>
         </Box>
       </div>
-
-      {!uploaded ? (
-        <></>
-      ) : (
-        <Box
-          height={72}
-          width={812}
-          my={4}
-          display="flex"
-          alignItems="center"
-          justifyContent={"space-between"}
-          gap={4}
-          p={2}
-          sx={{
-            border: "2px solid #EAECF0",
-            borderRadius: "12px",
-            background: `linear-gradient(to right, #F9FAFB ${progress}%, transparent ${progress}%), transparent 100%`,
-          }}
-        >
-          <Stack>
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontWeight: "medium",
-                color: "#344054",
-                fontFamily: "Inter",
-                marginBottom: "4px",
-              }}
-            >
-              {currentfile}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "13px",
-                fontWeight: "regular",
-                color: "#475467",
-                fontFamily: "Inter",
-                marginBottom: "4px",
-              }}
-            >
-              {filesize}MB – {progress}% uploaded
-            </Typography>
-          </Stack>
-          <Stack sx={{ position: "relative" }}>
-            <CircularProgress
-              variant="determinate"
-              sx={{
-                color: "#F2F4F7",
-              }}
-              size={40}
-              thickness={4}
-              value={100}
-            />
-            <CircularProgress
-              variant="determinate"
-              // disableShrink
-              sx={{
-                color: "#7F56D9",
-                position: "absolute",
-                left: 0,
-                [`& .${circularProgressClasses.circle}`]: {
-                  strokeLinecap: "round",
-                },
-              }}
-              value={progress}
-              size={40}
-              thickness={4}
-            />
-          </Stack>
-        </Box>
-      )}
-
-      {finalData["filelist"].length === 0 ? (
+      {state.offboardingSignedDocuments === 0 ? (
         <></>
       ) : (
         <TableContainer>
@@ -357,7 +227,7 @@ const DocumentUpload = forwardRef((props, ref) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {finalData["filelist"].map((file, index) => (
+              {state.offboardingSignedDocuments.map((file, index) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -383,7 +253,7 @@ const DocumentUpload = forwardRef((props, ref) => {
                       fontFamily: "Inter",
                     }}
                   >
-                    {file.uploadedDate}
+                    {dayjs(file.dateUploaded).format("MMM D, YYYY")}
                   </TableCell>
                   <TableCell align="right">
                     <Stack

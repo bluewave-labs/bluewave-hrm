@@ -18,7 +18,7 @@ const pageItems = [
 ];
 
 export const PageProvider = ({ children }) => {
-  const [page, setPage] = React.useState({ placeholder: true });
+  const [page, setPage] = React.useState({ login : true });
 
   const navigateTo = (page) => {
     const pageData = {};

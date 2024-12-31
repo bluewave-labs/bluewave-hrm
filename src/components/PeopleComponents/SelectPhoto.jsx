@@ -67,14 +67,14 @@ const SelectPhoto = (props) => {
       spacing={2}
       alignContent={"flex-start"}
       direction={"row"}
-      width={512}
     >
       <Avatar sx={{ height: 75, width: 75 }} src={selectedFile}></Avatar>
       <Box
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         height={100}
-        width={450}
+        width={"80%"}
+        minWidth={250}
         display="flex"
         alignItems="center"
         justifyContent={"center"}

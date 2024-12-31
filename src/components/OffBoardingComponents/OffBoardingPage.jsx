@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
@@ -6,94 +6,56 @@ import { multiStepContext } from "../../context/stepContext";
 import FinalStep from "./FinalStep";
 import { Box } from "@mui/system";
 import CustomizedSteppers from "../SetupCompanyMenu/CustomizedSteppers";
-import StateContext from "../../context/StateContext";
-import { useNavigate } from "react-router-dom";
+import ErrorPage from "../Error/ErrorPage";
+import NoContentComponent from "../PeopleComponents/NoContentComponent";
+import { useParams } from "react-router-dom";
+
 const api = require("../../assets/FetchServices");
 
-function OffBoardingPage() {
-  const { currentStep, finalData } = useContext(multiStepContext);
-  const stateContext = useContext(StateContext);
-  const navigate = useNavigate();
+function OffboardingPage() {
+  const { state, setState, setDownloadable } = useContext(multiStepContext);
+
+  const { token } = useParams();
+  const [status, setStatus] = useState({
+    error: false,
+    loading: true,
+  });
+
   useEffect(() => {
     async function fetchData() {
       try {
-        if (!stateContext.state.user) {
-          const currentUser = await api.user.refresh();
-
-          if (currentUser) {
-            // Get associated employee record
-            const currentEmployee = await api.employee.fetchOneByEmail(
-              currentUser.email
-            );
-
-            const data = {
-              user: currentUser,
-              employee: currentEmployee,
-            };
-            //Set logo =
-            try {
-              const res = await api.company.fetchLogo();
-              const logo = `data:image/png;base64,${atob(res)}`;
-              if (logo) {
-                data["logo"] = logo;
-              }
-            } catch (error) {
-              console.log("Error, failed to reload logo");
-            }
-            // console.log({ data });
-            stateContext.updateStates(data);
-          } else {
-            throw "No active session, please log in.";
-          }
+        if (!token) {
+          throw "Token is null";
         }
+        const data = await api.offboarding.fetchOneByToken(token);
+        if (!data) {
+          throw "Invalid token";
+        }
+        setState(data);
+        const downloadable = await api.offboardingDocument.fetchAll();
+        setDownloadable(downloadable);
+        setStatus({ ...status, loading: false });
       } catch (err) {
         console.log(err);
-        navigate("/", { replace: true }); // Redirect to login page
+        setStatus({
+          error: true,
+          loading: false,
+        });
       }
     }
     fetchData();
-    // console.log({ stateContext });
   }, []);
 
-  const stepStyle = {
-    "&.MuiStepper-root": {
-      padding: "50px 50px",
-    },
-    "& .MuiStepConnector-line": {
-      marginTop: "-15px",
-      width: "100%",
-    },
-    "& .Mui-active": {
-      "&.MuiStepIcon-root": {
-        color: "#7F56D9",
-      },
-      "& .MuiStepConnector-line": {
-        border: "1px solid #7f56d9",
-      },
-      "& .MuiSvgIcon-root": {
-        fontSize: "30px",
-      },
-    },
-    "& .Mui-completed": {
-      "&.MuiStepIcon-root": {
-        color: "#7F56D9",
-      },
-      "& .MuiStepConnector-line": {
-        border: "1px solid #7f56d9",
-      },
-      "& .MuiSvgIcon-root": {
-        fontSize: "30px",
-      },
-    },
-    "& .MuiStepLabel-root": {
-      display: "flex",
-      flexDirection: "column",
-      textAlign: "center",
-      "& .MuiStepLabel-label": {
-        marginTop: "10px",
-      },
-    },
-  };
+  if (status.loading) {
+    return (
+      <NoContentComponent>
+        <p>Loading. Please wait...</p>
+      </NoContentComponent>
+    );
+  }
+  if (status.error) {
+    return <ErrorPage />;
+  }
   function showstep(step) {
     switch (step) {
       case 1:
@@ -119,7 +81,7 @@ function OffBoardingPage() {
         }}
       >
         <CustomizedSteppers
-          stepnumber={currentStep - 1}
+          stepnumber={state.step - 1}
           steps={[
             { label: "Start", description: "" },
             { label: "Sign and Upload", description: "" },
@@ -128,9 +90,9 @@ function OffBoardingPage() {
           ]}
         />
       </Box>
-      {showstep(currentStep)}
+      {showstep(state.step)}
     </>
   );
 }
 
-export default OffBoardingPage;
+export default OffboardingPage;

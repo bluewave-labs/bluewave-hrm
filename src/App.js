@@ -4,22 +4,23 @@ import LandingPage from "./containers/LandingPage.js";
 import SetNewPasswordPage from "./components/LoginComponents/SetNewPassword.jsx";
 import Dashboard from "./containers/Dashboard.js";
 import CompleteSignup from "./components/LoginComponents/CompleteSignupPage.js";
-import OffBoardingPage from "./components/OffBoardingComponents/OffBoardingPage.jsx";
+import OffboardingPage from "./components/OffboardingComponents/OffboardingPage.jsx";
 import EmployeeOnboarding from "./containers/EmployeeOnboarding.js";
 import ErrorPage from "./components/Error/ErrorPage.jsx";
+import Driver from "./components/TestComponents/Driver.js"
 
 function App() {
-  return (
+     return (
     <StateProvider>
-      <Routes>
+       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/onboarding" element={<EmployeeOnboarding />} />
         <Route path="/resetpassword/:id" element={<SetNewPasswordPage />} />
         <Route path="/complete-signup/:token" element={<CompleteSignup />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/off-boarding/:token" element={<OffBoardingPage />} />
+        <Route path="/off-boarding/:token" element={<OffboardingPage />} />
         <Route path="*" element={<ErrorPage />} />
-      </Routes>
+      </Routes> 
     </StateProvider>
   );
 }

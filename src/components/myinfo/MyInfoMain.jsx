@@ -5,13 +5,16 @@ import MyInfoPersonCard from "./MyInfoPersonalCard";
 import React, { useContext } from "react";
 import { Box } from "@mui/material";
 import StateContext from "../../context/StateContext";
+import NoContentComponent from "../PeopleComponents/NoContentComponent";
 
 export default function MyInfoMain({style, onClickEdit}) {
   const {state} = useContext(StateContext);
   const employee = state.employee;
 
   if (!employee) {
-    return <div style={{paddingTop:"0px"}}>No record to display.</div>;
+    return <NoContentComponent>
+      <div>You have no employee record to display.</div>
+    </NoContentComponent>
   }
   return (
     <Box>

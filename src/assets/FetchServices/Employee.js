@@ -220,3 +220,35 @@ export const finalizeOnboarding = async (empId) => {
   }
 
 }
+
+export const fetchEmployeeWithNoManager = async () => {
+  try {
+    const url = `${BASE_URL}/api/employees/manager/none`;
+    const res = await axios.get(url, addCred);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+//Expected data format = { managerIds: [1,2,3]}
+export const removeManager = async (data) => {
+  try {
+    const url = `${BASE_URL}/api/employees/manager/remove`;
+    const res = await axios.post(url, data, addCred);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+//Expected data format [{managerId:1, empIds: [2,3,4]}, {managerId: 5, empIds:[6,7,8]}]
+export const changeManager = async (data) => {
+  try {
+    const url = `${BASE_URL}/api/employees/manager/change`;
+    const res = await axios.post(url, data, addCred);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};

@@ -351,11 +351,13 @@ export default function People({
           minHeight: "50vh",
           backgroundColor: "#FFFFFF",
           border: "1px solid #EBEBEB",
+          borderRadius: "10px",
           pt: 7.5,
           pb: 4,
           pr: 4,
           pl: 5,
           mt: 0,
+          mb: 5,
         }}
       >
         {

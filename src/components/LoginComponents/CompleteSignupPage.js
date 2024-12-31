@@ -1,7 +1,6 @@
 import React from "react";
 import SingupPage from "./SingupPage";
 import { useParams } from "react-router-dom";
-import Placeholder from "../PeopleComponents/Placeholder";
 import ErrorPage from "../Error/ErrorPage";
 const api = require("../../assets/FetchServices");
 

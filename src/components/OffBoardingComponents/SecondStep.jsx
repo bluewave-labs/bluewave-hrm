@@ -9,49 +9,86 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import HRMButton from "../Button/HRMButton";
 import { multiStepContext } from "../../context/stepContext";
 import CheckBox from "../Checkbox/Checkbox";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import arrow from "../../Images/Arrow.svg";
-import { useRef } from "react";
-import api from "../../assets/FetchServices";
+import { produce } from "immer";
 import DocumentUpload from "./DocumentUpload";
 
-function SecondStep() {
-  const { currentStep, setCurrentStep, finalData, setFinalData } =
-    useContext(multiStepContext);
-  const docRef = useRef();
+// Utility function to create a TableRow.
+function CreateTableRow(downloadable, key, handleDownload) {
+  return (
+    <TableRow
+      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      key={key}
+    >
+      <TableCell
+        component="th"
+        scope="row"
+        sx={{
+          fontFamily: "Inter",
+          fontWeight: "600",
+          fontSize: "14px",
+        }}
+        key={0}
+      >
+        {downloadable.documentName}
+      </TableCell>
+      <TableCell
+        align="left"
+        sx={{
+          fontFamily: "Inter",
+          fontWeight: "600",
+          color: "#7F56D9",
+        }}
+        key={1}
+      >
+        <Button
+          onClick={() => handleDownload(downloadable)}
+          sx={{
+            border: "none",
+            fontSize: "14px",
+            cursor: "pointer",
+            color: "#7F56D9",
+            fontWeight: "600",
+            background: "none",
+            "&:hover": { backgroundColor: "transparent" },
+          }}
+        >
+          Download
+        </Button>
+      </TableCell>
+    </TableRow>
+  );
+}
 
-  const handleCheckBox = (e) =>
-    setFinalData({
-      ...finalData,
-      SignedDocumentAck: e.target.checked,
-    });
-  const fetchLeavingLetterDoc = async () => {
-    const data = await api.offboarding.fetchLeavingLetter();
-    const link = document.createElement("a");
-    link.href = `data:application/pdf;base64,${data}`;
-    link.download = "leaving-letter.pdf"; // specify the filename
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-  const fetchNdaDoc = async () => {
-    const data = await api.offboarding.fetchNDA();
-    const link = document.createElement("a");
-    link.href = `data:application/pdf;base64,${data}`;
-    link.download = "NDA.pdf"; // specify the filename
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleNext = async () => {
-    await docRef.current.handleSubmit();
-    setCurrentStep(3);
-  };
+function CreateDownloadableDocumentContainer(downloadable, handleDownload) {
+  if (downloadable.length === 0) {
+    return (
+      <>
+        <Box
+          width={"1003px"}
+          margin={"49px auto 0 auto"}
+          textAlign={"center"}
+          sx={{ border: "2px solid #ebebeb" }}
+          padding={"44px 0"}
+        >
+          <Typography
+            fontFamily="Inter"
+            variant="h1"
+            fontSize={"16px"}
+            fontWeight={600}
+            margin={"20px auto"}
+          >
+            No documents to download
+          </Typography>
+        </Box>
+      </>
+    );
+  }
   return (
     <>
       <Box
@@ -68,7 +105,9 @@ function SecondStep() {
           fontWeight={600}
           margin={"20px auto"}
         >
-          Download documents below, sign them and upload again
+          {`Download ${
+            downloadable.length === 1 ? "document" : "documents"
+          } below, sign them and upload again`}
         </Typography>
         <Typography
           fontFamily="Inter"
@@ -79,12 +118,8 @@ function SecondStep() {
           You can sign digitally or manually by printing and scanning as you
           wish.
         </Typography>
-        {/* Logic for upload documents */}
 
-        <TableContainer
-          // component={Paper}
-          sx={{ width: "80%", margin: "20px auto" }}
-        >
+        <TableContainer sx={{ width: "80%", margin: "20px auto" }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -107,80 +142,47 @@ function SecondStep() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{
-                    fontFamily: "Inter",
-                    fontWeight: "600",
-                    fontSize: "14px",
-                  }}
-                >
-                  Leaving Letter
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    fontFamily: "Inter",
-                    fontWeight: "600",
-                    color: "#7F56D9",
-                  }}
-                >
-                  <Button
-                    onClick={fetchLeavingLetterDoc}
-                    sx={{
-                      border: "none",
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      color: "#7F56D9",
-                      fontWeight: "600",
-                      background: "none",
-                      "&:hover": { backgroundColor: "transparent" },
-                    }}
-                  >
-                    Download
-                  </Button>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ fontFamily: "Inter", fontWeight: "600" }}
-                >
-                  NDA
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontFamily: "Inter",
-                    fontWeight: "600",
-                    color: "#7F56D9",
-                  }}
-                >
-                  <Button
-                    disableTouchListener
-                    onClick={fetchNdaDoc}
-                    sx={{
-                      border: "none",
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      color: "#7F56D9",
-                      fontWeight: "600",
-                      background: "none",
-                      "&:hover": { backgroundColor: "transparent" },
-                    }}
-                  >
-                    Download
-                  </Button>
-                </TableCell>
-              </TableRow>
+              {downloadable.map((row, index) => {
+                return CreateTableRow(row, index, handleDownload);
+              })}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+    </>
+  );
+}
+
+function SecondStep() {
+  const [enabled, setEnabled] = useState(true); // To disable save button after click
+  const { setCurrentStep, state, setState, handleSave, downloadable } =
+    useContext(multiStepContext);
+
+  const handleDownload = (downloadable) => {
+    const link = document.createElement("a");
+    link.href = `data:application/${
+      downloadable.documentExtension
+    };base64,${atob(downloadable.documentFile)}`;
+    link.download = `${downloadable.documentName}.${downloadable.documentExtension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleCheckBox = (e) => {
+    const data = produce(state, (newState) => {
+      newState.signedDocumentAck = e.target.checked;
+    });
+    setState(data);
+  };
+
+  const handleNext = async (e) => {
+    setEnabled(false);
+    await handleSave();
+  };
+  return (
+    <>
+      {CreateDownloadableDocumentContainer(downloadable, handleDownload)}
 
       <Box
         sx={{
@@ -220,7 +222,7 @@ function SecondStep() {
         </Typography>
         {/* <FileUploadDialog/> */}
         <Box sx={{ width: "80%", margin: "20px auto" }}>
-          <DocumentUpload ref={docRef} />
+          <DocumentUpload />
         </Box>
 
         {/* table logic ends... */}
@@ -234,7 +236,7 @@ function SecondStep() {
           }}
         >
           <CheckBox
-            checked={false || finalData?.SignedDocumentAck}
+            checked={state.signedDocumentAck}
             onChange={handleCheckBox}
           />
           <Typography
@@ -267,23 +269,39 @@ function SecondStep() {
 
               fontSize: "13px",
             }}
-            onClick={() => setCurrentStep(currentStep - 1)}
+            onClick={() => setCurrentStep(state.step - 1)}
           >
             Previous
           </HRMButton>
-          <HRMButton
-            mode={"primary"}
-            style={{
-              padding: "10px",
-              width: "132px",
-              height: "32px",
-              fontSize: "13px",
-            }}
-            onClick={handleNext}
-            enabled={finalData["SignedDocumentAck"]}
-          >
-            Save and next
-          </HRMButton>
+          {enabled ? (
+            <HRMButton
+              mode={"primary"}
+              style={{
+                padding: "10px",
+                width: "132px",
+                height: "32px",
+                fontSize: "13px",
+              }}
+              onClick={handleNext}
+              enabled={state.signedDocumentAck}
+            >
+              Save and next
+            </HRMButton>
+          ) : (
+            <HRMButton
+              mode={"primary"}
+              style={{
+                padding: "10px",
+                width: "132px",
+                height: "32px",
+                fontSize: "13px",
+              }}
+              onClick={handleNext}
+              enabled={false}
+            >
+              Processing...
+            </HRMButton>
+          )}
         </div>
       </Box>
     </>

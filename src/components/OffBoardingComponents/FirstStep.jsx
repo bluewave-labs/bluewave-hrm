@@ -1,14 +1,12 @@
-import { Box, margin, padding } from "@mui/system";
-import React, { useContext, useEffect } from "react";
+import { Box } from "@mui/system";
+import React, { useContext } from "react";
 import HRMButton from "../Button/HRMButton";
 import { Typography } from "@mui/material";
 import { multiStepContext } from "../../context/stepContext";
 
 function FirstStep() {
   const { setCurrentStep } = useContext(multiStepContext);
-  useEffect(() => {
-    localStorage.setItem("files", JSON.stringify([]));
-  });
+ 
   return (
     <Box
       width={"1003px"}
