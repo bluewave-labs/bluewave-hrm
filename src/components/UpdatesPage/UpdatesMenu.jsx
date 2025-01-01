@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import UpdatesFilter from './UpdatesFilter';
 import UpdatesList from './UpdatesList';
-import PagesNavBar from './PagesNavBar';
+import PagesNavBar from '../StaticComponents/PagesNavBar';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
 import { colors, fonts } from '../../Styles';
 import { fetchAllByEmployee } from '../../assets/FetchServices/Notification';

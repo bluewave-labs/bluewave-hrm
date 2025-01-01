@@ -11,8 +11,8 @@ import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 
 /**
- * Popup component for displaying the date selector controls. Used to set the starting and 
- * ending dates for a time off period.
+ * Popup component for displaying the date selector controls. Used to set starting and 
+ * ending dates.
  * 
  * Props:
  * - close<Function>: Function for closing this popup component.

@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import AvailableTimeOffTable from './AvailableTimeOffTable';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
-import PagesNavBar from '../UpdatesPage/PagesNavBar';
+import PagesNavBar from '../StaticComponents/PagesNavBar';
 import Label from '../Label/Label';
 import { colors, fonts } from '../../Styles';
 import { fetchOne } from '../../assets/FetchServices/EmployeeAnnualTimeOff';
