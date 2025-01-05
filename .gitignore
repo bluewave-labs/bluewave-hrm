@@ -33,5 +33,6 @@ yarn-error.log*
 *storybook.log
 .storybook/
 /src/stories
+/src/assets/FetchServices/BaseUrl.json
 
 .env

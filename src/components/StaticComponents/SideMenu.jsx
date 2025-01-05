@@ -10,6 +10,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SupportIcon from "@mui/icons-material/Support";
@@ -49,9 +50,10 @@ function CustomizedListItem(props) {
           {index === 1 && <PersonOutlineIcon />}
           {index === 2 && <PeopleOutlineIcon />}
           {index === 3 && <AccessTimeIcon />}
-          {index === 4 && <PieChartOutlineOutlinedIcon />}
-          {index === 5 && <SettingsOutlinedIcon />}
-          {index === 6 && <SupportIcon />}
+          {index === 4 && <QuestionAnswerIcon />}
+          {index === 5 && <PieChartOutlineOutlinedIcon />}
+          {index === 6 && <SettingsOutlinedIcon />}
+          {index === 7 && <SupportIcon />}
         </ListItemIcon>
         <ListItemText primary={primary} />
       </ListItemButton>
@@ -136,20 +138,29 @@ export default function SideMenu({ style, onSelect }) {
             );
           })}
             {(isAdmin || isManager) && (
-            <CustomizedListItem
-              primary={"Reporting"}
-              index={4}
-              menuItem={"reporting"}
-              selected={selectedIndex === 4}
-              handleListItemClick={handleListItemClick}
-            />
+            <>
+              <CustomizedListItem
+                primary={"Surveys"}
+                index={4}
+                menuItem={"surveys"}
+                selected={selectedIndex === 4}
+                handleListItemClick={handleListItemClick}
+              />
+              <CustomizedListItem
+                primary={"Reporting"}
+                index={5}
+                menuItem={"reporting"}
+                selected={selectedIndex === 5}
+                handleListItemClick={handleListItemClick}
+              />
+            </>
           )}
           {isAdmin && (
             <CustomizedListItem
               primary={"Settings"}
-              index={5}
+              index={6}
               menuItem={"settings"}
-              selected={selectedIndex === 5}
+              selected={selectedIndex === 6}
               handleListItemClick={handleListItemClick}
             />
           )}
@@ -160,8 +171,8 @@ export default function SideMenu({ style, onSelect }) {
         <CustomizedListItem
           primary={"Support"}
           menuItem={"support"}
-          index={6}
-          selected={selectedIndex === 6}
+          index={7}
+          selected={selectedIndex === 7}
           handleListItemClick={() => {
             window.open('https://github.com/bluewave-labs/bluewave-hrm', '_blank');
           }}
