@@ -308,6 +308,10 @@ export default function NewSurveyPopup({close, style}) {
         marginBottom: "10px"
     });
 
+    const Header5 = styled("h5")({
+        marginBottom: "10px"
+    });
+
     return (
         <Box sx={{...{
             width: "520px",
@@ -467,7 +471,7 @@ export default function NewSurveyPopup({close, style}) {
             {/*Page 3: Adding survey questions*/}
             {pageNumber === 3 &&
                 <>
-                    <h5 style={{ marginBottom: "10px" }}>Survey questions</h5>
+                    <Header5 style={{ marginBottom: "10px" }}>Survey questions</Header5>
                     <Stack
                         direction="row"
                         alignItems="flex-start"
@@ -489,7 +493,7 @@ export default function NewSurveyPopup({close, style}) {
                         <HRMButton 
                             mode="secondaryB" 
                             onClick={() => addQuestion(newQuestionText)}
-                            style={{ width: "110px" }}
+                            style={{ width: "120px" }}
                         >
                             <b style={{ color: colors.darkGrey }}>Add new</b>
                         </HRMButton>
@@ -508,7 +512,7 @@ export default function NewSurveyPopup({close, style}) {
             {/*Page 4: Adding survey recipients*/}
             {pageNumber === 4 && 
                 <>
-                    <h5>Survey recipients</h5>
+                    <Header5>Survey recipients</Header5>
                     <Stack
                         direction="row"
                         alignItems="center"
@@ -527,7 +531,7 @@ export default function NewSurveyPopup({close, style}) {
                         <HRMButton 
                             mode="secondaryB" 
                             onClick={() => addRecipient(newRecipient)}
-                            style={{ width: "110px" }}
+                            style={{ width: "120px" }}
                         >
                             <b style={{ color: colors.darkGrey }}>Add new</b>
                         </HRMButton>
@@ -546,9 +550,9 @@ export default function NewSurveyPopup({close, style}) {
             {pageNumber === 5 && 
                 <>
                     {/*Welcome screen title and message*/}
-                    <h5>Welcome screen title</h5>
+                    <Header5>Welcome screen title</Header5>
                     <p style={{ marginBottom: "40px" }}>{newSurvey.welcomeScreenTitle}</p>
-                    <h5>Welcome screen message</h5>
+                    <Header5>Welcome screen message</Header5>
                     <p style={{ marginBottom: "40px" }}>
                         {newSurvey.welcomeScreenMessage ? 
                             newSurvey.welcomeScreenMessage : 
@@ -556,9 +560,9 @@ export default function NewSurveyPopup({close, style}) {
                         }
                     </p>
                     {/*End screen title and message*/}
-                    <h5>End screen title</h5>
+                    <Header5>End screen title</Header5>
                     <p style={{ marginBottom: "40px" }}>{newSurvey.endScreenTitle}</p>
-                    <h5>End screen message</h5>
+                    <Header5>End screen message</Header5>
                     <p style={{ marginBottom: "40px" }}>
                         {newSurvey.endScreenMessage ? 
                             newSurvey.endScreenMessage :
@@ -566,16 +570,16 @@ export default function NewSurveyPopup({close, style}) {
                         }
                     </p>
                     {/*Start and end dates*/}
-                    <h5>Start date</h5>
+                    <Header5>Start date</Header5>
                     <p style={{ marginBottom: "40px" }}>
                         {formatDate(newSurvey.startDate)}
                     </p>
-                    <h5>End date</h5>
+                    <Header5>End date</Header5>
                     <p style={{ marginBottom: "40px" }}>
                         {formatDate(newSurvey.endDate)}
                     </p>
                     {/*Survey questions*/}
-                    <h5>Survey questions</h5>
+                    <Header5>Survey questions</Header5>
                     <TableContainer sx={{ marginBottom: "40px" }}>
                         <Table>
                             <TableBody>
@@ -590,7 +594,7 @@ export default function NewSurveyPopup({close, style}) {
                         </Table>
                     </TableContainer>
                     {/*Survey recipients*/}
-                    <h5>Survey recipients</h5>
+                    <Header5>Survey recipients</Header5>
                     <TableContainer sx={{ marginBottom: "40px" }}>
                         <Table>
                             <TableHead>
