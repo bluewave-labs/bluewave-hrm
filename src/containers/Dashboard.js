@@ -11,6 +11,8 @@ import { produce } from "immer";
 import Placeholder from "../components/PeopleComponents/Placeholder";
 import UpdatesPage from "../components/UpdatesPage/UpdatesPage";
 import TimeOffPage from "../components/TimeOffPage/TimeOffPage";
+import SettingsPage from "../components/SettingsPage/SettingsPage";
+import { SettingsProvider } from "../components/SettingsPage/context";
 const api = require("../assets/FetchServices");
 
 const dashboardMenu = {
@@ -107,6 +109,7 @@ export default function Dashboard() {
         <Box
           sx={{
             width: "100%",
+            height: "100vh",
             paddingLeft: "280px",
             paddingRight: "120px",
             paddingTop: "137px",
@@ -119,9 +122,9 @@ export default function Dashboard() {
           {current.timeoff && <TimeOffPage />}
           {current.reporting && <ReportsMain />}
           {current.settings && (
-            <Placeholder>
-              <h1>Settings page</h1>
-            </Placeholder>
+            <SettingsProvider>
+              <SettingsPage />
+            </SettingsProvider>
           )}
         </Box>
       </Stack>

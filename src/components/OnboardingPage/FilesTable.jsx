@@ -49,8 +49,20 @@ export default function FilesTable({files, style}) {
                         <TableRow>
                             <TableCell>
                                 <Stack direction="row" alignItems="center" justifyContent="space-between">
-                                    <b>{file.name}</b>
-                                    <HRMButton mode="tertiary"><b style={{color: "#7F56D9"}}>Download</b></HRMButton>
+                                    <b>{file.title}</b>
+                                    <HRMButton mode="tertiary">
+                                        <a
+                                            href={`data:application/pdf;base64,${atob(file.file)}`}
+                                            download={file.name}
+                                            style={{
+                                                textDecoration: "none",
+                                                fontWeight: "bold",
+                                                color: "#7F56D9"
+                                            }}
+                                        >
+                                            Download
+                                        </a>
+                                    </HRMButton>
                                 </Stack>
                             </TableCell>
                         </TableRow>

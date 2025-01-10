@@ -20,6 +20,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env
+/dev
+/constants/data/images
 
 .storybook
 .vscode
@@ -28,3 +31,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+*storybook.log
+.storybook/
+/src/stories
+
+.env

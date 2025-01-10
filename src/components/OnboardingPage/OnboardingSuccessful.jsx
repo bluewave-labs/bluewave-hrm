@@ -1,6 +1,5 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
-import { useNavigate } from "react-router-dom";
 import HRMButton from "../Button/HRMButton";
 import { fonts } from "../../Styles";
 
@@ -11,9 +10,7 @@ import { fonts } from "../../Styles";
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function OnboardingSuccessful({style}) {
-    const navigate = useNavigate();
-
+export default function OnboardingSuccessful({completeOnboarding, style}) {
     return (
         <Box sx={{...{
             border: "1px solid #EBEBEB",
@@ -34,7 +31,7 @@ export default function OnboardingSuccessful({style}) {
                         marginRight: "auto", 
                         width: "230px"
                     }}
-                    onClick={() => navigate("/dashboard", { replace: true })}
+                    onClick={completeOnboarding}
                 >
                     Complete and notify the HR
                 </HRMButton>

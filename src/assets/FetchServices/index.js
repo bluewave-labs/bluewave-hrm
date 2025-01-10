@@ -21,5 +21,12 @@ service.offboardingSurveyQuestion = require("./Offboarding/OffboardingSurveyQues
 service.offboardingDocument = require("./Offboarding/OffboardingDocument");
 service.offboardingSignedDocument = require("./Offboarding/OffboardingSignedDocument");
 service.satisfactionSurvey = require("./SatifsactionSurvey");
+service.onboarding = require("./Onboarding");
+service.video = require("./Video");
+service.file = require("./File");
+service.task = require("./Task");
+service.taskName = require("./TaskName");
+service.surveyQuestion = require("./SurveyQuestion");
+service.surveyResponse = require("./SurveyResponse");
 
 module.exports = service;

@@ -13,7 +13,7 @@ import HRMButton from "../Button/HRMButton";
 import { useSettingsContext } from "./context";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import { axios } from "./api/axios";
 
 const Dialog = styled(MUIDialog)({
   "& .MuiDialog-paper": {
@@ -115,7 +115,6 @@ export default function CustomDialog({
   }, [transfDepartmentOptions]);
 
   const handleSuccess = (response) => {
-    console.log("Data submitted successfully:", response.data);
     const responseMessage = response.data;
     if (
       typeof responseMessage === "string" &&
@@ -151,7 +150,7 @@ export default function CustomDialog({
 
   const addDepartment = (data) => {
     axios
-      .post("http://localhost:3000/api/departments", data)
+      .post("departments", data)
       .then(handleSuccess)
       .catch(handleError);
   };
@@ -162,7 +161,7 @@ export default function CustomDialog({
     );
 
     axios
-      .put("http://localhost:3000/api/departments", {
+      .put("departments", {
         ...editDepartmentData,
         departmentName: data.departmentName,
       })
@@ -172,7 +171,7 @@ export default function CustomDialog({
 
   const deleteDepartment = () =>
     axios
-      .delete(`http://localhost:3000/api/departments/${selectedDepartment.id}`)
+      .delete(`departments/${selectedDepartment.id}`)
       .then((response) => {
         console.log("Data deleted successfully:", response.data);
         fetchDepartmentsPeople();
@@ -197,7 +196,7 @@ export default function CustomDialog({
   const transferEmployees = (employeesTransfer) =>
     axios
       .post(
-        `http://localhost:3000/api/employees/change/department`,
+        `api/employees/change/department`,
         employeesTransfer
       )
       .then((response) => {
@@ -256,20 +255,18 @@ export default function CustomDialog({
         <TextLabel>{configs[action]?.label}</TextLabel>
         <form>
           {deleteAction ? (
-             
-              <Autocomplete
-                options={transfDepartmentOptions}
-                getOptionLabel={(option) => option.departmentName}
-                renderInput={(params) => <TextField {...params} />}
-                value={transferEmployeesDepartment}
-                onChange={(_, value) => {
-                  setTransferEmployeesDepartment(value);
-                }}
-                fullWidth
-                size="small"
-                color="secondary"
-              />
-            
+            <Autocomplete
+              options={transfDepartmentOptions}
+              getOptionLabel={(option) => option.departmentName}
+              renderInput={(params) => <TextField {...params} />}
+              value={transferEmployeesDepartment}
+              onChange={(_, value) => {
+                setTransferEmployeesDepartment(value);
+              }}
+              fullWidth
+              size="small"
+              color="secondary"
+            />
           ) : (
             <TextField
               size="small"

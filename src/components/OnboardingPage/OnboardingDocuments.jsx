@@ -1,10 +1,12 @@
 import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import HRMButton from "../Button/HRMButton";
 import Checkbox from "../Checkbox/Checkbox";
 import FilesTable from "./FilesTable";
+import { fetchAllByOnboardingId } from "../../assets/FetchServices/File";
 import { fonts } from "../../Styles";
 
 /**
@@ -21,8 +23,6 @@ import { fonts } from "../../Styles";
  *      application's homepage
  *      Syntax: save()
  * 
- * - files<Array<Object<String>>>: List of files represented by objects containing the file name and source.
- * 
  * - readDocuments<Boolean>: Flag determining if the user has declared that s/he has reviewed all the documents.
  * 
  * - setReadDocuments<Function>: Function provided by the parent component to set the readDocuments flag.
@@ -31,7 +31,20 @@ import { fonts } from "../../Styles";
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function OnboardingDocuments({prev, next, save, files, readDocuments, setReadDocuments, style}) {
+export default function OnboardingDocuments({prev, next, save, readDocuments, setReadDocuments, onboardingId, style}) {
+    //Files to be displayed
+    const [files, setFiles] = useState([]);
+
+    useEffect(() => {
+        getFiles();
+        console.log(files);
+    }, []);
+
+    //Function for retrieving the onboarding files
+    function getFiles() {
+        fetchAllByOnboardingId(onboardingId).then((data) => setFiles(data));
+    };
+
     return (
         <Box sx={{...{
             border: "1px solid #EBEBEB",
@@ -87,9 +100,6 @@ OnboardingDocuments.propTypes = {
 
     //Function for saving the onboarding status
     save: PropTypes.func,
-
-    //List of files
-    files: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
 
     //Flag determining whether the user has declared that s/he has read the documents
     readDocuments: PropTypes.bool,

@@ -7,7 +7,6 @@ import TimeOffRequest from '../PopupComponents/TimeOffRequest';
 import TimeOffRequestSent from '../PopupComponents/TimeOffRequestSent';
 import HRMButton from '../Button/HRMButton';
 
-
 /**
  * Time off page of the HRM application. Contains the time off menu as well as controls for 
  * request time off.
@@ -24,12 +23,15 @@ export default function TimeOffPage({style}) {
     //should be displayed
     const [openRequest, setOpenRequest] = useState(false);
     const [requestSuccess, setRequestSuccess] = useState(false);
+    const [update, setUpdate] = useState(false);
+    console.log(update);
 
     //Function for sending a time off request
     function sendRequest() {
         setOpenRequest(false);
         setRequestSuccess(true);
         setTimeout(() => setRequestSuccess(false), 5000);
+        setUpdate(!update);
     }
 
     return (
@@ -51,12 +53,12 @@ export default function TimeOffPage({style}) {
                     Request new time off
                 </HRMButton>
             </Stack>
-            <TimeOffMenu />
+            <TimeOffMenu update={update} />
             {/*Time off request menu*/}
             <Dialog open={openRequest} onClose={() => setOpenRequest(false)}>
                 <TimeOffRequest 
                     close={() => setOpenRequest(false)} 
-                    sendRequest={() => sendRequest()} 
+                    sendRequest={sendRequest} 
                 />
             </Dialog>
             {/*Request successful notification*/}

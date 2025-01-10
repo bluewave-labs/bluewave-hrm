@@ -26,10 +26,12 @@ function formatDate(date) {
  * time off per policy and any upcoming periods of time off scheduled.
  * 
  * Props:
+ * - update<Boolean>: Flag for triggering the useEffect hook.
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function BoardTabContent({style}) {
+export default function BoardTabContent({update, style}) {
     //The current page number 
     const [currentPage, setCurrentPage] = useState(1);  
     //Time off policies to be displayed
@@ -45,6 +47,8 @@ export default function BoardTabContent({style}) {
     //ID of the currently logged in employee
     const stateContext = useContext(StateContext);
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
+
+    console.log(update);
     
     dayjs.extend(isSameOrAfter);
 
@@ -52,14 +56,14 @@ export default function BoardTabContent({style}) {
     useEffect(() => {
         getTimeOffPolicies();
         getUpcomingTimeOffPeriods();
-    }, [refresh]);
+    }, [refresh, update]);
 
     //Function for retrieving the time off policies and their respective hours used and available
     function getTimeOffPolicies() {
-        //Send Request to database for time off policies
+        //Send request to database for time off policies
+        console.log("Executing getTimeOffPolicies");
         setLoadingPolicies(true);
-        fetchOne(currentUser)
-        .then((data) => {
+        fetchOne(currentUser).then((data) => {
             if (data) {
                 const policies = {};
                 //Only display the information for the current year
@@ -74,16 +78,15 @@ export default function BoardTabContent({style}) {
                 });
                 setTimeOffPolicies(policies);
             }
-        })
-        .finally(() => setLoadingPolicies(false));
+        }).finally(() => setLoadingPolicies(false));
     }
 
     //Function for retrieving any upcoming time off periods
     function getUpcomingTimeOffPeriods() {
         //Send request to database for time off periods
+        console.log("Executing getUpcomingTimeOffPeriods");
         setLoadingPeriods(true);
-        fetchAllByEmployee(currentUser)
-        .then((data) => {
+        fetchAllByEmployee(currentUser).then((data) => {
             if (data) {
                 const periods = [];
                 //const data = response.data;
@@ -104,8 +107,7 @@ export default function BoardTabContent({style}) {
                 });
                 setTimeOffPeriods(periods);
             }
-        })
-        .finally(() => setLoadingPeriods(false));
+        }).finally(() => setLoadingPeriods(false));
     };
 
     //Only shows 10 periods at a time
