@@ -41,7 +41,7 @@ export default function UpdatesPage({ style }) {
   );
 }
 
-//Control panel settings for storybooks
+//Control panel settings for storybook
 UpdatesPage.propTypes = {};
 
 //Default values for this component

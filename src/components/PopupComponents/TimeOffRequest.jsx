@@ -39,7 +39,7 @@ function isValidPeriod(from, to) {
     } else {
         return false;
   }
-}
+};
 
 //Function for parsing a JavaScript date into a string format.
 function formatDate(date) {
@@ -47,7 +47,7 @@ function formatDate(date) {
     const month = date.toLocaleString("default", { month: "short" });
     const year = date.toLocaleString("default", { year: "numeric" });
     return `${month} ${day}, ${year}`;
-    }
+};
 
 /**
  * Popup component for displaying the form for submitting a time off request. Includes controls
@@ -402,9 +402,7 @@ export default function TimeOffRequest({
     };
 
     return (
-        <Box
-        sx={{
-            ...{
+        <Box sx={{...{
             borderRadius: "12px",
             boxShadow: "0 15px 6px #10182808",
             paddingX: "36px",
@@ -413,29 +411,26 @@ export default function TimeOffRequest({
             minHeight: "500px",
             color: colors.darkGrey,
             fontFamily: fonts.fontFamily,
-            },
-            ...style,
-        }}
-        >
+        }, ...style}}>
         {/*Title*/}
         <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
             sx={{
-            marginBottom: "30px",
+                marginBottom: "30px",
             }}
         >
             {initialRequest ? <h3>Edit my time off</h3> : <h3>Request new time off</h3>}
             <CloseIcon
-            onClick={close}
-            sx={{
-                backgroundColor: "#FFFFFFF",
-                "&:hover": {
-                cursor: "pointer",
-                backgroundColor: "#D0D5DD",
-                },
-            }}
+                onClick={close}
+                sx={{
+                    backgroundColor: "#FFFFFF",
+                    "&:hover": {
+                        cursor: "pointer",
+                        backgroundColor: "#D0D5DD",
+                    },
+                }}
             />
         </Stack>
             {/*Set time off category*/}
@@ -462,39 +457,39 @@ export default function TimeOffRequest({
                 sx={{ marginBottom: "40px" }}
             >
                 <Box>
-                <Header4>From</Header4>
-                <Chip
-                    icon={<CalendarMonthIcon />}
-                    label={formatDate(from)}
-                    variant="outlined"
-                    onClick={() => setOpenFrom(true)}
-                    disableTouchRipple
-                    sx={{ borderRadius: "4px" }}
-                />
+                    <Header4>From</Header4>
+                    <Chip
+                        icon={<CalendarMonthIcon />}
+                        label={formatDate(from)}
+                        variant="outlined"
+                        onClick={() => setOpenFrom(true)}
+                        disableTouchRipple
+                        sx={{ borderRadius: "4px" }}
+                    />
                 </Box>
                 <Box>
-                <Header4>To</Header4>
-                <Chip
-                    icon={<CalendarMonthIcon />}
-                    label={formatDate(to)}
-                    variant="outlined"
-                    onClick={() => setOpenTo(true)}
-                    disableTouchRipple
-                    sx={{ borderRadius: "4px" }}
-                />
+                    <Header4>To</Header4>
+                    <Chip
+                        icon={<CalendarMonthIcon />}
+                        label={formatDate(to)}
+                        variant="outlined"
+                        onClick={() => setOpenTo(true)}
+                        disableTouchRipple
+                        sx={{ borderRadius: "4px" }}
+                    />
                 </Box>
             </Stack>
             {/*Set amount of time off per day*/}
             <Header4>Amount</Header4>
             <Stack direction="row" alignItems="center" spacing={1}>
                 <Checkbox
-                type="checkbox"
-                id="setHours"
-                name="setHours"
-                value="setHours"
-                size="large"
-                onChange={() => setEachDay(!eachDay)}
-                style={{ marginRight: "10px" }}
+                    type="checkbox"
+                    id="setHours"
+                    name="setHours"
+                    value="setHours"
+                    size="large"
+                    onChange={() => setEachDay(!eachDay)}
+                    style={{ marginRight: "10px" }}
                 />
                 <p>Set hours for each day during the time off period</p>
             </Stack>
@@ -558,7 +553,7 @@ export default function TimeOffRequest({
             </Dialog>
         </Box>
     );
-}
+};
 
 //Control panel settings for storybook
 TimeOffRequest.propTypes = {

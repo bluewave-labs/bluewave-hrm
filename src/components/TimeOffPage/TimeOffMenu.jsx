@@ -41,65 +41,21 @@ export default function TimeOffMenu({ update, style }) {
     { label: "Board", child: <BoardTabContent update={update} /> },
     { label: "History", child: <HistoryTabContent /> }
   ];
-
-  /*
-  //Function for selecting a new tab
-  function handleChange(e, newValue) {
-    setTab(newValue);
-  }
-
-  //Custom style elements
-  const StyledTab = styled(Tab)({
-    textTransform: "none",
-  });
-
-  const StyledTabPanel = styled(TabPanel)({
-    padding: 0,
-  });
-  */
-
-    return (
-        <Box sx={{...{
-            boxSizing: "border-box",
-            minWidth: "980px",
-            padding: "48px",
-            border: "1px solid #EBEBEB",
-            borderRadius: "5px",
-            backgroundColor: "#FFFFFF",
-            color: colors.darkGrey,
-            fontFamily: fonts.fontFamily
-        }, ...style}}>
-          <CustomTabs items={tabs}/>
-          {/*
-            <TabContext value={tab}>
-                <Box sx={{ borderBottom: 1, borderColor: "#EAECF0" }}>
-                    <TabList 
-                        textColor="secondary" 
-                        indicatorColor="secondary" 
-                        onChange={handleChange}
-                        sx={{ marginBottom: "32px" }}
-                    >
-                        <StyledTab label="Board" value="Board" />
-                        <StyledTab label="History" value="History" />
-                        {(isAdmin || isManager) && <StyledTab label="My team" value="My team" />}
-                    </TabList>
-                </Box>
-                
-                <StyledTabPanel value="Board">
-                    <BoardTabContent />
-                </StyledTabPanel>
-                
-                <StyledTabPanel value="History">
-                    <HistoryTabContent />
-                </StyledTabPanel>
-                
-                <StyledTabPanel value="My team">
-                    <TeamTabContent />
-                </StyledTabPanel>
-            </TabContext>
-          */}
-        </Box>
-    );
+  
+  return (
+      <Box sx={{...{
+          boxSizing: "border-box",
+          minWidth: "980px",
+          padding: "48px",
+          border: "1px solid #EBEBEB",
+          borderRadius: "5px",
+          backgroundColor: "#FFFFFF",
+          color: colors.darkGrey,
+          fontFamily: fonts.fontFamily
+      }, ...style}}>
+        <CustomTabs items={tabs}/>
+      </Box>
+  );
 };
 
 //Control panel settings for storybook

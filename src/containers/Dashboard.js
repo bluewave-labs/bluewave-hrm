@@ -12,6 +12,7 @@ import Placeholder from "../components/PeopleComponents/Placeholder";
 import UpdatesPage from "../components/UpdatesPage/UpdatesPage";
 import TimeOffPage from "../components/TimeOffPage/TimeOffPage";
 import SettingsPage from "../components/SettingsPage/SettingsPage";
+import SurveysPage from "../components/SurveysPage/SurveysPage";
 import { SettingsProvider } from "../components/SettingsPage/context";
 const api = require("../assets/FetchServices");
 
@@ -120,6 +121,7 @@ export default function Dashboard() {
           {current.myinfo && <MyInfoHome />}
           {current.people && <PeopleHome />}
           {current.timeoff && <TimeOffPage />}
+          {current.surveys && <SurveysPage />}
           {current.reporting && <ReportsMain />}
           {current.settings && (
             <SettingsProvider>

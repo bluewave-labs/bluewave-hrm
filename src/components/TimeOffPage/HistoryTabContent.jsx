@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useState, useEffect, useContext } from 'react';
 import dayjs from 'dayjs';
 import UpcomingTimeOffTable from './UpcomingTimeOffTable';
-import PagesNavBar from '../UpdatesPage/PagesNavBar';
+import PagesNavBar from '../StaticComponents/PagesNavBar';
 import MenuToggleButton from '../BasicMenus/MenuToggleButton';
 import NoContentComponent from '../StaticComponents/NoContentComponent';
 import Label from '../Label/Label';
