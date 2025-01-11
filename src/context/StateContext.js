@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { produce } from "immer";
-import logo from "../assets/images/HRM_logo_large.svg";
+import logo from "../Images/bluewave_hrm_logo_large.png";
 const api = require("../assets/FetchServices");
 const StateContext = createContext();
 

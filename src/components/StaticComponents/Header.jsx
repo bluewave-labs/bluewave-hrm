@@ -36,8 +36,9 @@ export default function Header({ window, style }) {
         ...{
           boxSizing: "border-box",
           width: "100%",
-          height: "64px",
+          height: "87px",
           padding: "20px",
+          paddingRight: "40px",
           display: "flex",
           justifyContent: "flex-end",
           alignItems: "center",

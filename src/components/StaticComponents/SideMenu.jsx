@@ -10,7 +10,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SupportIcon from "@mui/icons-material/Support";
@@ -50,7 +50,7 @@ function CustomizedListItem(props) {
           {index === 1 && <PersonOutlineIcon />}
           {index === 2 && <PeopleOutlineIcon />}
           {index === 3 && <AccessTimeIcon />}
-          {index === 4 && <QuestionAnswerIcon />}
+          {index === 4 && <ChatBubbleOutlineIcon />}
           {index === 5 && <PieChartOutlineOutlinedIcon />}
           {index === 6 && <SettingsOutlinedIcon />}
           {index === 7 && <SupportIcon />}
@@ -119,8 +119,8 @@ export default function SideMenu({ style, onSelect }) {
           src={stateContext.state.logo}
           alt="Company Logo"
           style={{
-            width: "200px",
-            height: "40px",
+            maxWidth: "200px",
+            //height: "40px",
             marginTop: "40px",
             marginBottom: "24px"
           }}
