@@ -28,7 +28,7 @@ The BlueWave HRM is a people and resource management application for your organi
 * [Node.js](https://nodejs.org/en)
 * [PostgreSQL](https://www.postgresql.org/)
 
-This application doesn't rely on any 3rd party proprietary software to run.
+This application does not rely on any 3rd party proprietary software to run.
 
 ## Contributing
 
