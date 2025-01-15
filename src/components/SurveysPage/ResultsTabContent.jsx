@@ -2,6 +2,7 @@ import Box from "@mui/system/Box";
 import Stack from "@mui/system/Stack";
 import Dialog from "@mui/material/Dialog";
 import { useState } from "react";
+import { fetchAll } from "../../assets/FetchServices/SatisfactionSurvey";
 import HRMButton from "../Button/HRMButton";
 import SurveysTable from "./SurveysTable";
 import SurveyDetails from "./SurveyDetails";
@@ -20,6 +21,10 @@ export default function ResultsTabContent({style}) {
     const [survey, setSurvey] = useState(null);
     //Flag determining whether the popup for creating a new survey should be displayed
     const [openNewSurvey, setOpenNewSurvey] = useState(false);
+
+    fetchAll().then((data) => {
+        console.log(data);
+    });
     
     const surveyList = [
         {
