@@ -13,6 +13,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         defaultValue: "Anonymous",
       },
+      teamName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "Anonymous",
+      },
       surveyId: {
         type: Sequelize.INTEGER,
         allowNull: false,

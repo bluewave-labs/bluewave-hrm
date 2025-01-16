@@ -35,21 +35,29 @@ app.use("/api", router);
 app.listen(HTTP_PORT, "0.0.0.0", () => {
   console.log(`Server ready at http://localhost:${HTTP_PORT}.`);
 });
+
+/**
+ * This function prepopulates database table(s) with sample data.
+ * It must be called at least once to prevent error during certain API calls.
+ * @param {*} param0
+ */
+const populateDatabaseTables = async ({ all = true }) => {
+  let data = require("./constants/data"); // Get the sample data
+  console.log("Sync operation in progress, please wait...");
+  await db.sequelize.sync({ force: true }); // Perform sync operation
+  if (all === true) {
+    await data.populateTables(db);
+  } else {
+    await data.populatePermissionTable(db);
+  }
+  console.log("Sync operation successful.");
+};
+
 /*
-Table(s) that must be prepopulated in production
-1. Permission table
-
+Note:
+1. Comment out the following function call after running the application for the first time to prevent
+   altering database tables at each run of the application.
+2. Change value of "all" to false to prepopulate permission table only.
 */
-
-//Uncomment the following codes to populate your database
-
-// db.sequelize.sync({ force: true }).then(async () => {
-//   let data = require("./constants/data");
-
-//   await data.populateTables(db);
-
-  // await data.populatePermissionTable(db);
-
-//   console.log("Sync operation successful.");
-// });
+populateDatabaseTables({ all: true });
 

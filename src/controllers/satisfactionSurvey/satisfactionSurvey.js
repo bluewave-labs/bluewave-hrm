@@ -23,7 +23,7 @@ const fetchRecipientData = async (data) => {
 // Utility function to fetch responses
 const fetchResponseBySurveyId = async (surveyId) => {
   const data = await db.satisfactionSurveyRespondent.findAll({
-    attributes: ["name"],
+    attributes: ["name", "teamName"],
     include: [
       {
         model: db.satisfactionSurveyResponse,
@@ -114,7 +114,9 @@ const resentSurveyTo = async ({ surveyObject, empId, frontendUrl }) => {
 
 const sendEmail = async ({ surveyObject, emailData, frontendUrl }) => {
   const emailService = new EmailService();
-  const endDate = surveyObject.completedAt ? dayjs(surveyObject.completedAt).format('MMMM D, YYYY') : null;
+  const endDate = surveyObject.completedAt
+    ? dayjs(surveyObject.completedAt).format("MMMM D, YYYY")
+    : null;
   // Obtain company name
   const company = await db.company.findOne({
     attributes: ["companyName"],
@@ -146,6 +148,12 @@ const sendEmail = async ({ surveyObject, emailData, frontendUrl }) => {
 const createRespondents = async ({ surveyId, anonymous, empIds }) => {
   const employees = await db.employee.findAll({
     attributes: ["empId", "firstName", "lastName", "email"],
+    include: [
+      {
+        model: db.team,
+        attributes: ["teamName"],
+      },
+    ],
     where: { empId: empIds },
     order: ["firstName", "lastName"],
   });
@@ -164,10 +172,18 @@ const createRespondents = async ({ surveyId, anonymous, empIds }) => {
       .update(accessToken)
       .digest("hex");
 
+    let teamName = null;
+    if (anonymous) {
+      teamName = "Anonymous";
+    } else if (employee.team) {
+      teamName = employee.team.teamName;
+    }
+
     const respondent = {
       name: anonymous
         ? "Anonymous"
         : `${employee.firstName} ${employee.lastName}`,
+      teamName,
       surveyId,
       empId: anonymous ? null : employee.empId,
       accessToken: hashedToken,
