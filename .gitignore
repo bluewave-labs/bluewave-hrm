@@ -21,7 +21,10 @@
 .env
 /dev
 /constants/data/images
-
+/.vs
+/.vscode
+.vs
+.vscode
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

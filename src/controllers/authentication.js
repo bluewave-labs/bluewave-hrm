@@ -1,12 +1,11 @@
 const db = require("../../models");
-var validator = require("validator");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const mailService = require("../helper/email");
-
-const { handleError, validatePassword } = require("../helper/validation");
+const EmailService = require("../helper/emailServices");
+const { createEmailContext } = require("../helper/utils");
+const { validatePassword } = require("../helper/validation");
 const message = require("../../constants/messages.json");
 
 // create json web token
@@ -49,7 +48,7 @@ const login = async (req, res) => {
       const auth = await bcrypt.compare(password, user.password); // Check if the password matched
       if (auth) {
         const token = createToken(user.email);
-        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000});
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
         return res.status(200).json({ user: user.email });
       }
     }
@@ -61,49 +60,55 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
-  res.status(200).json({message: "You've successfully logged out."});
+  res.status(200).json({ message: "You've successfully logged out." });
 };
+
 // This api sends a password resetToken to user
 const forgotPassword = async (req, res) => {
-  // Get user based on the posted email
-  const { email, frontendUrl } = req.body;
-  const user = await db.appUser.findOne({
-    where: { email: email.toLowerCase() },
-  });
-  if (!user) {
-    return res
-      .status(404)
-      .json({ error: "No account is associated with this email" });
-  }
-
-  // Generate a random reset token
-  const resetToken = crypto.randomBytes(64).toString("hex");
-  // Hash resetToken
-  const hashedResetToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
-
-  const expiresAt = new Date();
-  expiresAt.setMinutes(expiresAt.getMinutes() + 25); // 25 min from now
-
-  // Send the plain resetToken to the user email and update user's passwordResetToken and passwordResetTokenExpiresAt in the database
-  const resetUrl = `${frontendUrl}${resetToken}`;
-  const message = `You have requested to reset your password. Please use the link below to reset your password\n\n${resetUrl}\n\nThis reset password link will expire in 25 minutes.`;
-  console.log(resetUrl);
-
   try {
-    // await mailService.sendEmail({
-    //   email: user.email,
-    //   subject: "Password change request",
-    //   message: message,
-    // });
+    // Get user based on the posted email
+    const { email, frontendUrl } = req.body;
+    const user = await db.appUser.findOne({
+      where: { email: email.toLowerCase() },
+    });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: "No account is associated with this email" });
+    }
+
+    // Generate a random reset token
+    const resetToken = crypto.randomBytes(64).toString("hex");
+    // Hash resetToken
+    const hashedResetToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 25); // 25 min from now
+
+    // Send the plain resetToken to the user email and update user's passwordResetToken and passwordResetTokenExpiresAt in the database
+    const resetUrl = `${frontendUrl}${resetToken}`;
+    
+   // console.log("\n\n\nPassword reset link:", resetUrl, "\n\n\n");
 
     user.set({
       passwordResetToken: hashedResetToken,
       passwordResetTokenExpiresAt: expiresAt,
     });
     await user.save();
+
+    const context = await createEmailContext({ email, db });
+    context.resetUrl = resetUrl;  
+    const emailService = new EmailService();
+    const messageId = await emailService.buildAndSendEmail(
+      "resetpassword",
+      context,
+      email, // to be replaced with the receiver's email
+      "Password change request" // Subject
+    );
+    console.log(`Email sent successfully! Message ID: ${messageId}`);
 
     res.status(200).json({
       status: "success",

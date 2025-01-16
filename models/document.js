@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       documentDescription: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       empId: {
         type: Sequelize.INTEGER,

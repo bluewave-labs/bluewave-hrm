@@ -90,7 +90,7 @@ module.exports = {
     const path = "./constants/data/images/";
     if (fs.existsSync(path)) {
       for (let d of data) {
-        console.log(d);
+        //console.log(d);
         const img = fs.readFileSync(`${path}${d.empId}.png`, {
           encoding: "base64",
         });
@@ -122,15 +122,7 @@ module.exports = {
     });
     displayInfo(results.length, "document");
   },
-  populateOffBoardingDocumentTable: async function (db) {
-    const data = require("./offBoardingDocument.json");
-    removeKey(data, "id");
-    const results = await db.offBoardingDocument.bulkCreate(data, {
-      validate: true,
-    });
-    displayInfo(results.length, "offBoardingDocument");
-  },
-  populateSocialProfileTable: async function (db) {
+   populateSocialProfileTable: async function (db) {
     const data = require("./socialProfile.json");
     removeKey(data, "id");
     const results = await db.socialProfile.bulkCreate(data, {
@@ -250,6 +242,107 @@ module.exports = {
     displayInfo(results.length, "surveyResponse");
   },
 
+  populateOffboardingTables: async function (db) {
+    const questionData = require("./offboarding/offboardingSurveyQuestion.json");
+    const responseData = require("./offboarding/offboardingSurveyResponse.json");
+    const offboardingData = require("./offboarding/offboarding.json");
+    const docData = require("./offboarding/offboardingDocument.json");
+    const surveyData = require("./offboarding/offboardingSurvey.json");
+    const ndaPath = "./constants/data/offboarding/NDA.pdf";
+    const leaveLetterPath = "./constants/data/offboarding/resignation-letter.docx";
+    // Create survey questions
+    let results = await db.offboardingSurveyQuestion.bulkCreate(questionData, {
+      validate: true,
+    });
+    // Create offboarding
+    results = await db.offboarding.bulkCreate(offboardingData, {
+      validate: true,
+    });
+    // Create survey response
+    results = await db.offboardingSurveyResponse.bulkCreate(responseData, {
+      validate: true,
+    });
+    // Create offboarding survey
+    results = await db.offboardingSurvey.bulkCreate(surveyData, {
+      validate: true,
+    });
+
+    // Read document files
+    const leaveLetter = fs.readFileSync(leaveLetterPath, {
+      encoding: "base64",
+    });
+
+    const nda = fs.readFileSync(ndaPath, {
+      encoding: "base64",
+    });
+
+    // Update document files
+    docData[0].documentFile = leaveLetter;
+    docData[1].documentFile = nda;
+
+    // Create documents
+    results = await db.offboardingDocument.bulkCreate(docData, {
+      validate: true,
+    });
+
+    // Create signed documents
+    docData[0]["offboardingId"] = 1;
+    docData[1]["offboardingId"] = 1;
+
+    await db.offboardingSignedDocument.bulkCreate(docData, {
+      validate: true,
+    });
+
+    // Create offboarding documentation - linking offboarding to signed documents
+    results = await db.offboardingDocumentation.bulkCreate(
+      [
+        {
+          offboardingId: 1,
+          offboardingSignedDocumentId: 1,
+        },
+        {
+          offboardingId: 1,
+          offboardingSignedDocumentId: 2,
+        },
+      ],
+      {
+        validate: true,
+      }
+    );
+
+    console.log("Offboarding records successfully created");
+  },
+
+  populateSatisfactionSurveyTables : async function (db) {
+    const respondentData = require("./satisfactionSurvey/satisfactionSurveyRespondent.json");
+    const surveyData = require("./satisfactionSurvey/satisfactionSurvey.json");
+    const questionData = require("./satisfactionSurvey/satisfactionSurveyQuestion.json");
+    const responseData = require("./satisfactionSurvey/satisfactionSurveyResponse.json");
+    const recipientData = require("./satisfactionSurvey/satisfactionSurveyRecipient.json");
+  
+    // Create satisfactionSurvey
+    await db.satisfactionSurvey.bulkCreate(surveyData, {
+      validate: true,
+    });
+    // Create survey questions
+    await db.satisfactionSurveyQuestion.bulkCreate(questionData, {
+      validate: true,
+    });
+    // Create survey respondent
+    await db.satisfactionSurveyRespondent.bulkCreate(respondentData, {
+      validate: true,
+    });
+    // Create survey response
+    await db.satisfactionSurveyResponse.bulkCreate(responseData, {
+      validate: true,
+    });
+      // Create survey repcipient
+      await db.satisfactionSurveyRecipient.bulkCreate(recipientData, {
+        validate: true,
+      });
+    console.log("Satisfaction survey records successfully created");
+  },
+
   populateTables: async function (db) {
     console.log("Populating tables...");
     await this.populateRoleTable(db);
@@ -261,7 +354,6 @@ module.exports = {
     await this.populateEmployeeTable(db);
     await this.populateSocialProfileTable(db);
     await this.populateDocumentTable(db);
-    await this.populateOffBoardingDocumentTable(db);
     await this.populateUserTable(db);
     await this.populateTimeOffHistoryTable(db);
     await this.populateChangeHistoryTable(db);
@@ -275,6 +367,8 @@ module.exports = {
     // await this.populateOnboardingTable(db);
     // await this.populateTaskTable(db);
     // await this.populateSurveyResponseTable(db);
+    await this.populateOffboardingTables(db);
+    await this.populateSatisfactionSurveyTables(db);
     console.log("Operation successful, tables Populated.");
   },
 };

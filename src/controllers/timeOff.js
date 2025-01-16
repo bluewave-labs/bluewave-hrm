@@ -312,7 +312,7 @@ exports.initiateDeletion = async (req, res) => {
 Note: employees is an array of empId of the affected employees.
 
  */
-exports.confirmDeletion = async (req, res) => {
+exports.confirmDeletion = async (req, res) => {console.log(req.body)
   const { employees, oldTimeOffId, newTimeOffId } = req.body;
   try {
     for (const empId in employees) {
@@ -361,7 +361,7 @@ exports.confirmDeletion = async (req, res) => {
         message: message.failed,
       });
     }
-  } catch (error) {
+  } catch (error) {console.log(error);
     res.status(400).send({
       message: error.message || message.failed,
     });

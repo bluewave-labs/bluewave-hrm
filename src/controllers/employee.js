@@ -50,8 +50,13 @@ const autoDelete = async () => {
   )} millisecond(s)`;
   console.log(str);
 };
+try {
+  runAtSpecificTimeOfDay(23, 59, autoDelete);
+} catch (error) {
+  console.log(error);
+  console.log("Auto delete failed.")
+}
 
-runAtSpecificTimeOfDay(23, 59, autoDelete);
 
 const predefinedColors = [
   "#7F56D9", // 1st place
@@ -123,22 +128,79 @@ const assignTimeOffToEmployee = async (empId) => {
     console.log(error);
   }
 };
+// Expected an object with a property named managerIds with an array attribute
+// Expected data format {managerIds: [1,2,3]}
+exports.removeEmployeeManager = async (req, res) => {
+  try {
+    const managerIds = req.body.managerIds;
+    // Find affected employees
+    const employees = await db.employee.findAll({
+      attributes: ["empId", "firstName", "lastName", "email"],
+      where: { managerId: managerIds },
+      order: ["firstName", "lastName"],
+    });
+
+    await db.employee.update(
+      { managerId: null },
+      {
+        where: {
+          managerId: managerIds,
+        },
+      }
+    );
+    // Send a list of affected employees
+    res.send(employees);
+  } catch (error) {
+    console.log(error);
+    res.send("error");
+  }
+};
+//Expected data format [{managerId:1, empIds: [2,3,4]}, {managerId: 5, empIds:[6,7,8]}]
+exports.changeEmployeeManager = async (req, res) => {
+  try {
+    const data = req.body;
+    let count = 0; // Count the number of changes
+    for (let element of data) {
+      const result = await db.employee.update(
+        { managerId: element.managerId },
+        {
+          where: {
+            empId: element.empIds,
+          },
+        }
+      );
+      count += parseInt(result);
+    }
+
+    res.send({
+      status: message.updated,
+      managerCount: data.length,
+      employeeCount: count,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send("error");
+  }
+};
+exports.showEmployeeWithNoManager = async (req, res) => {
+  try {
+    const employees = await db.employee.findAll({
+      attributes: ["empId", "firstName", "lastName", "email"],
+      where: { managerId: null },
+      order: ["firstName", "lastName"],
+    });
+    return res.send(employees);
+  } catch (error) {
+    console.log(error);
+    res.send("error");
+  }
+};
 
 exports.showManagers = async (req, res) => {
-  const data = await db.employee.aggregate("managerId", "DISTINCT", {
-    plain: false,
-  });
-  const ids = [];
-  for (let d of data) {
-    const managerId = d.DISTINCT;
-    if (managerId) {
-      ids.push(managerId);
-    }
-  }
-  const managers = await db.employee.findAll({
+  const managers = await db.appUser.findAll({
     attributes: ["empId", "firstName", "lastName", "email"],
     order: ["firstName", "lastName"],
-    where: { empId: ids },
+    where: { permissionId: [1, 2], empId: { [db.Sequelize.Op.ne]: null } },
   });
   res.json(managers);
 };

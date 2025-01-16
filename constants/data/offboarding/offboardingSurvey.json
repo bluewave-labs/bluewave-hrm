@@ -1,0 +1,42 @@
+[
+  {
+    "offboardingId": 1,
+    "offboardingSurveyResponseId": 1
+  },
+  {
+    "offboardingId": 1,
+    "offboardingSurveyResponseId": 2
+  },
+  {
+    "offboardingId": 1,
+    "offboardingSurveyResponseId": 3
+  },
+  {
+    "offboardingId": 1,
+    "offboardingSurveyResponseId": 4
+  },
+  {
+    "offboardingId": 1,
+    "offboardingSurveyResponseId": 5
+  },
+  {
+    "offboardingId": 2,
+    "offboardingSurveyResponseId": 1
+  },
+  {
+    "offboardingId": 2,
+    "offboardingSurveyResponseId": 2
+  },
+  {
+    "offboardingId": 2,
+    "offboardingSurveyResponseId": 3
+  },
+  {
+    "offboardingId": 2,
+    "offboardingSurveyResponseId": 4
+  },
+  {
+    "offboardingId": 2,
+    "offboardingSurveyResponseId": 5
+  }
+]

@@ -183,6 +183,7 @@ async function retrieveNotificationByRecipient(recipientId) {
       "timeOffHistory",
     ],
     where: { id: { [db.Sequelize.Op.in]: ids } },
+    order: [["id", "DESC"]],
   });
   const formattedData = [];
   for (let n of notifications) {

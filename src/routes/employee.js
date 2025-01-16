@@ -12,6 +12,10 @@ module.exports = (router) => {
   router.route("/employees").post(requireAuth, controller.createRecord);
   router.route("/employees").put(requireAuth, controller.updateRecord);
   router.route("/employees/").delete(requireAuth, controller.deleteRecord);
+  router.route("/employees/manager/remove").post(requireAuth, controller.removeEmployeeManager);
+  router.route("/employees/manager/change").post(requireAuth, controller.changeEmployeeManager);
+  router.route("/employees/manager/none").get(requireAuth, controller.showEmployeeWithNoManager);
+  router.route("/employees/manager/list").get(requireAuth, controller.showManagers);
   // Statistics/summary routes
   router
     .route("/employees/summaries/departments")
