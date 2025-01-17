@@ -19,6 +19,8 @@ Headcount is a people and resource management application for your organization.
 - Team management
 - Employee management
 - Time off & vacation management
+- Onboarding
+- Offboarding
 - Reporting
 - Surveys
 
