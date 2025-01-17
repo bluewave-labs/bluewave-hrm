@@ -10,7 +10,7 @@
 
 <p align="center"><strong>An open source human resource management application</strong></p>
 
-![Github social](https://github.com/user-attachments/assets/0ce6f478-bed8-4fd6-a287-2a5cf31148ed)
+![Hero image](https://github.com/user-attachments/assets/47cccd52-36ab-4a94-a7f0-e7006647476e)
 
 ## Features 
 
