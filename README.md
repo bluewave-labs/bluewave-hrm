@@ -14,7 +14,7 @@
 
 ## Features 
 
-Headcount is a people and resource management application for your organization. It has the following features: 
+Headcount is an open source human resources management (HRM) application for your organization. It has the following features: 
 
 - Team management
 - Employee management
