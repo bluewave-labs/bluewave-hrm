@@ -22,6 +22,7 @@ Headcount is a people and resource management application for your organization.
 - Onboarding
 - Offboarding
 - Reporting
+- Employee logs
 - Surveys
 
 ## Tech stack
