@@ -5,6 +5,7 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const app = express();
+const path = require("path");
 const router = express.Router();
 app.use(cookieParser());
 
@@ -22,7 +23,8 @@ app.use(cookieParser());
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Work in progress" });
+  res.sendFile(path.join(__dirname, '/constants/index.html'));
+  //res.json({ message: "Welcome to headcount backend application" });
 });
 
 const routes = require("./src/routes/index");
@@ -38,7 +40,6 @@ app.listen(HTTP_PORT, "0.0.0.0", () => {
 
 /**
  * This function prepopulates database table(s) with sample data.
- * It must be called at least once to prevent error during certain API calls.
  * @param {*} param0
  */
 const populateDatabaseTables = async ({ all = true }) => {
@@ -55,9 +56,18 @@ const populateDatabaseTables = async ({ all = true }) => {
 
 /*
 Note:
-1. Comment out the following function call after running the application for the first time to prevent
+1. The following function call will prepopulate the database table(s) with sample data for testing 
+   or required data to initiate the onboarding process. Note that:
+   populateDatabaseTables({ all: true }) - prepopulates all database tables with sample data
+   populateDatabaseTables({ all: false }) - prepopulates database with required data
+2. The "populateDatabaseTables" function must be called at least once to prevent error(s) during 
+   certain API calls.   
+3. The value of "all" determines the page that comes up when frontend app starts running.
+   { all: true } - Frontend app displays login page
+   { all: false } - Frontend app displays registration page
+4. Comment out the function call after running the application for the first time to prevent
    altering database tables at each run of the application.
-2. Change value of "all" to false to prepopulate permission table only.
 */
+
 populateDatabaseTables({ all: true });
 
