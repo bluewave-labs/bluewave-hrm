@@ -5,10 +5,19 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/system/Stack";
+import dayjs from "dayjs";
 import { styled } from "@mui/system";
 import PropTypes from "prop-types";
 import HRMButton from "../Button/HRMButton";
 import { colors } from "../../Styles";
+
+//Function for parsing a JavaScript date into a string format.
+function formatDate(date) {
+    const day = date.toLocaleString("default", { day: "2-digit" });
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.toLocaleString("default", { year: "numeric" });
+    return `${month} ${day}, ${year}`;
+};
 
 /**
  * Menu component for listing surveys and their results in the surveys page.
@@ -67,9 +76,9 @@ export default function SurveysTable({surveyList, setSurvey, style}) {
                     {surveyList.map((survey) => (
                         <TableRow>
                             <TableBodyCell><b>{survey.name}</b></TableBodyCell>
-                            <TableBodyCell>{survey.startDate}</TableBodyCell>
-                            <TableBodyCell>{survey.finishDate}</TableBodyCell>
-                            <TableBodyCell>{survey.answered}</TableBodyCell>
+                            <TableBodyCell>{formatDate(dayjs(survey.startedAt).toDate())}</TableBodyCell>
+                            <TableBodyCell>{formatDate(dayjs(survey.completedAt).toDate())}</TableBodyCell>
+                            <TableBodyCell>{survey.respondentCount} times</TableBodyCell>
                             <TableBodyCell>
                                 <Stack 
                                     direction="row" 

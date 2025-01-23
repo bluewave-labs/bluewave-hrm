@@ -14,9 +14,6 @@ import HRMButton from '../Button/HRMButton';
  * Props:
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
- * 
- * - innerStyle<Object>: Optional prop for adding further inline styling in the inner component.
- *      Default: {}
  */
 export default function TimeOffPage({style}) {
     //States determining whether the time off request menu and request successful notifications

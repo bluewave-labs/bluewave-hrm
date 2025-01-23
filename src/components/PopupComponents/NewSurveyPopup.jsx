@@ -19,12 +19,16 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
-import DateSelect from "../PopupComponents/DateSelect";
+import { fetchAll as fetchAllEmployees } from "../../assets/FetchServices/Employee";
+import { fetchAll as fetchAllTeams } from "../../assets/FetchServices/Team";
+import { createOne } from "../../assets/FetchServices/SatisfactionSurvey";
+import DateSelect from "./DateSelect";
 import HRMButton from "../Button/HRMButton";
 //import Checkbox from "../Checkbox/Checkbox";
-import QuestionsList from "./QuestionsList";
-import RecipientsList from "./RecipientsList";
+import QuestionsList from "../SurveysPage/QuestionsList";
+import RecipientsList from "../SurveysPage/RecipientsList";
 import { fonts, colors } from "../../Styles";
+const BASE_URL = require("../../assets/FetchServices/BaseUrl.json").value;
 
 //Function for determining if a time period is valid. A time period is only valid if the
 //starting date is before or on the same day as the ending date.
@@ -69,7 +73,7 @@ function formatDate(date) {
 export default function NewSurveyPopup({close, style}) {
     //Page number outlining the stage of the new survey creation
     const [pageNumber, setPageNumber] = useState(1);
-    //Falg determining if a previous survey should be used
+    //Flag determining if a previous survey should be used
     //const [usePrevious, setUsePrevious] = useState(false);
     //Flag determining if the popup for choosing the survey start date is open
     const [openStartDate, setOpenStartDate] = useState(false);
@@ -81,16 +85,21 @@ export default function NewSurveyPopup({close, style}) {
     const [newRecipient, setNewRecipient] = useState(null);
     //All the relevant information regarding the new survey to be created
     const [newSurvey, setNewSurvey] = useState({
-        surveyName: "",
-        welcomeScreenTitle: "",
-        welcomeScreenMessage: "",
-        endScreenTitle: "",
-        endScreenMessage: "",
-        startDate: dayjs().toDate(),
-        endDate: dayjs().toDate(),
-        questions: [],
-        recipients: []
+        anonymous: false,
+        name: "",
+        welcomeTitle: "",
+        welcomeMessage: "",
+        endTitle: "",
+        endMessage: "",
+        startedAt: dayjs().toISOString(),
+        completedAt: dayjs().toISOString(),
+        satisfactionSurveyQuestions: [],
+        satisfactionSurveyRecipients: [],
+        frontendUrl: BASE_URL
     });
+    //Options when selecting survey recipients
+    const [recipientOptions, setRecipientOptions] = useState([]);
+    const [recipientTeams, setRecipientTeams] = useState([]);
     //Validation states for determining if error messages should be displayed
     const [validation, setValidation] = useState({
         1: false,
@@ -99,6 +108,7 @@ export default function NewSurveyPopup({close, style}) {
         4: false
     });
 
+    /*
     const recipientOptions = [
         {
             category: "Team",
@@ -156,20 +166,28 @@ export default function NewSurveyPopup({close, style}) {
             name: "Barry Singh"
         }
     ];
+    */
+
+    //Retrieve all options for survey recipient selection when the popup is opened
+    useEffect(() => {
+        getAllTeams();
+        getAllRecipients();
+    }, [])
 
     //Automatically adjust or validate dates to ensure a valid period is set
     useEffect(() => {
-        if (!isValidPeriod(newSurvey.startDate, newSurvey.endDate)) {
-            setNewSurvey({...newSurvey, endDate: newSurvey.startDate});
+        if (!isValidPeriod(dayjs(newSurvey.startedAt).toDate(), dayjs(newSurvey.completedAt).toDate())) {
+            setNewSurvey({...newSurvey, completedAt: newSurvey.startedAt});
         }
-    }, [newSurvey.startDate]);
+    }, [newSurvey.startedAt]);
 
     useEffect(() => {
-        if (!isValidPeriod(newSurvey.startDate, newSurvey.endDate)) {
-            setNewSurvey({...newSurvey, startDate: newSurvey.endDate});
+        if (!isValidPeriod(dayjs(newSurvey.startedAt).toDate(), dayjs(newSurvey.completedAt).toDate())) {
+            setNewSurvey({...newSurvey, startedAt: newSurvey.completedAt});
         }
-    }, [newSurvey.endDate]);
+    }, [newSurvey.completedAt]);
 
+    //Remove any validation messages five seconds after they have appeared
     useEffect(() => {
         if (Object.entries(validation).some((value) => value[1])) {
             setTimeout(() => setValidation({
@@ -180,6 +198,39 @@ export default function NewSurveyPopup({close, style}) {
             }), "5000");
         }
     }, [validation]);
+
+    //Retrieve all teams to populate survey recipient options
+    function getAllTeams() {
+        fetchAllTeams().then((data) => {
+            const teams = [
+                ...[{ category: "Team", name: "Everyone" }],
+                ...data.map((t) => {
+                    return {
+                        category: "Team",
+                        name: t.teamName
+                    }
+                })
+            ];
+            console.log(teams);
+            setRecipientTeams(teams);
+        });
+    };
+
+    //Retrieve all employees to populate survey recipient options
+    function getAllRecipients() {
+        fetchAllEmployees().then((data) => {
+            const employees = data.map((e) => {
+                return {
+                    empId: e.empId,
+                    category: "Employee",
+                    teamName: e.team.teamName,
+                    name: `${e.firstName} ${e.lastName}`
+                }
+            });
+            console.log(employees);
+            setRecipientOptions(employees);
+        });
+    };
 
     //Function for navigating to the previous page
     function previousPage() {
@@ -193,40 +244,47 @@ export default function NewSurveyPopup({close, style}) {
 
     //Function for navigating to the next page if requirements are met
     function nextPage() {
-        if (pageNumber === 1 && !newSurvey.surveyName) {
+        //Survey requires a name in page 1
+        if (pageNumber === 1 && !newSurvey.name) {
             setValidation({
                 ...validation,
                 [1]: true
             });
         }
-        else if (pageNumber === 2 && (!newSurvey.welcomeScreenTitle || !newSurvey.endScreenTitle)) {
+        //Survey requires a welcome and ending title in page 2
+        else if (pageNumber === 2 && (!newSurvey.welcomeTitle || !newSurvey.endTitle)) {
             setValidation({
                 ...validation,
                 [2]: true
             });
         }
-        else if (pageNumber === 3 && newSurvey.questions.length === 0) {
+        //Survey requires at least one question in page 3
+        else if (pageNumber === 3 && newSurvey.satisfactionSurveyQuestions.length === 0) {
             setValidation({
                 ...validation,
                 [3]: true
             });
         }
-        else if (pageNumber === 4 && newSurvey.recipients.length === 0) {
+        //Survey requires at least one recipient in page 4
+        else if (pageNumber === 4 && newSurvey.satisfactionSurveyRecipients.length === 0) {
             setValidation({
                 ...validation,
                 [4]: true
             });
         }
+        //Submit the survey request if on the last page
         else if (pageNumber === 5) {
             handleSubmit();
         }
+        //Otherwise, navigate to the next page
         else {
             setPageNumber(pageNumber + 1);
         }
     };
 
-    //Function for submitted the new survey
+    //Function for submitting the new survey
     function handleSubmit() {
+        createOne(newSurvey);
         close();
     };
 
@@ -235,10 +293,10 @@ export default function NewSurveyPopup({close, style}) {
         if (questionText) {
             setNewSurvey({
                 ...newSurvey,
-                questions: [
-                    ...newSurvey.questions,
+                satisfactionSurveyQuestions: [
+                    ...newSurvey.satisfactionSurveyQuestions,
                     {
-                        index: newSurvey.questions.length,
+                        orderNumber: newSurvey.satisfactionSurveyQuestions.length,
                         question: questionText
                     }
                 ]
@@ -248,35 +306,38 @@ export default function NewSurveyPopup({close, style}) {
 
     //Function for adding a new recipient for the survey
     function addRecipient(option) {
+        //If a team option is selected, add every employee in that team as a recipient
         if (option.category === "Team") {
             let newRecipients;
             if (option.name === "Everyone") {
                 newRecipients = recipientOptions.filter(
-                    (rec) => rec.team && newSurvey.recipients.every((rec2) => rec.name !== rec2.name)
+                    (rec) => rec.teamName && newSurvey.satisfactionSurveyRecipients.every((rec2) => rec.name !== rec2.name)
                 );
             }
             else {
                 newRecipients = recipientOptions.filter(
-                    (rec) => rec.team === option.name && newSurvey.recipients.every((rec2) => rec.name !== rec2.name)
+                    (rec) => rec.teamName === option.name && newSurvey.satisfactionSurveyRecipients.every((rec2) => rec.name !== rec2.name)
                 );
             }
             
+            //An id is added to each recipient to help with removing recipients
             newRecipients.forEach((rec) => rec.id = uuidv4());
 
             setNewSurvey({
                 ...newSurvey, 
-                recipients: [
-                    ...newSurvey.recipients,
+                satisfactionSurveyRecipients: [
+                    ...newSurvey.satisfactionSurveyRecipients,
                     ...newRecipients
                 ]
             });
         
         }
+        //If an employee option is selected, only add that employee as a recipient
         else if (option.category === "Employee") {
             setNewSurvey({
                 ...newSurvey,
-                recipients: [
-                    ...newSurvey.recipients,
+                satisfactionSurveyRecipients: [
+                    ...newSurvey.satisfactionSurveyRecipients,
                     {
                         ...option,
                         id: uuidv4()
@@ -343,10 +404,10 @@ export default function NewSurveyPopup({close, style}) {
                 <>
                     <Header4>Internal survey name<span style={{color: "red"}}>*</span></Header4>
                     <TextField 
-                        value={newSurvey.surveyName}
+                        value={newSurvey.name}
                         error={validation[1]}
                         placeholder="Survey name"
-                        onChange={(e) => setNewSurvey({...newSurvey, surveyName: e.target.value})}
+                        onChange={(e) => setNewSurvey({...newSurvey, name: e.target.value})}
                         helperText={validation[1] ? "Required": null}
                         sx={{ 
                             width: "100%",
@@ -389,11 +450,11 @@ export default function NewSurveyPopup({close, style}) {
                     {/*Textfields for welcome screen title and message*/}
                     <Header4>Welcome screen title<span style={{color: "red"}}>*</span></Header4>
                     <TextField 
-                        value={newSurvey.welcomeScreenTitle}
-                        error={validation[2] && !newSurvey.welcomeScreenTitle}
+                        value={newSurvey.welcomeTitle}
+                        error={validation[2] && !newSurvey.welcomeTitle}
                         placeholder="Welcome screen title"
-                        onChange={(e) => setNewSurvey({...newSurvey, welcomeScreenTitle: e.target.value})}
-                        helperText={(validation[2] && !newSurvey.welcomeScreenTitle) ? "Required" : null}
+                        onChange={(e) => setNewSurvey({...newSurvey, welcomeTitle: e.target.value})}
+                        helperText={(validation[2] && !newSurvey.welcomeTitle) ? "Required" : null}
                         sx={{ 
                             width: "100%",
                             marginBottom: "20px" 
@@ -401,11 +462,11 @@ export default function NewSurveyPopup({close, style}) {
                     />
                     <Header4>Welcome screen message</Header4>
                     <TextField 
-                        value={newSurvey.welcomeScreenMessage}
+                        value={newSurvey.welcomeMessage}
                         placeholder="Enter welcome screen message..."
                         multiline
                         rows={4}
-                        onChange={(e) => setNewSurvey({...newSurvey, welcomeScreenMessage: e.target.value})}
+                        onChange={(e) => setNewSurvey({...newSurvey, welcomeMessage: e.target.value})}
                         sx={{ 
                             width: "100%",
                             marginBottom: "40px"
@@ -414,11 +475,11 @@ export default function NewSurveyPopup({close, style}) {
                     {/*Textfields for end screen title and message*/}
                     <Header4>End screen title<span style={{color: "red"}}>*</span></Header4>
                     <TextField 
-                        value={newSurvey.endScreenTitle}
-                        error={validation[2] && !newSurvey.endScreenTitle}
+                        value={newSurvey.endTitle}
+                        error={validation[2] && !newSurvey.endTitle}
                         placeholder="End screen title"
-                        onChange={(e) => setNewSurvey({...newSurvey, endScreenTitle: e.target.value})}
-                        helperText={(validation[2] && !newSurvey.endScreenTitle) ? "Required" : null}
+                        onChange={(e) => setNewSurvey({...newSurvey, endTitle: e.target.value})}
+                        helperText={(validation[2] && !newSurvey.endTitle) ? "Required" : null}
                         sx={{
                             width: "100%",
                             marginBottom: "20px"
@@ -426,11 +487,11 @@ export default function NewSurveyPopup({close, style}) {
                     />
                     <Header4>End screen message</Header4>
                     <TextField 
-                        value={newSurvey.endScreenMessage}
+                        value={newSurvey.endMessage}
                         placeholder="Enter end screen message..."
                         multiline
                         rows={4}
-                        onChange={(e) => setNewSurvey({...newSurvey, endScreenMessage: e.target.value})}
+                        onChange={(e) => setNewSurvey({...newSurvey, endMessage: e.target.value})}
                         sx={{
                             width: "100%",
                             marginBottom: "20px"
@@ -447,7 +508,7 @@ export default function NewSurveyPopup({close, style}) {
                             <Header4>Start date</Header4>
                             <Chip 
                                 icon={<CalendarMonthIcon />}
-                                label={formatDate(newSurvey.startDate)}
+                                label={formatDate(dayjs(newSurvey.startedAt).toDate())}
                                 variant="outlined"
                                 onClick={() => setOpenStartDate(true)}
                                 disableTouchRipple
@@ -458,7 +519,7 @@ export default function NewSurveyPopup({close, style}) {
                             <Header4>End date</Header4>
                             <Chip 
                                 icon={<CalendarMonthIcon />}
-                                label={formatDate(newSurvey.endDate)}
+                                label={formatDate(dayjs(newSurvey.completedAt).toDate())}
                                 variant="outlined"
                                 onClick={() => setOpenEndDate(true)}
                                 disableTouchRipple
@@ -499,9 +560,9 @@ export default function NewSurveyPopup({close, style}) {
                         </HRMButton>
                     </Stack>
                     {/*List of added survey questions*/}
-                    {newSurvey.questions.length > 0 ? 
+                    {newSurvey.satisfactionSurveyQuestions.length > 0 ? 
                         <QuestionsList 
-                            questions={newSurvey.questions} 
+                            questions={newSurvey.satisfactionSurveyQuestions} 
                             setQuestions={(questions) => setNewSurvey({...newSurvey, questions})}
                             style={{ marginBottom: "20px" }} 
                         /> :
@@ -521,7 +582,7 @@ export default function NewSurveyPopup({close, style}) {
                     >
                         <Autocomplete 
                             value={newRecipient}
-                            options={recipientOptions}
+                            options={[...recipientTeams, ...recipientOptions]}
                             groupBy={(option) => option.category}
                             getOptionLabel={(option) => option.name}
                             onChange={(e, newValue) => setNewRecipient(newValue)}
@@ -536,10 +597,10 @@ export default function NewSurveyPopup({close, style}) {
                             <b style={{ color: colors.darkGrey }}>Add new</b>
                         </HRMButton>
                     </Stack>
-                    {newSurvey.recipients.length > 0 ?
+                    {newSurvey.satisfactionSurveyRecipients.length > 0 ?
                         <RecipientsList 
-                            recipients={newSurvey.recipients} 
-                            setRecipients={(newRecipients) => setNewSurvey({...newSurvey, recipients: newRecipients})}
+                            recipients={newSurvey.satisfactionSurveyRecipients} 
+                            setRecipients={(newRecipients) => setNewSurvey({...newSurvey, satisfactionSurveyRecipients: newRecipients})}
                             style={{ marginBottom: "20px" }}
                         /> :
                         <Header4>No recipients have been added</Header4>
@@ -551,39 +612,39 @@ export default function NewSurveyPopup({close, style}) {
                 <>
                     {/*Welcome screen title and message*/}
                     <Header5>Welcome screen title</Header5>
-                    <p style={{ marginBottom: "40px" }}>{newSurvey.welcomeScreenTitle}</p>
+                    <p style={{ marginBottom: "40px" }}>{newSurvey.welcomeTitle}</p>
                     <Header5>Welcome screen message</Header5>
                     <p style={{ marginBottom: "40px" }}>
-                        {newSurvey.welcomeScreenMessage ? 
-                            newSurvey.welcomeScreenMessage : 
+                        {newSurvey.welcomeMessage ? 
+                            newSurvey.welcomeMessage : 
                             <i>No welcome screen message was provided</i>
                         }
                     </p>
                     {/*End screen title and message*/}
                     <Header5>End screen title</Header5>
-                    <p style={{ marginBottom: "40px" }}>{newSurvey.endScreenTitle}</p>
+                    <p style={{ marginBottom: "40px" }}>{newSurvey.endTitle}</p>
                     <Header5>End screen message</Header5>
                     <p style={{ marginBottom: "40px" }}>
-                        {newSurvey.endScreenMessage ? 
-                            newSurvey.endScreenMessage :
+                        {newSurvey.endMessage ? 
+                            newSurvey.endMessage :
                             <i>No end screen message was provided</i>
                         }
                     </p>
                     {/*Start and end dates*/}
                     <Header5>Start date</Header5>
                     <p style={{ marginBottom: "40px" }}>
-                        {formatDate(newSurvey.startDate)}
+                        {formatDate(dayjs(newSurvey.startedAt).toDate())}
                     </p>
                     <Header5>End date</Header5>
                     <p style={{ marginBottom: "40px" }}>
-                        {formatDate(newSurvey.endDate)}
+                        {formatDate(dayjs(newSurvey.completedAt).toDate())}
                     </p>
                     {/*Survey questions*/}
                     <Header5>Survey questions</Header5>
                     <TableContainer sx={{ marginBottom: "40px" }}>
                         <Table>
                             <TableBody>
-                                {newSurvey.questions.sort((q1, q2) => q1.index - q2.index).map((q) => (
+                                {newSurvey.satisfactionSurveyQuestions.sort((q1, q2) => q1.orderNumber - q2.orderNumber).map((q) => (
                                     <TableRow>
                                         <TableBodyCell>
                                             <p>{q.question}</p>
@@ -604,10 +665,10 @@ export default function NewSurveyPopup({close, style}) {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {newSurvey.recipients.map((rec) => (
+                                {newSurvey.satisfactionSurveyRecipients.map((rec) => (
                                     <TableRow>
                                         <TableBodyCell><p>{rec.name}</p></TableBodyCell>
-                                        <TableBodyCell><p>{rec.team}</p></TableBodyCell>
+                                        <TableBodyCell><p>{rec.teamName}</p></TableBodyCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -644,15 +705,15 @@ export default function NewSurveyPopup({close, style}) {
             <Dialog open={openStartDate} onClose={() => setOpenStartDate(false)}>
                 <DateSelect 
                     close={() => setOpenStartDate(false)} 
-                    setDate={(date) => setNewSurvey({...newSurvey, startDate: date})}
-                    initialValue={newSurvey.startDate}
+                    setDate={(date) => setNewSurvey({...newSurvey, startedAt: date})}
+                    initialValue={newSurvey.startedAt}
                 />
             </Dialog>
             <Dialog open={openEndDate} onClose={() => setOpenEndDate(false)}>
                 <DateSelect 
                     close={() => setOpenEndDate(false)}
-                    setDate={(date) => setNewSurvey({...newSurvey, endDate: date})}
-                    initialValue={newSurvey.endDate}
+                    setDate={(date) => setNewSurvey({...newSurvey, completedAt: date})}
+                    initialValue={newSurvey.completedAt}
                 />
             </Dialog>
         </Box>

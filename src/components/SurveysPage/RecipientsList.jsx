@@ -80,7 +80,7 @@ export default function RecipientsList({recipients, setRecipients, style}) {
                             </TableBodyCell>
                             <TableBodyCell>
                                 {/*Recipient's department*/}
-                                <p>{rec.team}</p>
+                                <p>{rec.teamName}</p>
                             </TableBodyCell>
                         </TableRow>
                     ))}

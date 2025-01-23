@@ -25,6 +25,15 @@ export default function SurveyDetails({survey, back, style}) {
     const [infoSelected, setInfoSelected] = useState(true);
     const [answersSelected, setAnswersSelected] = useState(false);
 
+    const details = {
+        welcomeTitle: survey.welcomeTitle,
+        welcomeMessage: survey.welcomeMessage,
+        endTitle: survey.endTitle,
+        endMessage: survey.endMessage,
+        startedAt: survey.startedAt,
+        completedAt: survey.completedAt
+    };
+
     return (
         <Box sx={{...{
             color: colors.darkGrey,
@@ -57,8 +66,8 @@ export default function SurveyDetails({survey, back, style}) {
                     answersSelected={answersSelected}
                     setAnswersSelected={setAnswersSelected}
                 />
-                {infoSelected && <SurveyInfo surveyInfo={survey.information} />}
-                {answersSelected && <SurveyResponses responseList={survey.responses} />}
+                {infoSelected && <SurveyInfo surveyInfo={details} />}
+                {answersSelected && <SurveyResponses responseList={survey.satisfactionSurveyAnswers} />}
             </Stack>
         </Box>
     );

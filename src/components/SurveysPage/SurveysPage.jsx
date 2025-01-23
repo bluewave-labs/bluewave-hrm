@@ -13,7 +13,7 @@ import { fonts } from "../../Styles";
 export default function SurveysPage({style}) {
     return (
         <Box sx={{...{
-            padding: "40px",
+            //padding: "40px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
             <Stack

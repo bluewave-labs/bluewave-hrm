@@ -104,7 +104,7 @@ function MyInfoPersonalCard({ employee }) {
           display: 'flex',
           flexDirection: 'column',
           minWidth: '952px', 
-          overflowX: 'auto', 
+          //overflowX: 'auto', 
         }}
       >
         <ThemeProvider theme={theme}>

@@ -13,7 +13,7 @@ import { styled } from "@mui/system";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import HRMButton from "../Button/HRMButton";
-import SurveyResponsePopup from "./SurveyResponsePopup";
+import SurveyResponsePopup from "../PopupComponents/SurveyResponsePopup";
 import { colors } from "../../Styles";
 
 /**
@@ -58,7 +58,7 @@ export default function SurveyResponses({responseList, style}) {
     //Employee entries after filtering by employee name and department
     const filteredRes = responseList.filter(
         (res) => res.name.toLowerCase().includes(filterName.toLowerCase()) && 
-        res.team.toLowerCase().includes(filterTeam.toLowerCase())
+        res.teamName.toLowerCase().includes(filterTeam.toLowerCase())
     );
 
     //Functions for incrementing and decrementing the selected survey index
@@ -142,7 +142,7 @@ export default function SurveyResponses({responseList, style}) {
                         {filteredRes.map((res, index) => (
                             <TableRow>
                                 <TableBodyCell>{res.name}</TableBodyCell>
-                                <TableBodyCell>{res.team}</TableBodyCell>
+                                <TableBodyCell>{res.teamName}</TableBodyCell>
                                 <TableBodyCell>
                                     <Stack
                                         direction="row"

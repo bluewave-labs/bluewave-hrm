@@ -92,12 +92,12 @@ export default function SurveyResponsePopup({survey, hasPrev, prev, hasNext, nex
                 />
             </Stack>
             {/*Survey questions and responses*/}
-            <table style={{width: "100%"}}>
+            <table cellSpacing="20" style={{ width: "100%" }}>
                 <tr>
                     <StyledTD><h3>Question</h3></StyledTD>
                     <StyledTD><h3>Response</h3></StyledTD>
                 </tr>
-                {survey.response.map((q) => (
+                {survey.satisfactionSurveyResponses.map((q) => (
                     <tr>
                         <StyledTD><b>{q.question}</b></StyledTD>
                         <StyledTD>{q.answer}</StyledTD>

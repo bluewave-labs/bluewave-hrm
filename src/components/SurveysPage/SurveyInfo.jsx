@@ -1,6 +1,15 @@
 import Box from "@mui/system/Box";
+import dayjs from "dayjs";
 import { styled } from "@mui/system";
 import { fonts } from "../../Styles";
+
+//Function for parsing a JavaScript date into a string format.
+function formatDate(date) {
+    const day = date.toLocaleString("default", { day: "2-digit" });
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.toLocaleString("default", { year: "numeric" });
+    return `${month} ${day}, ${year}`;
+};
 
 /**
  * Content component for displaying the information of a given survey.
@@ -33,12 +42,22 @@ export default function SurveyInfo({surveyInfo, style}) {
             fontSize: fonts.default.size
         }, ...style}}>
             <table style={{ width: "100%" }}>
-                {surveyInfo.map((row) => (
-                    <tr>
-                        <StyledTD><b>{row.field}</b></StyledTD>
-                        <StyledTD>{row.answer}</StyledTD>
-                    </tr>
-                ))}
+                <tr>
+                    <StyledTD><b>{surveyInfo.welcomeTitle}</b></StyledTD>
+                    <StyledTD>{surveyInfo.welcomeMessage}</StyledTD>
+                </tr>
+                <tr>
+                    <StyledTD><b>{surveyInfo.endTitle}</b></StyledTD>
+                    <StyledTD>{surveyInfo.endMessage}</StyledTD>
+                </tr>
+                <tr>
+                    <StyledTD><b>Start date:</b></StyledTD>
+                    <StyledTD>{formatDate(dayjs(surveyInfo.startedAt).toDate())}</StyledTD>
+                </tr>
+                <tr>
+                    <StyledTD><b>Finish date:</b></StyledTD>
+                    <StyledTD>{formatDate(dayjs(surveyInfo.completedAt).toDate())}</StyledTD>
+                </tr>
             </table>
         </Box>
     );

@@ -249,42 +249,44 @@ const handleDelete = (index) => {
      
       </Stack>
     </Box>
-    <TableContainer >
-      <Table sx={{ width:"812px" }} aria-label="simple table">
-        <TableHead>
-          <TableRow sx={{backgroundColor:"#F9FAFB"}}>
-            <TableCell sx={{fontSize:'12px',fontWeight:'medium',color:'#475467',fontFamily:'Inter'}}>File name</TableCell>
-            <TableCell sx={{fontSize:'12px',fontWeight:'medium',color:'#475467',fontFamily:'Inter'}} align="left">Date uploaded</TableCell>
-            <TableCell align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filelist.map((file,index) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" sx={{fontSize:'14px',fontWeight:'medium',color:'#101828',fontFamily:'Inter'}} >
-                {file.name}
-              </TableCell>
-              <TableCell align="left" sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter'}}>{file.uploadedDate}</TableCell>
-              <TableCell align="right">
-                <Stack direction="row" display="flex" justifyContent="right">
-                  <Link
-                    component="button"
-                    underline="none"
-                    onClick={() => handleDelete(index)}
-                    sx={{fontSize:'14px',fontWeight:'600',color:'#475467',fontFamily:'Inter',marginBottom:'4px',marginRight:'8px'}}
-                    >Delete
-                  </Link>
-                </Stack>
-              </TableCell>
-             
+    {filelist.length > 0 &&
+      <TableContainer >
+        <Table sx={{ width:"812px" }} aria-label="simple table">
+          <TableHead>
+            <TableRow sx={{backgroundColor:"#F9FAFB"}}>
+              <TableCell sx={{fontSize:'12px',fontWeight:'medium',color:'#475467',fontFamily:'Inter'}}>File name</TableCell>
+              <TableCell sx={{fontSize:'12px',fontWeight:'medium',color:'#475467',fontFamily:'Inter'}} align="left">Date uploaded</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {filelist.map((file,index) => (
+              <TableRow
+                key={index}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row" sx={{fontSize:'14px',fontWeight:'medium',color:'#101828',fontFamily:'Inter'}} >
+                  {file.name}
+                </TableCell>
+                <TableCell align="left" sx={{fontSize:'13px',fontWeight:'regular',color:'#475467',fontFamily:'Inter'}}>{file.uploadedDate}</TableCell>
+                <TableCell align="right">
+                  <Stack direction="row" display="flex" justifyContent="right">
+                    <Link
+                      component="button"
+                      underline="none"
+                      onClick={() => handleDelete(index)}
+                      sx={{fontSize:'14px',fontWeight:'600',color:'#475467',fontFamily:'Inter',marginBottom:'4px',marginRight:'8px'}}
+                      >Delete
+                    </Link>
+                  </Stack>
+                </TableCell>
+              
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    }
    </>
   )
 }
