@@ -52,7 +52,6 @@ const surveyQueryObject = {
   ],
 };
 const formatSurveyObject = async (surveyObject) => {
-  //console.log(`*****\n\n\n\n\n${surveyObject.satisfactionSurveyRecipients}\n\n\n\n\n*****`);
   const recipients = await fetchRecipientData(
     surveyObject.satisfactionSurveyRecipients
   );
@@ -249,16 +248,16 @@ exports.createRecord = async (req, res) => {
 
     if (satisfactionSurveyQuestions) {
       // Save questions
-      //let orderNumber = 1;
+      let orderNumber = 1;
       const questions = [];
       for (let question of satisfactionSurveyQuestions) {
         const questionData = {
           surveyId,
-          orderNumber: question.orderNumber,
-          question: question.question,
+          orderNumber,
+          question,
         };
         questions.push(questionData);
-        //orderNumber++;
+        orderNumber++;
       }
       if (questions.length > 0) {
         await db.satisfactionSurveyQuestion.bulkCreate(questions, {
@@ -270,11 +269,8 @@ exports.createRecord = async (req, res) => {
     if (satisfactionSurveyRecipients) {
       // Save recipient data
       const recipients = [];
-      for (let emp of satisfactionSurveyRecipients) {
-        recipients.push({ 
-          surveyId, 
-          empId: emp.empId 
-        });
+      for (let empId of satisfactionSurveyRecipients) {
+        recipients.push({ surveyId, empId });
       }
       await db.satisfactionSurveyRecipient.bulkCreate(recipients, {
         validate: true,
