@@ -1,5 +1,6 @@
 import globalAxios from 'axios';
+const BASE_URL = require("../../../assets/FetchServices/BaseUrl.json").value;
 
 export const axios = globalAxios.create({
-  baseURL: 'http://localhost:3000/api/', // Base URL for all requests
+  baseURL: `${BASE_URL}/api/`, // Base URL for all requests
 });
