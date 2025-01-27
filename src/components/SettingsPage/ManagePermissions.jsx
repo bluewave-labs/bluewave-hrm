@@ -13,7 +13,6 @@ import PermissionsTable from "./PermissionsTable";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Toast from "./Toast";
 import PermissionsDialog from "./PermissionsDialog";
-import { useSettingsContext } from "./context";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",

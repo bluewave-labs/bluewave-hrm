@@ -8,6 +8,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import CompanyProfileForm from "./CompanyProfileForm";
+import Offboarding from "./Offboarding";
 import ListTabContent from "./ListTabContent";
 import ManagePermissions from "./ManagePermissions";
 import { useSettingsContext } from "./context";
@@ -18,6 +19,7 @@ import {
   usePermissions,
 } from "./hooks";
 import { tabNames } from "./SettingsDialog";
+import { Style } from "@mui/icons-material";
 
 const StyledTab = styled(Tab)({
   textTransform: "none",
@@ -45,7 +47,7 @@ export default function SettingsPage({ style }) {
   const permissionsData = getPermissionsInfo.data;
 
   const context = useSettingsContext();
-    if (!context) return;
+  if (!context) return;
 
   const setUpdatedPermissions = context.setUpdatedPermissions;
 
@@ -94,7 +96,7 @@ export default function SettingsPage({ style }) {
               <StyledTab label="Job titles" value="Job titles" />
               <StyledTab label="Time off" value="Time off" />
               <StyledTab label="Permissions" value="Permissions" />
-              {/* <StyledTab label="Offboarding" value="Offboarding" /> */}
+              <StyledTab label="Offboarding" value="Offboarding" />
             </TabList>
           </Box>
           <StyledTabPanel value="Company profile">
@@ -111,7 +113,7 @@ export default function SettingsPage({ style }) {
           <StyledTabPanel value="Job titles">
             <ListTabContent
               contentList={jobTitlesPeopleData}
-              titleTabPage="Job Title"
+              titleTabPage="Job titles"
               columns={jobTitlesPeopleColumns}
               tabName={tabNames.jobtitles}
             />
@@ -130,6 +132,9 @@ export default function SettingsPage({ style }) {
               titleTabPage="Permissions"
               tabName={tabNames.permissions}
             />
+          </StyledTabPanel>
+          <StyledTabPanel value="Offboarding">
+            <Offboarding/>
           </StyledTabPanel>
         </TabContext>
       </Box>

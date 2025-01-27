@@ -166,7 +166,7 @@ export default function CompanyProfileForm({ style }) {
       <Box
         sx={{
           ...{
-            paddingTop: 4,
+            paddingTop: 6,
             paddingBottom: 16,
             fontFamily: "Inter, sans-serif",
           },
