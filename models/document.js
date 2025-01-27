@@ -28,13 +28,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BLOB,
         allowNull: false,
       },
-      documentCategory:{
-        type: Sequelize.STRING
-      },
       documentExtension:{
         type: Sequelize.STRING
       }
-
     },
     {
       sequelize,

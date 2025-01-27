@@ -122,7 +122,7 @@ module.exports = {
     });
     displayInfo(results.length, "document");
   },
-   populateSocialProfileTable: async function (db) {
+  populateSocialProfileTable: async function (db) {
     const data = require("./socialProfile.json");
     removeKey(data, "id");
     const results = await db.socialProfile.bulkCreate(data, {
@@ -197,9 +197,9 @@ module.exports = {
     data[0].file = jobOffer;
     data[1].file = NDA;
     const results = await db.fileName.bulkCreate(data, {
-      validate: true
+      validate: true,
     });
-    displayInfo(results.length, "file")
+    displayInfo(results.length, "file");
   },
 
   populateSurveyQuestionTable: async function (db) {
@@ -249,7 +249,8 @@ module.exports = {
     const docData = require("./offboarding/offboardingDocument.json");
     const surveyData = require("./offboarding/offboardingSurvey.json");
     const ndaPath = "./constants/data/offboarding/NDA.pdf";
-    const leaveLetterPath = "./constants/data/offboarding/resignation-letter.docx";
+    const leaveLetterPath =
+      "./constants/data/offboarding/resignation-letter.docx";
     // Create survey questions
     let results = await db.offboardingSurveyQuestion.bulkCreate(questionData, {
       validate: true,
@@ -313,13 +314,13 @@ module.exports = {
     console.log("Offboarding records successfully created");
   },
 
-  populateSatisfactionSurveyTables : async function (db) {
+  populateSatisfactionSurveyTables: async function (db) {
     const respondentData = require("./satisfactionSurvey/satisfactionSurveyRespondent.json");
     const surveyData = require("./satisfactionSurvey/satisfactionSurvey.json");
     const questionData = require("./satisfactionSurvey/satisfactionSurveyQuestion.json");
     const responseData = require("./satisfactionSurvey/satisfactionSurveyResponse.json");
     const recipientData = require("./satisfactionSurvey/satisfactionSurveyRecipient.json");
-  
+
     // Create satisfactionSurvey
     await db.satisfactionSurvey.bulkCreate(surveyData, {
       validate: true,
@@ -336,11 +337,23 @@ module.exports = {
     await db.satisfactionSurveyResponse.bulkCreate(responseData, {
       validate: true,
     });
-      // Create survey repcipient
-      await db.satisfactionSurveyRecipient.bulkCreate(recipientData, {
-        validate: true,
-      });
+    // Create survey repcipient
+    await db.satisfactionSurveyRecipient.bulkCreate(recipientData, {
+      validate: true,
+    });
     console.log("Satisfaction survey records successfully created");
+  },
+
+  populateTimeOffRenewalDateTable: async function (db) {
+    const date = new Date(`${new Date().getFullYear() + 1}-Jan-01`); // January first of the following year
+    await db.timeOffRenewalDate.create({ renewalDate: date });
+  },
+
+  populateRequiredTables: async function (db) {
+    console.log("Populating required tables...");
+    await this.populatePermissionTable(db);
+    await this.populateTimeOffRenewalDateTable(db);
+    console.log("Operation successful, required tables Populated.");
   },
 
   populateTables: async function (db) {
@@ -369,6 +382,7 @@ module.exports = {
     // await this.populateSurveyResponseTable(db);
     await this.populateOffboardingTables(db);
     await this.populateSatisfactionSurveyTables(db);
+    await this.populateTimeOffRenewalDateTable(db);
     console.log("Operation successful, tables Populated.");
   },
 };

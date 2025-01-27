@@ -49,7 +49,7 @@ const populateDatabaseTables = async ({ all = true }) => {
   if (all === true) {
     await data.populateTables(db);
   } else {
-    await data.populatePermissionTable(db);
+    await data.populateRequiredTables(db);
   }
   console.log("Sync operation successful.");
 };
@@ -70,4 +70,3 @@ Note:
 */
 
 populateDatabaseTables({ all: true });
-

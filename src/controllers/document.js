@@ -21,7 +21,7 @@ exports.showAll = async (req, res) => {
 exports.showOne = async (req, res) => {
   // Document entity depends on employee entity. Query of document entity will be better done using empId.
   const empid = req.params.empid;
-  const data = await db.document.findOne({ where: { empId: empid } });
+  const data = await db.document.findAll({ where: { empId: empid } });
   if (data === null) {
     res.status(400).send("Not found!");
   } else {
@@ -29,7 +29,7 @@ exports.showOne = async (req, res) => {
   }
 };
 
-
+/*
 exports.fectchLeavingLetterDoc = async (req, res) => {
   // Document entity depends on employee entity. Query of document entity will be better done using empId.
   const empid = "1";
@@ -54,8 +54,8 @@ exports.fectchNDADoc = async (req, res) => {
     res.status(200).send(base64file);
   }
 };
-
-exports.createBulkRecord = async (req, res) => {  
+*/
+exports.createBulkRecord = async (req, res) => {
   try {
     const data = await db.document.bulkCreate(req.body.data);
     console.log(req.body.data);
@@ -63,7 +63,6 @@ exports.createBulkRecord = async (req, res) => {
   } catch (err) {
     console.log("err");
     res.send({ message: message.failed });
-
   }
 };
 

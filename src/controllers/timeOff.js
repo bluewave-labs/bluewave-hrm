@@ -47,11 +47,16 @@ const createTimeOffRenewalDate = (month) => {
 
 // Utility function to count the number of times a time off policy has been approved for employees
 const getTimeOffUsageCount = async (id) => {
-  const query = `select count(id) from "timeOffHistory" where status = 'Approved' and "timeOffId" = :id;`;
-  const [results, metadata] = await db.sequelize.query(query, {
-    replacements: { id: id },
-  });
-  return parseInt(results[0].count);
+  try {
+    const query = `select count(id) from "timeOffHistory" where status = 'Approved' and "timeOffId" = :id;`;
+    const [results, metadata] = await db.sequelize.query(query, {
+      replacements: { id: id },
+    });
+    return parseInt(results[0].count);
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
 };
 
 const assignTimeOffToEmployees = async (timeOff, year) => {
@@ -90,37 +95,41 @@ const updateEmployeeAnnualTimeOffBalance = async (
   oldTimeOffId,
   newTimeOffId
 ) => {
-  const oldEmployeeAnnualTimeOffs = await db.employeeAnnualTimeOff.findAll({
-    attributes: [
-      "yearNumber",
-      "hoursAllowed",
-      "cumulativeHoursTaken",
-      "timeOffId",
-      "employeeEmpId",
-    ],
-    where: {
-      [db.Sequelize.Op.and]: {
-        timeOffId: oldTimeOffId,
-        employeeEmpId: empId,
-      },
-    },
-    raw: true,
-  });
-
-  for (let item of oldEmployeeAnnualTimeOffs) {
-    const hoursLeft = item.hoursAllowed - item.cumulativeHoursTaken; //Remaining time from the policy to be deleted in a given year
-    const current = await db.employeeAnnualTimeOff.findOne({
+  try {
+    const oldEmployeeAnnualTimeOffs = await db.employeeAnnualTimeOff.findAll({
+      attributes: [
+        "yearNumber",
+        "hoursAllowed",
+        "cumulativeHoursTaken",
+        "timeOffId",
+        "employeeEmpId",
+      ],
       where: {
         [db.Sequelize.Op.and]: {
-          timeOffId: newTimeOffId,
+          timeOffId: oldTimeOffId,
           employeeEmpId: empId,
-          yearNumber: item.yearNumber,
         },
       },
+      raw: true,
     });
-    const balance = current.hoursAllowed + hoursLeft;
-    current.hoursAllowed = balance;
-    await current.save();
+
+    for (let item of oldEmployeeAnnualTimeOffs) {
+      const hoursLeft = item.hoursAllowed - item.cumulativeHoursTaken; //Remaining time from the policy to be deleted in a given year
+      const current = await db.employeeAnnualTimeOff.findOne({
+        where: {
+          [db.Sequelize.Op.and]: {
+            timeOffId: newTimeOffId,
+            employeeEmpId: empId,
+            yearNumber: item.yearNumber,
+          },
+        },
+      });
+      const balance = current.hoursAllowed + hoursLeft;
+      current.hoursAllowed = balance;
+      await current.save();
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -193,16 +202,21 @@ exports.showAll = async (req, res) => {
 };
 
 exports.showOne = async (req, res) => {
-  const id = req.params.id;
-  const data = await db.timeOff.findByPk(id, {
-    attributes: { exclude: ["createdAt", "updatedAt"] },
-    raw: true,
-  });
-  if (data === null) {
+  try {
+    const id = req.params.id;
+    const data = await db.timeOff.findByPk(id, {
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      raw: true,
+    });
+    if (data === null) {
+      res.status(400).send("Not found!");
+    } else {
+      data["usageCount"] = await getTimeOffUsageCount(data.id);
+      res.status(200).send(data);
+    }
+  } catch (error) {
+    console.log(error);
     res.status(400).send("Not found!");
-  } else {
-    data["usageCount"] = await getTimeOffUsageCount(data.id);
-    res.status(200).send(data);
   }
 };
 /**
@@ -312,7 +326,8 @@ exports.initiateDeletion = async (req, res) => {
 Note: employees is an array of empId of the affected employees.
 
  */
-exports.confirmDeletion = async (req, res) => {console.log(req.body)
+exports.confirmDeletion = async (req, res) => {
+  //console.log(req.body)
   const { employees, oldTimeOffId, newTimeOffId } = req.body;
   try {
     for (const empId in employees) {
@@ -361,7 +376,8 @@ exports.confirmDeletion = async (req, res) => {console.log(req.body)
         message: message.failed,
       });
     }
-  } catch (error) {console.log(error);
+  } catch (error) {
+    console.log(error);
     res.status(400).send({
       message: error.message || message.failed,
     });
@@ -382,7 +398,7 @@ exports.setRenewalDate = async (req, res) => {
       data.renewalDate = date;
       await data.save();
     } else {
-      // Not date set, create one.
+      // No date set, create one. This may not happen
       data = await db.timeOffRenewalDate.create({ renewalDate: date });
     }
     res.status(200).send(data);

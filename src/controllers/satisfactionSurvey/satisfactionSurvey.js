@@ -6,20 +6,6 @@ const dayjs = require("dayjs");
 const message = require("../../../constants/messages.json");
 const EmailService = require("../../helper/emailServices");
 
-//data is an array of objects of the form: {id: 1, surveyId: 1, empId: 11}.
-const fetchRecipientData = async (data) => {
-  if (!data) return [];
-  //Extract employee ids
-  const empIds = [];
-  for (item of data) {
-    empIds.push(item.empId);
-  }
-  const query = `SELECT concat("firstName", ' ', "lastName") AS name, "teamName" FROM employee e JOIN team t ON e."teamId" = t."id" WHERE e."empId" in (:empIds) ORDER BY e."empId";`;
-  const [results, metadata] = await db.sequelize.query(query, {
-    replacements: { empIds: empIds },
-  });
-  return results;
-};
 // Utility function to fetch responses
 const fetchResponseBySurveyId = async (surveyId) => {
   const data = await db.satisfactionSurveyRespondent.findAll({
@@ -52,9 +38,9 @@ const surveyQueryObject = {
   ],
 };
 const formatSurveyObject = async (surveyObject) => {
-  const recipients = await fetchRecipientData(
-    surveyObject.satisfactionSurveyRecipients
-  );
+  const recipients = await db.satisfactionSurveyRecipient.findAll({
+    where: { surveyId: surveyObject.id },
+  });
   const satisfactionSurveyAnswers = await fetchResponseBySurveyId(
     surveyObject.id
   );
@@ -70,7 +56,7 @@ const formatSurveyObject = async (surveyObject) => {
 
 // Utility function to resend non-anonymous survey to an existing respondent.
 // It returns -1 if no survey is sent or empId if otherwise.
-const resentSurveyTo = async ({ surveyObject, empId, frontendUrl }) => {
+const resendSurveyTo = async ({ surveyObject, empId, frontendUrl }) => {
   const employee = await db.employee.findByPk(empId, {
     attributes: ["firstName", "lastName", "email"],
     order: ["firstName", "lastName"],
@@ -248,16 +234,14 @@ exports.createRecord = async (req, res) => {
 
     if (satisfactionSurveyQuestions) {
       // Save questions
-      let orderNumber = 1;
       const questions = [];
       for (let question of satisfactionSurveyQuestions) {
         const questionData = {
           surveyId,
-          orderNumber,
-          question,
+          orderNumber: question.orderNumber,
+          question: question.question,
         };
         questions.push(questionData);
-        orderNumber++;
       }
       if (questions.length > 0) {
         await db.satisfactionSurveyQuestion.bulkCreate(questions, {
@@ -269,8 +253,10 @@ exports.createRecord = async (req, res) => {
     if (satisfactionSurveyRecipients) {
       // Save recipient data
       const recipients = [];
-      for (let empId of satisfactionSurveyRecipients) {
-        recipients.push({ surveyId, empId });
+      const empIds = [];
+      for (let recipient of satisfactionSurveyRecipients) {
+        recipients.push({ surveyId, ...recipient });
+        empIds.push(recipient.empId);
       }
       await db.satisfactionSurveyRecipient.bulkCreate(recipients, {
         validate: true,
@@ -279,7 +265,7 @@ exports.createRecord = async (req, res) => {
       const emailData = await createRespondents({
         surveyId,
         anonymous: data.anonymous,
-        empIds: satisfactionSurveyRecipients,
+        empIds,
       });
       // Send email to the recipients
       await sendEmail({ surveyObject: data, emailData, frontendUrl });
@@ -411,8 +397,17 @@ exports.submitSurvey = async (req, res) => {
   }
 };
 
+// Send url of an existing survey to an array of recipients
 exports.sendSurvey = async (req, res) => {
   try {
+const x =  {
+  "surveyId": 9,
+  "empId": 20,
+  "category": "Category9",
+  "teamName": "Development",
+  "name": "Kettie Nortcliffe"
+}
+
     const { id, satisfactionSurveyRecipients, frontendUrl } = req.body;
     const survey = await db.satisfactionSurvey.findByPk(id);
     if (!survey) {
@@ -429,32 +424,30 @@ exports.sendSurvey = async (req, res) => {
     const existingRecipient = [];
     const newRecipient = []; // for sending email
     const recipientData = []; // to be saved in the database
-    for (let empId of satisfactionSurveyRecipients) {
-      const recipient = await db.satisfactionSurveyRecipient.findOne({
+    for (let recipient of satisfactionSurveyRecipients) {
+      const result = await db.satisfactionSurveyRecipient.findOne({
         where: {
           surveyId: id,
-          empId: empId,
+          empId: recipient.empId,
         },
       });
-      if (recipient) {
+      if (result) {
         // Survey already sent to the recipient
         if (!survey.anonymous) {
-          const result = await resentSurveyTo({
+          const result = await resendSurveyTo({
             surveyObject: survey,
-            empId,
+            empId: recipient.empId,
             frontendUrl,
           });
           if (result > -1) {
-            existingRecipient.push(empId);
+            existingRecipient.push(recipient);
           }
         }
       } else {
         // Save recipient data
-        recipientData.push({
-          surveyId: id,
-          empId: empId,
-        });
-        newRecipient.push(empId);
+        recipient.surveyId = id
+        recipientData.push(recipient);
+        newRecipient.push(recipient.empId);
       }
     }
 
