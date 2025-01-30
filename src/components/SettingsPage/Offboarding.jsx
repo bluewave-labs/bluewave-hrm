@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import HRMButton from "../Button/HRMButton";
 import OffboardingTable from "./OffboardingTable";
+import { OffboardingDocuments } from "./OffboardingDocuments";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -103,7 +104,10 @@ export default function Offboarding({ style }) {
               </Stack>
             </Stack>
           ) : (
-            <HeadText component="h3">Offboarding documents</HeadText>
+            <Stack spacing={4}>
+              <HeadText component="h3">Offboarding documents</HeadText>
+              <OffboardingDocuments/>
+            </Stack>
           )}
         </Grid>
       </Grid>
