@@ -1,12 +1,16 @@
 import { useState } from "react";
 import {
   styled,
+  Grid,
   Box,
   Typography,
   List,
   ListItemButton,
   ListItemText,
+  Stack,
 } from "@mui/material";
+import HRMButton from "../Button/HRMButton";
+import OffboardingTable from "./OffboardingTable";
 
 const HeadText = styled(Typography)({
   fontSize: "18px",
@@ -28,8 +32,13 @@ export default function Offboarding({ style }) {
   ];
   const [listItem, setListItem] = useState({
     id: 0,
-    title: "Survey Questions",
+    title: "Survey questions",
   });
+  const [offboardingTableData, setOffboardingTableData] = useState([
+    { id: "1", order: 1, question: "Why are you leaving?" },
+    { id: "2", order: 2, question: "What did you like most about your job?" },
+    { id: "3", order: 3, question: "What did you like least about your job?" },
+  ]);
 
   const handleListItemClick = (_, selectedListItem) => {
     setListItem(selectedListItem);
@@ -37,6 +46,8 @@ export default function Offboarding({ style }) {
 
   return (
     <Box
+      direction="row"
+      justifyContent="space-between"
       sx={{
         ...{
           paddingTop: 6,
@@ -47,34 +58,55 @@ export default function Offboarding({ style }) {
         ...style,
       }}
     >
-      <List component="nav" sx={{ pr: 8 }}>
-        {offboardingListItems.map((item) => (
-          <ListItemButton
-            key={item.id}
-            selected={listItem.id === item.id}
-            onClick={(event) => handleListItemClick(event, item)}
-          >
-            <ListItemText
-              primary={
-                <Typography style={{ fontSize: "13px" }}>
-                  {item.title}
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        ))}
-      </List>
-      {listItem.title === "Survey questions" ? (
-        <Box>
-          <HeadText component="h3">
-            Offboarding (exit survey) questions
-          </HeadText>
-        </Box>
-      ) : (
-        <Box>
-          <HeadText component="h3">Offboarding documents</HeadText>
-        </Box>
-      )}
+      <Grid container spacing={4}>
+        <Grid item xs={3}>
+          <List component="nav" sx={{ pr: 2 }}>
+            {offboardingListItems.map((item) => (
+              <ListItemButton
+                key={item.id}
+                selected={listItem.id === item.id}
+                onClick={(event) => handleListItemClick(event, item)}
+              >
+                <ListItemText
+                  primary={
+                    <HeadText style={{ fontSize: "13px" }}>
+                      {item.title}
+                    </HeadText>
+                  }
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Grid>
+        <Grid item xs={9}>
+          {listItem.title === "Survey questions" ? (
+            <Stack spacing={4}>
+              <Stack direction="row" justifyContent="space-between">
+                <HeadText component="h3">
+                  Offboarding (exit survey) questions
+                </HeadText>
+                <HRMButton
+                  mode="primary"
+                  onClick={() => console.log("Add new")}
+                >
+                  Add new
+                </HRMButton>
+              </Stack>
+              <OffboardingTable/>
+              <Stack direction="row" justifyContent="flex-end">
+                <HRMButton
+                  mode="primary"
+                  onClick={() => console.log("Add new")}
+                >
+                  Save changes
+                </HRMButton>
+              </Stack>
+            </Stack>
+          ) : (
+            <HeadText component="h3">Offboarding documents</HeadText>
+          )}
+        </Grid>
+      </Grid>
     </Box>
   );
 }
