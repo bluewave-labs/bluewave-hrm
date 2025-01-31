@@ -18,10 +18,9 @@ import { styled } from "@mui/system";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { v4 as uuidv4 } from "uuid";
 import { fetchAll as fetchAllEmployees } from "../../assets/FetchServices/Employee";
 import { fetchAll as fetchAllTeams } from "../../assets/FetchServices/Team";
-import { createOne } from "../../assets/FetchServices/SatisfactionSurvey";
+import { createOne, update } from "../../assets/FetchServices/SatisfactionSurvey";
 import DateSelect from "./DateSelect";
 import HRMButton from "../Button/HRMButton";
 //import Checkbox from "../Checkbox/Checkbox";
@@ -67,10 +66,28 @@ function formatDate(date) {
  * - close<Function>: Function for closing this popup component.
  *      Syntax: close()
  * 
- * - style<Object>: Optional prop for adding further inline styling
+ * - refresh<Function>: Function provided by the parent component for refreshing the survey list.
+ *      Syntax: refresh()
+ * 
+ * - initialSurvey<Object>: When editing a survey, this object shows the original details of the survey.
+ *      Syntax: {
+ *          anonymous: <Boolean>
+ *          name: <String>
+ *          welcomeTitle: <String>
+ *          welcomeMessage: <String>
+ *          endTitle: <String>
+ *          endMessage: <String>
+ *          startedAt: <String>
+ *          completedAt: <String>
+ *          satisfactionSurveyQuestions: <Array<Object>>
+ *          satisfactionSurveyRecipients: <Array<Object>>
+ *          frontendUrl: <String>
+ *      }
+ * 
+ * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function NewSurveyPopup({close, style}) {
+export default function NewSurveyPopup({close, refresh, initialSurvey, style}) {
     //Page number outlining the stage of the new survey creation
     const [pageNumber, setPageNumber] = useState(1);
     //Flag determining if a previous survey should be used
@@ -84,7 +101,20 @@ export default function NewSurveyPopup({close, style}) {
     //The option selected when adding a new recipient for the survey
     const [newRecipient, setNewRecipient] = useState(null);
     //All the relevant information regarding the new survey to be created
-    const [newSurvey, setNewSurvey] = useState({
+    const [newSurvey, setNewSurvey] = useState(initialSurvey ? {
+        id: initialSurvey.id,
+        anonymous: initialSurvey.anonymous,
+        name: initialSurvey.name,
+        welcomeTitle: initialSurvey.welcomeTitle,
+        welcomeMessage: initialSurvey.welcomeMessage,
+        endTitle: initialSurvey.endTitle,
+        endMessage: initialSurvey.endMessage,
+        startedAt: initialSurvey.startedAt,
+        completedAt: initialSurvey.completedAt,
+        satisfactionSurveyQuestions: initialSurvey.satisfactionSurveyQuestions,
+        satisfactionSurveyRecipients: initialSurvey.satisfactionSurveyRecipients,
+        frontendUrl: initialSurvey.frontendUrl
+    } : {
         anonymous: false,
         name: "",
         welcomeTitle: "",
@@ -108,68 +138,9 @@ export default function NewSurveyPopup({close, style}) {
         4: false
     });
 
-    /*
-    const recipientOptions = [
-        {
-            category: "Team",
-            name: "Everyone"
-        },
-        {
-            category: "Team",
-            name: "Marketing"
-        },
-        {
-            category: "Team",
-            name: "Research & Development"
-        },
-        {
-            category: "Team",
-            name: "Finance"
-        },
-        {
-            category: "Team",
-            name: "Engineering"
-        },
-        {
-            category: "Employee",
-            team: "Marketing",
-            name: "Olivia Rhye"
-        },
-        {
-            category: "Employee",
-            team: "Research & Development",
-            name: "Samuel Harris"
-        },
-        {
-            category: "Employee",
-            team: "Finance",
-            name: "Marcus Drake"
-        },
-        {
-            category: "Employee",
-            team: "Research & Development",
-            name: "Ashley Collins"
-        },
-        {
-            category: "Employee",
-            team: "Engineering",
-            name: "Darrell Smith"
-        },
-        {
-            category: "Employee",
-            team: "Marketing",
-            name: "Simon West"
-        },
-        {
-            category: "Employee",
-            team: "Research & Development",
-            name: "Barry Singh"
-        }
-    ];
-    */
-
     //Retrieve all options for survey recipient selection when the popup is opened
     useEffect(() => {
+        console.log(newSurvey);
         getAllTeams();
         getAllRecipients();
     }, [])
@@ -211,7 +182,7 @@ export default function NewSurveyPopup({close, style}) {
                     }
                 })
             ];
-            console.log(teams);
+            //console.log(teams);
             setRecipientTeams(teams);
         });
     };
@@ -227,7 +198,7 @@ export default function NewSurveyPopup({close, style}) {
                     name: `${e.firstName} ${e.lastName}`
                 }
             });
-            console.log(employees);
+            //console.log(employees);
             setRecipientOptions(employees);
         });
     };
@@ -274,7 +245,12 @@ export default function NewSurveyPopup({close, style}) {
         }
         //Submit the survey request if on the last page
         else if (pageNumber === 5) {
-            handleSubmit();
+            if (initialSurvey) {
+                handleEdit();
+            }
+            else {
+                handleSubmit();
+            }
         }
         //Otherwise, navigate to the next page
         else {
@@ -282,9 +258,16 @@ export default function NewSurveyPopup({close, style}) {
         }
     };
 
-    //Function for submitting the new survey
+    //Functions for submitting the new survey
     function handleSubmit() {
         createOne(newSurvey);
+        refresh();
+        close();
+    };
+
+    function handleEdit() {
+        update(newSurvey);
+        refresh();
         close();
     };
 
@@ -306,46 +289,42 @@ export default function NewSurveyPopup({close, style}) {
 
     //Function for adding a new recipient for the survey
     function addRecipient(option) {
-        //If a team option is selected, add every employee in that team as a recipient
-        if (option.category === "Team") {
-            let newRecipients;
-            if (option.name === "Everyone") {
-                newRecipients = recipientOptions.filter(
-                    (rec) => rec.teamName && newSurvey.satisfactionSurveyRecipients.every((rec2) => rec.name !== rec2.name)
-                );
-            }
-            else {
-                newRecipients = recipientOptions.filter(
-                    (rec) => rec.teamName === option.name && newSurvey.satisfactionSurveyRecipients.every((rec2) => rec.name !== rec2.name)
-                );
-            }
-            
-            //An id is added to each recipient to help with removing recipients
-            newRecipients.forEach((rec) => rec.id = uuidv4());
+        if (!initialSurvey) {
+            //If a team option is selected, add every employee in that team as a recipient
+            if (option.category === "Team") {
+                let newRecipients;
+                if (option.name === "Everyone") {
+                    newRecipients = recipientOptions.filter(
+                        (rec) => rec.teamName && newSurvey.satisfactionSurveyRecipients.every((rec2) => rec.empId !== rec2.empId)
+                    );
+                }
+                else {
+                    newRecipients = recipientOptions.filter(
+                        (rec) => rec.teamName === option.name && newSurvey.satisfactionSurveyRecipients.every((rec2) => rec.empId !== rec2.empId)
+                    );
+                }
 
-            setNewSurvey({
-                ...newSurvey, 
-                satisfactionSurveyRecipients: [
-                    ...newSurvey.satisfactionSurveyRecipients,
-                    ...newRecipients
-                ]
-            });
-        
+                setNewSurvey({
+                    ...newSurvey, 
+                    satisfactionSurveyRecipients: [
+                        ...newSurvey.satisfactionSurveyRecipients,
+                        ...newRecipients
+                    ]
+                });
+            
+            }
+            //If an employee option is selected, only add that employee as a recipient
+            else if (option.category === "Employee") {
+                setNewSurvey({
+                    ...newSurvey,
+                    satisfactionSurveyRecipients: [
+                        ...newSurvey.satisfactionSurveyRecipients,
+                        option
+                    ]
+                });
+            }
+            //console.log(newSurvey.recipients);
         }
-        //If an employee option is selected, only add that employee as a recipient
-        else if (option.category === "Employee") {
-            setNewSurvey({
-                ...newSurvey,
-                satisfactionSurveyRecipients: [
-                    ...newSurvey.satisfactionSurveyRecipients,
-                    {
-                        ...option,
-                        id: uuidv4()
-                    }
-                ]
-            });
-        }
-        //console.log(newSurvey.recipients);
     };
 
     //Custom style elements
@@ -375,7 +354,7 @@ export default function NewSurveyPopup({close, style}) {
 
     return (
         <Box sx={{...{
-            width: "520px",
+            width: "100%",
             padding: "30px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
@@ -586,21 +565,27 @@ export default function NewSurveyPopup({close, style}) {
                             groupBy={(option) => option.category}
                             getOptionLabel={(option) => option.name}
                             onChange={(e, newValue) => setNewRecipient(newValue)}
+                            disabled={initialSurvey}
                             sx={{ width: "100%" }}
                             renderInput={(params) => <TextField {...params} />}
                         />
                         <HRMButton 
                             mode="secondaryB" 
                             onClick={() => addRecipient(newRecipient)}
+                            enabled={!initialSurvey}
                             style={{ width: "120px" }}
                         >
                             <b style={{ color: colors.darkGrey }}>Add new</b>
                         </HRMButton>
                     </Stack>
+                    {initialSurvey && 
+                        <Header4 sx={{ color: "#D92D20" }}>Recipients cannot be added or removed after the survey has been published</Header4>
+                    }
                     {newSurvey.satisfactionSurveyRecipients.length > 0 ?
                         <RecipientsList 
                             recipients={newSurvey.satisfactionSurveyRecipients} 
                             setRecipients={(newRecipients) => setNewSurvey({...newSurvey, satisfactionSurveyRecipients: newRecipients})}
+                            canEdit={!initialSurvey}
                             style={{ marginBottom: "20px" }}
                         /> :
                         <Header4>No recipients have been added</Header4>
@@ -698,7 +683,7 @@ export default function NewSurveyPopup({close, style}) {
                     {pageNumber === 1 ? "Cancel" : "Previous"}
                 </HRMButton>
                 <HRMButton mode="primary" onClick={nextPage}>
-                    {pageNumber === 5 ? "Send" : "Next"}
+                    {pageNumber === 5 ? initialSurvey ? "Update" : "Send" : "Next"}
                 </HRMButton>
             </Stack>
             {/*Popup components for setting the starting and ending dates of the new survey*/}
@@ -723,10 +708,17 @@ export default function NewSurveyPopup({close, style}) {
 //Control panel settings for storybook
 NewSurveyPopup.propTypes = {
     //Function for closing this popup component
-    close: PropTypes.func
+    close: PropTypes.func,
+
+    //Function for refreshing the survey list
+    refresh: PropTypes.func,
+
+    //Details of the initial survey when editing
+    initialSurvey: PropTypes.object
 };
 
 //Default values for this component
 NewSurveyPopup.defaultProps = {
+    initialSurvey: null,
     style: {}
 };

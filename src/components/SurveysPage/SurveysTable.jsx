@@ -8,6 +8,7 @@ import Stack from "@mui/system/Stack";
 import dayjs from "dayjs";
 import { styled } from "@mui/system";
 import PropTypes from "prop-types";
+import { remove } from "../../assets/FetchServices/SatisfactionSurvey";
 import HRMButton from "../Button/HRMButton";
 import { colors } from "../../Styles";
 
@@ -36,10 +37,13 @@ function formatDate(date) {
  * - setSurvey<Function>: Function provided by the parent component for setting the selected survey.
  *      Syntax: setSurvey(<Object>)
  * 
+ * - refresh<Function>: Function provided by the parent component for refreshing the survey list
+ *      Syntax: refresh()
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function SurveysTable({surveyList, setSurvey, style}) {
+export default function SurveysTable({surveyList, setSurvey, refresh, style}) {
     //Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey,
@@ -56,6 +60,12 @@ export default function SurveysTable({surveyList, setSurvey, style}) {
         paddingTop: "16px",
         paddingBottom: "16px"
     });
+
+    //Function for deleting a survey given its id
+    function handleDelete(id) {
+        remove(id);
+        refresh();
+    };
 
     return (
         <TableContainer sx={{...{
@@ -86,7 +96,7 @@ export default function SurveysTable({surveyList, setSurvey, style}) {
                                     justifyContent="flex-end" 
                                     spacing={1}
                                 >
-                                    <HRMButton mode="tertiary">
+                                    <HRMButton mode="tertiary" onClick={() => handleDelete(survey.id)}>
                                         <b>Delete</b>
                                     </HRMButton>
                                     <HRMButton mode="tertiary" onClick={() => setSurvey(survey)}>
@@ -108,7 +118,10 @@ SurveysTable.propTypes = {
     surveyList: PropTypes.array,
 
     //Function provided by the parent component for setting the selected survey
-    setSurvey: PropTypes.func
+    setSurvey: PropTypes.func,
+
+    //Function for refreshing the survey list
+    refresh: PropTypes.func
 };
 
 //Default values for this component

@@ -21,15 +21,20 @@ export default function ResultsTabContent({style}) {
     const [survey, setSurvey] = useState(null);
     //Flag determining whether the popup for creating a new survey should be displayed
     const [openNewSurvey, setOpenNewSurvey] = useState(false);
+    //List of surveys to display
     const [surveyList, setSurveyList] = useState([]);
+    //Hook for refreshing the list of surveys
+    const [refresh, setRefresh] = useState(false);
 
+    //Refresh the list of surveys
     useEffect(() => {
         getSurveys();
-    }, []);
+    }, [refresh]);
 
+    //Function for retrieving all the surveys
     function getSurveys() {
         fetchAll().then((data) => {
-            console.log(data);
+            //console.log(data);
             setSurveyList(data);
         });
     };
@@ -43,7 +48,11 @@ export default function ResultsTabContent({style}) {
             {survey ?
                 <>
                     {/*If a survey is selected, information on the currently selected survey is shown*/}
-                    <SurveyDetails survey={survey} back={() => setSurvey(null)} />
+                    <SurveyDetails 
+                        survey={survey} 
+                        back={() => setSurvey(null)} 
+                        refresh={() => setRefresh(!refresh)}
+                    />
                 </> :
                 <>
                     {/*Otherwise, a table displaying all the surveys is shown*/}
@@ -59,12 +68,21 @@ export default function ResultsTabContent({style}) {
                         <h3>Surveys</h3>
                         <HRMButton mode="primary" onClick={() => setOpenNewSurvey(true)}>Send new survey</HRMButton>
                     </Stack> 
-                    <SurveysTable surveyList={surveyList} setSurvey={setSurvey} />
+                    <SurveysTable 
+                        surveyList={surveyList} 
+                        setSurvey={setSurvey}
+                        refresh={() => setRefresh(!refresh)}
+                    />
                 </>
             }
             {/*Popup component for creating a new survey*/}
-            <Dialog open={openNewSurvey} onClose={() => setOpenNewSurvey(false)}>
-                <NewSurveyPopup close={() => setOpenNewSurvey(false)} />
+            <Dialog 
+                open={openNewSurvey} 
+                onClose={() => setOpenNewSurvey(false)}
+                fullWidth={true}
+                maxWidth="md"
+            >
+                <NewSurveyPopup close={() => setOpenNewSurvey(false)} refresh={() => setRefresh(!refresh)} />
             </Dialog>
         </Box>
 

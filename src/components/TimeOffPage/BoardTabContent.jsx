@@ -48,7 +48,7 @@ export default function BoardTabContent({update, style}) {
     const stateContext = useContext(StateContext);
     const currentUser = stateContext.state.employee ? stateContext.state.employee.empId : -1;
 
-    console.log(update);
+    //console.log(update);
     
     dayjs.extend(isSameOrAfter);
 
@@ -61,10 +61,10 @@ export default function BoardTabContent({update, style}) {
     //Function for retrieving the time off policies and their respective hours used and available
     function getTimeOffPolicies() {
         //Send request to database for time off policies
-        console.log("Executing getTimeOffPolicies");
         setLoadingPolicies(true);
         fetchOne(currentUser).then((data) => {
             if (data) {
+                //console.log(data);
                 const policies = {};
                 //Only display the information for the current year
                 const filteredData = data.filter((p) => p.year === dayjs().year());
@@ -84,7 +84,6 @@ export default function BoardTabContent({update, style}) {
     //Function for retrieving any upcoming time off periods
     function getUpcomingTimeOffPeriods() {
         //Send request to database for time off periods
-        console.log("Executing getUpcomingTimeOffPeriods");
         setLoadingPeriods(true);
         fetchAllByEmployee(currentUser).then((data) => {
             if (data) {

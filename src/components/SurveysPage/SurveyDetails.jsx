@@ -15,24 +15,19 @@ import { colors, fonts } from "../../Styles";
  * Props: 
  * - survey<Object>: The selected survey in question.
  * 
- * - back<Function>: The function for navigating back to the survey table
+ * - back<Function>: The function for navigating back to the survey table.
  *      Syntax: back()
+ * 
+ * - refresh<Function>: Function provided by the parent component for refreshing the survey list.
+ *      Syntax: refresh()
  * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function SurveyDetails({survey, back, style}) {
+export default function SurveyDetails({survey, back, refresh, style}) {
+    //Hooks determining which tab on the survey details page is selected
     const [infoSelected, setInfoSelected] = useState(true);
     const [answersSelected, setAnswersSelected] = useState(false);
-
-    const details = {
-        welcomeTitle: survey.welcomeTitle,
-        welcomeMessage: survey.welcomeMessage,
-        endTitle: survey.endTitle,
-        endMessage: survey.endMessage,
-        startedAt: survey.startedAt,
-        completedAt: survey.completedAt
-    };
 
     return (
         <Box sx={{...{
@@ -40,6 +35,7 @@ export default function SurveyDetails({survey, back, style}) {
             fontFamily: fonts.fontFamily,
             width: "100%"
         }, ...style}}>
+            {/*Header*/}
             <Stack 
                 direction="row" 
                 alignItems="center" 
@@ -60,13 +56,15 @@ export default function SurveyDetails({survey, back, style}) {
                 <h3>Survey Details | {survey.name}</h3>
             </Stack>
             <Stack direction="row" alignItems="flex-start" spacing={2}>
+                {/*Info and Answers tabs*/}
                 <SurveyDetailsMenu 
                     infoSelected={infoSelected}
                     setInfoSelected={setInfoSelected}
                     answersSelected={answersSelected}
                     setAnswersSelected={setAnswersSelected}
                 />
-                {infoSelected && <SurveyInfo surveyInfo={details} />}
+                {/*Tab content*/}
+                {infoSelected && <SurveyInfo surveyInfo={survey} refresh={refresh} />}
                 {answersSelected && <SurveyResponses responseList={survey.satisfactionSurveyAnswers} />}
             </Stack>
         </Box>
@@ -79,7 +77,10 @@ SurveyDetails.propTypes = {
     survey: PropTypes.object,
 
     //Function for navigating back to the survey table
-    back: PropTypes.func
+    back: PropTypes.func,
+
+    //Function for refreshing the survey list
+    refresh: PropTypes.func
 };
 
 //Default values for this component

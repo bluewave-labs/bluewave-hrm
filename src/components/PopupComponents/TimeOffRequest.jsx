@@ -327,14 +327,14 @@ export default function TimeOffRequest({
         };
         createOnePeriod(newPeriod).then((data) => {
             if (data) {
-                console.log(data);
+                //console.log(data);
                 //Update the time off balance
                 const newBalance = {
                     id: category.id,
                     cumulativeHoursTaken: category.hoursUsed + totalHoursOff
                 };
                 updatePolicy(newBalance).then((data) => {
-                    console.log(data);
+                    //console.log(data);
                     sendRequest();
                 });
             }
@@ -357,7 +357,7 @@ export default function TimeOffRequest({
         };
         updatePeriod(updatedPeriod).then((data) => {
             if (data) {
-                console.log(data);
+                //console.log(data);
                 //If the time off policy has changed
                 if (initialRequest.timeOffId !== category.timeOffId) {
                     //Refund the hours used in the original policy
@@ -367,14 +367,14 @@ export default function TimeOffRequest({
                         cumulativeHoursTaken: categoryMenu.filter((p) => p.timeOffId === initialRequest.timeOffId)[0].hoursUsed - initialRequest.hours
                     };
                     updatePolicy(refundBalance).then((data) => {
-                        console.log(data);
+                        //console.log(data);
                         //Subtract the hours used in the new policy
                         const newBalance = {
                             id: category.id,
                             cumulativeHoursTaken: category.hoursUsed + totalHoursOff
                         };
                         updatePolicy(newBalance).then((data) => {
-                            console.log(data);
+                            //console.log(data);
                             sendRequest();
                         });
                     });
@@ -387,7 +387,7 @@ export default function TimeOffRequest({
                         cumulativeHoursTaken: category.hoursUsed + totalHoursOff - initialRequest.hours
                     };
                     updatePolicy(newBalance).then((data) => {
-                        console.log(data);
+                        //console.log(data);
                         sendRequest();
                     });
                 }

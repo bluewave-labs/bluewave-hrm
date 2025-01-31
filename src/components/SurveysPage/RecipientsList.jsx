@@ -20,10 +20,12 @@ import { colors } from "../../Styles";
  *      survey recipients.
  *      Syntax: setRecipients(<list of recipients>)
  * 
+ * - canEdit<Object>: Flag determining if recipients can be added or removed
+ * 
  * - style<Object>: Optional prop for adding further inline styling.
  *      Default: {}
  */
-export default function RecipientsList({recipients, setRecipients, style}) {
+export default function RecipientsList({recipients, setRecipients, canEdit, style}) {
     //Custom style elements
     const TableHeaderCell = styled(TableCell)({
         color: colors.darkGrey,
@@ -42,8 +44,8 @@ export default function RecipientsList({recipients, setRecipients, style}) {
     });
 
     //Remove a recipient from the list
-    function remove(id) {
-        setRecipients(recipients.filter((rec) => rec.id !== id));
+    function remove(empId) {
+        setRecipients(recipients.filter((rec) => rec.empId !== empId));
     };
 
     return (
@@ -52,7 +54,11 @@ export default function RecipientsList({recipients, setRecipients, style}) {
                 {/*Table header*/}
                 <TableHead>
                     <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
-                        <TableHeaderCell sx={{ paddingLeft: "65px" }}><b>Name</b></TableHeaderCell>
+                        <TableHeaderCell 
+                            sx={{ paddingLeft: canEdit ? "65px" : "24px" }}
+                        >
+                            <b>Name</b>
+                        </TableHeaderCell>
                         <TableHeaderCell><b>Team</b></TableHeaderCell>
                     </TableRow>
                 </TableHead>
@@ -67,13 +73,15 @@ export default function RecipientsList({recipients, setRecipients, style}) {
                                     spacing={2}
                                 >   
                                     {/*Delete button*/}
-                                    <CloseIcon onClick={() => remove(rec.id)} sx={{
-                                        backgroundColor: "#FFFFFF",
-                                        "&:hover": {
-                                            cursor: "pointer",
-                                            backgroundColor: "#D0D5DD"
-                                        }
-                                    }}/>
+                                    {canEdit &&
+                                        <CloseIcon onClick={() => remove(rec.empId)} sx={{
+                                            backgroundColor: "#FFFFFF",
+                                            "&:hover": {
+                                                cursor: "pointer",
+                                                backgroundColor: "#D0D5DD"
+                                            }
+                                        }}/>
+                                    }
                                     {/*Recipient's name*/}
                                     <p>{rec.name}</p>
                                 </Stack>
@@ -96,7 +104,10 @@ RecipientsList.propTypes = {
     recipients: PropTypes.array,
 
     //Function provided by the parent component for setting the list of survey recipients
-    setRecipients: PropTypes.func
+    setRecipients: PropTypes.func,
+
+    //Flag determining if recipients can be added or removed
+    canEdit: PropTypes.object
 };
 
 //Default values for this component

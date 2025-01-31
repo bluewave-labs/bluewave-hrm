@@ -14,6 +14,7 @@ export default function SurveysPage({style}) {
     return (
         <Box sx={{...{
             //padding: "40px",
+            paddingBottom: "40px",
             fontFamily: fonts.fontFamily
         }, ...style}}>
             <Stack

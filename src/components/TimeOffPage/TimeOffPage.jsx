@@ -20,8 +20,9 @@ export default function TimeOffPage({style}) {
     //should be displayed
     const [openRequest, setOpenRequest] = useState(false);
     const [requestSuccess, setRequestSuccess] = useState(false);
+    //Hook for updating the list of time off periods
     const [update, setUpdate] = useState(false);
-    console.log(update);
+    //console.log(update);
 
     //Function for sending a time off request
     function sendRequest() {

@@ -1,5 +1,6 @@
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -34,6 +35,14 @@ export default function QuestionsList({questions, setQuestions, style}) {
     const [editQuestionPopup, setEditQuestionPopup] = useState(false);
 
     //Custom style elements
+    const TableHeaderCell = styled(TableCell)({
+        color: colors.darkGrey,
+        paddingLeft: "24px",
+        paddingRight: "24px",
+        paddingTop: "12px",
+        paddingBottom: "12px"
+    });
+
     const TableBodyCell = styled(TableCell)({
         color: colors.darkGrey,
         paddingLeft: "24px",
@@ -46,13 +55,13 @@ export default function QuestionsList({questions, setQuestions, style}) {
     function reorder(initialIndex, newIndex) {
         if (newIndex >= 0 && newIndex < questions.length) {
             //Swap indices of questions being reordered
-            const selectedQuestion = questions.filter((q) => q.index === initialIndex)[0];
-            const otherQuestion = questions.filter((q) => q.index === newIndex)[0];
-            selectedQuestion.index = newIndex;
-            otherQuestion.index = initialIndex;
+            const selectedQuestion = questions.filter((q) => q.orderNumber === initialIndex)[0];
+            const otherQuestion = questions.filter((q) => q.orderNumber === newIndex)[0];
+            selectedQuestion.orderNumber = newIndex;
+            otherQuestion.orderNumber = initialIndex;
 
             //Update the questions list
-            const newQuestions = questions.filter((q) => q.index !== initialIndex && q.index !== newIndex);
+            const newQuestions = questions.filter((q) => q.orderNumber !== initialIndex && q.orderNumber !== newIndex);
             newQuestions.push(selectedQuestion);
             newQuestions.push(otherQuestion);
             setQuestions(newQuestions);
@@ -61,10 +70,10 @@ export default function QuestionsList({questions, setQuestions, style}) {
 
     //Remove a survey question from the list
     function remove(index) {
-        const newQuestions = questions.filter((q) => q.index !== index);
+        const newQuestions = questions.filter((q) => q.orderNumber !== index);
         newQuestions.forEach((q) => {
-            if (q.index > index) {
-                q.index -= 1;
+            if (q.orderNumber > index) {
+                q.orderNumber -= 1;
             }
         });
         setQuestions(newQuestions);
@@ -79,7 +88,7 @@ export default function QuestionsList({questions, setQuestions, style}) {
     //Update the text for a given survey question
     function handleEdit(newQuestion) {
         setQuestions(
-            questions.map((q) => q.index === newQuestion.index ? newQuestion : q)
+            questions.map((q) => q.orderNumber === newQuestion.orderNumber ? newQuestion : q)
         );
         setEditQuestionPopup(false);
     };
@@ -90,9 +99,16 @@ export default function QuestionsList({questions, setQuestions, style}) {
                 width: "100%"
             }, ...style}}>
                 <Table>
+                    {/*Table header*/}
+                    <TableHead>
+                        <TableRow sx={{ backgroundColor: "#F9FAFB" }}>
+                            <TableHeaderCell><b>Order</b></TableHeaderCell>
+                            <TableHeaderCell colSpan={2}><b>Question Text</b></TableHeaderCell>
+                        </TableRow>
+                    </TableHead>
                     {/*List all questions*/}
                     <TableBody>
-                        {questions.sort((q1, q2) => q1.index - q2.index).map((q, index) => (
+                        {questions.sort((q1, q2) => q1.orderNumber - q2.orderNumber).map((q, index) => (
                             <TableRow>
                                 <TableBodyCell>
                                     <Stack
@@ -101,6 +117,7 @@ export default function QuestionsList({questions, setQuestions, style}) {
                                         spacing={2}
                                     >
                                         {/*Reordering buttons*/}
+                                        <b>{q.orderNumber + 1}</b>
                                         <ArrowUpwardIcon 
                                             onClick={() => reorder(index, index - 1)}
                                             sx={{
@@ -121,9 +138,11 @@ export default function QuestionsList({questions, setQuestions, style}) {
                                                 }
                                             }}
                                         />
-                                        {/*Question text*/}
-                                        <p>{q.question}</p>
                                     </Stack>
+                                </TableBodyCell>
+                                <TableBodyCell>
+                                    {/*Question text*/}
+                                    <p>{q.question}</p>
                                 </TableBodyCell>
                                 <TableBodyCell>
                                     {/*Delete and edit buttons*/}
