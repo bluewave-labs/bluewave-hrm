@@ -14,26 +14,7 @@ export default function ServerErrorPage() {
     }`;
   };
 
-  React.useEffect(() => {
-    const timerID = setInterval(() => {
-      if (counter.current === 0) {
-        clearInterval(timerID);
-        window.location.reload();
-        return;
-      }
-      counter.current = counter.current - 1;
-      setTimer(counter.current);
-    }, 1000);
-
-    if (counter.current === 0) {
-    }
-    return () => {
-      // clean up the effect
-      clearInterval(timerID);
-    };
-  }, []);
-
-  const handleClick = () => {
+   const handleClick = () => {
     window.location.reload();
   };
 
@@ -76,7 +57,6 @@ export default function ServerErrorPage() {
             margin: "5px 0px",
           }}
         >
-          {buttonName()}
         </p>
         <HRMButton
           mode={"primary"}
