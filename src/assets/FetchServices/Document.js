@@ -35,6 +35,32 @@ export const createOne = async (data) => {
   }
 };
 
+export const createOneWithProgressReport = async (data, func) => {
+  try {
+    const url = `${BASE_URL}/api/documents`;
+    const res = await axios.post(
+      url,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          func(percentCompleted);
+        },
+        ...addCred,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const update = async (data) => {
   try {
     const url = `${BASE_URL}/api/documents`;
